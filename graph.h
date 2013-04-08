@@ -30,6 +30,7 @@ typedef struct
 {
     int         num_nodes;            //!< Anzahl der Knoten, Normal L^2
     int                 L;                              //!< Seitenlänge
+    double          T,M,E;                  //!< Observablen des Systems
     gs_node_t       *node;
 } gs_graph_t;
 

@@ -30,7 +30,7 @@ int main()
 
     /* initialisiere den Status der Spins */
     init_spins_randomly(g);
-    print_graph_for_graph_viz(g);
+    //~ print_graph_for_graph_viz(g);
 
     /* Berechne Energie des Ising Modells */
     E = calculate_energy(g);
@@ -38,9 +38,27 @@ int main()
     /* Berechne Magnetisierung des Ising Modells */
     M = calculate_magnetisation(g);
     fprintf(stderr, "M = %f\n", M);
+    /* Setze M und E */
+    g->M = M;
+    g->E = E;
+
+    /* Setze Temperatur */
+    g->T = 2;
 
     /* Führe Monte Carlo Sweeps durch */
-    //~ monte_carlo_sweeps(g, N);
+    monte_carlo_sweeps(g, N);
+
+    /* Berechne Energie des Ising Modells */
+    E = calculate_energy(g);
+    fprintf(stderr, "E = %f, inc: %f\n", E, g->E);
+    /* Berechne Magnetisierung des Ising Modells */
+    M = calculate_magnetisation(g);
+    #ifdef INCREMENTAL
+        fprintf(stderr, "M = %f, inc: %f\n", M, g->M);
+    #else
+        fprintf(stderr, "M = %f\n", M);
+    #endif
+    print_graph_for_graph_viz(g);
 
     gs_clear_graph(g);
 
@@ -205,6 +223,7 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
     int num_nodes;
     int to_flip_idx;
     double delta_E;
+    double A;
     elem_t *list;
 
     num_nodes = g->num_nodes;
@@ -225,15 +244,33 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
         {
             /* Hier wird die Summe ausgeführt: E += s_j * J_{ij} */
             delta_E += g->node[list->index].spin * list->weight;
+            list = list->next;
         }
         /* Hier werden die Koeffizienten berücksichtigt: E = 2s_k*sum */
         delta_E *= 2 * g->node[to_flip_idx].spin;
-
+        fprintf(stderr,"dE: %f\n",delta_E);
         /*! Berechne die Wahrscheinlichkeit, mit der der Flip akzeptiert
             wird.
-            \f[ A =  \f]*/
+            \f[ A = \left\{
+                      \begin{array}{ll}
+                        e^{-\beta \Delta E} & \Delta E > 0 \\
+                        1 & sonst
+                      \end{array}
+                    \right.  \f]
+         */
+        if(delta_E > 0)
+            A = exp(-delta_E/g->T);
+        else
+            A = 1.0;
+        fprintf(stderr,"%f\n",A);
+        if(A < drand48())
+        {
+            /* drehe den Spin um */
+            g->node[to_flip_idx].spin *= -1;
+            g->E += delta_E;
+            #ifdef INCREMENTAL
+                g->M += 2 * g->node[to_flip_idx].spin
+            #endif
+        }
     }
-
-    //~ #ifdef INCREMENTAL
-
 }
