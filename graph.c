@@ -118,7 +118,13 @@ void print_graph_for_graph_viz(gs_graph_t *g)
     printf("{\n");
     for(i=0;i<num_nodes;i++)
     {
-        printf("%d [pos=\"%f,%f!\"];\n", i, g->node[i].x, g->node[i].y);
+        if(g->node[i].spin == 1)
+            printf("%d [pos=\"%f,%f!\",label=\"\",shape=\"circle\",\
+                fillcolor=\"black\",style=\"filled\"];\n", i, g->node[i].x, g->node[i].y);
+        else
+            printf("%d [pos=\"%f,%f!\",label=\"\",shape=\"circle\",\
+                fillcolor=\"white\",style=\"filled\"];\n", i, g->node[i].x, g->node[i].y);
+        /* printf("%d [pos=\"%f,%f!\",label=\"%d\",shape=\"circle\"];\n", i, g->node[i].x, g->node[i].y, g->node[i].spin); */
         list = g->node[i].neighbors;
         while(list != NULL)
         {
