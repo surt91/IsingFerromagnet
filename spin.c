@@ -1,7 +1,7 @@
 #include "spin.h"
 
 /*! \def INV_SQRT2PI
-    \brief Konstante: 1/sqrt(2*pi) für Gaussfunktion laut Wolfram|alpha
+    \brief Konstante: \f$ \frac{1}{sqrt(2 \pi)} \f$ für Gaussfunktion laut Wolfram|alpha
 */
 #define INV_SQRT2PI 0.39894228040143267793994605993438
 
@@ -24,7 +24,9 @@ int main()
 
 /*! \fn double gauss(double sigma)
     \brief Erzeugt Gauss verteilte Zufallszahlen nach der Box-Müller
-            Methode
+            Methode.
+
+    Siehe auch \cite hartmann2009practical S. XXX (Y.Z)
 
     \param [in]   sigma    Standardabweichung der Glockenkurve
     \return Gaussverteilte Zufallszahl

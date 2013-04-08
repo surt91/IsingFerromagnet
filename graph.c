@@ -1,6 +1,6 @@
 #include "graph.h"
 
-/*! \fn gs_graph_t *gs_create_graph(int num_nodes)
+/*! \fn gs_graph_t *gs_create_graph(int L, double (*f)(double), double sigma)
     \brief Erstellt einen neuen Graphen. Aus Kapitel 'Graphs'
 
     \param [in]     L   Kantenlänge des Gitters
@@ -98,7 +98,7 @@ void gs_clear_graph(gs_graph_t *g)
     free(g);
 }
 
-/*! \fn void print_graph_for_graph_viz(gs_graph_t *g, int id)
+/*! \fn void print_graph_for_graph_viz(gs_graph_t *g)
     \brief gibt den Graphen als Input_datei für GraphViz
 
     Aufruf von GraphViz ist bspw. möglich mit dem Kommando
