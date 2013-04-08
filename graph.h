@@ -28,13 +28,15 @@ typedef struct
 */
 typedef struct
 {
-    int         num_nodes;
+    int         num_nodes;            //!< Anzahl der Knoten, Normal L^2
+    int                 L;                              //!< Seitenlänge
     gs_node_t       *node;
 } gs_graph_t;
 
-void gs_insert_edge(gs_graph_t *g, int from, int to);
-gs_graph_t *gs_create_graph(int num_nodes);
-void print_graph_for_graph_viz(gs_graph_t *g, int id);
+void gs_insert_edge(gs_graph_t *g, int from, int to, double weight);
+gs_graph_t *gs_create_graph(int L, double (*f)(double), double sigma);
+void print_graph_for_graph_viz(gs_graph_t *g);
+void print_graph_for_gnuplot(gs_graph_t *g);
 void gs_clear_graph(gs_graph_t *g);
 int gs_edge_exists(gs_graph_t *g, int from, int to);
 

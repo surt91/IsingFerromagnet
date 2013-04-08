@@ -59,7 +59,7 @@ elem_t *create_element(int index, double weight)
     elem_t *elem;
     elem = (elem_t *) malloc (sizeof(elem_t));
     elem->index = index;
-    elem->index = weight;
+    elem->weight = weight;
     elem->next = NULL;
 
     return(elem);
