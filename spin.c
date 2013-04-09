@@ -8,19 +8,22 @@
 int main()
 {
     gs_graph_t *g;
+    int i;
     int L;                                  //!< Kantenlänge des Gitters
     double sigma = 0.1; //!< Parameter, der die Verschiebung der einzelnen Knoten bestimmt
     double E, M;
-    double N;
+    int N, inc;
 
     srand(100);
     srand48(100);
 
     /* Kantenlänge des Feldes */
-    L=3;
+    L=100;
     /* Wieviele Sweeps berechnen */
     /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
-    N=1;
+    N=4000;
+    /* Alle wieviel Sweeps Ergebnisse Speichern */
+    inc=10;
 
     /* Initialisiere den Graphen für die Spins */
     g = gs_create_graph(L, gauss, sigma);
@@ -43,10 +46,18 @@ int main()
     g->E = E;
 
     /* Setze Temperatur */
-    g->T = 0.5;
+    g->T = 1;
 
     /* Führe Monte Carlo Sweeps durch */
-    monte_carlo_sweeps(g, N);
+    /* Schreibe alle 10 Sweeps die Energie und Magnetisierung in eine Datei */
+    /* Plotte den Ausdruck mit Gnuplot. zB.
+     * plot 'test.dat' using 1:2, "test.dat" using 1:3; */
+    printf("#N E M\n");
+    for(i=0;i<N;i+=inc)
+    {
+        monte_carlo_sweeps(g, inc);
+        printf("%d %f %f\n",i, g->E, g->M);
+    }
 
     /* Berechne Energie des Ising Modells */
     E = calculate_energy(g);
@@ -58,7 +69,7 @@ int main()
     #else
         fprintf(stderr, "M = %f\n", M);
     #endif
-    print_graph_for_graph_viz(g);
+    //~ print_graph_for_graph_viz(g);
 
     gs_clear_graph(g);
 
