@@ -20,7 +20,7 @@ int main()
     L=3;
     /* Wieviele Sweeps berechnen */
     /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
-    N=100;
+    N=1;
 
     /* Initialisiere den Graphen für die Spins */
     g = gs_create_graph(L, gauss, sigma);
@@ -43,7 +43,7 @@ int main()
     g->E = E;
 
     /* Setze Temperatur */
-    g->T = 2;
+    g->T = 0.5;
 
     /* Führe Monte Carlo Sweeps durch */
     monte_carlo_sweeps(g, N);
@@ -167,23 +167,28 @@ void init_spins_randomly(gs_graph_t *g)
 */
 double calculate_energy(gs_graph_t *g)
 {
-    int num_nodes, i, s1;
-    double E=0;
+    int num_nodes, i;
+    int sk;                 /*!< Wert des k-ten Spins (temporäre Var) */
+    double E=0;                              /*!< Energie des Systems */
+    double E_sk;         /*!< Energie des k-ten Spins (temporäre Var) */
     elem_t *list;
 
     num_nodes = g->num_nodes;
 
     for(i=0;i<num_nodes;i++)                      /* Über alle Knoten */
     {
-        s1 = g->node[i].spin;
+        E_sk = 0;
+        sk = g->node[i].spin;
         list = g->node[i].neighbors;
         while(list != NULL)                     /* Über alle Nachbarn */
         {
-            E += g->node[list->index].spin * list->weight;
+            E_sk += g->node[list->index].spin * list->weight;
             list = list->next;
         }
+        E_sk *= sk;
+        E += E_sk;
     }
-    return(E*s1/2);    /* Da über alle Spins zweimal summiert wurde: E/2 */
+    return(-E/2);    /* Da über alle Spins zweimal summiert wurde: E/2 */
 }
 
 /*! \fn void calculate_magnetisation(gs_graph_t *g)
@@ -231,9 +236,9 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
     for(i=0;i<num_nodes*N;i++)
     {
         delta_E = 0;
-        /*! Ermittele den zu flippenden Spin zufällig. */
+        /*! - Ermittele den zu flippenden Spin zufällig. */
         to_flip_idx = floor(drand48()*num_nodes);
-        /*! Ermittele Energieänderung
+        /*! - Ermittele Energieänderung
             \f[ \Delta E = 2s_k \sum_{\mathrm{adj}(s_k)} J_{kj} s_j \f]
             So wie in \cite newman1999monte S. 52 (3.10) gegeben,
             Jedoch leicht abgewandelt, um verschiedene J zu
@@ -248,8 +253,7 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
         }
         /* Hier werden die Koeffizienten berücksichtigt: E = 2s_k*sum */
         delta_E *= 2 * g->node[to_flip_idx].spin;
-        fprintf(stderr,"dE: %f\n",delta_E);
-        /*! Berechne die Wahrscheinlichkeit, mit der der Flip akzeptiert
+        /*! - Berechne die Wahrscheinlichkeit, mit der der Flip akzeptiert
             wird.
             \f[ A = \left\{
                       \begin{array}{ll}
@@ -257,19 +261,21 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
                         1 & sonst
                       \end{array}
                     \right.  \f]
+            Wie in \cite newman1999monte S. 49 (3.7) gegeben.
          */
         if(delta_E > 0)
             A = exp(-delta_E/g->T);
         else
             A = 1.0;
-        fprintf(stderr,"%f\n",A);
-        if(A < drand48())
+        if(A > drand48())
         {
             /* drehe den Spin um */
             g->node[to_flip_idx].spin *= -1;
+
             g->E += delta_E;
+
             #ifdef INCREMENTAL
-                g->M += 2 * g->node[to_flip_idx].spin
+                g->M += 2 * g->node[to_flip_idx].spin;
             #endif
         }
     }

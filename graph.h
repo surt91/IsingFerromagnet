@@ -31,7 +31,7 @@ typedef struct
     int         num_nodes;            //!< Anzahl der Knoten, Normal L^2
     int                 L;                              //!< Seitenlänge
     double          T,M,E;                  //!< Observablen des Systems
-    gs_node_t       *node;
+    gs_node_t       *node;               //!< Pointer auf ein Array, das die Knoten enthält
 } gs_graph_t;
 
 void gs_insert_edge(gs_graph_t *g, int from, int to, double weight);
