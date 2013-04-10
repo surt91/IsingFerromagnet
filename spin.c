@@ -10,29 +10,37 @@ int main()
     gs_graph_t *g;
     int i;
     int L;                                  //!< Kantenlänge des Gitters
-    double sigma = 0.1; //!< Parameter, der die Verschiebung der einzelnen Knoten bestimmt
+    double sigma;//!< Parameter, der die Verschiebung der einzelnen Knoten bestimmt
     double E, M;
     int N, inc;
+    FILE *data_out_file;
+    char filename[80];                  //!< Dateiname, der Output Datei
 
     srand(100);
     srand48(100);
 
     /* Kantenlänge des Feldes */
-    L=100;
+    L=16;
     /* Wieviele Sweeps berechnen */
     /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
     N=4000;
     /* Alle wieviel Sweeps Ergebnisse Speichern */
-    inc=10;
+    inc=1;
+    /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
+    sigma = 0;
 
     /* Initialisiere den Graphen für die Spins */
-    g = gs_create_graph(L, gauss, sigma);
+    g = gs_create_graph(L);
+
+    /* Verschiebe die Knoten */
+    move_graph_nodes(g, gauss, sigma);
 
     /* Verknüpfe die Knoten */
     create_edges_regular(g);
 
     /* initialisiere den Status der Spins */
     init_spins_randomly(g);
+    /* init_spins_up(g); */
     //~ print_graph_for_graph_viz(g);
 
     /* Berechne Energie des Ising Modells */
@@ -46,17 +54,19 @@ int main()
     g->E = E;
 
     /* Setze Temperatur */
-    g->T = 1;
+    g->T = 2;
 
     /* Führe Monte Carlo Sweeps durch */
     /* Schreibe alle 10 Sweeps die Energie und Magnetisierung in eine Datei */
     /* Plotte den Ausdruck mit Gnuplot. zB.
      * plot 'test.dat' using 1:2, "test.dat" using 1:3; */
-    printf("#N E M\n");
+    snprintf(filename, 80, "data_T_%.2f.dat", g->T);
+    data_out_file = fopen(filename, "w");           /* Fehlerbehandlung fehlt */
+    fprintf(data_out_file, "#N E M\n");
     for(i=0;i<N;i+=inc)
     {
         monte_carlo_sweeps(g, inc);
-        printf("%d %f %f\n",i, g->E, g->M);
+        fprintf(data_out_file, "%d %f %f\n",i, g->E, g->M);
     }
 
     /* Berechne Energie des Ising Modells */
@@ -69,7 +79,7 @@ int main()
     #else
         fprintf(stderr, "M = %f\n", M);
     #endif
-    //~ print_graph_for_graph_viz(g);
+    print_graph_for_graph_viz(g);
 
     gs_clear_graph(g);
 
@@ -80,7 +90,7 @@ int main()
     \brief Erzeugt Gauss verteilte Zufallszahlen nach der Box-Müller
             Methode.
 
-    Siehe auch \cite hartmann2009practical S. XXX (Y.Z)
+    Siehe auch \cite hartmann2009practical S. 250, 7.2.5
 
     \param [in]   sigma    Standardabweichung der Glockenkurve
     \return Gaussverteilte Zufallszahl
@@ -97,10 +107,29 @@ double gauss(double sigma)
 
     n1 = sqrt(-2*log(1-u1))*cos(2*M_PI*u2);
 
-    /* passe n1 und n2 entsprechend mu und sigma an */
+    /* passe n1 entsprechend mu und sigma an */
     n1 = n1*sigma+mu;
 
     return(n1);
+}
+
+/*! \fn void move_graph_nodes(gs_graph_t *g, double (*f)(double), double sigma)
+    \brief Verschiebt die Knoten des Graphen g, wobei die Verschiebung zufällig
+            nach der Verteilung f mit dem Parameter sigma gewählt wird.
+
+    \param [in,out]   g    Graph, dessen Knoten verschoben werden sollen
+    \param [in]       f    Funktion, die Zufallszahlen entsprechend der
+                           gewünschten Verteilung liefert
+    \param [in]   sigma    Paramter der Verteilung (zb. Standardabweichung)
+*/
+void move_graph_nodes(gs_graph_t *g, double (*f)(double), double sigma)
+{
+    int n;
+    for(n=0;n<g->num_nodes; n++)
+    {
+        g->node[n].x += f(sigma);
+        g->node[n].y += f(sigma);
+    }
 }
 
 /*! \fn void create_edges_regular(gs_graph_t *g)
@@ -128,20 +157,10 @@ void create_edges_regular(gs_graph_t *g)
         else
             gs_insert_edge(g, i, i/L *L, weight);
 
-        //~ if(i%L > 0)
-            //~ gs_insert_edge(g, i, i-1, weight);  /*links*/
-        //~ else
-            //~ gs_insert_edge(g, i, i/L *L+L-1, weight);
-
         if(i+L < num_nodes)
             gs_insert_edge(g, i, i+L, weight);  /*oben*/
         else
             gs_insert_edge(g, i, i%L, weight);
-
-        //~ if(i-L >= 0)
-            //~ gs_insert_edge(g, i, i-L, weight);  /*unten*/
-        //~ else
-            //~ gs_insert_edge(g, i, num_nodes - L + i%L , weight);
     }
 }
 
@@ -164,6 +183,21 @@ void init_spins_randomly(gs_graph_t *g)
         else
             g->node[i].spin = -1;
     }
+}
+
+/*! \fn void init_spins_up(gs_graph_t *g)
+    \brief Weist den Spins im gs_graph_t g den Wert Up = 1 zu
+
+    \param [in,out]    g    Graph, der modifiziert werden soll
+*/
+void init_spins_up(gs_graph_t *g)
+{
+    int num_nodes, i;
+
+    num_nodes = g->num_nodes;
+
+    for(i=0;i<num_nodes;i++)
+        g->node[i].spin = 1;
 }
 
 /*! \fn void calculate_energy(gs_graph_t *g)

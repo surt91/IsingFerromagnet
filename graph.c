@@ -9,7 +9,7 @@
                         bestimmt (zB. Breite der Glockenkurve)
     \return erzeugter Graph
 */
-gs_graph_t *gs_create_graph(int L, double (*f)(double), double sigma)
+gs_graph_t *gs_create_graph(int L)
 {
     gs_graph_t *g;
     int n;
@@ -25,8 +25,8 @@ gs_graph_t *gs_create_graph(int L, double (*f)(double), double sigma)
     for(n=0;n<num_nodes; n++)
     {
         g->node[n].neighbors = NULL;
-        g->node[n].x = n % L + f(sigma);
-        g->node[n].y = n / L + f(sigma);
+        g->node[n].x = n % L;
+        g->node[n].y = n / L;
     }
 
     return(g);
