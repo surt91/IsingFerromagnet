@@ -3,8 +3,8 @@ OBJ 	= graph.o list.o spin.o
 TARGET	= test
 LINK	= gcc
 CC	= gcc
-CFLAGS	= -O2 #-DUP
-LFLAGS	= -lm -lgsl -lgslcblas
+CFLAGS	= -g -pg
+LFLAGS	= -lm -lgsl -lgslcblas -pg
 WARNLEVEL= -Wall
 
 all: $(TARGET)
@@ -13,7 +13,7 @@ all: $(TARGET)
 	$(CC) -c $(WARNLEVEL) $(CFLAGS) $< -o $@
 
 $(TARGET): $(OBJ)
-	$(CC) -o $(TARGET) $(OBJ) $(LFLAGS)
+	$(CC) -o $(TARGET) $(LFLAGS) $(OBJ)
 
 clean:
 	rm -rf $(OBJ) $(TARGET)
