@@ -26,15 +26,17 @@ int main(int argc, char *argv[])
     }
     if(argc == 2)
         T=atof(argv[1]);                /* Fehlerbehandlung fehlt */
-
-    srand(100);
-    srand48(100);
+    #ifdef UP
+        smy_rand(100);
+    #else
+        smy_rand(200);
+    #endif
 
     /* Kantenlänge des Feldes */
     L=128;
     /* Wieviele Sweeps berechnen */
     /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
-    N=4000;
+    N=10000;
     /* Alle wieviel Sweeps Ergebnisse Speichern */
     inc=1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
@@ -85,7 +87,11 @@ int main(int argc, char *argv[])
     for(i=0;i<N;i+=inc)
     {
         monte_carlo_sweeps(g, inc);
-        fprintf(data_out_file, "%d %f %f\n",i, g->E, g->M);
+        #ifdef UNINCREMENTAL
+            fprintf(data_out_file, "%d %f %f\n",i, g->E, fabs(calculate_magnetisation(g))/g->num_nodes);
+        #else
+            fprintf(data_out_file, "%d %f %f\n",i, g->E, fabs(g->M)/g->num_nodes);
+        #endif
     }
 
     /* Berechne Energie des Ising Modells */
@@ -93,10 +99,10 @@ int main(int argc, char *argv[])
     fprintf(stderr, "E = %f, inc: %f\n", E, g->E);
     /* Berechne Magnetisierung des Ising Modells */
     M = calculate_magnetisation(g);
-    #ifdef INCREMENTAL
-        fprintf(stderr, "M = %f, inc: %f\n", M, g->M);
-    #else
+    #ifdef UNINCREMENTAL
         fprintf(stderr, "M = %f\n", M);
+    #else
+        fprintf(stderr, "M = %f, inc: %f\n", M, g->M);
     #endif
     //~ print_graph_for_graph_viz(g);
 
@@ -104,6 +110,41 @@ int main(int argc, char *argv[])
 
     return(0);
 }
+
+/*! \fn double wrapper_for_gsl_rand(int set_seed, int seed)
+    \brief Eine Funktion, die die GSL rand Funktionen in ein gewohntes Format
+            überführt
+    
+    \param [in] set_seed Ob ein neuer Seed gesetzt werden soll
+    \param [in] seed     Neuer Seed
+*/
+double wrapper_for_gsl_rand(int set_seed, int seed)
+{
+    static gsl_rng * rng;
+    const gsl_rng_type * T;
+    
+    if(set_seed)
+    {
+        gsl_rng_env_setup();
+
+        T = gsl_rng_default;
+        rng = gsl_rng_alloc (T);
+        gsl_rng_set(rng, seed);
+        return(0);
+    }
+    else
+        return(gsl_rng_uniform (rng));
+    /* gsl_rng_free (rng);*/
+}
+double my_rand()
+{
+    return(wrapper_for_gsl_rand(0, 0));
+}
+void smy_rand(int seed)
+{
+    wrapper_for_gsl_rand(1, seed);
+}
+
 
 /*! \fn double gauss(double sigma)
     \brief Erzeugt Gauss verteilte Zufallszahlen nach der Box-Müller
@@ -121,8 +162,8 @@ double gauss(double sigma)
     double n1;
 
     /* hier eventuell andere Zufallsgeneratoren benutzen */
-    u1 = drand48();
-    u2 = drand48();
+    u1 = my_rand();
+    u2 = my_rand();
 
     n1 = sqrt(-2*log(1-u1))*cos(2*M_PI*u2);
 
@@ -197,7 +238,7 @@ void init_spins_randomly(gs_graph_t *g)
     for(i=0;i<num_nodes;i++)
     {
         /* Todo: andere rand() Funktion (aus gsl?) */
-        if(drand48()<0.5)
+        if(my_rand()<0.5)
             g->node[i].spin = 1;
         else
             g->node[i].spin = -1;
@@ -301,7 +342,7 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
     {
         delta_E = 0;
         /*! - Ermittele den zu flippenden Spin zufällig. */
-        to_flip_idx = floor(drand48()*num_nodes);
+        to_flip_idx = floor(my_rand()*num_nodes);
         /*! - Ermittele Energieänderung
             \f[ \Delta E = 2s_k \sum_{\mathrm{adj}(s_k)} J_{kj} s_j \f]
             So wie in \cite newman1999monte S. 52 (3.10) gegeben,
@@ -331,14 +372,14 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
             A = exp(-delta_E/g->T);
         else
             A = 1.0;
-        if(A > drand48())
+        if(A > my_rand())
         {
             /* drehe den Spin um */
             g->node[to_flip_idx].spin *= -1;
 
             g->E += delta_E;
 
-            #ifdef INCREMENTAL
+            #ifndef UNINCREMENTAL
                 g->M += 2 * g->node[to_flip_idx].spin;
             #endif
         }

@@ -3,8 +3,8 @@ OBJ 	= graph.o list.o spin.o
 TARGET	= test
 LINK	= gcc
 CC	= gcc
-CFLAGS	= -O2 -DINCREMENTAL -DUP
-LFLAGS	= -lm
+CFLAGS	= -O2 -DUP
+LFLAGS	= -lm -lgsl -lgslcblas
 WARNLEVEL= -Wall
 
 all: $(TARGET)
