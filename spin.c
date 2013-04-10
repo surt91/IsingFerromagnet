@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
     L=256;
     /* Wieviele Sweeps berechnen */
     /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
-    N=12000;
+    N=110000;
     /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
-    t_eq = 000;
+    t_eq = 10000;
     /* Alle wieviel Sweeps Ergebnisse Speichern */
     inc=1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */

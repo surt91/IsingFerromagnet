@@ -3,7 +3,7 @@ OBJ 	= graph.o list.o spin.o
 TARGET	= test
 LINK	= gcc
 CC	= gcc
-CFLAGS	= -O2 -DUP
+CFLAGS	= -O2 #-DUP
 LFLAGS	= -lm -lgsl -lgslcblas
 WARNLEVEL= -Wall
 
