@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "list.h"
 
-/*! \var gs_node_t;
+/*! \struct gs_node_t;
     \brief Knoten in einem Graphen
 
     Dabei stellt dieser Knoten einen Spin dar, dessen Position durch x
@@ -15,12 +15,13 @@
 */
 typedef struct
 {
-    double x,y;                                  //!< Position der Spins
+    double x;                        //!< horizontale Position des Spins
+    double y;                          //!< vertikale Position der Spins
     int spin;                                     //!< Up = 1; down = -1
     elem_t *neighbors;               //!< Pointer auf Liste der Nachbarn
 } gs_node_t;
 
-/*! \var gs_graph_t;
+/*! \struct gs_graph_t;
     \brief Ein Graph
 
     Er besteht aus der Anzahl seiner Knoten und einem Array, in dem Pointer
@@ -28,9 +29,11 @@ typedef struct
 */
 typedef struct
 {
-    int         num_nodes;            //!< Anzahl der Knoten, Normal L^2
+    int         num_nodes;            //!< Anzahl der Knoten, Normal \f$ L^2 \f$
     int                 L;                              //!< Seitenlänge
-    double          T,M,E;                  //!< Observablen des Systems
+    double              T;                   //!< Temperatur des Systems
+    double              M;               //!< Magnetisierung des Systems
+    double              E;                      //!< Energie des Systems
     gs_node_t       *node;               //!< Pointer auf ein Array, das die Knoten enthält
 } gs_graph_t;
 
