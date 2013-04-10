@@ -1,48 +1,125 @@
+/*! \file spin.c
+ * Diese Datei beinhaltet alle Funktionen für eine
+ * Metropolis Monte Carlo Simulation bzw. in Zukunft den Wolff
+ * Algorithmus und parallel Tempering */
 #include "spin.h"
 
-/*! \def INV_SQRT2PI
-    \brief Konstante: \f$ \frac{1}{sqrt(2 \pi)} \f$ für Gaussfunktion laut Wolfram|alpha
-*/
-#define INV_SQRT2PI 0.39894228040143267793994605993438
+/*! \fn int main(int argc, char *argv[])
+    \brief Dies ist die Main Funktion.
 
+    Sie kümmert sich um
+    -# das Parsen von Kommandozeilenargumenten
+        - -h  -> zeigt die Hilfe
+        - -Tx -> Temperatur x                      (double)
+        - -Lx -> Länge x                              (int)
+        - -xx -> seed x                               (int)
+        - -Nx -> x Monte Carlo sweeps                 (int)
+        - -ex -> Equilibrium nach x sweeps angenommen (int)
+        - -sx -> sigma x                           (double)
+        - -ox -> filename (max. 79 Zeichen)        (string)
+        - -ux -> Ordnung x (0: zufällig, 1: alle up)  (int)
+    -# das Initialisieren des Graphens, auf dem die Spins liegen
+    -# das Aufrufen der Funktionen, die die Monte Carlo Sweeps durchführen
+    -# das Speichern der Ergebnisse in Dateien
+
+    \param [in] argc     Anzahl Kommandozeilen Argumente
+    \param [in] argv     Vektor der Kommandozeilenargumente
+*/
 int main(int argc, char *argv[])
 {
     gs_graph_t *g;
     int i;
-    int L;                                  //!< Kantenlänge des Gitters
-    double sigma;                             //!< Unordnung des Gitters
+    int L;                                   //< Kantenlänge des Gitters
+    double sigma;                              //< Unordnung des Gitters
     double E, M, T;
     int N, inc, t_eq;
+    int seed, start_order;
     FILE *data_out_file;
-    char filename[80];                  //!< Dateiname, der Output Datei
+    char filename[80];                   //< Dateiname, der Output Datei
 
-    T=1.6;
-    if(argc == 1)
-        fprintf(stderr, "Kein T gegeben, benutze default: T = %f\n", T);
-    if(argc > 2)
-    {
-        fprintf(stderr, "Gib genau einen double Parameter T an\n");
-        return(-1);
-    }
-    if(argc == 2)
-        T=atof(argv[1]);                   /* Fehlerbehandlung fehlt */
-    #ifdef UP
-        smy_rand(100);
-    #else
-        smy_rand(200);
-    #endif
+    /* Vars für getopt (Kommandozeilenparser) */
+    int c;
+    extern char *optarg;
 
+    /* Standardwerte, wenn keine Optionen gegeben */
+    /* Temperatur */
+    T=2.0;
     /* Kantenlänge des Feldes */
-    L=256;
+    L=64;
     /* Wieviele Sweeps berechnen */
     /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
-    N=110000;
+    N=2000;
     /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
-    t_eq = 10000;
+    t_eq = 1000;
     /* Alle wieviel Sweeps Ergebnisse Speichern */
     inc=1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
     sigma = 0;
+    /* Anfangsbedingung der Spins: 0: zufällig, 1: alle up */
+    start_order = 0;
+    /* Seed für Zufallsgenerator */
+    seed = 42;
+    /* standard Dateiname */
+    snprintf(filename, 80, "data/data_T_%.2f_L_%d_up.dat", T, L);
+
+    /* Hier wird die Kommandozeile geparst. */
+    /* -Tx -> Temperatur x */
+    /* -Lx -> Länge x */
+    /* -sx -> seed x */
+    /* -Nx -> x Monte Carlo sweeps */
+    /* -ex -> Equilibrium nac x sweeps angenommen */
+    /* -sx -> sigma x */
+    /* -ox -> Dateiname x */
+    /* -ux -> Start Ordnung x (0: zufällig, 1: alle up) */
+    opterr = 0;
+    while ((c = getopt (argc, argv, "hT:L:x:N:e:s:o:u:")) != -1)
+        switch (c)
+        {
+            case 'T':
+                T = atof(optarg);
+                break;
+            case 'L':
+                L = atoi(optarg);
+                break;
+            case 'x':
+                seed = atoi(optarg);
+                break;
+            case 'N':
+                N = atoi(optarg);
+                break;
+            case 'e':
+                t_eq = atoi(optarg);
+                break;
+            case 's':
+                sigma = atof(optarg);
+                break;
+            case 'o':
+                strncpy(filename, optarg, 80);
+                break;
+            case 'u':
+                start_order = atoi(optarg);
+                break;
+            case '?':
+                fprintf(stderr,
+                        "Unknown option character `\\x%x'.\n", optopt);
+            case 'h':
+                fprintf(stderr,"Benutzung: %s -[hTLxNesou]\n",argv[0]);
+                fprintf(stderr,"    -h     Zeigt diese Hilfe                         \n");
+                fprintf(stderr,"    -Tx    Temperatur x                      (double)\n");
+                fprintf(stderr,"    -Lx    Länge x                              (int)\n");
+                fprintf(stderr,"    -xx    seed x                               (int)\n");
+                fprintf(stderr,"    -Nx    x Monte Carlo sweeps                 (int)\n");
+                fprintf(stderr,"    -ex    Equilibrium nach x sweeps angenommen (int)\n");
+                fprintf(stderr,"    -sx    sigma x                           (double)\n");
+                fprintf(stderr,"    -ox    filename (max. 79 Zeichen)        (string)\n");
+                fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
+                return(-1);
+            default:
+                abort ();
+        }
+
+    smy_rand(seed);
+
 
     /* Initialisiere den Graphen für die Spins */
     g = gs_create_graph(L);
@@ -54,11 +131,12 @@ int main(int argc, char *argv[])
     create_edges_regular(g);
 
     /* initialisiere den Status der Spins */
-    #ifdef UP
+    if(start_order == 1)
         init_spins_up(g);
-    #else
+    else if(start_order == 0)
         init_spins_randomly(g);
-    #endif
+    else
+        init_spins_randomly(g);
 
     //~ print_graph_for_graph_viz(g);
 
@@ -80,12 +158,12 @@ int main(int argc, char *argv[])
     /* Schreibe alle inc Sweeps die Energie und Magnetisierung in eine Datei */
     /* Plotte den Ausdruck mit Gnuplot. zB.
      * plot 'test.dat' using 1:2, "test.dat" using 1:3; */
-    #ifdef UP
-        snprintf(filename, 80, "data/data_T_%.2f_L_%d_up.dat", g->T, g->L);
-    #else
-        snprintf(filename, 80, "data/data_T_%.2f_L_%d_rand.dat", g->T, g->L);
-    #endif
-    data_out_file = fopen(filename, "w");           /* Fehlerbehandlung fehlt */
+    data_out_file = fopen(filename, "w");
+    if(data_out_file == NULL)
+    {
+        fprintf(stderr,"ERROR: %s kann nicht geöffnet werden",filename);
+        return(-1);
+    }
     fprintf(data_out_file, "#N E M\n");
     for(i=0;i<N;i+=inc)
     {
@@ -101,10 +179,10 @@ int main(int argc, char *argv[])
     return(0);
 }
 
-/*! \fn double wrapper_for_gsl_rand(int set_seed, int seed)
+/*! \fn double wrapper_for_gsl_rand(int set_seed, int seed, int free)
     \brief Eine Funktion, die die GSL rand Funktionen in ein gewohntes Format
             überführt
-    
+
     \param [in] set_seed Ob ein neuer Seed gesetzt werden soll
     \param [in] seed     Neuer Seed
     \param [in] free     Ob der rng Speicher freigegeben werden soll
@@ -131,19 +209,31 @@ double wrapper_for_gsl_rand(int set_seed, int seed, int free)
     else
         return(gsl_rng_uniform (rng));
 }
+/*! \fn my_rand()
+    \brief Erzeugt eine gleichverteilte Zufallszahl
+
+    \return Gleichverteilte Zufallszahl aus [0,1)
+*/
 double my_rand()
 {
     return(wrapper_for_gsl_rand(0, 0, 0));
 }
+/*! \fn void smy_rand(int seed)
+    \brief Initialisiert den Zufallszahlengenerator mit einem Seed
+
+    \param [in] seed Seed
+*/
 void smy_rand(int seed)
 {
     wrapper_for_gsl_rand(1, seed, 0);
 }
+/*! \fn void free_my_rand()
+    \brief Gibt den vom Zufallszahlengenerator beanspruchten Speicher frei
+*/
 void free_my_rand()
 {
     wrapper_for_gsl_rand(0, 0, 1);
 }
-
 
 /*! \fn double gauss(double sigma)
     \brief Erzeugt Gauss verteilte Zufallszahlen nach der Box-Müller
@@ -271,9 +361,9 @@ void init_spins_up(gs_graph_t *g)
 double calculate_energy(gs_graph_t *g)
 {
     int num_nodes, i;
-    int sk;                 /*!< Wert des k-ten Spins (temporäre Var) */
-    double E=0;                              /*!< Energie des Systems */
-    double E_sk;         /*!< Energie des k-ten Spins (temporäre Var) */
+    int sk;                  /*< Wert des k-ten Spins (temporäre Var) */
+    double E=0;                               /*< Energie des Systems */
+    double E_sk;          /*< Energie des k-ten Spins (temporäre Var) */
     elem_t *list;
 
     num_nodes = g->num_nodes;
@@ -291,7 +381,7 @@ double calculate_energy(gs_graph_t *g)
         E_sk *= sk;
         E += E_sk;
     }
-    return(-E/2);    /* Da über alle Spins zweimal summiert wurde: E/2 */
+    return(-E/2);   /* Da über alle Spins zweimal summiert wurde: E/2 */
 }
 
 /*! \fn void calculate_magnetisation(gs_graph_t *g)

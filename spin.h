@@ -10,7 +10,10 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <gsl/gsl_rng.h>
+#include <unistd.h>                    //< getopt: Kommandozeilenparser
+#include <string.h>
+
+#include <gsl/gsl_rng.h>             //< gsl: für bessere Zufallszahlen
 
 #include "graph.h"
 #include "list.h"
