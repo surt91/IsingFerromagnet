@@ -1,6 +1,9 @@
-/*! \file spin.h
- * Kompiliere mit -DINCREMENTAL um bei jedem Monte Carlo Schritt die
- * Magnetisierung zu updaten
+/*! \file spin.h */
+
+/*! Kompiliere mit -DINCREMENTAL um bei jedem Monte Carlo Schritt die
+ *  Magnetisierung zu updaten
+ *  Kompiliere mit -DUP um mit einer "alle Up" Spin konfiguration zu
+ *  starten anstatt einer zufälligen
  */
 #ifndef _SPIN_H
 #define _SPIN_H

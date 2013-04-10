@@ -5,22 +5,33 @@
 */
 #define INV_SQRT2PI 0.39894228040143267793994605993438
 
-int main()
+int main(int argc, char *argv[])
 {
     gs_graph_t *g;
     int i;
     int L;                                  //!< Kantenlänge des Gitters
     double sigma;//!< Parameter, der die Verschiebung der einzelnen Knoten bestimmt
-    double E, M;
+    double E, M, T;
     int N, inc;
     FILE *data_out_file;
     char filename[80];                  //!< Dateiname, der Output Datei
+
+    T=2;
+    if(argc == 1)
+        fprintf(stderr, "Kein T gegeben, benutze default: T = %f\n", T);
+    if(argc > 2)
+    {
+        fprintf(stderr, "Gib genau einen double Parameter T an\n");
+        return(-1);
+    }
+    if(argc == 2)
+        T=atof(argv[1]);                /* Fehlerbehandlung fehlt */
 
     srand(100);
     srand48(100);
 
     /* Kantenlänge des Feldes */
-    L=16;
+    L=128;
     /* Wieviele Sweeps berechnen */
     /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
     N=4000;
@@ -39,8 +50,12 @@ int main()
     create_edges_regular(g);
 
     /* initialisiere den Status der Spins */
-    init_spins_randomly(g);
-    /* init_spins_up(g); */
+    #ifdef UP
+        init_spins_up(g);
+    #else
+        init_spins_randomly(g);
+    #endif
+
     //~ print_graph_for_graph_viz(g);
 
     /* Berechne Energie des Ising Modells */
@@ -54,13 +69,17 @@ int main()
     g->E = E;
 
     /* Setze Temperatur */
-    g->T = 2;
+    g->T = T;
 
     /* Führe Monte Carlo Sweeps durch */
     /* Schreibe alle 10 Sweeps die Energie und Magnetisierung in eine Datei */
     /* Plotte den Ausdruck mit Gnuplot. zB.
      * plot 'test.dat' using 1:2, "test.dat" using 1:3; */
-    snprintf(filename, 80, "data_T_%.2f.dat", g->T);
+    #ifdef UP
+        snprintf(filename, 80, "data/data_T_%.2f_up.dat", g->T);
+    #else
+        snprintf(filename, 80, "data/data_T_%.2f_rand.dat", g->T);
+    #endif
     data_out_file = fopen(filename, "w");           /* Fehlerbehandlung fehlt */
     fprintf(data_out_file, "#N E M\n");
     for(i=0;i<N;i+=inc)
@@ -79,7 +98,7 @@ int main()
     #else
         fprintf(stderr, "M = %f\n", M);
     #endif
-    print_graph_for_graph_viz(g);
+    //~ print_graph_for_graph_viz(g);
 
     gs_clear_graph(g);
 
