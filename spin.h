@@ -1,8 +1,6 @@
 /*! \file spin.h */
 
-/*! Kompiliere mit -DUNINCREMENTAL um bei jedem Monte Carlo Schritt die
- *  Magnetisierung zu updaten
- *  Kompiliere mit -DUP um mit einer "alle Up" Spin konfiguration zu
+/*! Kompiliere mit -DUP um mit einer "alle Up" Spin konfiguration zu
  *  starten anstatt einer zufälligen
  */
 #ifndef _SPIN_H
@@ -19,6 +17,7 @@
 
 double my_rand();
 void smy_rand(int seed);
+void free_my_rand();
 double gauss(double sigma);
 
 void create_edges_regular(gs_graph_t *g);

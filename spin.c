@@ -10,13 +10,13 @@ int main(int argc, char *argv[])
     gs_graph_t *g;
     int i;
     int L;                                  //!< Kantenlänge des Gitters
-    double sigma;//!< Parameter, der die Verschiebung der einzelnen Knoten bestimmt
+    double sigma;                             //!< Unordnung des Gitters
     double E, M, T;
-    int N, inc;
+    int N, inc, t_eq;
     FILE *data_out_file;
     char filename[80];                  //!< Dateiname, der Output Datei
 
-    T=2;
+    T=1.6;
     if(argc == 1)
         fprintf(stderr, "Kein T gegeben, benutze default: T = %f\n", T);
     if(argc > 2)
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
         return(-1);
     }
     if(argc == 2)
-        T=atof(argv[1]);                /* Fehlerbehandlung fehlt */
+        T=atof(argv[1]);                   /* Fehlerbehandlung fehlt */
     #ifdef UP
         smy_rand(100);
     #else
@@ -33,10 +33,12 @@ int main(int argc, char *argv[])
     #endif
 
     /* Kantenlänge des Feldes */
-    L=128;
+    L=256;
     /* Wieviele Sweeps berechnen */
     /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
-    N=10000;
+    N=12000;
+    /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
+    t_eq = 000;
     /* Alle wieviel Sweeps Ergebnisse Speichern */
     inc=1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
@@ -62,10 +64,10 @@ int main(int argc, char *argv[])
 
     /* Berechne Energie des Ising Modells */
     E = calculate_energy(g);
-    fprintf(stderr, "E = %f\n", E);
+    //fprintf(stderr, "E = %f\n", E);
     /* Berechne Magnetisierung des Ising Modells */
     M = calculate_magnetisation(g);
-    fprintf(stderr, "M = %f\n", M);
+    //fprintf(stderr, "M = %f\n", M);
     /* Setze M und E */
     g->M = M;
     g->E = E;
@@ -74,39 +76,27 @@ int main(int argc, char *argv[])
     g->T = T;
 
     /* Führe Monte Carlo Sweeps durch */
-    /* Schreibe alle 10 Sweeps die Energie und Magnetisierung in eine Datei */
+    /* Erreiche das Equilibrium */
+    /* Schreibe alle inc Sweeps die Energie und Magnetisierung in eine Datei */
     /* Plotte den Ausdruck mit Gnuplot. zB.
      * plot 'test.dat' using 1:2, "test.dat" using 1:3; */
     #ifdef UP
-        snprintf(filename, 80, "data/data_T_%.2f_up.dat", g->T);
+        snprintf(filename, 80, "data/data_T_%.2f_L_%d_up.dat", g->T, g->L);
     #else
-        snprintf(filename, 80, "data/data_T_%.2f_rand.dat", g->T);
+        snprintf(filename, 80, "data/data_T_%.2f_L_%d_rand.dat", g->T, g->L);
     #endif
     data_out_file = fopen(filename, "w");           /* Fehlerbehandlung fehlt */
     fprintf(data_out_file, "#N E M\n");
     for(i=0;i<N;i+=inc)
     {
         monte_carlo_sweeps(g, inc);
-        #ifdef UNINCREMENTAL
-            fprintf(data_out_file, "%d %f %f\n",i, g->E, fabs(calculate_magnetisation(g))/g->num_nodes);
-        #else
+        if(i > t_eq)
             fprintf(data_out_file, "%d %f %f\n",i, g->E, fabs(g->M)/g->num_nodes);
-        #endif
     }
-
-    /* Berechne Energie des Ising Modells */
-    E = calculate_energy(g);
-    fprintf(stderr, "E = %f, inc: %f\n", E, g->E);
-    /* Berechne Magnetisierung des Ising Modells */
-    M = calculate_magnetisation(g);
-    #ifdef UNINCREMENTAL
-        fprintf(stderr, "M = %f\n", M);
-    #else
-        fprintf(stderr, "M = %f, inc: %f\n", M, g->M);
-    #endif
-    //~ print_graph_for_graph_viz(g);
+    fclose(data_out_file);
 
     gs_clear_graph(g);
+    free_my_rand();
 
     return(0);
 }
@@ -117,32 +107,41 @@ int main(int argc, char *argv[])
     
     \param [in] set_seed Ob ein neuer Seed gesetzt werden soll
     \param [in] seed     Neuer Seed
+    \param [in] free     Ob der rng Speicher freigegeben werden soll
 */
-double wrapper_for_gsl_rand(int set_seed, int seed)
+double wrapper_for_gsl_rand(int set_seed, int seed, int free)
 {
     static gsl_rng * rng;
     const gsl_rng_type * T;
-    
+
     if(set_seed)
     {
         gsl_rng_env_setup();
 
-        T = gsl_rng_default;
+        T = gsl_rng_mt19937;
         rng = gsl_rng_alloc (T);
         gsl_rng_set(rng, seed);
         return(0);
     }
+    else if(free)
+    {
+        gsl_rng_free(rng);
+        return(0);
+    }
     else
         return(gsl_rng_uniform (rng));
-    /* gsl_rng_free (rng);*/
 }
 double my_rand()
 {
-    return(wrapper_for_gsl_rand(0, 0));
+    return(wrapper_for_gsl_rand(0, 0, 0));
 }
 void smy_rand(int seed)
 {
-    wrapper_for_gsl_rand(1, seed);
+    wrapper_for_gsl_rand(1, seed, 0);
+}
+void free_my_rand()
+{
+    wrapper_for_gsl_rand(0, 0, 1);
 }
 
 
@@ -237,7 +236,6 @@ void init_spins_randomly(gs_graph_t *g)
 
     for(i=0;i<num_nodes;i++)
     {
-        /* Todo: andere rand() Funktion (aus gsl?) */
         if(my_rand()<0.5)
             g->node[i].spin = 1;
         else
@@ -358,6 +356,7 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
         }
         /* Hier werden die Koeffizienten berücksichtigt: E = 2s_k*sum */
         delta_E *= 2 * g->node[to_flip_idx].spin;
+/*        printf("%f\n",delta_E);*/
         /*! - Berechne die Wahrscheinlichkeit, mit der der Flip akzeptiert
             wird.
             \f[ A = \left\{
@@ -379,9 +378,7 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
 
             g->E += delta_E;
 
-            #ifndef UNINCREMENTAL
-                g->M += 2 * g->node[to_flip_idx].spin;
-            #endif
+            g->M += 2 * g->node[to_flip_idx].spin;
         }
     }
 }
