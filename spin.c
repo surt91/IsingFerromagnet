@@ -9,7 +9,8 @@
 
     Sie kümmert sich um
     -# das Parsen von Kommandozeilenargumenten
-        - -h  -> zeigt die Hilfe
+        - -v  -> zeigt die Hilfe
+        - -h  -> gesprächiger Modus
         - -Tx -> Temperatur x                      (double)
         - -Lx -> Länge x                              (int)
         - -xx -> seed x                               (int)
@@ -38,7 +39,7 @@ int main(int argc, char *argv[])
     char filename[80];                   //< Dateiname, der Output Datei
 
     /* Vars für getopt (Kommandozeilenparser) */
-    int c;
+    int c, verbose=0, custom_file_name=0;
     extern char *optarg;
 
     /* Standardwerte, wenn keine Optionen gegeben */
@@ -59,10 +60,10 @@ int main(int argc, char *argv[])
     start_order = 0;
     /* Seed für Zufallsgenerator */
     seed = 42;
-    /* standard Dateiname */
-    snprintf(filename, 80, "data/data_T_%.2f_L_%d_up.dat", T, L);
 
     /* Hier wird die Kommandozeile geparst. */
+    /* -h  -> help */
+    /* -v  -> verbose */
     /* -Tx -> Temperatur x */
     /* -Lx -> Länge x */
     /* -sx -> seed x */
@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
     /* -ox -> Dateiname x */
     /* -ux -> Start Ordnung x (0: zufällig, 1: alle up) */
     opterr = 0;
-    while ((c = getopt (argc, argv, "hT:L:x:N:e:s:o:u:")) != -1)
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:")) != -1)
         switch (c)
         {
             case 'T':
@@ -94,10 +95,14 @@ int main(int argc, char *argv[])
                 sigma = atof(optarg);
                 break;
             case 'o':
+                custom_file_name = 1;
                 strncpy(filename, optarg, 80);
                 break;
             case 'u':
                 start_order = atoi(optarg);
+                break;
+            case 'v':
+                verbose = 1;
                 break;
             case '?':
                 fprintf(stderr,
@@ -105,6 +110,7 @@ int main(int argc, char *argv[])
             case 'h':
                 fprintf(stderr,"Benutzung: %s -[hTLxNesou]\n",argv[0]);
                 fprintf(stderr,"    -h     Zeigt diese Hilfe                         \n");
+                fprintf(stderr,"    -v     gesprächiger Modus                        \n");
                 fprintf(stderr,"    -Tx    Temperatur x                      (double)\n");
                 fprintf(stderr,"    -Lx    Länge x                              (int)\n");
                 fprintf(stderr,"    -xx    seed x                               (int)\n");
@@ -120,6 +126,28 @@ int main(int argc, char *argv[])
 
     smy_rand(seed);
 
+    if(!custom_file_name)
+    {
+        /* standard Dateiname */
+        snprintf(filename, 80, "data/data_T_%.2f_L_%d_up.dat", T, L);
+    }
+
+    if(verbose)
+    {
+        printf("gewählte Parameter:\n");
+        printf("    L     = %d\n", L);
+        printf("    T     = %f\n", T);
+        printf("    N     = %d\n", N);
+        printf("    t_eq  = %d\n", t_eq);
+        printf("    seed  = %d\n", seed);
+        printf("    sigma = %f\n", sigma);
+        if(start_order)
+            printf("    spins starten alle up\n");
+        else
+            printf("    spins starten zufällig\n");
+        printf("    Filename: '%s'\n",filename);
+        printf("    \n");
+    }
 
     /* Initialisiere den Graphen für die Spins */
     g = gs_create_graph(L);
@@ -164,7 +192,7 @@ int main(int argc, char *argv[])
         fprintf(stderr,"ERROR: %s kann nicht geöffnet werden",filename);
         return(-1);
     }
-    fprintf(data_out_file, "#N E M\n");
+    fprintf(data_out_file, "# N E M # T=%f\n",g->T);
     for(i=0;i<N;i+=inc)
     {
         monte_carlo_sweeps(g, inc);
@@ -459,7 +487,6 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
         }
         /* Hier werden die Koeffizienten berücksichtigt: E = 2s_k*sum */
         delta_E *= 2 * g->node[to_flip_idx].spin;
-/*        printf("%f\n",delta_E);*/
         /*! - Berechne die Wahrscheinlichkeit, mit der der Flip akzeptiert
             wird.
             \f[ A = \left\{
