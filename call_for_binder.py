@@ -3,11 +3,8 @@
 from subprocess import call
 from numpy import arange
 
+# Generieren der Ergebnisse
 for l in [16, 32, 64]:
-    call(["make","clean"])
-    call(["sed", "-e", "s/L=[0-9]\+/L={0}/g".format(l),"-i", "spin.c"])
-    call(["make"])
-    # Generieren der Ergebnisse
-    for i in arange(2.2,2.4,0.01):
-        call(["./test", "{0:.2f}".format(i)])
-
+    for t in arange(1,4,0.02):
+        call(["./test", "-T{0:.2f}".format(t), "-L{0}".format(l), "-e5000", "-N80000", "-v", "-u1", "-x13"])
+        call(["./test", "-T{0:.2f}".format(t), "-L{0}".format(l), "-e5000", "-N80000", "-v", "-u0", "-x42"])
