@@ -38,6 +38,10 @@ int main(int argc, char *argv[])
     FILE *data_out_file;
     char filename[80];                   //< Dateiname, der Output Datei
 
+    #ifdef TIME
+        double begin_time, end_time;          //< for timing Information
+    #endif
+
     /* Vars für getopt (Kommandozeilenparser) */
     int c, verbose=0, custom_file_name=0;
     extern char *optarg;
@@ -129,7 +133,10 @@ int main(int argc, char *argv[])
     if(!custom_file_name)
     {
         /* standard Dateiname */
-        snprintf(filename, 80, "data/data_T_%.2f_L_%d_up.dat", T, L);
+        if(start_order)
+            snprintf(filename, 80, "data/data_T_%.2f_L_%d_up.dat", T, L);
+        else
+            snprintf(filename, 80, "data/data_T_%.2f_L_%d_rand.dat", T, L);
     }
 
     if(verbose)
@@ -147,6 +154,10 @@ int main(int argc, char *argv[])
             printf("    spins starten zufällig\n");
         printf("    Filename: '%s'\n",filename);
         printf("    \n");
+
+        #ifdef TIME
+            begin_time = clock();
+        #endif
     }
 
     /* Initialisiere den Graphen für die Spins */
@@ -203,6 +214,15 @@ int main(int argc, char *argv[])
 
     gs_clear_graph(g);
     free_my_rand();
+
+    #ifdef TIME
+        if(verbose)
+        {
+            end_time = clock();
+            printf("Laufzeit\n    %.2f s\n\n",
+                         (double)(end_time-begin_time)/CLOCKS_PER_SEC);
+        }
+    #endif
 
     return(0);
 }

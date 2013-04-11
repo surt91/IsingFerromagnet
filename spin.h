@@ -1,7 +1,7 @@
 /*! \file spin.h */
 
-/*! Kompiliere mit -DUP um mit einer "alle Up" Spin konfiguration zu
- *  starten anstatt einer zufälligen
+/*! Kompiliere mit -DTIME, um die Laufzeit eines Jeden Laufs im Verbose
+ * Modus anzeigen zu lassen
  */
 #ifndef _SPIN_H
 #define _SPIN_H
@@ -12,6 +12,10 @@
 
 #include <unistd.h>                    //< getopt: Kommandozeilenparser
 #include <string.h>
+
+#ifdef TIME
+    #include <time.h>                        //< Zur Laufzeitbestimmung
+#endif
 
 #include <gsl/gsl_rng.h>             //< gsl: für bessere Zufallszahlen
 
