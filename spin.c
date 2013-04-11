@@ -420,9 +420,22 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
     int i;
     int num_nodes;
     int to_flip_idx;
-    double delta_E;
+    int delta_E;
     double A;
     elem_t *list;
+    /* Array mit vorberechneten exp(E/T)
+     * Es gibt die möglichen delta_E Werte -8, -4, 0, 4, 8
+     * Nur die positiven müssen berechnet werden.
+     */
+    static double exp_T[2];
+    static int exp_ready=0;
+
+    if(!exp_ready)
+    {
+        exp_T[0] = exp(-4/g->T);
+        exp_T[1] = exp(-8/g->T);
+        exp_ready = 1;
+    }
 
     num_nodes = g->num_nodes;
 
@@ -457,10 +470,18 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
                     \right.  \f]
             Wie in \cite newman1999monte S. 49 (3.7) gegeben.
          */
-        if(delta_E > 0)
-            A = exp(-delta_E/g->T);
-        else
-            A = 1.0;
+        switch(delta_E)
+        {
+            case 4:
+                A = exp_T[0];
+                break;
+            case 8:
+                A = exp_T[1];
+                break;
+            default:
+                A = 1.0;
+                break;
+        }
         if(A > my_rand())
         {
             /* drehe den Spin um */
