@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
     {
         monte_carlo_sweeps(g, inc);
         if(i > t_eq)
-            fprintf(data_out_file, "%d %f %f\n",i, g->E, fabs(g->M)/g->num_nodes);
+            fprintf(data_out_file, "%d %f %f\n",i, g->E, g->M/g->num_nodes);
     }
     fclose(data_out_file);
 
