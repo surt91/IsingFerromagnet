@@ -37,14 +37,17 @@ class output_reader():
     def X(self, t):
         m = self.M
         t_max = len(m)
-        return sum([m[i] * m[i+t] for i in range(0,t_max-t)])
+        eins = sum([m[i] * m[i+t] for i in range(0,t_max-t)])
+        zwei = sum([m[i] for i in range(0,t_max-t)]) * sum([m[i+t] for i in range(0,t_max-t)])/(t_max-t)
+        return eins - zwei
         
     def getAutocorrTime(self):
         m = self.M
         x0 = self.X(0)
         autocorr = [self.X(t) for t in range(0,len(m))]
         self.tau = trapz(autocorr)/x0
-        
+#        for i in autocorr:
+#            print i
         return self.tau
         
     def getBinder(self):
