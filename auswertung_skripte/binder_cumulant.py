@@ -17,7 +17,7 @@ for f in os.listdir("../data"):
     r = output_reader(os.path.join("../data",f))
     g.append([T,L,(r.getBinder(),r.getBinderErrorJackknife())])
     #~ M.append([T,L,(r.getMeanM(),sqrt(r.getVarM))])
-    #tau.append([T,L,r.getAutocorrTime()])
+    #tau.append([T,L,(r.getAutocorrTime(),0)])
 
 for [val,fname] in ((g,"binder.dat"),):
     out = sorted(val)

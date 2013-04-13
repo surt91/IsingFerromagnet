@@ -4,7 +4,7 @@
 import csv
 from numpy import mean, var, sqrt
 
-from scipy.integrate import trapz
+#~ from scipy.integrate import trapz
 
 class output_reader():
     """!
@@ -66,7 +66,7 @@ class output_reader():
         t_max = len(m)
         eins = sum([m[i] * m[i+t] for i in range(0,t_max-t)])
         zwei = sum([m[i] for i in range(0,t_max-t)]) * sum([m[i+t] for i in range(0,t_max-t)])/(t_max-t)
-        return eins - zwei
+        return abs(eins - zwei)
 
     def getAutocorrTime(self):
         """! Berechnet die Autokorrelationszeit \f$ \tau \f$
@@ -80,8 +80,8 @@ class output_reader():
         autocorr = [self.X(t) for t in range(0,len(m))]
         #~ self.tau = trapz(autocorr)/x0
         self.tau = sum(autocorr)/x0
-#        for i in autocorr:
-#            print i
+        #~ for i in autocorr:
+            #~ print i
         return self.tau
 
     def getBinder(self):
