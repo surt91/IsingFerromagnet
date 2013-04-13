@@ -4,6 +4,11 @@
  * Algorithmus und parallel Tempering */
 #include "spin.h"
 
+/*! \def MAX_LEN_FILENAME
+ * Maximale Länge des Outputdateinamens
+ */
+#define MAX_LEN_FILENAME 80
+
 /*! \fn int main(int argc, char *argv[])
     \brief Dies ist die Main Funktion.
 
@@ -39,7 +44,7 @@ int main(int argc, char *argv[])
     int N, inc, t_eq;
     int seed, start_order;
     FILE *data_out_file;
-    char filename[80];                   //< Dateiname, der Output Datei
+    char filename[MAX_LEN_FILENAME];     //< Dateiname, der Output Datei
 
     #ifdef TIME
         double begin_time, end_time;          //< for timing Information
@@ -111,7 +116,7 @@ int main(int argc, char *argv[])
                 break;
             case 'o':
                 custom_file_name = 1;
-                strncpy(filename, optarg, 80);
+                strncpy(filename, optarg, MAX_LEN_FILENAME);
                 break;
             case 'u':
                 start_order = atoi(optarg);
@@ -157,9 +162,9 @@ int main(int argc, char *argv[])
     {
         /* standard Dateiname */
         if(start_order)
-            snprintf(filename, 80, "data/data_T_%.2f_L_%d_up.dat", T, L);
+            snprintf(filename, MAX_LEN_FILENAME, "data/data_T_%.2f_L_%d_up.dat", T, L);
         else
-            snprintf(filename, 80, "data/data_T_%.2f_L_%d_rand.dat", T, L);
+            snprintf(filename, MAX_LEN_FILENAME, "data/data_T_%.2f_L_%d_rand.dat", T, L);
     }
 
     if(verbose)
@@ -226,7 +231,7 @@ int main(int argc, char *argv[])
         fprintf(stderr,"ERROR: %s kann nicht geöffnet werden",filename);
         return(-1);
     }
-    fprintf(data_out_file, "# N E M # T=%f\n",g->T);
+    fprintf(data_out_file, "# N E M # T=%f # L=%d\n",g->T, g->L);
 
     for(i=0;i<N;i+=inc)
     {
