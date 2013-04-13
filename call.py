@@ -2,25 +2,31 @@
 
 from subprocess import call
 from numpy import arange
-from multiprocessing import Process, Pool,cpu_count
+from multiprocessing import Process, cpu_count
 
-def f(t,l):
-    call(["time", "-f%E", "./test", "-T{0:.2f}".format(t), "-L{0}".format(l), "-e5000", "-N15000", "-v", "-u1", "-x13"])
-    call(["time", "-f%E", "./test", "-T{0:.2f}".format(t), "-L{0}".format(l), "-e5000", "-N15000", "-v", "-u0", "-x42"])
+def f(t,l,t_eq,tau):
+    call(["time", "-f%E", "./test", "-T{0:.2f}".format(t),
+           "-L{0}".format(l), "-e{0}".format(t_eq),
+           "-N{0}".format(t_eq+1000*tau), "-i{0}".format(tau),
+           "-v", "-u1", "-x13"])
 
 if __name__ == '__main__':
     n=0
     nWorker = cpu_count()*2
+    # Tupel aus L, T_eq, tau
+    # Also Größe, Equilibriums Zeit und Korrelationszeit
+    # Diese sind durch tests in zeiten.par eingetragen
+    configs = [ ( 16, 100*2, 100),
+                ( 32, 500*2, 100)
+                #( 64,1800*2, 300)
+                                  ]
     # Generieren der Ergebnisse
-    for l in [16, 32, 64]:
-        for t in arange(1.8,3.3,0.1):
+    for [l,t_eq,tau] in configs:
+        for t in arange(2.1,2.4,0.01):
+            n+=1
             #! bearbeite mehrere Prozesse gleichzeitig
-            if n < nWorker:
-                p = Process(target=f, args=(t,l))
-                p.start()
-                n+=1
-            else:
-                p = Process(target=f, args=(t,l))
-                p.start()
+            p = Process(target=f, args=(t,l,t_eq,tau))
+            p.start()
+            if n >= nWorker:
                 p.join()
                 n=0
