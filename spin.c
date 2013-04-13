@@ -180,6 +180,14 @@ int main(int argc, char *argv[])
             printf("    spins starten alle up\n");
         else
             printf("    spins starten zufällig\n");
+        if(wolff_flag)
+            printf("    Wolff Algorithmus\n");
+        else
+            printf("    Metropolis Algorithmus\n");
+        if(par_temp_flag)
+            printf("    Parallel Tempering aktiviert\n");
+        else
+            printf("    Parallel Tempering deaktiviert\n");
         printf("    Filename: '%s'\n",filename);
         printf("    \n");
 
