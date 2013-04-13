@@ -1,12 +1,9 @@
 #include "graph.h"
 
-/*! \fn gs_graph_t *gs_create_graph(int L, double (*f)(double), double sigma)
+/*! \fn gs_graph_t *gs_create_graph(int L)
     \brief Erstellt einen neuen Graphen. Aus Kapitel 'Graphs'
 
     \param [in]     L   Kantenlänge des Gitters
-    \param [in]     f   Funktion, die eine Abweichung der Positionen liefert
-    \param [in] sigma   Parameter, der die Verschiebungen der x und y
-                        bestimmt (zB. Breite der Glockenkurve)
     \return erzeugter Graph
 */
 gs_graph_t *gs_create_graph(int L)
