@@ -1,11 +1,11 @@
-OBJ 	= graph.o list.o spin.o
+OBJ 	= graph.o list.o stack.o spin.o
 
 TARGET	= test
 LINK	= gcc
 CC	= gcc
 #CFLAGS	= -g -pg -DTIME
-CFLAGS	= -O2
-LFLAGS	= -lm -lgsl -lgslcblas -pg
+CFLAGS	= -O2 -march=native -pipe
+LFLAGS	= -lm -lgsl -lgslcblas
 WARNLEVEL= -Wall
 
 all: $(TARGET)

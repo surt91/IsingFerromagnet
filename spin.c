@@ -19,6 +19,9 @@
         - -sx -> sigma x                           (double)
         - -ox -> filename (max. 79 Zeichen)        (string)
         - -ux -> Ordnung x (0: zufällig, 1: alle up)  (int)
+        - -ix -> Alle x sweeps schreiben              (int)
+        - -w     Wolff Algorithmus (statt Metropolis)
+        - -p     Parallel Tempering aktivieren
     -# das Initialisieren des Graphens, auf dem die Spins liegen
     -# das Aufrufen der Funktionen, die die Monte Carlo Sweeps durchführen
     -# das Speichern der Ergebnisse in Dateien
@@ -44,6 +47,7 @@ int main(int argc, char *argv[])
 
     /* Vars für getopt (Kommandozeilenparser) */
     int c, verbose=0, custom_file_name=0;
+    int wolff_flag, par_temp_flag;
     extern char *optarg;
 
     /* Standardwerte, wenn keine Optionen gegeben */
@@ -64,6 +68,10 @@ int main(int argc, char *argv[])
     start_order = 0;
     /* Seed für Zufallsgenerator */
     seed = 42;
+    /* Soll Wolff Algorithmus benutzt werden? */
+    wolff_flag = 0;
+    /* Soll Parallel Tempering Algorithmus benutzt werden? */
+    par_temp_flag = 0;
 
     /* Hier wird die Kommandozeile geparst. */
     /* -h  -> help */
@@ -76,8 +84,11 @@ int main(int argc, char *argv[])
     /* -sx -> sigma x */
     /* -ox -> Dateiname x */
     /* -ux -> Start Ordnung x (0: zufällig, 1: alle up) */
+    /* -ix -> Alle x sweeps schreiben */
+    /* -w  -> Wolff Algorithmus (statt Metropolis) */
+    /* -p     Parallel Tempering aktivieren */
     opterr = 0;
-    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:")) != -1)
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp")) != -1)
         switch (c)
         {
             case 'T':
@@ -105,8 +116,17 @@ int main(int argc, char *argv[])
             case 'u':
                 start_order = atoi(optarg);
                 break;
+            case 'i':
+                inc = atoi(optarg);
+                break;
             case 'v':
                 verbose = 1;
+                break;
+            case 'w':
+                wolff_flag = 1;
+                break;
+            case 'p':
+                par_temp_flag = 1;
                 break;
             case '?':
                 fprintf(stderr,
@@ -123,6 +143,9 @@ int main(int argc, char *argv[])
                 fprintf(stderr,"    -sx    sigma x                           (double)\n");
                 fprintf(stderr,"    -ox    filename (max. 79 Zeichen)        (string)\n");
                 fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
+                fprintf(stderr,"    -ix    Alle x sweeps schreiben              (int)\n");
+                fprintf(stderr,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
+                fprintf(stderr,"    -p     Parallel Tempering aktivieren             \n");
                 return(-1);
             default:
                 abort ();
@@ -204,9 +227,21 @@ int main(int argc, char *argv[])
         return(-1);
     }
     fprintf(data_out_file, "# N E M # T=%f\n",g->T);
+
     for(i=0;i<N;i+=inc)
     {
-        monte_carlo_sweeps(g, inc);
+        /* Welchen Algorithmus nutzen? */
+        if(! wolff_flag)
+            metropolis_monte_carlo_sweeps(g, inc);
+        else
+        {
+            wolff_monte_carlo_sweeps(g, inc);
+            g->E = calculate_energy(g);
+        }
+
+        g->M = calculate_magnetisation(g);
+        /* Ergebnisse nur in die Ausgabe schreiben, wenn die (vermutete)
+            Equilibriumszeit verstrichen ist */
         if(i > t_eq)
             fprintf(data_out_file, "%d %f %f\n",i, g->E, g->M/g->num_nodes);
     }
@@ -298,7 +333,6 @@ double gauss(double sigma)
     double u1, u2;
     double n1;
 
-    /* hier eventuell andere Zufallsgeneratoren benutzen */
     u1 = my_rand();
     u2 = my_rand();
 
@@ -396,7 +430,7 @@ void init_spins_up(gs_graph_t *g)
         g->node[i].spin = 1;
 }
 
-/*! \fn void calculate_energy(gs_graph_t *g)
+/*! \fn double calculate_energy(gs_graph_t *g)
     \brief Berechnet die Energie des Ising Modells
 
     Dies wird durch einfache Auswertung des Hamiltonoperators des
@@ -432,7 +466,7 @@ double calculate_energy(gs_graph_t *g)
     return(-E/2);   /* Da über alle Spins zweimal summiert wurde: E/2 */
 }
 
-/*! \fn void calculate_magnetisation(gs_graph_t *g)
+/*! \fn double calculate_magnetisation(gs_graph_t *g)
     \brief Berechnet die Magnetisierung des Ising Modells
 
     Dies wird durch einfache Auswertung der Definition erledigt.
@@ -454,16 +488,15 @@ double calculate_magnetisation(gs_graph_t *g)
     return(M);
 }
 
-/*! \fn double monte_carlo_sweeps(gs_graph_t *g, int N)
-    \brief Führt N Monte Carlo Sweeps durch
+/*! \fn void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N)
+    \brief Führt N Monte Carlo Sweeps durch mit dem Metropolis Algorithmus
 
     Dabei besteht ein Sweep aus \f$ L^2 \f$ Monte Carlo Schritten
 
     \param [in,out]    g    Graph, der modifiziert werden soll
     \param [in]        N    Anzahl der zu berechnenden Sweeps
-    \return Magnetisierung des Systems.
 */
-void monte_carlo_sweeps(gs_graph_t *g, int N)
+void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N)
 {
     int i;
     int num_nodes;
@@ -536,7 +569,89 @@ void monte_carlo_sweeps(gs_graph_t *g, int N)
 
             g->E += delta_E;
 
-            g->M += 2 * g->node[to_flip_idx].spin;
+            //~ g->M += 2 * g->node[to_flip_idx].spin;
         }
     }
+}
+
+/*! \fn void wolff_monte_carlo_sweeps(gs_graph_t *g, int N)
+    \brief Führt N Monte Carlo Sweeps durch mit dem Wolff Cluster Algorithmus
+
+    Dabei besteht ein Sweep aus einem Clusterschritt.\n
+    Ablauf:
+    - Cluster bilden
+        - Einen zufälligen Seed Spin wählen
+        - Nachbarn, die in die gleiche Richtung zeigen
+            mit der Wahrscheinlichkeit \f$ P_add 1-e^{(-2J/T)} \f$
+            hinzufügen
+        - Nachbarn der Nachbarn auf gleiche Weise hinzufügen, bis es
+            keine weitere Möglichkeit mehr gibt, Spins hinzuzufügen
+    - Alle Spins in diesem Cluster flippen
+
+    Vergleiche auch \cite newman1999monte (4.12)
+
+    \param [in,out]    g    Graph, der modifiziert werden soll
+    \param [in]        N    Anzahl der zu berechnenden Sweeps
+*/
+void wolff_monte_carlo_sweeps(gs_graph_t *g, int N)
+{
+    int i,n;                                     /* Counter Variablen */
+    int cur_index;              /* Welchen Spin betrachte ich gerade? */
+    elem_t *list;                    /* Temporär: finden der Nachbarn */
+    int *cluster;     /* Liste der in den Cluster aufgenommenen Spins */
+    double p_add;    /* Wahscheinlich einen weitern Spin hinzuzufügen */
+    /* Stack mit Spins, deren Nachbarn noch die Chance bekommen müssen
+     *                           in den Cluster aufgenommen zu werden */
+    stack_t *stack_of_spins_with_untestet_neighbors = NULL;
+
+    /* Allokation */
+    cluster = malloc(g->num_nodes*sizeof(int));
+
+    for(i=0;i<N;n++)
+    {
+        /* Initialisierung */
+        for(i=0;i<g->num_nodes;i++)
+            cluster[i]=0;
+
+        /* Wähle zufälligen seed */
+        cur_index = (int) (my_rand() * g->num_nodes);
+        cluster[cur_index] = 1;
+        stack_of_spins_with_untestet_neighbors
+            = push(stack_of_spins_with_untestet_neighbors, cur_index);
+        while(!is_empty(stack_of_spins_with_untestet_neighbors))
+        {
+            stack_of_spins_with_untestet_neighbors
+                = pop(stack_of_spins_with_untestet_neighbors, &cur_index);
+            /* Suche nach benachbarten Knoten mit gleichem Spin */
+            list = g->node[cur_index].neighbors;
+            while(list != NULL)
+            {
+                /* Wenn dieser Nachbar noch nicht im Cluster ist, und den
+                 * gleichen Spin hat ... */
+                if( (!cluster[list->index]) &&
+                    (g->node[list->index].spin == g->node[cur_index].spin))
+                {
+                    /* ... gib ihm die Chance in den Cluster zu kommen */
+                    /* Nicht vorher berechenbar, da J beliebig */
+                    p_add = 1-exp(-2*list->weight/g->T);
+                    if(p_add > my_rand())
+                    {
+                        cluster[list->index] = 1;
+                        stack_of_spins_with_untestet_neighbors
+                            = push(stack_of_spins_with_untestet_neighbors, list->index);
+                    }
+                }
+                list = list->next;
+            }
+        }
+
+        /* Jetzt flippe alle Spins im Cluster */
+        for(i=0;i<g->num_nodes;i++)
+            if(cluster[i])
+                g->node[i].spin *= -1;
+
+        /* Sollte eigentlich schon leer sein... */
+        clear_stack(stack_of_spins_with_untestet_neighbors);
+    }
+    free(cluster);
 }

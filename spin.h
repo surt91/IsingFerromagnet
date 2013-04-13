@@ -21,6 +21,7 @@
 
 #include "graph.h"
 #include "list.h"
+#include "stack.h"
 
 double my_rand();
 void smy_rand(int seed);
@@ -33,7 +34,8 @@ void init_spins_randomly(gs_graph_t *g);
 void init_spins_up(gs_graph_t *g);
 double calculate_energy(gs_graph_t *g);
 double calculate_magnetisation(gs_graph_t *g);
-void monte_carlo_sweeps(gs_graph_t *g, int N);
+void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N);
+void wolff_monte_carlo_sweeps(gs_graph_t *g, int N);
 
 
 
