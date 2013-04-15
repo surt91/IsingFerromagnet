@@ -127,7 +127,8 @@ void print_graph_for_graph_viz(gs_graph_t *g)
         {
             /* Drucke keine periodischen Randbedingungen */
             if(i+1 == list->index || i - 1 == list->index || i - L == list->index || i + L == list->index)
-                printf("%d -- %d\n", i, list->index);
+                //~ printf("%d -- %d [label=\" %.2f\"]\n", i, list->index, list->weight);
+                printf("%d -- %d [penwidth=\" %.2f\"]\n", i, list->index, list->weight*10);
             list = list->next;
         }
     }

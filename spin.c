@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     int i;
     int L;                                   //< Kantenlänge des Gitters
     double sigma;                              //< Unordnung des Gitters
+    double alpha;                              //< Gewichtung der Kanten
     double E, M, T;
     int N, inc, t_eq;
     int seed, start_order;
@@ -68,7 +69,9 @@ int main(int argc, char *argv[])
     /* Alle wieviel Sweeps Ergebnisse Speichern */
     inc=1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
-    sigma = 0;
+    sigma = 0.2;
+    /* Parameter, der die Gewichtung der Kanten bestimmt */
+    alpha = 1;
     /* Anfangsbedingung der Spins: 0: zufällig, 1: alle up */
     start_order = 0;
     /* Seed für Zufallsgenerator */
@@ -204,6 +207,7 @@ int main(int argc, char *argv[])
 
     /* Verknüpfe die Knoten */
     create_edges_regular(g);
+    assign_weights_with_function(g, exponential_decay, alpha);
 
     /* initialisiere den Status der Spins */
     if(start_order == 1)
@@ -259,6 +263,8 @@ int main(int argc, char *argv[])
             fprintf(data_out_file, "%d %f %f\n",i, g->E, g->M/g->num_nodes);
     }
     fclose(data_out_file);
+
+    //~ print_graph_for_graph_viz(g);
 
     gs_clear_graph(g);
     free_my_rand();
@@ -357,6 +363,18 @@ double gauss(double sigma)
     return(n1);
 }
 
+/*! \fn double exponential_decay(double alpha, double x)
+    \brief Berechnet den exponentiellen Abfall \f$ e^{-\alpha x}
+
+    \param [in]   alpha    Parameter des Abfalls
+    \param [in]   x        Argument der Funktion
+    \return \f$ e^{-\alpha x}
+*/
+double exponential_decay(double alpha, double x)
+{
+    return(exp(-alpha*x));
+}
+
 /*! \fn void move_graph_nodes(gs_graph_t *g, double (*f)(double), double sigma)
     \brief Verschiebt die Knoten des Graphen g, wobei die Verschiebung zufällig
             nach der Verteilung f mit dem Parameter sigma gewählt wird.
@@ -405,6 +423,65 @@ void create_edges_regular(gs_graph_t *g)
             gs_insert_edge(g, i, i+L, weight);  /*oben*/
         else
             gs_insert_edge(g, i, i%L, weight);
+    }
+}
+
+/*! \fn void assign_weights_with_function(gs_graph_t *g, double (*f)(double alpha, double dist), double alpha)
+    \brief Ändert die Kantengewichte eines Graphen abhängig vom Abstand
+            der Knoten nach einem exponentiellen Zusammenhang.
+
+            Dieser Exponentielle Zusammenhang ist
+            \f$ J = e^{-\alpha d} \f$
+            wobei d der Abstand er Knoten ist
+
+    \param [in,out]    g     Graph, der modifiziert werden soll
+    \param [in]        alpha Gewichtungsfaktor
+*/
+void assign_weights_with_function(gs_graph_t *g,
+                   double (*f)(double alpha, double dist), double alpha)
+{
+    int i,j;
+    int L;
+    double weight, dist;
+    double dx, dy;
+    elem_t *list;
+
+    for(i=0;i<g->num_nodes;i++)
+    {
+        L = g->L;
+
+        list = g->node[i].neighbors;
+        while(list != NULL)                     /* Über alle Nachbarn */
+        {
+            j=list->index;
+
+            /* Prüfe, ob der Knoten ein rechter oder linker Randknoten ist
+                Wenn ja, reduziere den Abstand in x-Richtung um L */
+            if(    (i%L == 0   && j%L == L-1)    /* i links, j rechts */
+                || (i%L == L-1 && j%L == 0)   )  /* i rechts, j links */
+            {
+                dx = abs(g->node[j].x - g->node[i].x) - L;
+            }
+            else
+                dx = g->node[j].x - g->node[i].x;
+
+            /* Prüfe, ob der Knoten ein oberer oder unterer Randknoten ist
+                Wenn ja, reduziere den Abstand in y-Richtung um L */
+            if(    (i/L == 0   && j/L == L-1)    /* i oben, j unten */
+                || (i/L == L-1 && j/L == 0)   )  /* i unten, j oben */
+            {
+                dy = abs(g->node[j].y - g->node[i].y) - L;
+            }
+            else
+                dy = g->node[j].y - g->node[i].y;
+
+            dist = sqrt(dx*dx + dy*dy);
+
+            weight = f(alpha,dist);
+            list->weight = weight;
+
+            list = list->next;
+        }
     }
 }
 
