@@ -15,7 +15,7 @@ for f in os.listdir("../data"):
     L=f.split("_")[4]
 
     r = output_reader(os.path.join("../data",f))
-    g.append([T,L,(r.getBinder(),r.getBinderErrorJackknife())])
+    g.append([T,L,(r.getBinder(),r.getBinderErrorJackknife(r.getBinder,r.M))])
     #~ M.append([T,L,(r.getMeanM(),sqrt(r.getVarM))])
     #tau.append([T,L,(r.getAutocorrTime(),0)])
 

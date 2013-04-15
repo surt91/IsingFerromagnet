@@ -28,8 +28,6 @@ class output_reader():
     # Magnetisierung pro Spin (Liste)
     ## @var E
     # Energie (Liste)
-    ## @var g
-    # Binderkumulante
     ## @var tau
     # Autokorrelationszeit
 
@@ -84,42 +82,38 @@ class output_reader():
             #~ print i
         return self.tau
 
-    def getBinder(self):
+    def getBinder(self,m=False):
         """! Berechnet die Binder Kumulante
 
             vgl. \cite katzgraber2011introduction S. 12 (19)
         """
-        m = self.M
-        m4 = mean([abs(i**4) for i in m])
-        m2 = mean([abs(i**2) for i in m])
+        if not m:
+            m = self.M
+        m4 = mean([i**4 for i in m])
+        m2 = mean([i**2 for i in m])
 
-        self.g=(3-m4/(m2**2))/2
+        g=(3-m4/(m2**2))/2
 
-        return self.g
+        return g
 
-    def getBinderErrorJackknife(self):
+    def getErrorJackknife(self,estimator,data):
         """! berechnet eine Unsicherheit der Binderkumulante
 
             Dabei wird die Jackknife Methode benutzt.
             vgl \cite young2012everything S. 12
-
         """
-        m = self.M
+        m = data
         g = [0 for i in range(len(m))]
         for i in range(len(m)):
             m_tmp = [j for j in m]
             del m_tmp[i]
-            m4 = mean([j**4 for j in m_tmp])
-            m2 = mean([j**2 for j in m_tmp])
 
-            g[i] = (3-m4/(m2**2))/2
+            g[i] = estimator(m_tmp)
 
         # Jackknife Estimate
         #mean(g)
         # Jackknife Error
         return ( sqrt(len(m)-1) * sqrt(mean([i**2 for i in g]) - mean(g)**2) )
-
-
 
     def getMeanM(self):
         return mean([abs(i) for i in self.M])
