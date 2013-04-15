@@ -76,9 +76,9 @@ int main(int argc, char *argv[])
     /* Alle wieviel Sweeps Ergebnisse Speichern */
     inc=1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
-    sigma = 0.2;
+    sigma = 0;
     /* Parameter, der die Gewichtung der Kanten bestimmt */
-    alpha = 1;
+    alpha = 0;
     /* Anfangsbedingung der Spins: 0: zufällig, 1: alle up */
     start_order = 0;
     /* Seed für Zufallsgenerator */
@@ -300,7 +300,7 @@ int main(int argc, char *argv[])
     for(i=0;i<N;i+=inc)
     {
         if(i > t_eq)
-            fprintf(data_out_file, "%d", i);
+            fprintf(data_out_file, "%d ", i);
         /* Für jede Temperatur */
         for(nT=0;nT<num_temps;nT++)
         {
@@ -315,33 +315,40 @@ int main(int argc, char *argv[])
             }
 
             g->M = calculate_magnetisation(g);
+
             /* Ergebnisse nur in die Ausgabe schreiben, wenn die (vermutete)
                 Equilibriumszeit verstrichen ist */
             if(i > t_eq)
-                fprintf(data_out_file, "%f %f", g->E, g->M/g->num_nodes);
+                fprintf(data_out_file, "%f %f ", g->E, g->M/g->num_nodes);
+
+            list_of_graphs[nT] = g;
         }
         if(i > t_eq)
-                fprintf(data_out_file, "\n");
+            fprintf(data_out_file, "\n");
         /* wähle eine zufällige Temperatur und tausche sie mit der nächst höheren */
         /* stelle sicher, dass nie die höchste gewählt wird */
 
         if(par_temp_flag)
         {
-            temp_index = (int) (my_rand() * (num_temps-1));
-            par_temp_versuche[temp_index]++;
-            /* Wähle zufällig, ob getauscht werden soll */
-            delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index+1]->T )
-                    * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index+1]->E);
-            if(my_rand() < exp(delta))
+            //~ temp_index = (int) (my_rand() * (num_temps-1));
+            for(j=0;j<num_temps-1;j++)
             {
-                par_temp_erfolge[temp_index]++;
-                /* Tausche erst die Graphen, tausche danach die Temperaturen zurück */
-                g = list_of_graphs[temp_index];
-                list_of_graphs[temp_index] = list_of_graphs[temp_index+1];
-                list_of_graphs[temp_index+1] = g;
-                tmp_T = list_of_graphs[temp_index]->T;
-                list_of_graphs[temp_index]->T = list_of_graphs[temp_index+1]->T;
-                list_of_graphs[temp_index+1]->T = tmp_T;
+                temp_index = j;
+                par_temp_versuche[temp_index]++;
+                /* Wähle zufällig, ob getauscht werden soll */
+                delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index+1]->T )
+                        * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index+1]->E);
+                if(my_rand() < exp(delta))
+                {
+                    par_temp_erfolge[temp_index]++;
+                    /* Tausche erst die Graphen, tausche danach die Temperaturen zurück */
+                    g = list_of_graphs[temp_index];
+                    list_of_graphs[temp_index] = list_of_graphs[temp_index+1];
+                    list_of_graphs[temp_index+1] = g;
+                    tmp_T = list_of_graphs[temp_index]->T;
+                    list_of_graphs[temp_index]->T = list_of_graphs[temp_index+1]->T;
+                    list_of_graphs[temp_index+1]->T = tmp_T;
+                }
             }
         }
     }
