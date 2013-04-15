@@ -778,7 +778,7 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g, int N)
     /* Allokation */
     cluster = malloc(g->num_nodes*sizeof(int));
 
-    for(i=0;i<N;n++)
+    for(i=0;i<g->num_nodes*N;n++)
     {
         /* Initialisierung */
         for(i=0;i<g->num_nodes;i++)
