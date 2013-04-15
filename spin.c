@@ -14,19 +14,20 @@
 
     Sie kümmert sich um
     -# das Parsen von Kommandozeilenargumenten
-        - -v  -> zeigt die Hilfe
-        - -h  -> gesprächiger Modus
-        - -Tx -> Temperatur x                      (double)
-        - -Lx -> Länge x                              (int)
-        - -xx -> seed x                               (int)
-        - -Nx -> x Monte Carlo sweeps                 (int)
-        - -ex -> Equilibrium nach x sweeps angenommen (int)
-        - -sx -> sigma x                           (double)
-        - -ox -> filename (max. 79 Zeichen)        (string)
-        - -ux -> Ordnung x (0: zufällig, 1: alle up)  (int)
-        - -ix -> Alle x sweeps schreiben              (int)
+        - -v     zeigt die Hilfe
+        - -h     gesprächiger Modus
+        - -Tx    Temperatur x                      (double)
+        - -Lx    Länge x                              (int)
+        - -xx    seed x                               (int)
+        - -Nx    x Monte Carlo sweeps                 (int)
+        - -ex    Equilibrium nach x sweeps angenommen (int)
+        - -sx    sigma x                           (double)
+        - -ox    filename (max. 79 Zeichen)        (string)
+        - -ux    Ordnung x (0: zufällig, 1: alle up)  (int)
+        - -ix    Alle x sweeps schreiben              (int)
         - -w     Wolff Algorithmus (statt Metropolis)
-        - -p     Parallel Tempering aktivieren
+        - -px    Parallel Tempering mit einer Komma
+                 getrennten Liste der zu berechnenden Temperaturen
     -# das Initialisieren des Graphens, auf dem die Spins liegen
     -# das Aufrufen der Funktionen, die die Monte Carlo Sweeps durchführen
     -# das Speichern der Ergebnisse in Dateien
@@ -37,13 +38,19 @@
 int main(int argc, char *argv[])
 {
     gs_graph_t *g;
-    int i;
+    gs_graph_t **list_of_graphs;
+    int i, j, nT;
     int L;                                   //< Kantenlänge des Gitters
     double sigma;                              //< Unordnung des Gitters
     double alpha;                              //< Gewichtung der Kanten
     double E, M, T;
+    double *list_of_temps;
+    double tmp_T, delta;
+    int num_temps, temp_index;                //< Für parallel Tempering
+    char temp_string[20];
     int N, inc, t_eq;
     int seed, start_order;
+    double *par_temp_versuche, *par_temp_erfolge;
     FILE *data_out_file;
     char filename[MAX_LEN_FILENAME];     //< Dateiname, der Output Datei
 
@@ -80,6 +87,7 @@ int main(int argc, char *argv[])
     wolff_flag = 0;
     /* Soll Parallel Tempering Algorithmus benutzt werden? */
     par_temp_flag = 0;
+    num_temps = 1;
 
     /* Hier wird die Kommandozeile geparst. */
     /* -h  -> help */
@@ -94,9 +102,10 @@ int main(int argc, char *argv[])
     /* -ux -> Start Ordnung x (0: zufällig, 1: alle up) */
     /* -ix -> Alle x sweeps schreiben */
     /* -w  -> Wolff Algorithmus (statt Metropolis) */
-    /* -p     Parallel Tempering aktivieren */
+    /* -px    Parallel Tempering aktivieren, mit den kommagetrennten
+     *          Temperauren dahinter */
     opterr = 0;
-    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp")) != -1)
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp:")) != -1)
         switch (c)
         {
             case 'T':
@@ -135,6 +144,29 @@ int main(int argc, char *argv[])
                 break;
             case 'p':
                 par_temp_flag = 1;
+                i=0;
+                /* Ermittele Anzahl der Temperaturen */
+                while(optarg[i]!= '\0')
+                    if(optarg[i++] == ',')
+                        num_temps++;
+                /* Reserviere Speicher */
+                list_of_temps = (double*) malloc(num_temps * sizeof(double));
+                /* Schreibe die Temperaturen als Double in das Array */
+                nT=0; j=0; i=0;
+                do
+                {
+                    if(optarg[i] == ',' || optarg[i] == '\0')
+                    {
+                        temp_string[j] = '\0';
+                        j=0;
+                        list_of_temps[nT++] = atof(temp_string);
+                    }
+                    else
+                    {
+                        temp_string[j] = optarg[i];
+                        j++;
+                    }
+                } while(optarg[i++]!= '\0');
                 break;
             case '?':
                 fprintf(stderr,
@@ -153,28 +185,38 @@ int main(int argc, char *argv[])
                 fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
                 fprintf(stderr,"    -ix    Alle x sweeps schreiben              (int)\n");
                 fprintf(stderr,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
-                fprintf(stderr,"    -p     Parallel Tempering aktivieren             \n");
+                fprintf(stderr,"    -px    Parallel Tempering mit einer Komma        \n");
+                fprintf(stderr,"            getrennten Liste der zu berechnenden Temperaturen \n");
                 return(-1);
             default:
                 abort ();
         }
 
     smy_rand(seed);
+    list_of_graphs = (gs_graph_t**) malloc(num_temps * sizeof(gs_graph_t*));
 
+    par_temp_versuche= (double*) calloc(num_temps, sizeof(double));
+    par_temp_erfolge= (double*) calloc(num_temps, sizeof(double));
+
+    if(!par_temp_flag)
+    {
+        list_of_temps = (double*) malloc(num_temps * sizeof(double));
+        list_of_temps[0] = T;
+    }
     if(!custom_file_name)
     {
         /* standard Dateiname */
-        if(start_order)
-            snprintf(filename, MAX_LEN_FILENAME, "data/data_T_%.2f_L_%d_up.dat", T, L);
-        else
-            snprintf(filename, MAX_LEN_FILENAME, "data/data_T_%.2f_L_%d_rand.dat", T, L);
+        snprintf(filename, MAX_LEN_FILENAME, "data/data_L_%d.dat", L);
     }
 
     if(verbose)
     {
         printf("gewählte Parameter:\n");
         printf("    L     = %d\n", L);
-        printf("    T     = %f\n", T);
+        printf("    T     =  \n");
+        for(i=0;i<num_temps;i++)
+            printf("            %f,\n",list_of_temps[i]);
+        printf("           \n");
         printf("    N     = %d\n", N);
         printf("    t_eq  = %d\n", t_eq);
         printf("    seed  = %d\n", seed);
@@ -199,38 +241,43 @@ int main(int argc, char *argv[])
         #endif
     }
 
-    /* Initialisiere den Graphen für die Spins */
-    g = gs_create_graph(L);
+    for(nT=0;nT<num_temps;nT++)
+    {
+        /* Initialisiere den Graphen für die Spins */
+        g = gs_create_graph(L);
 
-    /* Verschiebe die Knoten */
-    move_graph_nodes(g, gauss, sigma);
+        /* Verschiebe die Knoten */
+        move_graph_nodes(g, gauss, sigma);
 
-    /* Verknüpfe die Knoten */
-    create_edges_regular(g);
-    assign_weights_with_function(g, exponential_decay, alpha);
+        /* Verknüpfe die Knoten */
+        create_edges_regular(g);
+        assign_weights_with_function(g, exponential_decay, alpha);
 
-    /* initialisiere den Status der Spins */
-    if(start_order == 1)
-        init_spins_up(g);
-    else if(start_order == 0)
-        init_spins_randomly(g);
-    else
-        init_spins_randomly(g);
+        /* initialisiere den Status der Spins */
+        if(start_order == 1)
+            init_spins_up(g);
+        else if(start_order == 0)
+            init_spins_randomly(g);
+        else
+            init_spins_randomly(g);
 
-    //~ print_graph_for_graph_viz(g);
+        //~ print_graph_for_graph_viz(g);
 
-    /* Berechne Energie des Ising Modells */
-    E = calculate_energy(g);
-    //fprintf(stderr, "E = %f\n", E);
-    /* Berechne Magnetisierung des Ising Modells */
-    M = calculate_magnetisation(g);
-    //fprintf(stderr, "M = %f\n", M);
-    /* Setze M und E */
-    g->M = M;
-    g->E = E;
+        /* Berechne Energie des Ising Modells */
+        E = calculate_energy(g);
+        //fprintf(stderr, "E = %f\n", E);
+        /* Berechne Magnetisierung des Ising Modells */
+        M = calculate_magnetisation(g);
+        //fprintf(stderr, "M = %f\n", M);
+        /* Setze M und E */
+        g->M = M;
+        g->E = E;
 
-    /* Setze Temperatur */
-    g->T = T;
+        /* Setze Temperatur */
+        g->T = list_of_temps[nT];
+
+        list_of_graphs[nT] = g;
+    }
 
     /* Führe Monte Carlo Sweeps durch */
     /* Erreiche das Equilibrium */
@@ -243,30 +290,81 @@ int main(int argc, char *argv[])
         fprintf(stderr,"ERROR: %s kann nicht geöffnet werden",filename);
         return(-1);
     }
-    fprintf(data_out_file, "# N E M # T=%f # L=%d\n",g->T, g->L);
+    /* Schreibe Header */
+    fprintf(data_out_file, "# N E M # L=%d # T= ", g->L);
+    for(nT=0;nT<num_temps;nT++)
+        fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
+    fprintf(data_out_file, "\n");
 
+    /* Führe einen Sweep durch */
     for(i=0;i<N;i+=inc)
     {
-        /* Welchen Algorithmus nutzen? */
-        if(! wolff_flag)
-            metropolis_monte_carlo_sweeps(g, inc);
-        else
-        {
-            wolff_monte_carlo_sweeps(g, inc);
-            g->E = calculate_energy(g);
-        }
-
-        g->M = calculate_magnetisation(g);
-        /* Ergebnisse nur in die Ausgabe schreiben, wenn die (vermutete)
-            Equilibriumszeit verstrichen ist */
         if(i > t_eq)
-            fprintf(data_out_file, "%d %f %f\n",i, g->E, g->M/g->num_nodes);
-    }
-    fclose(data_out_file);
+            fprintf(data_out_file, "%d", i);
+        /* Für jede Temperatur */
+        for(nT=0;nT<num_temps;nT++)
+        {
+            g = list_of_graphs[nT];
+            /* Welchen Algorithmus nutzen? */
+            if(! wolff_flag)
+                metropolis_monte_carlo_sweeps(g, inc);
+            else
+            {
+                wolff_monte_carlo_sweeps(g, inc);
+                g->E = calculate_energy(g);
+            }
 
+            g->M = calculate_magnetisation(g);
+            /* Ergebnisse nur in die Ausgabe schreiben, wenn die (vermutete)
+                Equilibriumszeit verstrichen ist */
+            if(i > t_eq)
+                fprintf(data_out_file, "%f %f", g->E, g->M/g->num_nodes);
+        }
+        if(i > t_eq)
+                fprintf(data_out_file, "\n");
+        /* wähle eine zufällige Temperatur und tausche sie mit der nächst höheren */
+        /* stelle sicher, dass nie die höchste gewählt wird */
+
+        if(par_temp_flag)
+        {
+            temp_index = (int) (my_rand() * (num_temps-1));
+            par_temp_versuche[temp_index]++;
+            /* Wähle zufällig, ob getauscht werden soll */
+            delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index+1]->T )
+                    * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index+1]->E);
+            if(my_rand() < exp(delta))
+            {
+                par_temp_erfolge[temp_index]++;
+                /* Tausche erst die Graphen, tausche danach die Temperaturen zurück */
+                g = list_of_graphs[temp_index];
+                list_of_graphs[temp_index] = list_of_graphs[temp_index+1];
+                list_of_graphs[temp_index+1] = g;
+                tmp_T = list_of_graphs[temp_index]->T;
+                list_of_graphs[temp_index]->T = list_of_graphs[temp_index+1]->T;
+                list_of_graphs[temp_index+1]->T = tmp_T;
+            }
+        }
+    }
+    if(verbose)
+    {
+        fprintf(stderr,"Akzeptanzniveaus: \n");
+        fprintf(stderr,"T: ");
+        for(nT=0;nT<num_temps;nT++)
+            fprintf(stderr,"%.2f      ",list_of_temps[nT]);
+        fprintf(stderr,"\n");
+        fprintf(stderr,"A: ");
+        for(nT=0;nT<num_temps;nT++)
+            fprintf(stderr,"     %.2f ", par_temp_erfolge[nT]/par_temp_versuche[nT]);
+        fprintf(stderr,"\n");
+    }
+
+    fclose(data_out_file);
     //~ print_graph_for_graph_viz(g);
 
-    gs_clear_graph(g);
+    for(nT=0;nT<num_temps;nT++)
+        gs_clear_graph(list_of_graphs[nT]);
+    free(list_of_graphs);
+    free(list_of_temps);
     free_my_rand();
 
     #ifdef TIME
@@ -364,11 +462,11 @@ double gauss(double sigma)
 }
 
 /*! \fn double exponential_decay(double alpha, double x)
-    \brief Berechnet den exponentiellen Abfall \f$ e^{-\alpha x}
+    \brief Berechnet den exponentiellen Abfall \f$ e^{-\alpha x} \f$
 
     \param [in]   alpha    Parameter des Abfalls
     \param [in]   x        Argument der Funktion
-    \return \f$ e^{-\alpha x}
+    \return \f$ e^{-\alpha x} \f$
 */
 double exponential_decay(double alpha, double x)
 {
