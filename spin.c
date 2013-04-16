@@ -320,8 +320,6 @@ int main(int argc, char *argv[])
                 Equilibriumszeit verstrichen ist */
             if(i > t_eq)
                 fprintf(data_out_file, "%f %f ", g->E, g->M/g->num_nodes);
-
-            list_of_graphs[nT] = g;
         }
         if(i > t_eq)
             fprintf(data_out_file, "\n");
