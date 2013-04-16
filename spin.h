@@ -24,22 +24,40 @@
 #include "list.h"
 #include "stack.h"
 
+/*! \struct options_t;
+    \brief Optionen für die MC Simulation, die per Kommandozeilenargument
+            übergeben wurden.
+*/
+typedef struct
+{
+    int L;                                  //!< Kantenlänge des Gitters
+    double T;//!< Temperatur (wenn kein parallel Tempering genutzt wird)
+    int N;                        //!< Anzahl der zu berechnenden Sweeps
+    int t_eq;                            //!< geschätze Equilibriumszeit
+    int inc;            //!< Alle wieviel Sweeps soll gepeichert werden?
+    double (*moving_fkt)(double);                //!< Unordnungsfunktion
+    double sigma;                               //!< Unordnungsparameter
+    double (*weighting_fkt)(double, double);    //!< Gewichtungsfunktion
+    double alpha;                               //!< Gewichtungsparamter
+    int start_order;                                   //!< Startordnung
+    void (*mc_fkt)(gs_graph_t *, int);      //!< Monte Carlo Algorithmus
+    int par_temp_flag;      //!< soll parallel Tempering genutzt werden?
+    int num_temps;            //!< Wieviele Temperaturen für pT gegeben?
+    double *list_of_temps;                //!< Liste der pT Temperaturen
+    int verbose;                                 //!< Gesprächiger Modus
+    char filename[MAX_LEN_FILENAME];               //!< Output Dateiname
+} options_t;
+
 double my_rand();
 void smy_rand(int seed);
 void free_my_rand();
 
-void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
-                    int *t_eq, int *inc, double *sigma, double *alpha,
-                    int *start_order, int *wolff_flag,
-                    int *par_temp_flag, int *num_temps, int *verbose,
-                    char (*filename)[MAX_LEN_FILENAME], double **list_of_temps);
+options_t get_cl_args(int argc, char *argv[]);
 
 double gauss(double sigma);
 double exponential_decay(double alpha, double x);
 
-gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_order,
-                        double (*moving_fkt)(double), double sigma,
-                        double (*weighting_fkt)(double alpha, double dist), double alpha);
+gs_graph_t **init_graphs(options_t options);
 void move_graph_nodes(gs_graph_t *g, double (*f)(double), double sigma);
 void create_edges_regular(gs_graph_t *g);
 void assign_weights_with_function(gs_graph_t *g, double (*f)(double alpha, double dist), double alpha);
@@ -50,9 +68,7 @@ void init_spins_up(gs_graph_t *g);
 double calculate_energy(gs_graph_t *g);
 double calculate_magnetisation(gs_graph_t *g);
 
-void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps,
-                                int t_eq, int par_temp_flag, void (*mc_fkt)(gs_graph_t*, int),
-                                char filename[MAX_LEN_FILENAME], int verbose);
+void do_mc_simulation(gs_graph_t **list_of_graphs, options_t options);
 void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N);
 void wolff_monte_carlo_sweeps(gs_graph_t *g, int N);
 

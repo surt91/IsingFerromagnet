@@ -20,165 +20,126 @@ int main(int argc, char *argv[])
 {
     gs_graph_t **list_of_graphs;
     int nT;
-    int L;                                   //< Kantenlänge des Gitters
-    double sigma;                              //< Unordnung des Gitters
-    double alpha;                              //< Gewichtung der Kanten
-    double T;
-    double *list_of_temps;
-    int num_temps;                //< Für parallel Tempering
-    int N, inc, t_eq;
-    int start_order;
-    void (*mc_fkt)(gs_graph_t *, int);
-    char filename[MAX_LEN_FILENAME];     //< Dateiname, der Output Datei
 
     /* Vars für getopt (Kommandozeilenparser) */
-    int verbose;
-    int wolff_flag, par_temp_flag;
+    options_t o;
 
-    get_cl_args(argc, argv, &L, &T, &N,
-                    &t_eq, &inc, &sigma, &alpha,
-                    &start_order, &wolff_flag,
-                    &par_temp_flag, &num_temps, &verbose,
-                    &filename, &list_of_temps);
+    o = get_cl_args(argc, argv);
 
-    /* Welchen Algorithmus nutzen? */
-    if(! wolff_flag)
-        mc_fkt = &metropolis_monte_carlo_sweeps;
-    else
-        mc_fkt = &wolff_monte_carlo_sweeps;
+    list_of_graphs = init_graphs(o);
 
-    list_of_graphs = init_graphs(L,num_temps, list_of_temps, start_order,
-                                        gauss, sigma, exponential_decay, alpha);
-
-
-    do_mc_simulation(list_of_graphs, N, inc, num_temps, t_eq,
-                                par_temp_flag, mc_fkt, filename, verbose);
+    do_mc_simulation(list_of_graphs, o);
 
     /* gebe Speicher frei */
-    for(nT=0;nT<num_temps;nT++)
+    for(nT=0;nT<o.num_temps;nT++)
         gs_clear_graph(list_of_graphs[nT]);
     free(list_of_graphs);
-    free(list_of_temps);
+    free(o.list_of_temps);
     free_my_rand();
 
     return(0);
 }
 
-/*! \fn void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
-                    int *t_eq, int *inc, double *sigma, double *alpha,
-                    int *start_order, int *seed, int *wolff_flag,
-                    int *par_temp_flag, int *num_temps, int *verbose,
-                    char (*filename)[MAX_LEN_FILENAME], double **list_of_temps)
+/*! \fn options_t get_cl_args(int argc, char *argv[])
     \brief Diese Funktion interpretiert die Kommandozeilenargumente mithilfe von
             getopt und gibt sie wieder zurück. Und vergibt für den Rest
             Standardwerte.
 
     \param [in]  argc           Anzahl der Argumente
     \param [in]  argv           Vektor der Argumente
-    \param [out] L              Kantenlänge
-    \param [out] T              Temperatur
-    \param [out] N              Anzahl Sweeps
-    \param [out] t_eq           Equilibriumszeit
-    \param [out] inc            Autokorrelationszeit
-    \param [out] sigma          Unordnungsparamter
-    \param [out] alpha          Bindungsparameter
-    \param [out] start_order    Start Ordnung
-    \param [out] seed           Zufallszahlenseed
-    \param [out] wolff_flag     Soll Wolff Alogrithmus benutzt werden
-    \param [out] par_temp_flag  Soll Parallel Tempering (MC^3) genutzt werden
-    \param [out] num_temps      Anzahl der verschiedenen Temperaturen
-    \param [out] verbose        Gesprächiger Modus
-    \param [out] filename       Output Dateiname
-    \param [out] list_of_temps  Liste der Temperaturen
+    \return struct mit allen wichtigen Informationen
 */
-void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
-                    int *t_eq, int *inc, double *sigma, double *alpha,
-                    int *start_order, int *wolff_flag,
-                    int *par_temp_flag, int *num_temps, int *verbose,
-                    char (*filename)[MAX_LEN_FILENAME], double **list_of_temps)
+options_t get_cl_args(int argc, char *argv[])
 {
     int c;
     int i, j, nT;
     int seed;
     int custom_file_name;
+    int wolff_flag;
     char temp_string[20];
     extern char *optarg;
+
+    options_t o;
+
     /* Standardwerte, wenn keine Optionen gegeben */
     /* Temperatur */
-    *T=2.0;
+    o.T=2.0;
     /* Kantenlänge des Feldes */
-    *L=64;
+    o.L=64;
     /* Wieviele Sweeps berechnen */
     /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
-    *N=2000;
+    o.N=2000;
     /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
-    *t_eq = 1000;
+    o.t_eq = 1000;
     /* Alle wieviel Sweeps Ergebnisse Speichern */
-    *inc=1;
+    o.inc=1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
-    *sigma = 0;
+    o.moving_fkt = gauss;
+    o.sigma = 0;
     /* Parameter, der die Gewichtung der Kanten bestimmt */
-    *alpha = 0;
+    o.weighting_fkt = exponential_decay;
+    o.alpha = 0;
     /* Anfangsbedingung der Spins: 0: zufällig, 1: alle up */
-    *start_order = 0;
+    o.start_order = 0;
     /* Seed für Zufallsgenerator */
     seed = 42;
     /* Soll Wolff Algorithmus benutzt werden? */
-    *wolff_flag = 0;
+    wolff_flag = 0;
     /* Soll Parallel Tempering Algorithmus benutzt werden? */
-    *par_temp_flag = 0;
-    *num_temps = 1;
+    o.par_temp_flag = 0;
+    o.num_temps = 1;
     /* weitere Optionen */
-    *verbose = 0;
+    o.verbose = 0;
     custom_file_name = 0;
+
 
     opterr = 0;
     while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp:")) != -1)
         switch (c)
         {
             case 'T':
-                *T = atof(optarg);
+                o.T = atof(optarg);
                 break;
             case 'L':
-                *L = atoi(optarg);
+                o.L = atoi(optarg);
                 break;
             case 'x':
                 seed = atoi(optarg);
                 break;
             case 'N':
-                *N = atoi(optarg);
+                o.N = atoi(optarg);
                 break;
             case 'e':
-                *t_eq = atoi(optarg);
+                o.t_eq = atoi(optarg);
                 break;
             case 's':
-                *sigma = atof(optarg);
+                o.sigma = atof(optarg);
                 break;
             case 'o':
                 custom_file_name = 1;
-                strncpy(*filename, optarg, MAX_LEN_FILENAME);
+                strncpy(o.filename, optarg, MAX_LEN_FILENAME);
                 break;
             case 'u':
-                *start_order = atoi(optarg);
+                o.start_order = atoi(optarg);
                 break;
             case 'i':
-                *inc = atoi(optarg);
+                o.inc = atoi(optarg);
                 break;
             case 'v':
-                *verbose = 1;
+                o.verbose = 1;
                 break;
             case 'w':
-                *wolff_flag = 1;
+                wolff_flag = 1;
                 break;
             case 'p':
-                *par_temp_flag = 1;
+                o.par_temp_flag = 1;
                 i=0;
                 /* Ermittele Anzahl der Temperaturen */
                 while(optarg[i]!= '\0')
                     if(optarg[i++] == ',')
-                        (*num_temps)++;
+                        (o.num_temps)++;
                 /* Reserviere Speicher */
-                *list_of_temps = (double*) malloc(*num_temps * sizeof(double));
+                o.list_of_temps = (double*) malloc(o.num_temps * sizeof(double));
                 /* Schreibe die Temperaturen als Double in das Array */
                 nT=0; j=0; i=0;
                 do
@@ -187,7 +148,7 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
                     {
                         temp_string[j] = '\0';
                         j=0;
-                        (*list_of_temps)[nT++] = atof(temp_string);
+                        (o.list_of_temps)[nT++] = atof(temp_string);
                     }
                     else
                     {
@@ -220,90 +181,87 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
                 abort ();
         }
 
-    if(! *par_temp_flag)
+    if(! o.par_temp_flag)
     {
-        *list_of_temps = (double*) malloc(*num_temps * sizeof(double));
-        *list_of_temps[0] = *T;
+        o.list_of_temps = (double*) malloc(o.num_temps * sizeof(double));
+        o.list_of_temps[0] = o.T;
     }
     if(!custom_file_name)
     {
         /* standard Dateiname */
-        snprintf(*filename, MAX_LEN_FILENAME, "data/data_L_%d.dat", *L);
+        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_L_%d.dat", o.L);
     }
+
+    /* Welchen Algorithmus nutzen? */
+    if(! wolff_flag)
+        o.mc_fkt = &metropolis_monte_carlo_sweeps;
+    else
+        o.mc_fkt = &wolff_monte_carlo_sweeps;
 
     smy_rand(seed);
 
-    if(verbose)
+    if(o.verbose)
     {
         printf("gewählte Parameter:\n");
-        printf("    L     = %d\n", *L);
+        printf("    L     = %d\n", o.L);
         printf("    T     =  \n");
-        for(i=0;i<*num_temps;i++)
-            printf("            %f,\n",(*list_of_temps)[i]);
+        for(i=0;i<o.num_temps;i++)
+            printf("            %f,\n",(o.list_of_temps)[i]);
         printf("           \n");
-        printf("    N     = %d\n", *N);
-        printf("    t_eq  = %d\n", *t_eq);
-        printf("    tau   = %d\n", *inc);
+        printf("    N     = %d\n", o.N);
+        printf("    t_eq  = %d\n", o.t_eq);
+        printf("    tau   = %d\n", o.inc);
         printf("    seed  = %d\n", seed);
-        printf("    sigma = %f\n", *sigma);
-        if(*start_order)
+        printf("    sigma = %f\n", o.sigma);
+        if(o.start_order)
             printf("    spins starten alle up\n");
         else
             printf("    spins starten zufällig\n");
-        if(*wolff_flag)
+        if(wolff_flag)
             printf("    Wolff Algorithmus\n");
         else
             printf("    Metropolis Algorithmus\n");
-        if(*par_temp_flag)
+        if(o.par_temp_flag)
             printf("    Parallel Tempering aktiviert\n");
         else
             printf("    Parallel Tempering deaktiviert\n");
-        printf("    Filename: '%s'\n",*filename);
+        printf("    Filename: '%s'\n",o.filename);
         printf("    \n");
     }
+
+    return(o);
 }
 
-/*! \fn gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_order,
-                        double (*moving_fkt)(double), double sigma,
-                        double (*weighting_fkt)(double alpha, double dist), double alpha)
+/*! \fn gs_graph_t **init_graphs(options_t o)
     \brief Diese Funktion initialisiert die Graphen mit allen nötigen
             Informationen
 
-    \param [in] L               Kantenlänge des Graphen
-    \param [in] num_temps       Anzahl der Graphen
-    \param [in] list_of_temps   Array der Temperaturen (eine pro Graph)
-    \param [in] start_order     Anfangsordnung der Graphen
-    \param [in] moving_fkt      Funktion, nach der die Knoten verschoben werden
-    \param [in] sigma           Parameter der moving_fkt
-    \param [in] weighting_fkt   Funktion, nach der die Kanten gewichtet werden
-    \param [in] alpha           Parameter der weighting_fkt
+    \param [in] o               struct mit allen wichtigen Informationen
     \return Array mit den initialisierten Graphen
 */
-gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_order,
-                        double (*moving_fkt)(double), double sigma,
-                        double (*weighting_fkt)(double alpha, double dist), double alpha)
+gs_graph_t **init_graphs(options_t o)
 {
     gs_graph_t *g;
     gs_graph_t **list_of_graphs;
 
     int nT;
 
-    list_of_graphs = (gs_graph_t**) malloc(num_temps * sizeof(gs_graph_t*));
+    list_of_graphs = (gs_graph_t**) malloc(o.num_temps * sizeof(gs_graph_t*));
 
     /* Initialisiere den Graphen für die Spins */
-    g = gs_create_graph(L);
+    g = gs_create_graph(o.L);
 
     /* Verschiebe die Knoten */
-    move_graph_nodes(g, moving_fkt, sigma);
+    move_graph_nodes(g, o.moving_fkt, o.sigma);
 
     /* Verknüpfe die Knoten */
     create_edges_regular(g);
-    assign_weights_with_function(g, weighting_fkt, alpha);
+    assign_weights_with_function(g, o.weighting_fkt, o.alpha);
 
-    for(nT=0;nT<num_temps;nT++)
+    for(nT=0;nT<o.num_temps;nT++)
     {
         /* initialisiere den Status der Spins */
-        if(start_order == 1)
+        if(o.start_order == 1)
             init_spins_up(g);
         else
             init_spins_randomly(g);
@@ -317,35 +275,22 @@ gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_
         list_of_graphs[nT] = gs_copy_graph(g);
 
         /* Setze Temperatur */
-        list_of_graphs[nT]->T = list_of_temps[nT];
+        list_of_graphs[nT]->T = o.list_of_temps[nT];
     }
     gs_clear_graph(g);
 
     return(list_of_graphs);
 }
 
-/*! \fn void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps,
-                                int t_eq, int par_temp_flag, int wolff_flag,
-                                char filename[MAX_LEN_FILENAME], int verbose)
+/*! \fn void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     \brief Diese Funktion führt die MC Berechnungen durch und speichert die
             Ergebnisse
 
     \param [in] list_of_graphs  Liste der Graphen, die für parallel Tempering
                                 genutzt werden
-    \param [in] N               Anzahl der durchzuführenden MC Sweeps
-    \param [in] inc             Alle wieviel Sweeps sollen gespeichert werden
-    \param [in] num_temps       Anzahl der verschiedenen Temperaturen
-    \param [in] t_eq            Wielange warten, bevor das erste Ergebnis
-                                gespeichert wird
-    \param [in] par_temp_flag   Soll parallel Tempering genutzt werden?
-    \param [in] wolff_flag      Soll der Wolff Algorithmus genutzt werden?
-    \param [in] filename        Name der output Datei
-    \param [in] verbose         Gesprächiger Modus
-    \return Array mit den initialisierten Graphen
+    \param [in] o               struct mit allen wichtigen Informationen
 */
-void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps,
-                                int t_eq, int par_temp_flag, void (*mc_fkt)(gs_graph_t*, int),
-                                char filename[MAX_LEN_FILENAME], int verbose)
+void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
 {
     double *par_temp_versuche, *par_temp_erfolge;
     FILE *data_out_file;
@@ -356,33 +301,33 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps
     gs_graph_t *g;
 
     /* Allokation und Initialisierung zur Statistik der Parallel Tempering Übergänge */
-    par_temp_versuche = (double*) calloc(num_temps, sizeof(double));
-    par_temp_erfolge  = (double*) calloc(num_temps, sizeof(double));
+    par_temp_versuche = (double*) calloc(o.num_temps, sizeof(double));
+    par_temp_erfolge  = (double*) calloc(o.num_temps, sizeof(double));
 
     /* Führe Monte Carlo Sweeps durch */
     /* Erreiche das Equilibrium */
     /* Schreibe alle inc Sweeps die Energie und Magnetisierung in eine Datei */
     /* Plotte den Ausdruck mit Gnuplot. zB.
      * plot 'test.dat' using 1:2, "test.dat" using 1:3; */
-    data_out_file = fopen(filename, "w");
+    data_out_file = fopen(o.filename, "w");
     if(data_out_file == NULL)
     {
-        fprintf(stderr,"ERROR: %s kann nicht geöffnet werden",filename);
+        fprintf(stderr,"ERROR: %s kann nicht geöffnet werden",o.filename);
         exit(-1);
     }
     /* Schreibe Header */
     fprintf(data_out_file, "# N E M # L=%d # T= ", list_of_graphs[0]->L);
-    for(nT=0;nT<num_temps;nT++)
+    for(nT=0;nT<o.num_temps;nT++)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
 
     /* Führe N Sweeps durch */
-    for(i=0;i<N;i+=inc)
+    for(i=0;i<o.N;i+=o.inc)
     {
-        if(i > t_eq)
+        if(i > o.t_eq)
             fprintf(data_out_file, "%d ", i);
         /* Für jede Temperatur */
-        for(nT=0;nT<num_temps;nT++)
+        for(nT=0;nT<o.num_temps;nT++)
         {
             /* g wird hier nur als Abkürzung benutzt, da hier Adressen
                 zugewiesen werden, finden alle Änderungen an g auch
@@ -390,23 +335,23 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps
             g = list_of_graphs[nT];
 
             /* inc MC Sweeps durchführen */
-            mc_fkt(g, inc);
+            o.mc_fkt(g, o.inc);
 
             g->M = calculate_magnetisation(g);
 
             /* Ergebnisse nur in die Ausgabe schreiben, wenn die (vermutete)
                 Equilibriumszeit verstrichen ist */
-            if(i > t_eq)
+            if(i > o.t_eq)
                 fprintf(data_out_file, "%f %f ", g->E, g->M/g->num_nodes);
         }
-        if(i > t_eq)
+        if(i > o.t_eq)
             fprintf(data_out_file, "\n");
 
         /* Parallel Tempering Austausch */
-        if(par_temp_flag)
+        if(o.par_temp_flag)
         {
             //~ temp_index = (int) (my_rand() * (num_temps-1));
-            for(j=0;j<num_temps-1;j++)
+            for(j=0;j<o.num_temps-1;j++)
             {
                 temp_index = j;
                 par_temp_versuche[temp_index]++;
@@ -428,15 +373,15 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps
             }
         }
     }
-    if(verbose)
+    if(o.verbose)
     {
         fprintf(stderr,"Akzeptanzniveaus: \n");
         fprintf(stderr,"T: ");
-        for(nT=0;nT<num_temps;nT++)
+        for(nT=0;nT<o.num_temps;nT++)
             fprintf(stderr,"%.2f      ",list_of_graphs[nT]->T);
         fprintf(stderr,"\n");
         fprintf(stderr,"A: ");
-        for(nT=0;nT<num_temps;nT++)
+        for(nT=0;nT<o.num_temps;nT++)
             fprintf(stderr,"     %.2f ", par_temp_erfolge[nT]/par_temp_versuche[nT]);
         fprintf(stderr,"\n");
     }
