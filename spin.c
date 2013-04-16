@@ -1,7 +1,3 @@
-/*! \file spin.c
- * Diese Datei beinhaltet alle Funktionen für eine
- * Metropolis Monte Carlo Simulation bzw. in Zukunft den Wolff
- * Algorithmus und parallel Tempering */
 #include "spin.h"
 
 /*! \fn int main(int argc, char *argv[])
