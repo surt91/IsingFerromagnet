@@ -31,7 +31,6 @@
 typedef struct
 {
     int L;                                  //!< Kantenlänge des Gitters
-    double T;//!< Temperatur (wenn kein parallel Tempering genutzt wird)
     int N;                        //!< Anzahl der zu berechnenden Sweeps
     int t_eq;                            //!< geschätze Equilibriumszeit
     int inc;            //!< Alle wieviel Sweeps soll gepeichert werden?

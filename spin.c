@@ -59,7 +59,7 @@ options_t get_cl_args(int argc, char *argv[])
 
     /* Standardwerte, wenn keine Optionen gegeben */
     /* Temperatur */
-    o.T=2.0;
+    o.list_of_temps = NULL;
     /* Kantenlänge des Feldes */
     o.L=64;
     /* Wieviele Sweeps berechnen */
@@ -90,11 +90,33 @@ options_t get_cl_args(int argc, char *argv[])
 
 
     opterr = 0;
-    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp:")) != -1)
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp")) != -1)
         switch (c)
         {
             case 'T':
-                o.T = atof(optarg);
+                i=0;
+                /* Ermittele Anzahl der Temperaturen */
+                while(optarg[i]!= '\0')
+                    if(optarg[i++] == ',')
+                        (o.num_temps)++;
+                /* Reserviere Speicher */
+                o.list_of_temps = (double*) malloc(o.num_temps * sizeof(double));
+                /* Schreibe die Temperaturen als Double in das Array */
+                nT=0; j=0; i=0;
+                do
+                {
+                    if(optarg[i] == ',' || optarg[i] == '\0')
+                    {
+                        temp_string[j] = '\0';
+                        j=0;
+                        (o.list_of_temps)[nT++] = atof(temp_string);
+                    }
+                    else
+                    {
+                        temp_string[j] = optarg[i];
+                        j++;
+                    }
+                } while(optarg[i++]!= '\0');
                 break;
             case 'L':
                 o.L = atoi(optarg);
@@ -129,29 +151,6 @@ options_t get_cl_args(int argc, char *argv[])
                 break;
             case 'p':
                 o.par_temp_flag = 1;
-                i=0;
-                /* Ermittele Anzahl der Temperaturen */
-                while(optarg[i]!= '\0')
-                    if(optarg[i++] == ',')
-                        (o.num_temps)++;
-                /* Reserviere Speicher */
-                o.list_of_temps = (double*) malloc(o.num_temps * sizeof(double));
-                /* Schreibe die Temperaturen als Double in das Array */
-                nT=0; j=0; i=0;
-                do
-                {
-                    if(optarg[i] == ',' || optarg[i] == '\0')
-                    {
-                        temp_string[j] = '\0';
-                        j=0;
-                        (o.list_of_temps)[nT++] = atof(temp_string);
-                    }
-                    else
-                    {
-                        temp_string[j] = optarg[i];
-                        j++;
-                    }
-                } while(optarg[i++]!= '\0');
                 break;
             case '?':
                 fprintf(stderr,
@@ -177,10 +176,10 @@ options_t get_cl_args(int argc, char *argv[])
                 abort ();
         }
 
-    if(! o.par_temp_flag)
+    if(! o.list_of_temps)
     {
         o.list_of_temps = (double*) malloc(o.num_temps * sizeof(double));
-        o.list_of_temps[0] = o.T;
+        o.list_of_temps[0] = 2.0;
     }
     if(!custom_file_name)
     {
