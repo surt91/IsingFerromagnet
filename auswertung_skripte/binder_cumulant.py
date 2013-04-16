@@ -35,6 +35,32 @@ def getErrorJackknife(estimator,data):
     # Jackknife Error
     return ( sqrt(len(m)-1) * sqrt(mean([i**2 for i in g]) - mean(g)**2) )
 
+def X(t, m):
+    """! Autokorreltationsfunktion
+
+        Diese Funktion berechnet dei Autokorrelationsfunktion bei der
+        Verschiebung um t. Berechnung erfolgt naiv per Definition
+        in O(n) Laufzeit.
+    """
+    t_max = len(m)
+    eins = mean([m[i] * m[i+t] for i in range(0,t_max-t)])
+    zwei = mean([m[i] for i in range(0,t_max-t)]) * mean([m[i+t] for i in range(0,t_max-t)])
+    return abs(eins - zwei)
+
+def getAutocorrTime(m):
+    """! Berechnet die Autokorrelationszeit \f$ \tau \f$
+
+        Die Berechnung erfolgt durch Integration (hier sollte eine
+        Summation genau genug sein) der Autokorrelationsfunktion.
+        vgl. \cite newman1999monte S. 62 (3.20)
+    """
+    x0 = X(0,m)
+    autocorr = [X(t,m) for t in range(0,len(m))]
+    #~ self.tau = trapz(autocorr)/x0
+    tau = sum(autocorr)/x0
+    #~ for i in autocorr:
+        #~ print i
+    return tau
 
 g=[]
 M=[]
@@ -43,7 +69,7 @@ tau=[]
 for f in os.listdir("../data"):
     if ".png" in f:# or "_up" in f:
         continue
-    L=f.split("_")[2]
+    L=f.split("_")[2].partition(".")[0]
 
     r = output_reader(os.path.join("../data",f))
 
@@ -51,8 +77,8 @@ for f in os.listdir("../data"):
 
     for i in range(len(r.T)):
         g.append([r.T[i],L,(getBinder(r.M[i]), getErrorJackknife(getBinder,r.M[i]))])
-        #~ g.append([r.T[i],L,(getBinder(r.M[i]), 0)])
         M.append([r.T[i],L,(mean([abs(j) for j in r.M[i]]), std([abs(j) for j in r.M[i]]))])
+        #~ tau.append([r.T[i],L,(getAutocorrTime(r.M[i]), 0)])
 
 for [val,fname] in ((g,"binder.dat"),(M,"mean.dat"),):
     out = sorted(val)
@@ -60,8 +86,8 @@ for [val,fname] in ((g,"binder.dat"),(M,"mean.dat"),):
 
     #output for gnuplot
     f.write("#")
-    for i in out:
-        f.write("{0} ".format(i[1]))
+    for i in range(len(out[1])):
+        f.write(" {0}".format(out[i][1]))
     f.write("\n")
     tmp=""
     for i in out:
