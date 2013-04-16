@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
     int num_temps;                //< Für parallel Tempering
     int N, inc, t_eq;
     int start_order;
+    void (*mc_fkt)(gs_graph_t *, int);
     char filename[MAX_LEN_FILENAME];     //< Dateiname, der Output Datei
 
     /* Vars für getopt (Kommandozeilenparser) */
@@ -40,11 +41,18 @@ int main(int argc, char *argv[])
                     &par_temp_flag, &num_temps, &verbose,
                     &filename, &list_of_temps);
 
+    /* Welchen Algorithmus nutzen? */
+    if(! wolff_flag)
+        mc_fkt = &metropolis_monte_carlo_sweeps;
+    else
+        mc_fkt = &wolff_monte_carlo_sweeps;
+
     list_of_graphs = init_graphs(L,num_temps, list_of_temps, start_order,
                                         gauss, sigma, exponential_decay, alpha);
 
+
     do_mc_simulation(list_of_graphs, N, inc, num_temps, t_eq,
-                                par_temp_flag, wolff_flag, filename, verbose);
+                                par_temp_flag, mc_fkt, filename, verbose);
 
     /* gebe Speicher frei */
     for(nT=0;nT<num_temps;nT++)
@@ -319,7 +327,7 @@ gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_
 /*! \fn void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps,
                                 int t_eq, int par_temp_flag, int wolff_flag,
                                 char filename[MAX_LEN_FILENAME], int verbose)
-    \brief Diese Funktion führt die MC Berechnungen durch und speichert die 
+    \brief Diese Funktion führt die MC Berechnungen durch und speichert die
             Ergebnisse
 
     \param [in] list_of_graphs  Liste der Graphen, die für parallel Tempering
@@ -327,7 +335,7 @@ gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_
     \param [in] N               Anzahl der durchzuführenden MC Sweeps
     \param [in] inc             Alle wieviel Sweeps sollen gespeichert werden
     \param [in] num_temps       Anzahl der verschiedenen Temperaturen
-    \param [in] t_eq            Wielange warten, bevor das erste Ergebnis 
+    \param [in] t_eq            Wielange warten, bevor das erste Ergebnis
                                 gespeichert wird
     \param [in] par_temp_flag   Soll parallel Tempering genutzt werden?
     \param [in] wolff_flag      Soll der Wolff Algorithmus genutzt werden?
@@ -336,7 +344,7 @@ gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_
     \return Array mit den initialisierten Graphen
 */
 void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps,
-                                int t_eq, int par_temp_flag, int wolff_flag,
+                                int t_eq, int par_temp_flag, void (*mc_fkt)(gs_graph_t*, int),
                                 char filename[MAX_LEN_FILENAME], int verbose)
 {
     double *par_temp_versuche, *par_temp_erfolge;
@@ -368,7 +376,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
 
-    /* Führe einen Sweep durch */
+    /* Führe N Sweeps durch */
     for(i=0;i<N;i+=inc)
     {
         if(i > t_eq)
@@ -376,15 +384,13 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps
         /* Für jede Temperatur */
         for(nT=0;nT<num_temps;nT++)
         {
+            /* g wird hier nur als Abkürzung benutzt, da hier Adressen
+                zugewiesen werden, finden alle Änderungen an g auch
+                gleichzeitig an list_of_graphs[nT] statt. */
             g = list_of_graphs[nT];
-            /* Welchen Algorithmus nutzen? */
-            if(! wolff_flag)
-                metropolis_monte_carlo_sweeps(g, inc);
-            else
-            {
-                wolff_monte_carlo_sweeps(g, inc);
-                g->E = calculate_energy(g);
-            }
+
+            /* inc MC Sweeps durchführen */
+            mc_fkt(g, inc);
 
             g->M = calculate_magnetisation(g);
 
@@ -586,7 +592,7 @@ void create_edges_regular(gs_graph_t *g)
 }
 
 /*! \fn void create_edges_relative_neighborhood(gs_graph_t *g)
-    \brief Fügt Kanten zu einem Graphen hinzu, wodurch ein 
+    \brief Fügt Kanten zu einem Graphen hinzu, wodurch ein
             Relative Neighborhood Graph erzeugt werden soll.
 
             Kantengewichte (J) werden durch eine übergebene Funktion aus
@@ -597,7 +603,7 @@ void create_edges_regular(gs_graph_t *g)
 void create_edges_relative_neighborhood(gs_graph_t *g)
 {
     /* Zuerst kachele einen Graphen, aus neun Kopien des Originalgraphen,
-        um die periodischen Randbedingen zu beachten. 
+        um die periodischen Randbedingen zu beachten.
         Erstelle den Graphen und berechne aus den Abständen, die dabei
         berechnet werden können die Kantengewichte.
         Danach lösche die Kopien. */
@@ -815,8 +821,6 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N)
             g->node[to_flip_idx].spin *= -1;
 
             g->E += delta_E;
-
-            //~ g->M += 2 * g->node[to_flip_idx].spin;
         }
     }
 }
@@ -900,5 +904,6 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g, int N)
         /* Sollte eigentlich schon leer sein... */
         clear_stack(stack_of_spins_with_untestet_neighbors);
     }
+    g->E = calculate_energy(g);
     free(cluster);
 }

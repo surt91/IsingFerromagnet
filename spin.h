@@ -51,7 +51,7 @@ double calculate_energy(gs_graph_t *g);
 double calculate_magnetisation(gs_graph_t *g);
 
 void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps,
-                                int t_eq, int par_temp_flag, int wolff_flag,
+                                int t_eq, int par_temp_flag, void (*mc_fkt)(gs_graph_t*, int),
                                 char filename[MAX_LEN_FILENAME], int verbose);
 void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N);
 void wolff_monte_carlo_sweeps(gs_graph_t *g, int N);
