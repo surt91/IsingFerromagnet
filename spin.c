@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     int L;                                   //< Kantenlänge des Gitters
     double sigma;                              //< Unordnung des Gitters
     double alpha;                              //< Gewichtung der Kanten
-    double E, M, T;
+    double T;
     double *list_of_temps;
     double tmp_T, delta;
     int num_temps, temp_index;                //< Für parallel Tempering
@@ -241,43 +241,36 @@ int main(int argc, char *argv[])
         #endif
     }
 
+    /* Initialisiere den Graphen für die Spins */
+    g = gs_create_graph(L);
+
+    /* Verschiebe die Knoten */
+    move_graph_nodes(g, gauss, sigma);
+
+    /* Verknüpfe die Knoten */
+    create_edges_regular(g);
+    assign_weights_with_function(g, exponential_decay, alpha);
+
     for(nT=0;nT<num_temps;nT++)
     {
-        /* Initialisiere den Graphen für die Spins */
-        g = gs_create_graph(L);
-
-        /* Verschiebe die Knoten */
-        move_graph_nodes(g, gauss, sigma);
-
-        /* Verknüpfe die Knoten */
-        create_edges_regular(g);
-        assign_weights_with_function(g, exponential_decay, alpha);
-
         /* initialisiere den Status der Spins */
         if(start_order == 1)
             init_spins_up(g);
-        else if(start_order == 0)
-            init_spins_randomly(g);
         else
             init_spins_randomly(g);
 
-        //~ print_graph_for_graph_viz(g);
-
         /* Berechne Energie des Ising Modells */
-        E = calculate_energy(g);
-        //fprintf(stderr, "E = %f\n", E);
+        g->E = calculate_energy(g);
         /* Berechne Magnetisierung des Ising Modells */
-        M = calculate_magnetisation(g);
-        //fprintf(stderr, "M = %f\n", M);
-        /* Setze M und E */
-        g->M = M;
-        g->E = E;
+        g->M = calculate_magnetisation(g);
+
+        /* Speichere eine Kopie des Graphen im Array der Graphen */
+        list_of_graphs[nT] = gs_copy_graph(g);
 
         /* Setze Temperatur */
-        g->T = list_of_temps[nT];
-
-        list_of_graphs[nT] = g;
+        list_of_graphs[nT]->T = list_of_temps[nT];
     }
+    gs_clear_graph(g);
 
     /* Führe Monte Carlo Sweeps durch */
     /* Erreiche das Equilibrium */
@@ -291,7 +284,7 @@ int main(int argc, char *argv[])
         return(-1);
     }
     /* Schreibe Header */
-    fprintf(data_out_file, "# N E M # L=%d # T= ", g->L);
+    fprintf(data_out_file, "# N E M # L=%d # T= ", L);
     for(nT=0;nT<num_temps;nT++)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
@@ -365,7 +358,6 @@ int main(int argc, char *argv[])
     }
 
     fclose(data_out_file);
-    //~ print_graph_for_graph_viz(g);
 
     for(nT=0;nT<num_temps;nT++)
         gs_clear_graph(list_of_graphs[nT]);

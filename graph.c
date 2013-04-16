@@ -29,6 +29,36 @@ gs_graph_t *gs_create_graph(int L)
     return(g);
 }
 
+/*! \fn gs_graph_t *gs_copy_graph(gs_graph_t *g)
+    \brief Liefert eine Kopie des Graphen g
+
+    \param [in]     g   zu kopierender Graph
+    \return kopierter Graph
+*/
+gs_graph_t *gs_copy_graph(gs_graph_t *g)
+{
+    gs_graph_t *copy;
+    int n;
+
+    copy = (gs_graph_t *) malloc(sizeof(gs_graph_t));
+    copy->num_nodes = g->num_nodes;
+    copy->L = g->L;
+    copy->node = (gs_node_t *) malloc(g->num_nodes*sizeof(gs_node_t));
+
+    for(n=0;n<g->num_nodes; n++)
+    {
+        copy->node[n].neighbors = copy_list(g->node[n].neighbors);
+        copy->node[n].x = g->node[n].x;
+        copy->node[n].y = g->node[n].y;
+        copy->node[n].spin = g->node[n].spin;
+    }
+    copy->T = g->T;
+    copy->E = g->E;
+    copy->M = g->M;
+
+    return(copy);
+}
+
 /*! \fn void gs_insert_edge(gs_graph_t *g, int from, int to, double weight)
     \brief Erstellt eine neue Kante im Graphen g. Aus Kapitel 'Graphs'
 

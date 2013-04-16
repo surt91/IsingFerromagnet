@@ -114,6 +114,31 @@ elem_t *insert_element(elem_t *head, elem_t *elem, elem_t *ort)
     return(head);
 }
 
+/*! \fn elem_t *copy_list(elem_t *list)
+    \brief Liefert eine Kopie der Liste.
+
+    \param [in]     list    zu kopierende Liste
+    \return (new) Pointer auf den Listenanfang der kopierten Liste
+*/
+elem_t *copy_list(elem_t *list)
+{
+    elem_t *copy;
+    elem_t *elem;
+    elem_t *tail = NULL;
+
+    copy = create_element(list->index, list->weight);
+    list = list->next;
+
+    while(list != NULL)
+    {
+        elem = create_element(list->index, list->weight);
+        copy = insert_element(copy, elem, tail);
+        tail = elem;
+        list = list->next;
+    }
+    return(copy);
+}
+
 /*! \fn void print_list(elem_t *list)
     \brief  Gibt die Liste aus. Aus Kapitel 'Listen'
 
