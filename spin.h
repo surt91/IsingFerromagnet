@@ -37,6 +37,9 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
 double gauss(double sigma);
 double exponential_decay(double alpha, double x);
 
+gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_order,
+                        double (*moving_fkt)(double), double sigma,
+                        double (*weighting_fkt)(double alpha, double dist), double alpha);
 void move_graph_nodes(gs_graph_t *g, double (*f)(double), double sigma);
 void create_edges_regular(gs_graph_t *g);
 void assign_weights_with_function(gs_graph_t *g, double (*f)(double alpha, double dist), double alpha);

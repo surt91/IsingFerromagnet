@@ -9,23 +9,9 @@
 
     Sie kümmert sich um
     -# das Parsen von Kommandozeilenargumenten
-        - -v     zeigt die Hilfe
-        - -h     gesprächiger Modus
-        - -Tx    Temperatur x                      (double)
-        - -Lx    Länge x                              (int)
-        - -xx    seed x                               (int)
-        - -Nx    x Monte Carlo sweeps                 (int)
-        - -ex    Equilibrium nach x sweeps angenommen (int)
-        - -sx    sigma x                           (double)
-        - -ox    filename (max. 79 Zeichen)        (string)
-        - -ux    Ordnung x (0: zufällig, 1: alle up)  (int)
-        - -ix    Alle x sweeps schreiben              (int)
-        - -w     Wolff Algorithmus (statt Metropolis)
-        - -px    Parallel Tempering mit einer Komma
-                 getrennten Liste der zu berechnenden Temperaturen
     -# das Initialisieren des Graphens, auf dem die Spins liegen
     -# das Aufrufen der Funktionen, die die Monte Carlo Sweeps durchführen
-    -# das Speichern der Ergebnisse in Dateien
+        - die die Ergebnisse in einer Datei speichern
 
     \param [in] argc     Anzahl Kommandozeilen Argumente
     \param [in] argv     Vektor der Kommandozeilenargumente
@@ -59,41 +45,13 @@ int main(int argc, char *argv[])
                     &filename, &list_of_temps);
 
     smy_rand(seed);
-    list_of_graphs = (gs_graph_t**) malloc(num_temps * sizeof(gs_graph_t*));
 
+    list_of_graphs = init_graphs(L,num_temps, list_of_temps, start_order,
+                                        gauss, sigma, exponential_decay, alpha);
+
+    /* Allokation und Initialisierung zur Statistik der Parallel Tempering Übergänge */
     par_temp_versuche = (double*) calloc(num_temps, sizeof(double));
     par_temp_erfolge  = (double*) calloc(num_temps, sizeof(double));
-
-    /* Initialisiere den Graphen für die Spins */
-    g = gs_create_graph(L);
-
-    /* Verschiebe die Knoten */
-    move_graph_nodes(g, gauss, sigma);
-
-    /* Verknüpfe die Knoten */
-    create_edges_regular(g);
-    assign_weights_with_function(g, exponential_decay, alpha);
-
-    for(nT=0;nT<num_temps;nT++)
-    {
-        /* initialisiere den Status der Spins */
-        if(start_order == 1)
-            init_spins_up(g);
-        else
-            init_spins_randomly(g);
-
-        /* Berechne Energie des Ising Modells */
-        g->E = calculate_energy(g);
-        /* Berechne Magnetisierung des Ising Modells */
-        g->M = calculate_magnetisation(g);
-
-        /* Speichere eine Kopie des Graphen im Array der Graphen */
-        list_of_graphs[nT] = gs_copy_graph(g);
-
-        /* Setze Temperatur */
-        list_of_graphs[nT]->T = list_of_temps[nT];
-    }
-    gs_clear_graph(g);
 
     /* Führe Monte Carlo Sweeps durch */
     /* Erreiche das Equilibrium */
@@ -180,8 +138,8 @@ int main(int argc, char *argv[])
         fprintf(stderr,"\n");
     }
 
+    /* gebe Speicher frei */
     fclose(data_out_file);
-
     for(nT=0;nT<num_temps;nT++)
         gs_clear_graph(list_of_graphs[nT]);
     free(list_of_graphs);
@@ -259,7 +217,7 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
     /* weitere Optionen */
     *verbose = 0;
     custom_file_name = 0;
-    
+
     opterr = 0;
     while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp:")) != -1)
         switch (c)
@@ -386,6 +344,66 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
         printf("    Filename: '%s'\n",*filename);
         printf("    \n");
     }
+}
+
+/*! \fn gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_order,
+                        double (*moving_fkt)(double), double sigma,
+                        double (*weighting_fkt)(double alpha, double dist), double alpha)
+    \brief Diese Funktion initialisiert die Graphen mit allen nötigen
+            Informationen
+
+    \param [in] L               Kantenlänge des Graphen
+    \param [in] num_temps       Anzahl der Graphen
+    \param [in] list_of_temps   Array der Temperaturen (eine pro Graph)
+    \param [in] start_order     Anfangsordnung der Graphen
+    \param [in] moving_fkt      Funktion, nach der die Knoten verschoben werden
+    \param [in] sigma           Parameter der moving_fkt
+    \param [in] weighting_fkt   Funktion, nach der die Kanten gewichtet werden
+    \param [in] alpha           Parameter der weighting_fkt
+*/
+gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_order,
+                        double (*moving_fkt)(double), double sigma,
+                        double (*weighting_fkt)(double alpha, double dist), double alpha)
+{
+    gs_graph_t *g;
+    gs_graph_t **list_of_graphs;
+
+    int nT;
+
+    list_of_graphs = (gs_graph_t**) malloc(num_temps * sizeof(gs_graph_t*));
+
+    /* Initialisiere den Graphen für die Spins */
+    g = gs_create_graph(L);
+
+    /* Verschiebe die Knoten */
+    move_graph_nodes(g, moving_fkt, sigma);
+
+    /* Verknüpfe die Knoten */
+    create_edges_regular(g);
+    assign_weights_with_function(g, weighting_fkt, alpha);
+
+    for(nT=0;nT<num_temps;nT++)
+    {
+        /* initialisiere den Status der Spins */
+        if(start_order == 1)
+            init_spins_up(g);
+        else
+            init_spins_randomly(g);
+
+        /* Berechne Energie des Ising Modells */
+        g->E = calculate_energy(g);
+        /* Berechne Magnetisierung des Ising Modells */
+        g->M = calculate_magnetisation(g);
+
+        /* Speichere eine Kopie des Graphen im Array der Graphen */
+        list_of_graphs[nT] = gs_copy_graph(g);
+
+        /* Setze Temperatur */
+        list_of_graphs[nT]->T = list_of_temps[nT];
+    }
+    gs_clear_graph(g);
+
+    return(list_of_graphs);
 }
 
 /*! \fn double wrapper_for_gsl_rand(int set_seed, int seed, int free)

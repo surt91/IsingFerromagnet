@@ -15,10 +15,10 @@ if __name__ == '__main__':
     n=0
     nWorker = cpu_count()*2
     # Tupel aus L, T_eq, tau
-    # Also Größe, Equilibriums Zeit und Korrelationszeit
+    # Also Grosse, Equilibriums Zeit und Korrelationszeit
     # Diese sind durch tests in zeiten.par eingetragen
-    configs = [ ( 16,  200*2,  1)
-                #~ ( 32,  400*2,  15*2),
+    configs = [ ( 16,  200*2,  1),
+                ( 32,  400*2,  1)
                 #~ ( 64, 1000*2,  15*2),
                 #~ (128, 2000*2,  15*2)
                                   ]
