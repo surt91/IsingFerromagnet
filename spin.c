@@ -4,11 +4,6 @@
  * Algorithmus und parallel Tempering */
 #include "spin.h"
 
-/*! \def MAX_LEN_FILENAME
- * Maximale Länge des Outputdateinamens
- */
-#define MAX_LEN_FILENAME 80
-
 /*! \fn int main(int argc, char *argv[])
     \brief Dies ist die Main Funktion.
 
@@ -47,199 +42,27 @@ int main(int argc, char *argv[])
     double *list_of_temps;
     double tmp_T, delta;
     int num_temps, temp_index;                //< Für parallel Tempering
-    char temp_string[20];
     int N, inc, t_eq;
     int seed, start_order;
     double *par_temp_versuche, *par_temp_erfolge;
     FILE *data_out_file;
     char filename[MAX_LEN_FILENAME];     //< Dateiname, der Output Datei
 
-    #ifdef TIME
-        double begin_time, end_time;          //< for timing Information
-    #endif
-
     /* Vars für getopt (Kommandozeilenparser) */
-    int c, verbose=0, custom_file_name=0;
+    int verbose;
     int wolff_flag, par_temp_flag;
-    extern char *optarg;
 
-    /* Standardwerte, wenn keine Optionen gegeben */
-    /* Temperatur */
-    T=2.0;
-    /* Kantenlänge des Feldes */
-    L=64;
-    /* Wieviele Sweeps berechnen */
-    /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
-    N=2000;
-    /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
-    t_eq = 1000;
-    /* Alle wieviel Sweeps Ergebnisse Speichern */
-    inc=1;
-    /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
-    sigma = 0;
-    /* Parameter, der die Gewichtung der Kanten bestimmt */
-    alpha = 0;
-    /* Anfangsbedingung der Spins: 0: zufällig, 1: alle up */
-    start_order = 0;
-    /* Seed für Zufallsgenerator */
-    seed = 42;
-    /* Soll Wolff Algorithmus benutzt werden? */
-    wolff_flag = 0;
-    /* Soll Parallel Tempering Algorithmus benutzt werden? */
-    par_temp_flag = 0;
-    num_temps = 1;
-
-    /* Hier wird die Kommandozeile geparst. */
-    /* -h  -> help */
-    /* -v  -> verbose */
-    /* -Tx -> Temperatur x */
-    /* -Lx -> Länge x */
-    /* -sx -> seed x */
-    /* -Nx -> x Monte Carlo sweeps */
-    /* -ex -> Equilibrium nac x sweeps angenommen */
-    /* -sx -> sigma x */
-    /* -ox -> Dateiname x */
-    /* -ux -> Start Ordnung x (0: zufällig, 1: alle up) */
-    /* -ix -> Alle x sweeps schreiben */
-    /* -w  -> Wolff Algorithmus (statt Metropolis) */
-    /* -px    Parallel Tempering aktivieren, mit den kommagetrennten
-     *          Temperauren dahinter */
-    opterr = 0;
-    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp:")) != -1)
-        switch (c)
-        {
-            case 'T':
-                T = atof(optarg);
-                break;
-            case 'L':
-                L = atoi(optarg);
-                break;
-            case 'x':
-                seed = atoi(optarg);
-                break;
-            case 'N':
-                N = atoi(optarg);
-                break;
-            case 'e':
-                t_eq = atoi(optarg);
-                break;
-            case 's':
-                sigma = atof(optarg);
-                break;
-            case 'o':
-                custom_file_name = 1;
-                strncpy(filename, optarg, MAX_LEN_FILENAME);
-                break;
-            case 'u':
-                start_order = atoi(optarg);
-                break;
-            case 'i':
-                inc = atoi(optarg);
-                break;
-            case 'v':
-                verbose = 1;
-                break;
-            case 'w':
-                wolff_flag = 1;
-                break;
-            case 'p':
-                par_temp_flag = 1;
-                i=0;
-                /* Ermittele Anzahl der Temperaturen */
-                while(optarg[i]!= '\0')
-                    if(optarg[i++] == ',')
-                        num_temps++;
-                /* Reserviere Speicher */
-                list_of_temps = (double*) malloc(num_temps * sizeof(double));
-                /* Schreibe die Temperaturen als Double in das Array */
-                nT=0; j=0; i=0;
-                do
-                {
-                    if(optarg[i] == ',' || optarg[i] == '\0')
-                    {
-                        temp_string[j] = '\0';
-                        j=0;
-                        list_of_temps[nT++] = atof(temp_string);
-                    }
-                    else
-                    {
-                        temp_string[j] = optarg[i];
-                        j++;
-                    }
-                } while(optarg[i++]!= '\0');
-                break;
-            case '?':
-                fprintf(stderr,
-                        "Unknown option character `\\x%x'.\n", optopt);
-            case 'h':
-                fprintf(stderr,"Benutzung: %s -[hTLxNesou]\n",argv[0]);
-                fprintf(stderr,"    -h     Zeigt diese Hilfe                         \n");
-                fprintf(stderr,"    -v     gesprächiger Modus                        \n");
-                fprintf(stderr,"    -Tx    Temperatur x                      (double)\n");
-                fprintf(stderr,"    -Lx    Länge x                              (int)\n");
-                fprintf(stderr,"    -xx    seed x                               (int)\n");
-                fprintf(stderr,"    -Nx    x Monte Carlo sweeps                 (int)\n");
-                fprintf(stderr,"    -ex    Equilibrium nach x sweeps angenommen (int)\n");
-                fprintf(stderr,"    -sx    sigma x                           (double)\n");
-                fprintf(stderr,"    -ox    filename (max. 79 Zeichen)        (string)\n");
-                fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
-                fprintf(stderr,"    -ix    Alle x sweeps schreiben              (int)\n");
-                fprintf(stderr,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
-                fprintf(stderr,"    -px    Parallel Tempering mit einer Komma        \n");
-                fprintf(stderr,"            getrennten Liste der zu berechnenden Temperaturen \n");
-                return(-1);
-            default:
-                abort ();
-        }
+    get_cl_args(argc, argv, &L, &T, &N,
+                    &t_eq, &inc, &sigma, &alpha,
+                    &start_order, &seed, &wolff_flag,
+                    &par_temp_flag, &num_temps, &verbose,
+                    &filename, &list_of_temps);
 
     smy_rand(seed);
     list_of_graphs = (gs_graph_t**) malloc(num_temps * sizeof(gs_graph_t*));
 
     par_temp_versuche = (double*) calloc(num_temps, sizeof(double));
     par_temp_erfolge  = (double*) calloc(num_temps, sizeof(double));
-
-    if(!par_temp_flag)
-    {
-        list_of_temps = (double*) malloc(num_temps * sizeof(double));
-        list_of_temps[0] = T;
-    }
-    if(!custom_file_name)
-    {
-        /* standard Dateiname */
-        snprintf(filename, MAX_LEN_FILENAME, "data/data_L_%d.dat", L);
-    }
-
-    if(verbose)
-    {
-        printf("gewählte Parameter:\n");
-        printf("    L     = %d\n", L);
-        printf("    T     =  \n");
-        for(i=0;i<num_temps;i++)
-            printf("            %f,\n",list_of_temps[i]);
-        printf("           \n");
-        printf("    N     = %d\n", N);
-        printf("    t_eq  = %d\n", t_eq);
-        printf("    seed  = %d\n", seed);
-        printf("    sigma = %f\n", sigma);
-        if(start_order)
-            printf("    spins starten alle up\n");
-        else
-            printf("    spins starten zufällig\n");
-        if(wolff_flag)
-            printf("    Wolff Algorithmus\n");
-        else
-            printf("    Metropolis Algorithmus\n");
-        if(par_temp_flag)
-            printf("    Parallel Tempering aktiviert\n");
-        else
-            printf("    Parallel Tempering deaktiviert\n");
-        printf("    Filename: '%s'\n",filename);
-        printf("    \n");
-
-        #ifdef TIME
-            begin_time = clock();
-        #endif
-    }
 
     /* Initialisiere den Graphen für die Spins */
     g = gs_create_graph(L);
@@ -367,16 +190,202 @@ int main(int argc, char *argv[])
     free(par_temp_versuche);
     free(par_temp_erfolge);
 
-    #ifdef TIME
-        if(verbose)
-        {
-            end_time = clock();
-            printf("Laufzeit\n    %.2f s\n\n",
-                         (double)(end_time-begin_time)/CLOCKS_PER_SEC);
-        }
-    #endif
-
     return(0);
+}
+
+/*! \fn void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
+                    int *t_eq, int *inc, double *sigma, double *alpha,
+                    int *start_order, int *seed, int *wolff_flag,
+                    int *par_temp_flag, int *num_temps, int *verbose,
+                    char (*filename)[MAX_LEN_FILENAME], double **list_of_temps)
+    \brief Diese Funktion interpretiert die Kommandozeilenargumente mithilfe von
+            getopt und gibt sie wieder zurück. Und vergibt für den Rest
+            Standardwerte.
+
+    \param [in]  argc           Anzahl der Argumente
+    \param [in]  argv           Vektor der Argumente
+    \param [out] L              Kantenlänge
+    \param [out] T              Temperatur
+    \param [out] N              Anzahl Sweeps
+    \param [out] t_eq           Equilibriumszeit
+    \param [out] inc            Autokorrelationszeit
+    \param [out] sigma          Unordnungsparamter
+    \param [out] alpha          Bindungsparameter
+    \param [out] start_order    Start Ordnung
+    \param [out] seed           Zufallszahlenseed
+    \param [out] wolff_flag     Soll Wolff Alogrithmus benutzt werden
+    \param [out] par_temp_flag  Soll Parallel Tempering (MC^3) genutzt werden
+    \param [out] num_temps      Anzahl der verschiedenen Temperaturen
+    \param [out] verbose        Gesprächiger Modus
+    \param [out] filename       Output Dateiname
+    \param [out] list_of_temps  Liste der Temperaturen
+*/
+void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
+                    int *t_eq, int *inc, double *sigma, double *alpha,
+                    int *start_order, int *seed, int *wolff_flag,
+                    int *par_temp_flag, int *num_temps, int *verbose,
+                    char (*filename)[MAX_LEN_FILENAME], double **list_of_temps)
+{
+    int c;
+    int i, j, nT;
+    int custom_file_name;
+    char temp_string[20];
+    extern char *optarg;
+    /* Standardwerte, wenn keine Optionen gegeben */
+    /* Temperatur */
+    *T=2.0;
+    /* Kantenlänge des Feldes */
+    *L=64;
+    /* Wieviele Sweeps berechnen */
+    /* Ein Sweep sind \f$ L^2 \f$ Monte Carlo Schritte */
+    *N=2000;
+    /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
+    *t_eq = 1000;
+    /* Alle wieviel Sweeps Ergebnisse Speichern */
+    *inc=1;
+    /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
+    *sigma = 0;
+    /* Parameter, der die Gewichtung der Kanten bestimmt */
+    *alpha = 0;
+    /* Anfangsbedingung der Spins: 0: zufällig, 1: alle up */
+    *start_order = 0;
+    /* Seed für Zufallsgenerator */
+    *seed = 42;
+    /* Soll Wolff Algorithmus benutzt werden? */
+    *wolff_flag = 0;
+    /* Soll Parallel Tempering Algorithmus benutzt werden? */
+    *par_temp_flag = 0;
+    *num_temps = 1;
+    /* weitere Optionen */
+    *verbose = 0;
+    custom_file_name = 0;
+    
+    opterr = 0;
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp:")) != -1)
+        switch (c)
+        {
+            case 'T':
+                *T = atof(optarg);
+                break;
+            case 'L':
+                *L = atoi(optarg);
+                break;
+            case 'x':
+                *seed = atoi(optarg);
+                break;
+            case 'N':
+                *N = atoi(optarg);
+                break;
+            case 'e':
+                *t_eq = atoi(optarg);
+                break;
+            case 's':
+                *sigma = atof(optarg);
+                break;
+            case 'o':
+                custom_file_name = 1;
+                strncpy(*filename, optarg, MAX_LEN_FILENAME);
+                break;
+            case 'u':
+                *start_order = atoi(optarg);
+                break;
+            case 'i':
+                *inc = atoi(optarg);
+                break;
+            case 'v':
+                *verbose = 1;
+                break;
+            case 'w':
+                *wolff_flag = 1;
+                break;
+            case 'p':
+                *par_temp_flag = 1;
+                i=0;
+                /* Ermittele Anzahl der Temperaturen */
+                while(optarg[i]!= '\0')
+                    if(optarg[i++] == ',')
+                        (*num_temps)++;
+                /* Reserviere Speicher */
+                *list_of_temps = (double*) malloc(*num_temps * sizeof(double));
+                /* Schreibe die Temperaturen als Double in das Array */
+                nT=0; j=0; i=0;
+                do
+                {
+                    if(optarg[i] == ',' || optarg[i] == '\0')
+                    {
+                        temp_string[j] = '\0';
+                        j=0;
+                        (*list_of_temps)[nT++] = atof(temp_string);
+                    }
+                    else
+                    {
+                        temp_string[j] = optarg[i];
+                        j++;
+                    }
+                } while(optarg[i++]!= '\0');
+                break;
+            case '?':
+                fprintf(stderr,
+                        "Unknown option character `\\x%x'.\n", optopt);
+            case 'h':
+                fprintf(stderr,"Benutzung: %s -[hTLxNesou]\n",argv[0]);
+                fprintf(stderr,"    -h     Zeigt diese Hilfe                         \n");
+                fprintf(stderr,"    -v     gesprächiger Modus                        \n");
+                fprintf(stderr,"    -Tx    Temperatur x                      (double)\n");
+                fprintf(stderr,"    -Lx    Länge x                              (int)\n");
+                fprintf(stderr,"    -xx    seed x                               (int)\n");
+                fprintf(stderr,"    -Nx    x Monte Carlo sweeps                 (int)\n");
+                fprintf(stderr,"    -ex    Equilibrium nach x sweeps angenommen (int)\n");
+                fprintf(stderr,"    -sx    sigma x                           (double)\n");
+                fprintf(stderr,"    -ox    filename (max. 79 Zeichen)        (string)\n");
+                fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
+                fprintf(stderr,"    -ix    Alle x sweeps schreiben              (int)\n");
+                fprintf(stderr,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
+                fprintf(stderr,"    -px    Parallel Tempering mit einer Komma        \n");
+                fprintf(stderr,"            getrennten Liste der zu berechnenden Temperaturen \n");
+                exit(1);
+            default:
+                abort ();
+        }
+
+    if(! *par_temp_flag)
+    {
+        *list_of_temps = (double*) malloc(*num_temps * sizeof(double));
+        *list_of_temps[0] = *T;
+    }
+    if(!custom_file_name)
+    {
+        /* standard Dateiname */
+        snprintf(*filename, MAX_LEN_FILENAME, "data/data_L_%d.dat", *L);
+    }
+
+    if(verbose)
+    {
+        printf("gewählte Parameter:\n");
+        printf("    L     = %d\n", *L);
+        printf("    T     =  \n");
+        for(i=0;i<*num_temps;i++)
+            printf("            %f,\n",(*list_of_temps)[i]);
+        printf("           \n");
+        printf("    N     = %d\n", *N);
+        printf("    t_eq  = %d\n", *t_eq);
+        printf("    seed  = %d\n", *seed);
+        printf("    sigma = %f\n", *sigma);
+        if(*start_order)
+            printf("    spins starten alle up\n");
+        else
+            printf("    spins starten zufällig\n");
+        if(*wolff_flag)
+            printf("    Wolff Algorithmus\n");
+        else
+            printf("    Metropolis Algorithmus\n");
+        if(*par_temp_flag)
+            printf("    Parallel Tempering aktiviert\n");
+        else
+            printf("    Parallel Tempering deaktiviert\n");
+        printf("    Filename: '%s'\n",*filename);
+        printf("    \n");
+    }
 }
 
 /*! \fn double wrapper_for_gsl_rand(int set_seed, int seed, int free)
