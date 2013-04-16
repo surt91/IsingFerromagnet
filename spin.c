@@ -339,10 +339,11 @@ int main(int argc, char *argv[])
                 if(my_rand() < exp(delta))
                 {
                     par_temp_erfolge[temp_index]++;
-                    /* Tausche erst die Graphen, tausche danach die Temperaturen zurück */
+                    /* Tausche erst die Graphen ... */
                     g = list_of_graphs[temp_index];
                     list_of_graphs[temp_index] = list_of_graphs[temp_index+1];
                     list_of_graphs[temp_index+1] = g;
+                    /* ... tausche danach die Temperaturen zurück */
                     tmp_T = list_of_graphs[temp_index]->T;
                     list_of_graphs[temp_index]->T = list_of_graphs[temp_index+1]->T;
                     list_of_graphs[temp_index+1]->T = tmp_T;
@@ -560,6 +561,10 @@ void assign_weights_with_function(gs_graph_t *g,
         {
             j=list->index;
 
+            /* !!! */
+            /* Funktioniert nur im regulären Gitter: Muss ersetzt werden */
+            /* !!! */
+
             /* Prüfe, ob der Knoten ein rechter oder linker Randknoten ist
                 Wenn ja, reduziere den Abstand in x-Richtung um L */
             if(    (i%L == 0   && j%L == L-1)    /* i links, j rechts */
@@ -725,10 +730,10 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N)
         /*! - Berechne die Wahrscheinlichkeit, mit der der Flip akzeptiert
             wird.
             \f[ A = \left\{
-                      \begin{array}{ll}
-                        e^{-\beta \Delta E} & \Delta E > 0 \\
-                        1 & sonst
-                      \end{array}
+                        \begin{array}{ll}
+                            e^{-\beta \Delta E} & \Delta E > 0 \\
+                            1                   & sonst
+                        \end{array}
                     \right.  \f]
             Wie in \cite newman1999monte S. 49 (3.7) gegeben.
          */
