@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     double *list_of_temps;
     int num_temps;                //< Für parallel Tempering
     int N, inc, t_eq;
-    int seed, start_order;
+    int start_order;
     char filename[MAX_LEN_FILENAME];     //< Dateiname, der Output Datei
 
     /* Vars für getopt (Kommandozeilenparser) */
@@ -36,11 +36,9 @@ int main(int argc, char *argv[])
 
     get_cl_args(argc, argv, &L, &T, &N,
                     &t_eq, &inc, &sigma, &alpha,
-                    &start_order, &seed, &wolff_flag,
+                    &start_order, &wolff_flag,
                     &par_temp_flag, &num_temps, &verbose,
                     &filename, &list_of_temps);
-
-    smy_rand(seed);
 
     list_of_graphs = init_graphs(L,num_temps, list_of_temps, start_order,
                                         gauss, sigma, exponential_decay, alpha);
@@ -87,12 +85,13 @@ int main(int argc, char *argv[])
 */
 void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
                     int *t_eq, int *inc, double *sigma, double *alpha,
-                    int *start_order, int *seed, int *wolff_flag,
+                    int *start_order, int *wolff_flag,
                     int *par_temp_flag, int *num_temps, int *verbose,
                     char (*filename)[MAX_LEN_FILENAME], double **list_of_temps)
 {
     int c;
     int i, j, nT;
+    int seed;
     int custom_file_name;
     char temp_string[20];
     extern char *optarg;
@@ -115,7 +114,7 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
     /* Anfangsbedingung der Spins: 0: zufällig, 1: alle up */
     *start_order = 0;
     /* Seed für Zufallsgenerator */
-    *seed = 42;
+    seed = 42;
     /* Soll Wolff Algorithmus benutzt werden? */
     *wolff_flag = 0;
     /* Soll Parallel Tempering Algorithmus benutzt werden? */
@@ -136,7 +135,7 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
                 *L = atoi(optarg);
                 break;
             case 'x':
-                *seed = atoi(optarg);
+                seed = atoi(optarg);
                 break;
             case 'N':
                 *N = atoi(optarg);
@@ -224,6 +223,8 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
         snprintf(*filename, MAX_LEN_FILENAME, "data/data_L_%d.dat", *L);
     }
 
+    smy_rand(seed);
+
     if(verbose)
     {
         printf("gewählte Parameter:\n");
@@ -234,7 +235,8 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
         printf("           \n");
         printf("    N     = %d\n", *N);
         printf("    t_eq  = %d\n", *t_eq);
-        printf("    seed  = %d\n", *seed);
+        printf("    tau   = %d\n", *inc);
+        printf("    seed  = %d\n", seed);
         printf("    sigma = %f\n", *sigma);
         if(*start_order)
             printf("    spins starten alle up\n");
@@ -834,7 +836,7 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g, int N)
     /* Allokation */
     cluster = malloc(g->num_nodes*sizeof(int));
 
-    for(i=0;i<g->num_nodes*N;n++)
+    for(n=0;n<N;n++)
     {
         /* Initialisierung */
         for(i=0;i<g->num_nodes;i++)

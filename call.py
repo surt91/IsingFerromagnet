@@ -6,7 +6,7 @@ from multiprocessing import Process, cpu_count
 
 def f(l,t_eq,tau):
     t=",".join([str(i) for i in arange(1.0,3.3,0.1)])
-    call(["time", "-f%E", "./test", "-p{0}".format(t),
+    call(["time", "-f%U", "./test", "-p{0}".format(t),
            "-L{0}".format(l), "-e{0}".format(t_eq),
            "-N{0}".format(t_eq+500*tau), "-i{0}".format(tau),
            "-v", "-u1", "-x13", "-w"])
@@ -17,9 +17,9 @@ if __name__ == '__main__':
     # Tupel aus L, T_eq, tau
     # Also Grosse, Equilibriums Zeit und Korrelationszeit
     # Diese sind durch tests in zeiten.par eingetragen
-    configs = [ ( 16,  200*2,  1),
-                ( 32,  400*2,  1)
-                #~ ( 64, 1000*2,  15*2),
+    configs = [ ( 16,  200*2,  3),
+                ( 32,  400*2,  3),
+                ( 64, 1000*2,  3)
                 #~ (128, 2000*2,  15*2)
                                   ]
     # Generieren der Ergebnisse

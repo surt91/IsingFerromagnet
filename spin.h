@@ -30,7 +30,7 @@ void free_my_rand();
 
 void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
                     int *t_eq, int *inc, double *sigma, double *alpha,
-                    int *start_order, int *seed, int *wolff_flag,
+                    int *start_order, int *wolff_flag,
                     int *par_temp_flag, int *num_temps, int *verbose,
                     char (*filename)[MAX_LEN_FILENAME], double **list_of_temps);
 
