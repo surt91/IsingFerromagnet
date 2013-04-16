@@ -195,8 +195,8 @@ int main(int argc, char *argv[])
     smy_rand(seed);
     list_of_graphs = (gs_graph_t**) malloc(num_temps * sizeof(gs_graph_t*));
 
-    par_temp_versuche= (double*) calloc(num_temps, sizeof(double));
-    par_temp_erfolge= (double*) calloc(num_temps, sizeof(double));
+    par_temp_versuche = (double*) calloc(num_temps, sizeof(double));
+    par_temp_erfolge  = (double*) calloc(num_temps, sizeof(double));
 
     if(!par_temp_flag)
     {
@@ -373,6 +373,8 @@ int main(int argc, char *argv[])
     free(list_of_graphs);
     free(list_of_temps);
     free_my_rand();
+    free(par_temp_versuche);
+    free(par_temp_erfolge);
 
     #ifdef TIME
         if(verbose)
