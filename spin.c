@@ -18,20 +18,16 @@
 */
 int main(int argc, char *argv[])
 {
-    gs_graph_t *g;
     gs_graph_t **list_of_graphs;
-    int i, j, nT;
+    int nT;
     int L;                                   //< Kantenlänge des Gitters
     double sigma;                              //< Unordnung des Gitters
     double alpha;                              //< Gewichtung der Kanten
     double T;
     double *list_of_temps;
-    double tmp_T, delta;
-    int num_temps, temp_index;                //< Für parallel Tempering
+    int num_temps;                //< Für parallel Tempering
     int N, inc, t_eq;
     int seed, start_order;
-    double *par_temp_versuche, *par_temp_erfolge;
-    FILE *data_out_file;
     char filename[MAX_LEN_FILENAME];     //< Dateiname, der Output Datei
 
     /* Vars für getopt (Kommandozeilenparser) */
@@ -49,104 +45,15 @@ int main(int argc, char *argv[])
     list_of_graphs = init_graphs(L,num_temps, list_of_temps, start_order,
                                         gauss, sigma, exponential_decay, alpha);
 
-    /* Allokation und Initialisierung zur Statistik der Parallel Tempering Übergänge */
-    par_temp_versuche = (double*) calloc(num_temps, sizeof(double));
-    par_temp_erfolge  = (double*) calloc(num_temps, sizeof(double));
-
-    /* Führe Monte Carlo Sweeps durch */
-    /* Erreiche das Equilibrium */
-    /* Schreibe alle inc Sweeps die Energie und Magnetisierung in eine Datei */
-    /* Plotte den Ausdruck mit Gnuplot. zB.
-     * plot 'test.dat' using 1:2, "test.dat" using 1:3; */
-    data_out_file = fopen(filename, "w");
-    if(data_out_file == NULL)
-    {
-        fprintf(stderr,"ERROR: %s kann nicht geöffnet werden",filename);
-        return(-1);
-    }
-    /* Schreibe Header */
-    fprintf(data_out_file, "# N E M # L=%d # T= ", L);
-    for(nT=0;nT<num_temps;nT++)
-        fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
-    fprintf(data_out_file, "\n");
-
-    /* Führe einen Sweep durch */
-    for(i=0;i<N;i+=inc)
-    {
-        if(i > t_eq)
-            fprintf(data_out_file, "%d ", i);
-        /* Für jede Temperatur */
-        for(nT=0;nT<num_temps;nT++)
-        {
-            g = list_of_graphs[nT];
-            /* Welchen Algorithmus nutzen? */
-            if(! wolff_flag)
-                metropolis_monte_carlo_sweeps(g, inc);
-            else
-            {
-                wolff_monte_carlo_sweeps(g, inc);
-                g->E = calculate_energy(g);
-            }
-
-            g->M = calculate_magnetisation(g);
-
-            /* Ergebnisse nur in die Ausgabe schreiben, wenn die (vermutete)
-                Equilibriumszeit verstrichen ist */
-            if(i > t_eq)
-                fprintf(data_out_file, "%f %f ", g->E, g->M/g->num_nodes);
-        }
-        if(i > t_eq)
-            fprintf(data_out_file, "\n");
-        /* wähle eine zufällige Temperatur und tausche sie mit der nächst höheren */
-        /* stelle sicher, dass nie die höchste gewählt wird */
-
-        if(par_temp_flag)
-        {
-            //~ temp_index = (int) (my_rand() * (num_temps-1));
-            for(j=0;j<num_temps-1;j++)
-            {
-                temp_index = j;
-                par_temp_versuche[temp_index]++;
-                /* Wähle zufällig, ob getauscht werden soll */
-                delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index+1]->T )
-                        * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index+1]->E);
-                if(my_rand() < exp(delta))
-                {
-                    par_temp_erfolge[temp_index]++;
-                    /* Tausche erst die Graphen ... */
-                    g = list_of_graphs[temp_index];
-                    list_of_graphs[temp_index] = list_of_graphs[temp_index+1];
-                    list_of_graphs[temp_index+1] = g;
-                    /* ... tausche danach die Temperaturen zurück */
-                    tmp_T = list_of_graphs[temp_index]->T;
-                    list_of_graphs[temp_index]->T = list_of_graphs[temp_index+1]->T;
-                    list_of_graphs[temp_index+1]->T = tmp_T;
-                }
-            }
-        }
-    }
-    if(verbose)
-    {
-        fprintf(stderr,"Akzeptanzniveaus: \n");
-        fprintf(stderr,"T: ");
-        for(nT=0;nT<num_temps;nT++)
-            fprintf(stderr,"%.2f      ",list_of_temps[nT]);
-        fprintf(stderr,"\n");
-        fprintf(stderr,"A: ");
-        for(nT=0;nT<num_temps;nT++)
-            fprintf(stderr,"     %.2f ", par_temp_erfolge[nT]/par_temp_versuche[nT]);
-        fprintf(stderr,"\n");
-    }
+    do_mc_simulation(list_of_graphs, N, inc, num_temps, t_eq,
+                                par_temp_flag, wolff_flag, filename, verbose);
 
     /* gebe Speicher frei */
-    fclose(data_out_file);
     for(nT=0;nT<num_temps;nT++)
         gs_clear_graph(list_of_graphs[nT]);
     free(list_of_graphs);
     free(list_of_temps);
     free_my_rand();
-    free(par_temp_versuche);
-    free(par_temp_erfolge);
 
     return(0);
 }
@@ -360,6 +267,7 @@ void get_cl_args(int argc, char *argv[], int *L, double *T, int *N,
     \param [in] sigma           Parameter der moving_fkt
     \param [in] weighting_fkt   Funktion, nach der die Kanten gewichtet werden
     \param [in] alpha           Parameter der weighting_fkt
+    \return Array mit den initialisierten Graphen
 */
 gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_order,
                         double (*moving_fkt)(double), double sigma,
@@ -404,6 +312,130 @@ gs_graph_t **init_graphs(int L, int num_temps, double *list_of_temps, int start_
     gs_clear_graph(g);
 
     return(list_of_graphs);
+}
+
+/*! \fn void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps,
+                                int t_eq, int par_temp_flag, int wolff_flag,
+                                char filename[MAX_LEN_FILENAME], int verbose)
+    \brief Diese Funktion führt die MC Berechnungen durch und speichert die 
+            Ergebnisse
+
+    \param [in] list_of_graphs  Liste der Graphen, die für parallel Tempering
+                                genutzt werden
+    \param [in] N               Anzahl der durchzuführenden MC Sweeps
+    \param [in] inc             Alle wieviel Sweeps sollen gespeichert werden
+    \param [in] num_temps       Anzahl der verschiedenen Temperaturen
+    \param [in] t_eq            Wielange warten, bevor das erste Ergebnis 
+                                gespeichert wird
+    \param [in] par_temp_flag   Soll parallel Tempering genutzt werden?
+    \param [in] wolff_flag      Soll der Wolff Algorithmus genutzt werden?
+    \param [in] filename        Name der output Datei
+    \param [in] verbose         Gesprächiger Modus
+    \return Array mit den initialisierten Graphen
+*/
+void do_mc_simulation(gs_graph_t **list_of_graphs, int N, int inc, int num_temps,
+                                int t_eq, int par_temp_flag, int wolff_flag,
+                                char filename[MAX_LEN_FILENAME], int verbose)
+{
+    double *par_temp_versuche, *par_temp_erfolge;
+    FILE *data_out_file;
+    int i, j;
+    int nT;
+    int temp_index;
+    double tmp_T, delta;
+    gs_graph_t *g;
+
+    /* Allokation und Initialisierung zur Statistik der Parallel Tempering Übergänge */
+    par_temp_versuche = (double*) calloc(num_temps, sizeof(double));
+    par_temp_erfolge  = (double*) calloc(num_temps, sizeof(double));
+
+    /* Führe Monte Carlo Sweeps durch */
+    /* Erreiche das Equilibrium */
+    /* Schreibe alle inc Sweeps die Energie und Magnetisierung in eine Datei */
+    /* Plotte den Ausdruck mit Gnuplot. zB.
+     * plot 'test.dat' using 1:2, "test.dat" using 1:3; */
+    data_out_file = fopen(filename, "w");
+    if(data_out_file == NULL)
+    {
+        fprintf(stderr,"ERROR: %s kann nicht geöffnet werden",filename);
+        exit(-1);
+    }
+    /* Schreibe Header */
+    fprintf(data_out_file, "# N E M # L=%d # T= ", list_of_graphs[0]->L);
+    for(nT=0;nT<num_temps;nT++)
+        fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
+    fprintf(data_out_file, "\n");
+
+    /* Führe einen Sweep durch */
+    for(i=0;i<N;i+=inc)
+    {
+        if(i > t_eq)
+            fprintf(data_out_file, "%d ", i);
+        /* Für jede Temperatur */
+        for(nT=0;nT<num_temps;nT++)
+        {
+            g = list_of_graphs[nT];
+            /* Welchen Algorithmus nutzen? */
+            if(! wolff_flag)
+                metropolis_monte_carlo_sweeps(g, inc);
+            else
+            {
+                wolff_monte_carlo_sweeps(g, inc);
+                g->E = calculate_energy(g);
+            }
+
+            g->M = calculate_magnetisation(g);
+
+            /* Ergebnisse nur in die Ausgabe schreiben, wenn die (vermutete)
+                Equilibriumszeit verstrichen ist */
+            if(i > t_eq)
+                fprintf(data_out_file, "%f %f ", g->E, g->M/g->num_nodes);
+        }
+        if(i > t_eq)
+            fprintf(data_out_file, "\n");
+
+        /* Parallel Tempering Austausch */
+        if(par_temp_flag)
+        {
+            //~ temp_index = (int) (my_rand() * (num_temps-1));
+            for(j=0;j<num_temps-1;j++)
+            {
+                temp_index = j;
+                par_temp_versuche[temp_index]++;
+                /* Wähle zufällig, ob getauscht werden soll */
+                delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index+1]->T )
+                        * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index+1]->E);
+                if(my_rand() < exp(delta))
+                {
+                    par_temp_erfolge[temp_index]++;
+                    /* Tausche erst die Graphen ... */
+                    g = list_of_graphs[temp_index];
+                    list_of_graphs[temp_index] = list_of_graphs[temp_index+1];
+                    list_of_graphs[temp_index+1] = g;
+                    /* ... tausche danach die Temperaturen zurück */
+                    tmp_T = list_of_graphs[temp_index]->T;
+                    list_of_graphs[temp_index]->T = list_of_graphs[temp_index+1]->T;
+                    list_of_graphs[temp_index+1]->T = tmp_T;
+                }
+            }
+        }
+    }
+    if(verbose)
+    {
+        fprintf(stderr,"Akzeptanzniveaus: \n");
+        fprintf(stderr,"T: ");
+        for(nT=0;nT<num_temps;nT++)
+            fprintf(stderr,"%.2f      ",list_of_graphs[nT]->T);
+        fprintf(stderr,"\n");
+        fprintf(stderr,"A: ");
+        for(nT=0;nT<num_temps;nT++)
+            fprintf(stderr,"     %.2f ", par_temp_erfolge[nT]/par_temp_versuche[nT]);
+        fprintf(stderr,"\n");
+    }
+
+    fclose(data_out_file);
+    free(par_temp_versuche);
+    free(par_temp_erfolge);
 }
 
 /*! \fn double wrapper_for_gsl_rand(int set_seed, int seed, int free)
