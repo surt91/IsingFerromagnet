@@ -291,9 +291,17 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     FILE *data_out_file;
     int i, j;
     int nT;
-    int temp_index;
+    int temp_index,temp_index_p;
     double tmp_T, delta;
+    int *map_of_temps;
     gs_graph_t *g;
+
+    /* Am Anfang sollten die Temperaturen sortiert sein */
+    map_of_temps = (int*) malloc(o.num_temps * sizeof(int));
+    for(nT=0;nT<o.num_temps;nT++)
+    {
+        map_of_temps[nT] = nT;
+    }
 
     /* Allokation und Initialisierung zur Statistik der Parallel Tempering Übergänge */
     par_temp_versuche = (double*) calloc(o.num_temps, sizeof(double));
@@ -319,8 +327,6 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     /* Führe N Sweeps durch */
     for(i=0;i<o.N;i+=o.inc)
     {
-        if(i > o.t_eq)
-            fprintf(data_out_file, "%d ", i);
         /* Für jede Temperatur */
         for(nT=0;nT<o.num_temps;nT++)
         {
@@ -333,14 +339,21 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
             o.mc_fkt(g, o.inc);
 
             g->M = calculate_magnetisation(g);
-
-            /* Ergebnisse nur in die Ausgabe schreiben, wenn die (vermutete)
-                Equilibriumszeit verstrichen ist */
-            if(i > o.t_eq)
-                fprintf(data_out_file, "%f %f ", g->E, g->M/g->num_nodes);
         }
+
+        /* Schreibe in Datei */
         if(i > o.t_eq)
+        {
+            fprintf(data_out_file, "%d ", i);
+            for(nT=0;nT<o.num_temps;nT++)
+            {
+                /* An welcher Stelle liegt die nT-te Temperatur? */
+                j = map_of_temps[nT];
+                fprintf(data_out_file, "%f %f ", list_of_graphs[j]->E,
+                     list_of_graphs[j]->M/list_of_graphs[j]->num_nodes);
+            }
             fprintf(data_out_file, "\n");
+        }
 
         /* Parallel Tempering Austausch */
         if(o.par_temp_flag)
@@ -348,22 +361,23 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
             //~ temp_index = (int) (my_rand() * (num_temps-1));
             for(j=0;j<o.num_temps-1;j++)
             {
-                temp_index = j;
+                temp_index = map_of_temps[j];
+                temp_index_p = map_of_temps[j+1];
+
                 par_temp_versuche[temp_index]++;
                 /* Wähle zufällig, ob getauscht werden soll */
-                delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index+1]->T )
-                        * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index+1]->E);
+                delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index_p]->T )
+                        * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index_p]->E);
                 if(my_rand() < exp(delta))
                 {
                     par_temp_erfolge[temp_index]++;
-                    /* Tausche erst die Graphen ... */
-                    g = list_of_graphs[temp_index];
-                    list_of_graphs[temp_index] = list_of_graphs[temp_index+1];
-                    list_of_graphs[temp_index+1] = g;
-                    /* ... tausche danach die Temperaturen zurück */
+                    /* Tausche die Temperaturen ... */
                     tmp_T = list_of_graphs[temp_index]->T;
-                    list_of_graphs[temp_index]->T = list_of_graphs[temp_index+1]->T;
-                    list_of_graphs[temp_index+1]->T = tmp_T;
+                    list_of_graphs[temp_index]->T = list_of_graphs[temp_index_p]->T;
+                    list_of_graphs[temp_index_p]->T = tmp_T;
+                    /* ... und führe Buch */
+                    map_of_temps[j] = temp_index_p;
+                    map_of_temps[j+1] = temp_index;
                 }
             }
         }
@@ -373,11 +387,11 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
         fprintf(stderr,"Akzeptanzniveaus: \n");
         fprintf(stderr,"T: ");
         for(nT=0;nT<o.num_temps;nT++)
-            fprintf(stderr,"%.2f      ",list_of_graphs[nT]->T);
+            fprintf(stderr,"%.2f      ",list_of_graphs[map_of_temps[nT]]->T);
         fprintf(stderr,"\n");
         fprintf(stderr,"A: ");
         for(nT=0;nT<o.num_temps;nT++)
-            fprintf(stderr,"     %.2f ", par_temp_erfolge[nT]/par_temp_versuche[nT]);
+            fprintf(stderr,"     %.2f ", par_temp_erfolge[map_of_temps[nT]]/par_temp_versuche[map_of_temps[nT]]);
         fprintf(stderr,"\n");
     }
 
