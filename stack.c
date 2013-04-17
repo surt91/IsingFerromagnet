@@ -1,53 +1,64 @@
 #include "stack.h"
 
+/*! \fn stack_t create_stack(int length)
+    \brief Initialisert einen leeren Stack
+
+    \param [in]  length     Länge des Stacks
+    \return (new) Pointer auf den Stack
+*/
+stack_t create_stack(int length)
+{
+    stack_t stack;
+    stack.value = (int*) malloc(length * sizeof(int));
+    stack.index = 0;
+    stack.length = length;
+    return(stack);
+}
+
 /*! \fn stack_t *push(stack_t *stack, int item);
     \brief Legt ein neues Element auf den Stack
 
-    \param [in]  stack  erstes Element des Stacks (Pointer auf Stack)
+    \param [in,out]  stack   Stack
     \param [in]      item   Wert, der auf den Stack geleget werden soll
-    \return (new) Pointer auf den Stack
 */
-stack_t *push(stack_t *stack, int item)
+void push(stack_t *stack, int item)
 {
-    stack_t *elem;
-    elem = (stack_t *) malloc (sizeof(stack_t));
-    elem->value = item;
-    elem->next = stack;
-
-    return(elem);
+    if( stack->index < stack->length )
+        stack->value[stack->index++] = item;
+    else
+    {
+        fprintf(stderr,"Stackoverflow ;)");
+        exit(-1);
+    }
 }
 
-/*! \fn stack_t *pop(stack_t *stack, int *item)
+/*! \fn int pop(stack_t *stack)
     \brief Nimmt das oberste Element vom Stack und liefert seinen Wert
 
-    \param [in]  stack erstes Element des Stacks (Pointer auf Stack)
-    \param [out] item  Zeiger auf die Variable, die den Wert speichern soll
-    \return (new) Pointer auf den Stack
+    \param [in,out]  stack Stack
+    \return Wert des obersten Stackelements
 */
-stack_t *pop(stack_t *stack, int *item)
+int pop(stack_t *stack)
 {
-    stack_t *tmp;
+    if(stack->index > 0)
+        return(stack->value[--stack->index]);
+    else
+    {
+        fprintf(stderr,"Stackunderflow ;)");
+        exit(-1);
+    }
 
-    if(item != NULL)
-        *item = stack->value;
-
-    tmp = stack;
-    stack = stack->next;
-
-    free(tmp);
-
-    return(stack);
 }
 
 /*! \fn int is_empty(stack_t *stack);
     \brief Prüft, ob der Stack leer ist
 
-    \param [in]  stack erstes Element des Stacks (Pointer auf Stack)
+    \param [in]  stack Stack
     \return (new) Bool, ob der Stack leer ist
 */
 int is_empty(stack_t *stack)
 {
-    if(stack == NULL)
+    if(stack->index <= 0)
         return(1);
     else
         return(0);
@@ -57,10 +68,9 @@ int is_empty(stack_t *stack)
     \brief Löscht einen ganzen Stack (zB. Um am Ende den Speicher frei
             zu geben)
 
-    \param [in,out]  stack   erstes Element der Liste (Pointer auf Liste)
+    \param [in,out]  stack   Stack
 */
 void clear_stack(stack_t *stack)
 {
-    while(!is_empty(stack))
-        stack = pop(stack, NULL);
+    free(stack->value);
 }

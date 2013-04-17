@@ -3,26 +3,23 @@
 #define _STACK_H
 
 #include <stdlib.h>
+#include <stdio.h>
+/*! \struct stack_t
+    \brief Ein Stack
 
-/*! \struct stack_struct
-    \brief Ein Stackelement
-
-    Enthält ein integer Speicherfeld und einen Link auf das nächste Stack
-    Element.
+    Enthält ein Array zum Speichern der Einträge und ein Integer, der
+    sich den Index des obersten Elements des Stapels merkt
 */
-struct stack_struct
+typedef struct stack_struct
 {
-    int                value;                        //!< Der Nutzinhalt
-    struct stack_struct *next;                //!< Pointer zum Nachfolger
-};
+    int    *value;                 //!< Array zum Speichern der Einträge
+    int     index;                      //!< Index des obersten Elements
+    int    length;                         //!< Maximale Höhe des Stacks
+} stack_t;
 
-/*! \var stack_t;
-    \brief Eine Abkürzung für struct elem_struct
-*/
-typedef struct stack_struct stack_t;
-
-stack_t *push(stack_t *stack, int item);
-stack_t *pop(stack_t *stack, int *item);
+stack_t create_stack(int length);
+void push(stack_t *stack, int item);
+int pop(stack_t *stack);
 int is_empty(stack_t *stack);
 void clear_stack(stack_t *stack);
 

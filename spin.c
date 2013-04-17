@@ -799,9 +799,10 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
     double p_add;    /* Wahscheinlich einen weitern Spin hinzuzufügen */
     /* Stack mit Spins, deren Nachbarn noch die Chance bekommen müssen
      *                           in den Cluster aufgenommen zu werden */
-    stack_t *stack_of_spins_with_untestet_neighbors = NULL;
+    stack_t stack_of_spins_with_untestet_neighbors;
 
     /* Allokation */
+    stack_of_spins_with_untestet_neighbors = create_stack(g->num_nodes);
     cluster = malloc(g->num_nodes*sizeof(int));
 
     //~ for(n=0;n<g->num_nodes;n++)
@@ -814,12 +815,10 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
         /* Wähle zufälligen seed */
         cur_index = (int) (my_rand() * g->num_nodes);
         cluster[cur_index] = 1;
-        stack_of_spins_with_untestet_neighbors
-            = push(stack_of_spins_with_untestet_neighbors, cur_index);
-        while(!is_empty(stack_of_spins_with_untestet_neighbors))
+        push(&stack_of_spins_with_untestet_neighbors, cur_index);
+        while(!is_empty(&stack_of_spins_with_untestet_neighbors))
         {
-            stack_of_spins_with_untestet_neighbors
-                = pop(stack_of_spins_with_untestet_neighbors, &cur_index);
+            cur_index = pop(&stack_of_spins_with_untestet_neighbors);
             /* Suche nach benachbarten Knoten mit gleichem Spin */
             list = g->node[cur_index].neighbors;
             while(list != NULL)
@@ -835,8 +834,7 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
                     if(p_add > my_rand())
                     {
                         cluster[list->index] = 1;
-                        stack_of_spins_with_untestet_neighbors
-                            = push(stack_of_spins_with_untestet_neighbors, list->index);
+                        push(&stack_of_spins_with_untestet_neighbors, list->index);
                     }
                 }
                 list = list->next;
@@ -849,7 +847,7 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
                 g->node[i].spin *= -1;
 
         /* Sollte eigentlich schon leer sein... */
-        clear_stack(stack_of_spins_with_untestet_neighbors);
+        clear_stack(&stack_of_spins_with_untestet_neighbors);
     }
     g->E = calculate_energy(g);
     free(cluster);
