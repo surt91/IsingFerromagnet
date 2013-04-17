@@ -407,7 +407,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
             }
             pthread_mutex_unlock(&par_temp_mutex);
         }
-        pthread_exit(0);
+        return(NULL);
     }
 
     for(nT=0;nT<o.num_temps;nT++)
@@ -432,6 +432,8 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     free(par_temp_versuche);
     free(par_temp_erfolge);
     pthread_mutex_destroy(&par_temp_mutex);
+    free(calc_temps);
+    free(map_of_temps);
 }
 
 /*! \fn double wrapper_for_gsl_rand(int set_seed, int seed, int free)
