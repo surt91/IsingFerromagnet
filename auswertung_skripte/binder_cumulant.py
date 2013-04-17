@@ -67,11 +67,11 @@ M=[]
 V=[]
 tau=[]
 for f in os.listdir("../data"):
-    if ".png" in f:# or "_up" in f:
+    if not ".dat" in f:
         continue
-    L=f.split("_")[2].partition(".")[0]
 
     r = output_reader(os.path.join("../data",f))
+    L = r.L
 
     print "calculating"
 
