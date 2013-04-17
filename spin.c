@@ -294,14 +294,11 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     int temp_index,temp_index_p;
     double tmp_T, delta;
     int *map_of_temps;
-    gs_graph_t *g;
 
     /* Am Anfang sollten die Temperaturen sortiert sein */
     map_of_temps = (int*) malloc(o.num_temps * sizeof(int));
     for(nT=0;nT<o.num_temps;nT++)
-    {
         map_of_temps[nT] = nT;
-    }
 
     /* Allokation und Initialisierung zur Statistik der Parallel Tempering Übergänge */
     par_temp_versuche = (double*) calloc(o.num_temps, sizeof(double));
@@ -330,15 +327,11 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
         /* Für jede Temperatur */
         for(nT=0;nT<o.num_temps;nT++)
         {
-            /* g wird hier nur als Abkürzung benutzt, da hier Adressen
-                zugewiesen werden, finden alle Änderungen an g auch
-                gleichzeitig an list_of_graphs[nT] statt. */
-            g = list_of_graphs[nT];
-
             /* inc MC Sweeps durchführen */
-            o.mc_fkt(g, o.inc);
+            o.mc_fkt(list_of_graphs[nT], o.inc);
 
-            g->M = calculate_magnetisation(g);
+            list_of_graphs[nT]->M
+                          = calculate_magnetisation(list_of_graphs[nT]);
         }
 
         /* Schreibe in Datei */
