@@ -1,5 +1,10 @@
 /*! \file spin.h */
 
+/*! \def _XOPEN_SOURCE 600
+ * Damit Barriers in pthread verfügbar werden
+ */
+#define _XOPEN_SOURCE 600
+
 /*! \def MAX_LEN_FILENAME
  * Maximale Länge des Outputdateinamens
  */
@@ -17,6 +22,7 @@
 
 #include <unistd.h>                    //< getopt: Kommandozeilenparser
 #include <string.h>
+#include <pthread.h>                             //< Für Multithreading
 
 #include <gsl/gsl_rng.h>             //< gsl: für bessere Zufallszahlen
 

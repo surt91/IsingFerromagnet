@@ -289,11 +289,26 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
 {
     double *par_temp_versuche, *par_temp_erfolge;
     FILE *data_out_file;
-    int i, j;
+    int j;
     int nT;
+    int bool_par_temp_already_running;
     int temp_index,temp_index_p;
     double tmp_T, delta;
     int *map_of_temps;
+
+    /* Multithreading */
+    /* Mit Barrier (deshalb _XOPEN_SOURCE 600)
+     * Alle Threads warten an der Barrierer aufeinander, dann werden
+     * Temperaturen ausgetauscht, solange warten die Threads hinter der
+     * Barrier. Dann geht es weiter. */
+    pthread_t *calc_temps;
+    pthread_mutex_t par_temp_mutex;
+    pthread_barrier_t barr;
+
+    calc_temps = (pthread_t*) malloc(o.num_temps * sizeof(pthread_t));
+    pthread_mutex_init(&par_temp_mutex, NULL);
+    pthread_barrier_init(&barr, NULL, o.num_temps);
+    bool_par_temp_already_running = 0;
 
     /* Am Anfang sollten die Temperaturen sortiert sein */
     map_of_temps = (int*) malloc(o.num_temps * sizeof(int));
@@ -321,19 +336,8 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
 
-    /* Führe N Sweeps durch */
-    for(i=0;i<o.N;i+=o.inc)
+    void par_temp(i)
     {
-        /* Für jede Temperatur */
-        for(nT=0;nT<o.num_temps;nT++)
-        {
-            /* inc MC Sweeps durchführen */
-            o.mc_fkt(list_of_graphs[nT], o.inc);
-
-            list_of_graphs[nT]->M
-                          = calculate_magnetisation(list_of_graphs[nT]);
-        }
-
         /* Schreibe in Datei */
         if(i > o.t_eq)
         {
@@ -375,6 +379,42 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
             }
         }
     }
+
+    void *sweep(void *t)
+    {
+        int i;
+        long nT;
+        nT = (long) t;
+        /* Führe N Sweeps durch */
+        for(i=0;i<o.N;i+=o.inc)
+        {
+            /* inc MC Sweeps durchführen */
+            o.mc_fkt(list_of_graphs[nT], o.inc);
+
+            list_of_graphs[nT]->M
+                          = calculate_magnetisation(list_of_graphs[nT]);
+
+            pthread_barrier_wait(&barr);
+
+            bool_par_temp_already_running = 0;
+            pthread_barrier_wait(&barr);
+
+            pthread_mutex_lock(&par_temp_mutex);
+            if(!bool_par_temp_already_running)
+            {
+                bool_par_temp_already_running = 1;
+                par_temp(i);
+            }
+            pthread_mutex_unlock(&par_temp_mutex);
+        }
+        pthread_exit(0);
+    }
+
+    for(nT=0;nT<o.num_temps;nT++)
+        pthread_create(&calc_temps[nT], NULL, &sweep, (void *) (long) nT);
+    for(nT=0;nT<o.num_temps;nT++)
+        pthread_join(calc_temps[nT], NULL);
+
     if(o.verbose)
     {
         fprintf(stderr,"Akzeptanzniveaus: \n");
@@ -391,6 +431,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     fclose(data_out_file);
     free(par_temp_versuche);
     free(par_temp_erfolge);
+    pthread_mutex_destroy(&par_temp_mutex);
 }
 
 /*! \fn double wrapper_for_gsl_rand(int set_seed, int seed, int free)

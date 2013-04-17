@@ -5,7 +5,7 @@ LINK	= gcc
 CC	= gcc
 CFLAGS	= -g -pg
 #~ CFLAGS	= -O2 -march=native -pipe
-LFLAGS	= -lm -lgsl -lgslcblas
+LFLAGS	= -lm -lgsl -lgslcblas -lpthread
 WARNLEVEL= -Wall
 
 all: $(TARGET)
