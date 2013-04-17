@@ -67,8 +67,6 @@ options_t get_cl_args(int argc, char *argv[])
     o.N=2000;
     /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
     o.t_eq = 1000;
-    /* Alle wieviel Sweeps Ergebnisse Speichern */
-    o.inc=1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
     o.moving_fkt = gauss;
     o.sigma = 0;
@@ -140,9 +138,6 @@ options_t get_cl_args(int argc, char *argv[])
             case 'u':
                 o.start_order = atoi(optarg);
                 break;
-            case 'i':
-                o.inc = atoi(optarg);
-                break;
             case 'v':
                 o.verbose = 1;
                 break;
@@ -167,7 +162,6 @@ options_t get_cl_args(int argc, char *argv[])
                 fprintf(stderr,"    -sx    sigma x                           (double)\n");
                 fprintf(stderr,"    -ox    filename (max. 79 Zeichen)        (string)\n");
                 fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
-                fprintf(stderr,"    -ix    Alle x sweeps schreiben              (int)\n");
                 fprintf(stderr,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
                 fprintf(stderr,"    -px    Parallel Tempering mit einer Komma        \n");
                 fprintf(stderr,"            getrennten Liste der zu berechnenden Temperaturen \n");
@@ -205,7 +199,6 @@ options_t get_cl_args(int argc, char *argv[])
         printf("           \n");
         printf("    N     = %d\n", o.N);
         printf("    t_eq  = %d\n", o.t_eq);
-        printf("    tau   = %d\n", o.inc);
         printf("    seed  = %d\n", seed);
         printf("    sigma = %f\n", o.sigma);
         if(o.start_order)
@@ -383,16 +376,15 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     void *sweep(void *t)
     {
         int i;
-        long nT;
-        nT = (long) t;
+        gs_graph_t* g;
+        g = (gs_graph_t*) t;
         /* Führe N Sweeps durch */
-        for(i=0;i<o.N;i+=o.inc)
+        for(i=0;i<o.N;i++)
         {
             /* inc MC Sweeps durchführen */
-            o.mc_fkt(list_of_graphs[nT], o.inc);
+            o.mc_fkt(g);
 
-            list_of_graphs[nT]->M
-                          = calculate_magnetisation(list_of_graphs[nT]);
+            g->M = calculate_magnetisation(g);
 
             pthread_barrier_wait(&barr);
 
@@ -411,7 +403,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     }
 
     for(nT=0;nT<o.num_temps;nT++)
-        pthread_create(&calc_temps[nT], NULL, &sweep, (void *) (long) nT);
+        pthread_create(&calc_temps[nT], NULL, &sweep, (void *) list_of_graphs[nT]);
     for(nT=0;nT<o.num_temps;nT++)
         pthread_join(calc_temps[nT], NULL);
 
@@ -755,15 +747,14 @@ double calculate_magnetisation(gs_graph_t *g)
     return(M);
 }
 
-/*! \fn void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N)
+/*! \fn void metropolis_monte_carlo_sweeps(gs_graph_t *g)
     \brief Führt N Monte Carlo Sweeps durch mit dem Metropolis Algorithmus
 
     Dabei besteht ein Sweep aus \f$ L^2 \f$ Monte Carlo Schritten
 
     \param [in,out]    g    Graph, der modifiziert werden soll
-    \param [in]        N    Anzahl der zu berechnenden Sweeps
 */
-void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N)
+void metropolis_monte_carlo_sweeps(gs_graph_t *g)
 {
     int i;
     int num_nodes;
@@ -774,7 +765,7 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N)
 
     num_nodes = g->num_nodes;
 
-    for(i=0;i<num_nodes*N;i++)
+    for(i=0;i<num_nodes;i++)
     {
         delta_E = 0;
         /*! - Ermittele den zu flippenden Spin zufällig. */
@@ -815,7 +806,7 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N)
     }
 }
 
-/*! \fn void wolff_monte_carlo_sweeps(gs_graph_t *g, int N)
+/*! \fn void wolff_monte_carlo_sweeps(gs_graph_t *g)
     \brief Führt N Monte Carlo Sweeps durch mit dem Wolff Cluster Algorithmus
 
     Dabei besteht ein Sweep aus einem Clusterschritt.\n
@@ -832,9 +823,8 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N)
     Vergleiche auch \cite newman1999monte (4.12)
 
     \param [in,out]    g    Graph, der modifiziert werden soll
-    \param [in]        N    Anzahl der zu berechnenden Sweeps
 */
-void wolff_monte_carlo_sweeps(gs_graph_t *g, int N)
+void wolff_monte_carlo_sweeps(gs_graph_t *g)
 {
     int i,n;                                     /* Counter Variablen */
     int cur_index;              /* Welchen Spin betrachte ich gerade? */
@@ -848,7 +838,8 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g, int N)
     /* Allokation */
     cluster = malloc(g->num_nodes*sizeof(int));
 
-    for(n=0;n<N;n++)
+    //~ for(n=0;n<g->num_nodes;n++)
+    for(n=0;n<1;n++)
     {
         /* Initialisierung */
         for(i=0;i<g->num_nodes;i++)

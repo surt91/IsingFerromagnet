@@ -39,13 +39,12 @@ typedef struct
     int L;                                  //!< Kantenlänge des Gitters
     int N;                        //!< Anzahl der zu berechnenden Sweeps
     int t_eq;                            //!< geschätze Equilibriumszeit
-    int inc;            //!< Alle wieviel Sweeps soll gepeichert werden?
     double (*moving_fkt)(double);                //!< Unordnungsfunktion
     double sigma;                               //!< Unordnungsparameter
     double (*weighting_fkt)(double, double);    //!< Gewichtungsfunktion
     double alpha;                               //!< Gewichtungsparamter
     int start_order;                                   //!< Startordnung
-    void (*mc_fkt)(gs_graph_t *, int);      //!< Monte Carlo Algorithmus
+    void (*mc_fkt)(gs_graph_t *);           //!< Monte Carlo Algorithmus
     int par_temp_flag;      //!< soll parallel Tempering genutzt werden?
     int num_temps;            //!< Wieviele Temperaturen für pT gegeben?
     double *list_of_temps;                //!< Liste der pT Temperaturen
@@ -74,7 +73,7 @@ double calculate_energy(gs_graph_t *g);
 double calculate_magnetisation(gs_graph_t *g);
 
 void do_mc_simulation(gs_graph_t **list_of_graphs, options_t options);
-void metropolis_monte_carlo_sweeps(gs_graph_t *g, int N);
-void wolff_monte_carlo_sweeps(gs_graph_t *g, int N);
+void metropolis_monte_carlo_sweeps(gs_graph_t *g);
+void wolff_monte_carlo_sweeps(gs_graph_t *g);
 
 #endif /* _SPIN_H */
