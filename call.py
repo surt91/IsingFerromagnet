@@ -8,7 +8,7 @@ def f(l,t_eq):
     call(["time", "./test", "-T{0}".format(t),
            "-L{0}".format(l), "-e{0}".format(t_eq),
            "-N{0}".format(t_eq+500),
-           "-v", "-u1", "-x13", "", "-p"])
+           "-v", "-u1", "-x13", "-w", "-p"])
 
 if __name__ == '__main__':
     # Tupel aus L, T_eq
