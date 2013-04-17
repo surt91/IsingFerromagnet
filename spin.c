@@ -282,11 +282,8 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
 {
     double *par_temp_versuche, *par_temp_erfolge;
     FILE *data_out_file;
-    int j;
     int nT;
     int bool_par_temp_already_running;
-    int temp_index,temp_index_p;
-    double tmp_T, delta;
     int *map_of_temps;
 
     /* Multithreading */
@@ -329,48 +326,15 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
 
-    void par_temp(i)
+    void write_data_to_file_wrap_for_threads(int N)
     {
-        /* Schreibe in Datei */
-        if(i > o.t_eq)
-        {
-            fprintf(data_out_file, "%d ", i);
-            for(nT=0;nT<o.num_temps;nT++)
-            {
-                /* An welcher Stelle liegt die nT-te Temperatur? */
-                j = map_of_temps[nT];
-                fprintf(data_out_file, "%f %f ", list_of_graphs[j]->E,
-                     list_of_graphs[j]->M/list_of_graphs[j]->num_nodes);
-            }
-            fprintf(data_out_file, "\n");
-        }
+        write_data_to_file(data_out_file,list_of_graphs,map_of_temps,o,N);
+    }
 
-        /* Parallel Tempering Austausch */
-        if(o.par_temp_flag)
-        {
-            //~ temp_index = (int) (my_rand() * (num_temps-1));
-            for(j=0;j<o.num_temps-1;j++)
-            {
-                temp_index = map_of_temps[j];
-                temp_index_p = map_of_temps[j+1];
-
-                par_temp_versuche[temp_index]++;
-                /* Wähle zufällig, ob getauscht werden soll */
-                delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index_p]->T )
-                        * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index_p]->E);
-                if(my_rand() < exp(delta))
-                {
-                    par_temp_erfolge[temp_index]++;
-                    /* Tausche die Temperaturen ... */
-                    tmp_T = list_of_graphs[temp_index]->T;
-                    list_of_graphs[temp_index]->T = list_of_graphs[temp_index_p]->T;
-                    list_of_graphs[temp_index_p]->T = tmp_T;
-                    /* ... und führe Buch */
-                    map_of_temps[j] = temp_index_p;
-                    map_of_temps[j+1] = temp_index;
-                }
-            }
-        }
+    void par_temp_wrap_for_threads()
+    {
+        par_temp(list_of_graphs, map_of_temps, o,
+                                    par_temp_versuche,par_temp_erfolge);
     }
 
     void *sweep(void *t)
@@ -388,16 +352,18 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
 
             pthread_barrier_wait(&barr);
 
-            bool_par_temp_already_running = 0;
-            pthread_barrier_wait(&barr);
-
             pthread_mutex_lock(&par_temp_mutex);
             if(!bool_par_temp_already_running)
             {
+                write_data_to_file_wrap_for_threads(i);
+
                 bool_par_temp_already_running = 1;
-                par_temp(i);
+                par_temp_wrap_for_threads();
             }
             pthread_mutex_unlock(&par_temp_mutex);
+
+            pthread_barrier_wait(&barr);
+            bool_par_temp_already_running = 0;
         }
         return(NULL);
     }
@@ -887,4 +853,75 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
     }
     g->E = calculate_energy(g);
     free(cluster);
+}
+
+/*! \fn void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
+             options_t o, int *par_temp_versuche, int *par_temp_erfolge)
+    \brief Für den tausch der Temperaturen für parallel Tempering aus
+
+
+    Vergleiche auch \cite newman1999monte (6.4)
+
+    \param [in,out] list_of_graphs  Graphen, deren Temperaturen
+                                    ausgetauscht werden
+    \param [in,out] map_of_temps    Liste der Indizes der Graphen aus
+                    list_of_graphs aufsteigend nach Temperatur sortiert
+    \param [in]     o               allgemeine Informationen
+    \param [in,out] par_temp_versuche   für statistische Zwecke
+    \param [in,out] par_temp_erfolge   für statistische Zwecke
+*/
+void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
+             options_t o, double *par_temp_versuche, double *par_temp_erfolge)
+{
+    int j;
+    int temp_index, temp_index_p;
+    double delta;
+    double tmp_T;
+
+    /* Parallel Tempering Austausch */
+    if(o.par_temp_flag)
+    {
+        //~ temp_index = (int) (my_rand() * (num_temps-1));
+        for(j=0;j<o.num_temps-1;j++)
+        {
+            temp_index = map_of_temps[j];
+            temp_index_p = map_of_temps[j+1];
+
+            par_temp_versuche[temp_index]++;
+            /* Wähle zufällig, ob getauscht werden soll */
+            delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index_p]->T )
+                    * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index_p]->E);
+            if(my_rand() < exp(delta))
+            {
+                par_temp_erfolge[temp_index]++;
+                /* Tausche die Temperaturen ... */
+                tmp_T = list_of_graphs[temp_index]->T;
+                list_of_graphs[temp_index]->T = list_of_graphs[temp_index_p]->T;
+                list_of_graphs[temp_index_p]->T = tmp_T;
+                /* ... und führe Buch */
+                map_of_temps[j] = temp_index_p;
+                map_of_temps[j+1] = temp_index;
+            }
+        }
+    }
+}
+
+void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
+                                int *map_of_temps, options_t o, int N)
+{
+    int j;
+    int nT;
+    /* Schreibe in Datei */
+    if(N > o.t_eq)
+    {
+        fprintf(data_out_file, "%d ", N);
+        for(nT=0;nT<o.num_temps;nT++)
+        {
+            /* An welcher Stelle liegt die nT-te Temperatur? */
+            j = map_of_temps[nT];
+            fprintf(data_out_file, "%f %f ", list_of_graphs[j]->E,
+                 list_of_graphs[j]->M/list_of_graphs[j]->num_nodes);
+        }
+        fprintf(data_out_file, "\n");
+    }
 }

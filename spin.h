@@ -75,5 +75,10 @@ double calculate_magnetisation(gs_graph_t *g);
 void do_mc_simulation(gs_graph_t **list_of_graphs, options_t options);
 void metropolis_monte_carlo_sweeps(gs_graph_t *g);
 void wolff_monte_carlo_sweeps(gs_graph_t *g);
+void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
+            options_t o, double *par_temp_versuche, double *par_temp_erfolge);
+
+void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
+                                int *map_of_temps, options_t o, int N);
 
 #endif /* _SPIN_H */
