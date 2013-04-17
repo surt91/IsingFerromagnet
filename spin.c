@@ -856,7 +856,7 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
 }
 
 /*! \fn void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
-             options_t o, int *par_temp_versuche, int *par_temp_erfolge)
+             options_t o, double *par_temp_versuche, double *par_temp_erfolge)
     \brief Für den tausch der Temperaturen für parallel Tempering aus
 
 
@@ -906,6 +906,18 @@ void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
     }
 }
 
+/*! \fn void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
+                                int *map_of_temps, options_t o, int N)
+    \brief Schreibt eine Zeile (also einen Sweep) in die Ausgabedatei
+
+    \param [in]     data_out_file   Datei, in die geschrieben wird
+    \param [in,out] list_of_graphs  Graphen, die deren Kennziffern
+                                    geschrieben werden sollen
+    \param [in,out] map_of_temps    Liste der Indizes der Graphen aus
+                    list_of_graphs aufsteigend nach Temperatur sortiert
+    \param [in]     o               allgemeine Informationen
+    \param [in,out] N               Nummer des aktuellen Sweeps
+*/
 void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
                                 int *map_of_temps, options_t o, int N)
 {
