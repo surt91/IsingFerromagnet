@@ -10,9 +10,11 @@
  */
 #define MAX_LEN_FILENAME 80
 
-/*! Kompiliere mit -DTIME, um die Laufzeit eines Jeden Laufs im Verbose
- * Modus anzeigen zu lassen
+/*! \def THREADED
+ * Soll in mehreren Threads gerechnet werden?
+ * Kompiliere mit -DTHREADED wenn nicht
  */
+
 #ifndef _SPIN_H
 #define _SPIN_H
 

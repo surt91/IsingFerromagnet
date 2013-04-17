@@ -283,22 +283,26 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     double *par_temp_versuche, *par_temp_erfolge;
     FILE *data_out_file;
     int nT;
-    int bool_par_temp_already_running;
     int *map_of_temps;
 
-    /* Multithreading */
-    /* Mit Barrier (deshalb _XOPEN_SOURCE 600)
-     * Alle Threads warten an der Barrierer aufeinander, dann werden
-     * Temperaturen ausgetauscht, solange warten die Threads hinter der
-     * Barrier. Dann geht es weiter. */
-    pthread_t *calc_temps;
-    pthread_mutex_t par_temp_mutex;
-    pthread_barrier_t barr;
+    #ifdef THREADED
+        /* Multithreading */
+        /* Mit Barrier (deshalb _XOPEN_SOURCE 600)
+         * Alle Threads warten an der Barrierer aufeinander, dann werden
+         * Temperaturen ausgetauscht, solange warten die Threads hinter der
+         * Barrier. Dann geht es weiter. */
+        int bool_par_temp_already_running;
+        pthread_t *calc_temps;
+        pthread_mutex_t par_temp_mutex;
+        pthread_barrier_t barr;
 
-    calc_temps = (pthread_t*) malloc(o.num_temps * sizeof(pthread_t));
-    pthread_mutex_init(&par_temp_mutex, NULL);
-    pthread_barrier_init(&barr, NULL, o.num_temps);
-    bool_par_temp_already_running = 0;
+        calc_temps = (pthread_t*) malloc(o.num_temps * sizeof(pthread_t));
+        pthread_mutex_init(&par_temp_mutex, NULL);
+        pthread_barrier_init(&barr, NULL, o.num_temps);
+        bool_par_temp_already_running = 0;
+    #else
+        int i;
+    #endif
 
     /* Am Anfang sollten die Temperaturen sortiert sein */
     map_of_temps = (int*) malloc(o.num_temps * sizeof(int));
@@ -326,52 +330,68 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
 
-    void write_data_to_file_wrap_for_threads(int N)
-    {
-        write_data_to_file(data_out_file,list_of_graphs,map_of_temps,o,N);
-    }
+    #ifdef THREADED
+        void write_data_to_file_wrap_for_threads(int N)
+        {
+            write_data_to_file(data_out_file,list_of_graphs,map_of_temps,o,N);
+        }
 
-    void par_temp_wrap_for_threads()
-    {
-        par_temp(list_of_graphs, map_of_temps, o,
-                                    par_temp_versuche,par_temp_erfolge);
-    }
+        void par_temp_wrap_for_threads()
+        {
+            par_temp(list_of_graphs, map_of_temps, o,
+                                        par_temp_versuche,par_temp_erfolge);
+        }
 
-    void *sweep(void *t)
-    {
-        int i;
-        gs_graph_t* g;
-        g = (gs_graph_t*) t;
-        /* Führe N Sweeps durch */
+        void *sweep(void *t)
+        {
+            int i;
+            gs_graph_t* g;
+            g = (gs_graph_t*) t;
+            /* Führe N Sweeps durch */
+            for(i=0;i<o.N;i++)
+            {
+                o.mc_fkt(g);
+
+                g->M = calculate_magnetisation(g);
+
+                pthread_barrier_wait(&barr);
+
+                pthread_mutex_lock(&par_temp_mutex);
+                if(!bool_par_temp_already_running)
+                {
+                    write_data_to_file_wrap_for_threads(i);
+
+                    bool_par_temp_already_running = 1;
+                    par_temp_wrap_for_threads();
+                }
+                pthread_mutex_unlock(&par_temp_mutex);
+
+                pthread_barrier_wait(&barr);
+                bool_par_temp_already_running = 0;
+            }
+            return(NULL);
+        }
+
+        for(nT=0;nT<o.num_temps;nT++)
+            pthread_create(&calc_temps[nT], NULL, &sweep, (void *) list_of_graphs[nT]);
+        for(nT=0;nT<o.num_temps;nT++)
+            pthread_join(calc_temps[nT], NULL);
+    #else
         for(i=0;i<o.N;i++)
         {
-            /* inc MC Sweeps durchführen */
-            o.mc_fkt(g);
-
-            g->M = calculate_magnetisation(g);
-
-            pthread_barrier_wait(&barr);
-
-            pthread_mutex_lock(&par_temp_mutex);
-            if(!bool_par_temp_already_running)
+            for(nT=0;nT<o.num_temps;nT++)
             {
-                write_data_to_file_wrap_for_threads(i);
+                o.mc_fkt(list_of_graphs[nT]);
 
-                bool_par_temp_already_running = 1;
-                par_temp_wrap_for_threads();
+                list_of_graphs[nT]->M = calculate_magnetisation(list_of_graphs[nT]);
             }
-            pthread_mutex_unlock(&par_temp_mutex);
-
-            pthread_barrier_wait(&barr);
-            bool_par_temp_already_running = 0;
+            for(nT=0;nT<o.num_temps;nT++)
+            {
+                write_data_to_file(data_out_file,list_of_graphs,map_of_temps,o,i);
+                par_temp(list_of_graphs, map_of_temps, o, par_temp_versuche,par_temp_erfolge);
+            }
         }
-        return(NULL);
-    }
-
-    for(nT=0;nT<o.num_temps;nT++)
-        pthread_create(&calc_temps[nT], NULL, &sweep, (void *) list_of_graphs[nT]);
-    for(nT=0;nT<o.num_temps;nT++)
-        pthread_join(calc_temps[nT], NULL);
+    #endif
 
     if(o.verbose)
     {
@@ -389,8 +409,10 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     fclose(data_out_file);
     free(par_temp_versuche);
     free(par_temp_erfolge);
-    pthread_mutex_destroy(&par_temp_mutex);
-    free(calc_temps);
+    #ifdef THREADED
+        pthread_mutex_destroy(&par_temp_mutex);
+        free(calc_temps);
+    #endif
     free(map_of_temps);
 }
 
