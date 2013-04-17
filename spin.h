@@ -1,6 +1,6 @@
 /*! \file spin.h */
 
-/*! \def _XOPEN_SOURCE 600
+/*! \def _XOPEN_SOURCE
  * Damit Barriers in pthread verfügbar werden
  */
 #define _XOPEN_SOURCE 600

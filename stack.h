@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+
 /*! \struct stack_t
     \brief Ein Stack
 
@@ -23,4 +24,4 @@ int pop(stack_t *stack);
 int is_empty(stack_t *stack);
 void clear_stack(stack_t *stack);
 
-#endif /* _LIST_H */
+#endif /* _STACK_H */

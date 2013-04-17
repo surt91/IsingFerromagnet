@@ -557,7 +557,8 @@ void create_edges_relative_neighborhood(gs_graph_t *g)
         Danach lösche die Kopien. */
 }
 
-/*! \fn void assign_weights_with_function(gs_graph_t *g, double (*f)(double alpha, double dist), double alpha)
+/*! \fn void assign_weights_with_function(gs_graph_t *g,
+                   double (*f)(double alpha, double dist), double alpha)
     \brief Ändert die Kantengewichte eines Graphen abhängig vom Abstand
             der Knoten nach einem exponentiellen Zusammenhang.
 
@@ -566,6 +567,7 @@ void create_edges_relative_neighborhood(gs_graph_t *g)
             wobei d der Abstand er Knoten ist
 
     \param [in,out]    g     Graph, der modifiziert werden soll
+    \param [in]        f     Gewichtungsfunktion
     \param [in]        alpha Gewichtungsfaktor
 */
 void assign_weights_with_function(gs_graph_t *g,
