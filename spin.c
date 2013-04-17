@@ -847,12 +847,10 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
         for(i=0;i<g->num_nodes;i++)
             if(cluster[i])
                 g->node[i].spin *= -1;
-
-        /* Sollte eigentlich schon leer sein... */
-        clear_stack(&stack_of_spins_with_untestet_neighbors);
     }
     g->E = calculate_energy(g);
     free(cluster);
+    clear_stack(&stack_of_spins_with_untestet_neighbors);
 }
 
 /*! \fn void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
