@@ -227,7 +227,7 @@ options_t get_cl_args(int argc, char *argv[])
     \param [in] o               struct mit allen wichtigen Informationen
     \return Array mit den initialisierten Graphen
 */
-gs_graph_t **init_graphs(options_t o)
+gs_graph_t **init_graphs(const options_t o)
 {
     gs_graph_t *g;
     gs_graph_t **list_of_graphs;
@@ -278,7 +278,7 @@ gs_graph_t **init_graphs(options_t o)
                                 genutzt werden
     \param [in] o               struct mit allen wichtigen Informationen
 */
-void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
+void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
 {
     double *par_temp_versuche, *par_temp_erfolge;
     FILE *data_out_file;
@@ -424,7 +424,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, options_t o)
     \param [in] seed     Neuer Seed
     \param [in] free     Ob der rng Speicher freigegeben werden soll
 */
-double wrapper_for_gsl_rand(int set_seed, int seed, int free)
+double wrapper_for_gsl_rand(const int set_seed, const int seed, const int free)
 {
     static gsl_rng * rng;
     const gsl_rng_type * T;
@@ -460,7 +460,7 @@ double my_rand()
 
     \param [in] seed Seed
 */
-void smy_rand(int seed)
+void smy_rand(const int seed)
 {
     wrapper_for_gsl_rand(1, seed, 0);
 }
@@ -481,7 +481,7 @@ void free_my_rand()
     \param [in]   sigma    Standardabweichung der Glockenkurve
     \return Gaussverteilte Zufallszahl
 */
-double gauss(double sigma)
+double gauss(const double sigma)
 {
     double mu = 0;
     double u1, u2;
@@ -505,7 +505,7 @@ double gauss(double sigma)
     \param [in]   x        Argument der Funktion
     \return \f$ e^{-\alpha x} \f$
 */
-double exponential_decay(double alpha, double x)
+double exponential_decay(const double alpha, const double x)
 {
     return(exp(-alpha*x));
 }
@@ -519,7 +519,7 @@ double exponential_decay(double alpha, double x)
                            gewünschten Verteilung liefert
     \param [in]   sigma    Paramter der Verteilung (zb. Standardabweichung)
 */
-void move_graph_nodes(gs_graph_t *g, double (*f)(double), double sigma)
+void move_graph_nodes(gs_graph_t *g, double (*f)(double), const double sigma)
 {
     int n;
     for(n=0;n<g->num_nodes; n++)
@@ -593,7 +593,7 @@ void create_edges_relative_neighborhood(gs_graph_t *g)
     \param [in]        alpha Gewichtungsfaktor
 */
 void assign_weights_with_function(gs_graph_t *g,
-                   double (*f)(double alpha, double dist), double alpha)
+                   double (*f)(double alpha, double dist), const double alpha)
 {
     int i,j;
     int L;
@@ -684,7 +684,7 @@ void init_spins_up(gs_graph_t *g)
     \param [in,out]    g    Graph, der modifiziert werden soll
     \return Energie des Systems.
 */
-double calculate_energy(gs_graph_t *g)
+double calculate_energy(const gs_graph_t *g)
 {
     int num_nodes, i;
     int n;
@@ -717,7 +717,7 @@ double calculate_energy(gs_graph_t *g)
     \param [in,out]    g    Graph, der modifiziert werden soll
     \return Magnetisierung des Systems.
 */
-double calculate_magnetisation(gs_graph_t *g)
+double calculate_magnetisation(const gs_graph_t *g)
 {
     int num_nodes, i;
     double M=0;
@@ -883,7 +883,7 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
     \param [in,out] par_temp_erfolge   für statistische Zwecke
 */
 void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
-             options_t o, double *par_temp_versuche, double *par_temp_erfolge)
+             const options_t o, double *par_temp_versuche, double *par_temp_erfolge)
 {
     int j;
     int temp_index, temp_index_p;
@@ -931,7 +931,7 @@ void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
     \param [in,out] N               Nummer des aktuellen Sweeps
 */
 void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
-                                int *map_of_temps, options_t o, int N)
+                                int *map_of_temps, const options_t o, const int N)
 {
     int j;
     int nT;

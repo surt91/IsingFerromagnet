@@ -54,32 +54,34 @@ typedef struct
 } options_t;
 
 double my_rand();
-void smy_rand(int seed);
+void smy_rand(const int seed);
 void free_my_rand();
 
 options_t get_cl_args(int argc, char *argv[]);
 
-double gauss(double sigma);
-double exponential_decay(double alpha, double x);
+double gauss(const double sigma);
+double exponential_decay(const double alpha, const double x);
 
-gs_graph_t **init_graphs(options_t options);
-void move_graph_nodes(gs_graph_t *g, double (*f)(double), double sigma);
+gs_graph_t **init_graphs(const options_t options);
+void move_graph_nodes(gs_graph_t *g, double (*f)(double), const double sigma);
 void create_edges_regular(gs_graph_t *g);
-void assign_weights_with_function(gs_graph_t *g, double (*f)(double alpha, double dist), double alpha);
+void assign_weights_with_function(gs_graph_t *g,
+                double (*f)(const double alpha, const double dist),
+                                                    const double alpha);
 
 void init_spins_randomly(gs_graph_t *g);
 void init_spins_up(gs_graph_t *g);
 
-double calculate_energy(gs_graph_t *g);
-double calculate_magnetisation(gs_graph_t *g);
+double calculate_energy(const gs_graph_t *g);
+double calculate_magnetisation(const gs_graph_t *g);
 
-void do_mc_simulation(gs_graph_t **list_of_graphs, options_t options);
+void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t options);
 void metropolis_monte_carlo_sweeps(gs_graph_t *g);
 void wolff_monte_carlo_sweeps(gs_graph_t *g);
 void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
-            options_t o, double *par_temp_versuche, double *par_temp_erfolge);
+            const options_t o, double *par_temp_versuche, double *par_temp_erfolge);
 
 void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
-                                int *map_of_temps, options_t o, int N);
+                     int *map_of_temps, const options_t o, const int N);
 
 #endif /* _SPIN_H */
