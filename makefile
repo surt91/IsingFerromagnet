@@ -1,4 +1,4 @@
-OBJ 	= graph.o list.o stack.o spin.o
+OBJ 	= graph.o stack.o spin.o
 
 TARGET	= test
 LINK	= gcc

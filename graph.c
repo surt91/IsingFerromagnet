@@ -22,6 +22,7 @@ gs_graph_t *gs_create_graph(int L)
     for(n=0;n<num_nodes; n++)
     {
         g->node[n].neighbors = NULL;
+        g->node[n].num_neighbors = 0;
         g->node[n].x = n % L;
         g->node[n].y = n / L;
     }
@@ -38,7 +39,7 @@ gs_graph_t *gs_create_graph(int L)
 gs_graph_t *gs_copy_graph(gs_graph_t *g)
 {
     gs_graph_t *copy;
-    int n;
+    int n, i;
 
     copy = (gs_graph_t *) malloc(sizeof(gs_graph_t));
     copy->num_nodes = g->num_nodes;
@@ -47,7 +48,10 @@ gs_graph_t *gs_copy_graph(gs_graph_t *g)
 
     for(n=0;n<g->num_nodes; n++)
     {
-        copy->node[n].neighbors = copy_list(g->node[n].neighbors);
+        copy->node[n].num_neighbors = g->node[n].num_neighbors;
+        copy->node[n].neighbors = (gs_edge_t *) malloc(g->node[n].num_neighbors * sizeof(gs_edge_t));
+        for(i=0;i<g->node[n].num_neighbors;i++)
+            copy->node[n].neighbors[i] = g->node[n].neighbors[i];
         copy->node[n].x = g->node[n].x;
         copy->node[n].y = g->node[n].y;
         copy->node[n].spin = g->node[n].spin;
@@ -69,19 +73,19 @@ gs_graph_t *gs_copy_graph(gs_graph_t *g)
 */
 void gs_insert_edge(gs_graph_t *g, int from, int to, double weight)
 {
-    elem_t *elem1, *elem2;
-
     /* durchsuche den Graphen, ob die Kante schon existiert */
     if(gs_edge_exists(g, from, to))
-        return;                  /*Kante existiert, Also ist der graph fertig */
+        return;          /*Kante existiert, Also ist der graph fertig */
 
-    /* Erzeuge Listenelemente, die dann in die Liste eingefügt werden */
-    elem1 = create_element(to, weight);
-    g->node[from].neighbors =
-            insert_element(g->node[from].neighbors, elem1, NULL);
-    elem2 = create_element(from, weight);
-    g->node[to].neighbors =
-            insert_element(g->node[to].neighbors, elem2, NULL);
+    g->node[from].num_neighbors++;
+    g->node[from].neighbors = (gs_edge_t *) realloc (g->node[from].neighbors, g->node[from].num_neighbors * sizeof(gs_edge_t));
+    g->node[from].neighbors[g->node[from].num_neighbors-1].index = to;
+    g->node[from].neighbors[g->node[from].num_neighbors-1].weight = weight;
+
+    g->node[to].num_neighbors++;
+    g->node[to].neighbors = (gs_edge_t *) realloc (g->node[to].neighbors, g->node[to].num_neighbors * sizeof(gs_edge_t));
+    g->node[to].neighbors[g->node[to].num_neighbors-1].index = from;
+    g->node[to].neighbors[g->node[to].num_neighbors-1].weight = weight;
 }
 
 /*! \fn int gs_edge_exists(gs_graph_t *g, int from, int to)
@@ -94,15 +98,15 @@ void gs_insert_edge(gs_graph_t *g, int from, int to, double weight)
 */
 int gs_edge_exists(gs_graph_t *g, int from, int to)
 {
-    elem_t *list;
+    int n;
+    gs_edge_t *list;
 
     /* durchsuche den Graphen, ob die Kante schon existiert */
     list = g->node[from].neighbors;
-    while(list != NULL)
+    for(n=0;n<g->node[from].num_neighbors;n++)
     {
-        if(list->index == to)
+        if(list[n].index == to)
             return(1);
-        list = list->next;
     }
     return(0);
 }
@@ -119,7 +123,7 @@ void gs_clear_graph(gs_graph_t *g)
     num = g->num_nodes;
     for(i=0;i<num;i++)
     {
-        clear_list(g->node[i].neighbors);
+        free(g->node[i].neighbors);
     }
     free(g->node);
     free(g);
@@ -137,7 +141,8 @@ void gs_clear_graph(gs_graph_t *g)
 void print_graph_for_graph_viz(gs_graph_t *g)
 {
     int i=0, num_nodes = g->num_nodes;
-    elem_t *list;
+    int n;
+    gs_edge_t *list;
 
     int L = g->L;
 
@@ -153,13 +158,12 @@ void print_graph_for_graph_viz(gs_graph_t *g)
                 fillcolor=\"white\",style=\"filled\"];\n", i, g->node[i].x, g->node[i].y);
         /* printf("%d [pos=\"%f,%f!\",label=\"%d\",shape=\"circle\"];\n", i, g->node[i].x, g->node[i].y, g->node[i].spin); */
         list = g->node[i].neighbors;
-        while(list != NULL)
+        for(n=0;n<g->node[i].num_neighbors;n++)
         {
             /* Drucke keine periodischen Randbedingungen */
-            if(i+1 == list->index || i - 1 == list->index || i - L == list->index || i + L == list->index)
+            if(i+1 == list[n].index || i - 1 == list[n].index || i - L == list[n].index || i + L == list[n].index)
                 //~ printf("%d -- %d [label=\" %.2f\"]\n", i, list->index, list->weight);
-                printf("%d -- %d [penwidth=\" %.2f\"]\n", i, list->index, list->weight*10);
-            list = list->next;
+                printf("%d -- %d [penwidth=\" %.2f\"]\n", i, list[n].index, list[n].weight*10);
         }
     }
     printf("}\n\n");

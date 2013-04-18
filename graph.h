@@ -4,7 +4,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
+
+/*! \struct edge_t;
+    \brief Kante in einem Graphen
+*/
+typedef struct
+{
+    int     index;               //!< Der Index des referenzierten Spins
+    double  weight;                               //!< Gewicht der Kante
+} gs_edge_t;
 
 /*! \struct gs_node_t;
     \brief Knoten in einem Graphen
@@ -15,10 +23,11 @@
 */
 typedef struct
 {
+    int spin;                                     //!< Up = 1; down = -1
     double x;                        //!< horizontale Position des Spins
     double y;                          //!< vertikale Position der Spins
-    int spin;                                     //!< Up = 1; down = -1
-    elem_t *neighbors;               //!< Pointer auf Liste der Nachbarn
+    int num_neighbors;                          //!< Anzahl der Nachbarn
+    gs_edge_t *neighbors;                 //!< Pointer auf Array der Kanten
 } gs_node_t;
 
 /*! \struct gs_graph_t;
@@ -29,12 +38,12 @@ typedef struct
 */
 typedef struct
 {
-    int         num_nodes;            //!< Anzahl der Knoten, Normal \f$ L^2 \f$
+    int         num_nodes;    //!< Anzahl der Knoten, Normal \f$ L^2 \f$
     int                 L;                              //!< Seitenlänge
     double              T;                   //!< Temperatur des Systems
     double              M;               //!< Magnetisierung des Systems
     double              E;                      //!< Energie des Systems
-    gs_node_t       *node;               //!< Pointer auf ein Array, das die Knoten enthält
+    gs_node_t       *node;             //!< Pointer auf ein Array Knoten
 } gs_graph_t;
 
 void gs_insert_edge(gs_graph_t *g, int from, int to, double weight);

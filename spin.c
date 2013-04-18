@@ -597,18 +597,16 @@ void assign_weights_with_function(gs_graph_t *g,
 {
     int i,j;
     int L;
+    int n;
     double weight, dist;
     double dx, dy;
-    elem_t *list;
+
+    L = g->L;
 
     for(i=0;i<g->num_nodes;i++)
-    {
-        L = g->L;
-
-        list = g->node[i].neighbors;
-        while(list != NULL)                     /* Über alle Nachbarn */
+        for(n=0;n<g->node[i].num_neighbors;n++)     /* Über alle Nachbarn */
         {
-            j=list->index;
+            j=g->node[i].neighbors[n].index;
 
             /* !!! */
             /* Funktioniert nur im regulären Gitter: Muss ersetzt werden */
@@ -637,11 +635,8 @@ void assign_weights_with_function(gs_graph_t *g,
             dist = sqrt(dx*dx + dy*dy);
 
             weight = f(alpha,dist);
-            list->weight = weight;
-
-            list = list->next;
+            g->node[i].neighbors[n].weight = weight;
         }
-    }
 }
 
 /*! \fn void init_spins_randomly(gs_graph_t *g)
@@ -692,10 +687,11 @@ void init_spins_up(gs_graph_t *g)
 double calculate_energy(gs_graph_t *g)
 {
     int num_nodes, i;
+    int n;
     int sk;                  /*< Wert des k-ten Spins (temporäre Var) */
     double E=0;                               /*< Energie des Systems */
     double E_sk;          /*< Energie des k-ten Spins (temporäre Var) */
-    elem_t *list;
+    gs_edge_t *list;
 
     num_nodes = g->num_nodes;
 
@@ -704,11 +700,8 @@ double calculate_energy(gs_graph_t *g)
         E_sk = 0;
         sk = g->node[i].spin;
         list = g->node[i].neighbors;
-        while(list != NULL)                     /* Über alle Nachbarn */
-        {
-            E_sk += g->node[list->index].spin * list->weight;
-            list = list->next;
-        }
+        for(n=0;n<g->node[i].num_neighbors;n++) /* Über alle Nachbarn */
+            E_sk += g->node[list[n].index].spin * list[n].weight;
         E_sk *= sk;
         E += E_sk;
     }
@@ -747,11 +740,12 @@ double calculate_magnetisation(gs_graph_t *g)
 void metropolis_monte_carlo_sweeps(gs_graph_t *g)
 {
     int i;
+    int n;
     int num_nodes;
     int to_flip_idx;
     int delta_E;
     double A;
-    elem_t *list;
+    gs_edge_t *list;
 
     num_nodes = g->num_nodes;
 
@@ -767,11 +761,10 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g)
             berücksichtigen.
          */
         list = g->node[to_flip_idx].neighbors;
-        while(list != NULL)
+        for(n=0;n<g->node[to_flip_idx].num_neighbors;n++)
         {
             /* Hier wird die Summe ausgeführt: E += s_j * J_{ij} */
-            delta_E += g->node[list->index].spin * list->weight;
-            list = list->next;
+            delta_E += g->node[list[n].index].spin * list[n].weight;
         }
         /* Hier werden die Koeffizienten berücksichtigt: E = 2s_k*sum */
         delta_E *= 2 * g->node[to_flip_idx].spin;
@@ -816,9 +809,9 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g)
 */
 void wolff_monte_carlo_sweeps(gs_graph_t *g)
 {
-    int i,n;                                     /* Counter Variablen */
+    int i,n,j;                                   /* Counter Variablen */
     int cur_index;              /* Welchen Spin betrachte ich gerade? */
-    elem_t *list;                    /* Temporär: finden der Nachbarn */
+    gs_edge_t *list;                 /* Temporär: finden der Nachbarn */
     int *cluster;     /* Liste der in den Cluster aufgenommenen Spins */
     double p_add;    /* Wahscheinlich einen weitern Spin hinzuzufügen */
     /* Stack mit Spins, deren Nachbarn noch die Chance bekommen müssen
@@ -830,7 +823,7 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
     cluster = malloc(g->num_nodes*sizeof(int));
 
     //~ for(n=0;n<g->num_nodes;n++)
-    for(n=0;n<1;n++)
+    for(n=0;n<5;n++)
     {
         /* Initialisierung */
         for(i=0;i<g->num_nodes;i++)
@@ -845,23 +838,22 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
             cur_index = pop(&stack_of_spins_with_untestet_neighbors);
             /* Suche nach benachbarten Knoten mit gleichem Spin */
             list = g->node[cur_index].neighbors;
-            while(list != NULL)
+            for(j=0;j<g->node[cur_index].num_neighbors;j++)
             {
                 /* Wenn dieser Nachbar noch nicht im Cluster ist, und den
                  * gleichen Spin hat ... */
-                if( (!cluster[list->index]) &&
-                    (g->node[list->index].spin == g->node[cur_index].spin))
+                if( (!cluster[list[j].index]) &&
+                    (g->node[list[j].index].spin == g->node[cur_index].spin))
                 {
                     /* ... gib ihm die Chance in den Cluster zu kommen */
                     /* Nicht vorher berechenbar, da J beliebig */
-                    p_add = 1-exp(-2*list->weight/g->T);
+                    p_add = 1-exp(-2*list[j].weight/g->T);
                     if(p_add > my_rand())
                     {
-                        cluster[list->index] = 1;
-                        push(&stack_of_spins_with_untestet_neighbors, list->index);
+                        cluster[list[j].index] = 1;
+                        push(&stack_of_spins_with_untestet_neighbors, list[j].index);
                     }
                 }
-                list = list->next;
             }
         }
 

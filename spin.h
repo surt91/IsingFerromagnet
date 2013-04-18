@@ -29,7 +29,6 @@
 #include <gsl/gsl_rng.h>             //< gsl: für bessere Zufallszahlen
 
 #include "graph.h"
-#include "list.h"
 #include "stack.h"
 
 /*! \struct options_t;
