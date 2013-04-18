@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
         gs_clear_graph(list_of_graphs[nT]);
     free(list_of_graphs);
     free(o.list_of_temps);
-    free_my_rand();
+    gsl_rng_free(o.rng);
 
     return(0);
 }
@@ -68,7 +68,7 @@ options_t get_cl_args(int argc, char *argv[])
     /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
     o.t_eq = 1000;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
-    o.moving_fkt = gauss;
+    o.moving_fkt = gsl_ran_gaussian;
     o.sigma = 0;
     /* Parameter, der die Gewichtung der Kanten bestimmt */
     o.weighting_fkt = exponential_decay;
@@ -187,7 +187,10 @@ options_t get_cl_args(int argc, char *argv[])
     else
         o.mc_fkt = &wolff_monte_carlo_sweeps;
 
-    smy_rand(seed);
+    /* Setup RNG */
+    gsl_rng_env_setup();
+    o.rng = gsl_rng_alloc (gsl_rng_mt19937);
+    gsl_rng_set(o.rng, seed);
 
     if(o.verbose)
     {
@@ -240,7 +243,7 @@ gs_graph_t **init_graphs(const options_t o)
     g = gs_create_graph(o.L);
 
     /* Verschiebe die Knoten */
-    move_graph_nodes(g, o.moving_fkt, o.sigma);
+    move_graph_nodes(g, o.moving_fkt, o.rng, o.sigma);
 
     /* Verknüpfe die Knoten */
     create_edges_regular(g);
@@ -252,7 +255,7 @@ gs_graph_t **init_graphs(const options_t o)
         if(o.start_order == 1)
             init_spins_up(g);
         else
-            init_spins_randomly(g);
+            init_spins_randomly(g, o.rng);
 
         /* Berechne Energie des Ising Modells */
         g->E = calculate_energy(g);
@@ -346,11 +349,16 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         {
             int i;
             gs_graph_t* g;
+            gsl_rng * rng;
+
             g = (gs_graph_t*) t;
+            rng = gsl_rng_alloc (gsl_rng_mt19937);
+            gsl_rng_set(rng, 42+nT+13);
+
             /* Führe N Sweeps durch */
             for(i=0;i<o.N;i++)
             {
-                o.mc_fkt(g);
+                o.mc_fkt(g, rng);
 
                 g->M = calculate_magnetisation(g);
 
@@ -369,6 +377,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
                 pthread_barrier_wait(&barr);
                 bool_par_temp_already_running = 0;
             }
+            gsl_rng_free(rng);
             return(NULL);
         }
 
@@ -416,88 +425,6 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
     free(map_of_temps);
 }
 
-/*! \fn double wrapper_for_gsl_rand(int set_seed, int seed, int free)
-    \brief Eine Funktion, die die GSL rand Funktionen in ein gewohntes Format
-            überführt
-
-    \param [in] set_seed Ob ein neuer Seed gesetzt werden soll
-    \param [in] seed     Neuer Seed
-    \param [in] free     Ob der rng Speicher freigegeben werden soll
-*/
-double wrapper_for_gsl_rand(const int set_seed, const int seed, const int free)
-{
-    static gsl_rng * rng;
-    const gsl_rng_type * T;
-
-    if(set_seed)
-    {
-        gsl_rng_env_setup();
-
-        T = gsl_rng_mt19937;
-        rng = gsl_rng_alloc (T);
-        gsl_rng_set(rng, seed);
-        return(0);
-    }
-    else if(free)
-    {
-        gsl_rng_free(rng);
-        return(0);
-    }
-    else
-        return(gsl_rng_uniform (rng));
-}
-/*! \fn my_rand()
-    \brief Erzeugt eine gleichverteilte Zufallszahl
-
-    \return Gleichverteilte Zufallszahl aus [0,1)
-*/
-double my_rand()
-{
-    return(wrapper_for_gsl_rand(0, 0, 0));
-}
-/*! \fn void smy_rand(int seed)
-    \brief Initialisiert den Zufallszahlengenerator mit einem Seed
-
-    \param [in] seed Seed
-*/
-void smy_rand(const int seed)
-{
-    wrapper_for_gsl_rand(1, seed, 0);
-}
-/*! \fn void free_my_rand()
-    \brief Gibt den vom Zufallszahlengenerator beanspruchten Speicher frei
-*/
-void free_my_rand()
-{
-    wrapper_for_gsl_rand(0, 0, 1);
-}
-
-/*! \fn double gauss(double sigma)
-    \brief Erzeugt Gauss verteilte Zufallszahlen nach der Box-Müller
-            Methode.
-
-    Siehe auch \cite hartmann2009practical S. 250, 7.2.5
-
-    \param [in]   sigma    Standardabweichung der Glockenkurve
-    \return Gaussverteilte Zufallszahl
-*/
-double gauss(const double sigma)
-{
-    double mu = 0;
-    double u1, u2;
-    double n1;
-
-    u1 = my_rand();
-    u2 = my_rand();
-
-    n1 = sqrt(-2*log(1-u1))*cos(2*M_PI*u2);
-
-    /* passe n1 entsprechend mu und sigma an */
-    n1 = n1*sigma+mu;
-
-    return(n1);
-}
-
 /*! \fn double exponential_decay(double alpha, double x)
     \brief Berechnet den exponentiellen Abfall \f$ e^{-\alpha x} \f$
 
@@ -510,22 +437,23 @@ double exponential_decay(const double alpha, const double x)
     return(exp(-alpha*x));
 }
 
-/*! \fn void move_graph_nodes(gs_graph_t *g, double (*f)(double), double sigma)
+/*! \fn void move_graph_nodes(gs_graph_t *g, double (*f)(const gsl_rng *, double), gsl_rng *rng, const double sigma)
     \brief Verschiebt die Knoten des Graphen g, wobei die Verschiebung zufällig
             nach der Verteilung f mit dem Parameter sigma gewählt wird.
 
     \param [in,out]   g    Graph, dessen Knoten verschoben werden sollen
     \param [in]       f    Funktion, die Zufallszahlen entsprechend der
                            gewünschten Verteilung liefert
+    \param [in]   rng      Zufallszahlengenerator
     \param [in]   sigma    Paramter der Verteilung (zb. Standardabweichung)
 */
-void move_graph_nodes(gs_graph_t *g, double (*f)(double), const double sigma)
+void move_graph_nodes(gs_graph_t *g, double (*f)(const gsl_rng *, double), gsl_rng *rng, const double sigma)
 {
     int n;
     for(n=0;n<g->num_nodes; n++)
     {
-        g->node[n].x += f(sigma);
-        g->node[n].y += f(sigma);
+        g->node[n].x += f(rng, sigma);
+        g->node[n].y += f(rng, sigma);
     }
 }
 
@@ -639,12 +567,13 @@ void assign_weights_with_function(gs_graph_t *g,
         }
 }
 
-/*! \fn void init_spins_randomly(gs_graph_t *g)
+/*! \fn void init_spins_randomly(gs_graph_t *g, gsl_rng *rng)
     \brief Weist den Spins im gs_graph_t g zufällige Werte zu
 
     \param [in,out]    g    Graph, der modifiziert werden soll
+    \param [in]      rng    Zufallszahlengenerator
 */
-void init_spins_randomly(gs_graph_t *g)
+void init_spins_randomly(gs_graph_t *g, gsl_rng *rng)
 {
     int num_nodes, i;
 
@@ -652,7 +581,7 @@ void init_spins_randomly(gs_graph_t *g)
 
     for(i=0;i<num_nodes;i++)
     {
-        if(my_rand()<0.5)
+        if(gsl_rng_uniform(rng)<0.5)
             g->node[i].spin = 1;
         else
             g->node[i].spin = -1;
@@ -674,7 +603,7 @@ void init_spins_up(gs_graph_t *g)
         g->node[i].spin = 1;
 }
 
-/*! \fn double calculate_energy(gs_graph_t *g)
+/*! \fn double calculate_energy(const gs_graph_t *g)
     \brief Berechnet die Energie des Ising Modells
 
     Dies wird durch einfache Auswertung des Hamiltonoperators des
@@ -708,7 +637,7 @@ double calculate_energy(const gs_graph_t *g)
     return(-E/2);   /* Da über alle Spins zweimal summiert wurde: E/2 */
 }
 
-/*! \fn double calculate_magnetisation(gs_graph_t *g)
+/*! \fn double calculate_magnetisation(const gs_graph_t *g)
     \brief Berechnet die Magnetisierung des Ising Modells
 
     Dies wird durch einfache Auswertung der Definition erledigt.
@@ -730,14 +659,15 @@ double calculate_magnetisation(const gs_graph_t *g)
     return(M);
 }
 
-/*! \fn void metropolis_monte_carlo_sweeps(gs_graph_t *g)
+/*! \fn void metropolis_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
     \brief Führt N Monte Carlo Sweeps durch mit dem Metropolis Algorithmus
 
     Dabei besteht ein Sweep aus \f$ L^2 \f$ Monte Carlo Schritten
 
     \param [in,out]    g    Graph, der modifiziert werden soll
+    \param [in]      rng    Zufallszahlengenerator
 */
-void metropolis_monte_carlo_sweeps(gs_graph_t *g)
+void metropolis_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
 {
     int i;
     int n;
@@ -753,7 +683,7 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g)
     {
         delta_E = 0;
         /*! - Ermittele den zu flippenden Spin zufällig. */
-        to_flip_idx = floor(my_rand()*num_nodes);
+        to_flip_idx = floor(gsl_rng_uniform(rng)*num_nodes);
         /*! - Ermittele Energieänderung
             \f[ \Delta E = 2s_k \sum_{\mathrm{adj}(s_k)} J_{kj} s_j \f]
             So wie in \cite newman1999monte S. 52 (3.10) gegeben,
@@ -779,7 +709,7 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g)
             Wie in \cite newman1999monte S. 49 (3.7) gegeben.
          */
         A = exp(-delta_E/g->T);
-        if(A > my_rand())
+        if(A > gsl_rng_uniform(rng))
         {
             /* drehe den Spin um */
             g->node[to_flip_idx].spin *= -1;
@@ -789,7 +719,7 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g)
     }
 }
 
-/*! \fn void wolff_monte_carlo_sweeps(gs_graph_t *g)
+/*! \fn void wolff_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
     \brief Führt N Monte Carlo Sweeps durch mit dem Wolff Cluster Algorithmus
 
     Dabei besteht ein Sweep aus einem Clusterschritt.\n
@@ -806,8 +736,9 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g)
     Vergleiche auch \cite newman1999monte (4.12)
 
     \param [in,out]    g    Graph, der modifiziert werden soll
+    \param [in]      rng    Zufallszahlengenerator
 */
-void wolff_monte_carlo_sweeps(gs_graph_t *g)
+void wolff_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
 {
     int i,n,j;                                   /* Counter Variablen */
     int cur_index;              /* Welchen Spin betrachte ich gerade? */
@@ -830,7 +761,7 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
             cluster[i]=0;
 
         /* Wähle zufälligen seed */
-        cur_index = (int) (my_rand() * g->num_nodes);
+        cur_index = (int) (gsl_rng_uniform(rng) * g->num_nodes);
         cluster[cur_index] = 1;
         push(&stack_of_spins_with_untestet_neighbors, cur_index);
         while(!is_empty(&stack_of_spins_with_untestet_neighbors))
@@ -848,7 +779,7 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g)
                     /* ... gib ihm die Chance in den Cluster zu kommen */
                     /* Nicht vorher berechenbar, da J beliebig */
                     p_add = 1-exp(-2*list[j].weight/g->T);
-                    if(p_add > my_rand())
+                    if(p_add > gsl_rng_uniform(rng))
                     {
                         cluster[list[j].index] = 1;
                         push(&stack_of_spins_with_untestet_neighbors, list[j].index);
@@ -903,7 +834,7 @@ void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
             /* Wähle zufällig, ob getauscht werden soll */
             delta = ( 1/list_of_graphs[temp_index]->T - 1/list_of_graphs[temp_index_p]->T )
                     * ( list_of_graphs[temp_index]->E - list_of_graphs[temp_index_p]->E);
-            if(my_rand() < exp(delta))
+            if(gsl_rng_uniform(o.rng) < exp(delta))
             {
                 par_temp_erfolge[temp_index]++;
                 /* Tausche die Temperaturen ... */
