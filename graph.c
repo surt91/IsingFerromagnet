@@ -189,3 +189,92 @@ void print_graph_for_gnuplot(gs_graph_t *g)
         printf("%f %f\n", g->node[i].x, g->node[i].y);
     }
 }
+
+/*! \fn void print_graph_svg(gs_graph_t *g)
+    \brief gibt den Graphen als SVG aus
+
+    \param g   : Array des Graphs
+*/
+void print_graph_svg(gs_graph_t *g)
+{
+    int i, n ,j;
+    int L;
+    int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
+    int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
+    double dx, dy, dx2, dy2;
+    double tmp_length;
+    int tmp_idx, tmp_node_idx;
+    gs_edge_t *list;
+    FILE *svg_file;
+
+    L=g->L;
+
+    svg_file = fopen("graph.svg", "w");
+    if(svg_file == NULL)
+    {
+        fprintf(stderr,"ERROR: %s kann nicht geöffnet werden","graph.svg");
+        exit(-1);
+    }
+
+    /* Schreibe Header */
+    fprintf(svg_file, "<?xml version='1.0' encoding='UTF-8'?> \n\
+                        <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>\n\
+                        <svg xmlns='http://www.w3.org/2000/svg'\n\
+                        xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events'\n\
+                        version='1.1' baseProfile='full'>\n");
+
+    /* Rahmen */
+    fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.05;' />\n", 0.5, 0.5, g->L+0.5, 0.5);
+    fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.05;' />\n", 0.5, g->L+0.5, 0.5, 0.5);
+    fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.05;' />\n", g->L+0.5, g->L+0.5, +0.5, g->L+0.5);
+    fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.05;' />\n", g->L+0.5, 0.5, g->L+0.5, g->L+0.5);
+
+    /* Knoten */
+    for(i=0;i<g->num_nodes;i++)
+    {
+        if(g->node[i].spin == 1)
+            fprintf(svg_file, "<circle cx='%f' cy='%f' r='0.1' stroke='black' stroke-width='0.02' fill='black'/>\n", g->node[i].x+1, g->node[i].y+1);
+        else
+            fprintf(svg_file, "<circle cx='%f' cy='%f' r='0.1' stroke='black' stroke-width='0.02' fill='white'/>\n", g->node[i].x+1, g->node[i].y+1);
+    }
+
+    /* Kanten */
+    for(i=0;i<g->num_nodes;i++)
+    {
+        list = g->node[i].neighbors;
+        for(n=0;n<g->node[i].num_neighbors;n++)
+        {
+            /* Berücksichtige periodischen Randbedingungen */
+            tmp_length = L;
+            tmp_idx = 0;
+            tmp_node_idx = i;
+            for(j=1;j<9;j++)
+            {
+                dx = g->node[i].x - g->node[list[n].index].x;
+                dy = g->node[i].y - g->node[list[n].index].y;
+                dx2 = dx + L*verschiebung_x[j];
+                dy2 = dy + L*verschiebung_y[j];
+                if(dx*dx+dy*dy > dx2*dx2+dy2*dy2)
+                    if(tmp_length > dx2*dx2+dy2*dy2)
+                    {
+                        tmp_length = dx2*dx2+dy2*dy2;
+                        tmp_idx    = j;
+                        tmp_node_idx = list[n].index;
+                    }
+            }
+            if(tmp_idx)
+            {
+                if(g->node[tmp_node_idx].spin == 1)
+                    fprintf(svg_file, "<circle cx='%f' cy='%f' r='0.1' stroke='black' stroke-width='0.02' fill='black'/>\n", g->node[tmp_node_idx].x - L*verschiebung_x[tmp_idx]+1, g->node[tmp_node_idx].y - L*verschiebung_y[tmp_idx]+1);
+                else
+                    fprintf(svg_file, "<circle cx='%f' cy='%f' r='0.1' stroke='black' stroke-width='0.02' fill='white'/>\n", g->node[tmp_node_idx].x - L*verschiebung_x[tmp_idx]+1, g->node[tmp_node_idx].y - L*verschiebung_y[tmp_idx]+1);
+                fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.02;' />\n", g->node[i].x+1, g->node[tmp_node_idx].x - L*verschiebung_x[tmp_idx]+1, g->node[i].y+1, g->node[tmp_node_idx].y - L*verschiebung_y[tmp_idx]+1);
+            }
+            else
+                fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.02;' />\n", g->node[i].x+1, g->node[list[n].index].x+1, g->node[i].y+1, g->node[list[n].index].y+1);
+        }
+    }
+
+    /* Schreibe Footer */
+    fprintf(svg_file, "</svg>");
+}

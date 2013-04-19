@@ -3,6 +3,7 @@ docs/
 test
 *.dat
 *.png
+*.svg
 *.dot
 *.o
 *.out

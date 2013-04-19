@@ -22,11 +22,11 @@ int main(int argc, char *argv[])
 
     o = get_cl_args(argc, argv);
 
-    fprintf(stderr,"Starte Initialisierung\n");
+    if(o.verbose)
+        fprintf(stderr,"Starte Initialisierung\n");
     list_of_graphs = init_graphs(o);
-    fprintf(stderr,"  Initialisierung abgeschlossen\n");
 
-    print_graph_for_graph_viz(list_of_graphs[0]);
+    print_graph_svg(list_of_graphs[0]);
 
     do_mc_simulation(list_of_graphs, o);
 
