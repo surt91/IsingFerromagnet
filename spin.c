@@ -183,8 +183,15 @@ options_t get_cl_args(int argc, char *argv[])
 
     /* Welchen Algorithmus nutzen? */
     if(! wolff_flag)
-        o.mc_fkt = &metropolis_monte_carlo_sweeps;
+        /* Kein Wolff -> Metropolis */
+        o.mc_fkt = &metropolis_monte_carlo_sweep;
+    else if(par_temp_flag)
+        /* Wolff und Parallel Tempering
+         * -> führe vorher einen Metropolis Sweep aus */
+        o.mc_fkt = &metroplis_sweep_and_wolff_cluster;
     else
+        /* Wolff ohne Parallel Tempering
+         * -> führe nur Wolff aus */
         o.mc_fkt = &wolff_monte_carlo_cluster;
 
     /* Setup RNG */
@@ -659,7 +666,7 @@ double calculate_magnetisation(const gs_graph_t *g)
     return(M);
 }
 
-/*! \fn void metropolis_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
+/*! \fn void metropolis_monte_carlo_sweep(gs_graph_t *g, gsl_rng *rng)
     \brief Führt N Monte Carlo Sweeps durch mit dem Metropolis Algorithmus
 
     Dabei besteht ein Sweep aus \f$ L^2 \f$ Monte Carlo Schritten
@@ -667,7 +674,7 @@ double calculate_magnetisation(const gs_graph_t *g)
     \param [in,out]    g    Graph, der modifiziert werden soll
     \param [in]      rng    Zufallszahlengenerator
 */
-void metropolis_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
+void metropolis_monte_carlo_sweep(gs_graph_t *g, gsl_rng *rng)
 {
     int i;
     int n;
@@ -792,6 +799,21 @@ void wolff_monte_carlo_cluster(gs_graph_t *g, gsl_rng *rng)
     g->E = calculate_energy(g);
     free(cluster);
     clear_stack(&stack_of_spins_with_untestet_neighbors);
+}
+
+/*! \fn void metroplis_sweep_and_wolff_cluster(gs_graph_t *g, gsl_rng *rng)
+    \brief Führt erst einen Metropolis Sweep aus und flipt dann einen
+            Wolff Cluster.
+
+    Dies sollte nützlich im Zusammenhang mit parallel Tempering sein.
+
+    \param [in,out]    g    Graph, der modifiziert werden soll
+    \param [in]      rng    Zufallszahlengenerator
+*/
+void metroplis_sweep_and_wolff_cluster(gs_graph_t *g, gsl_rng *rng)
+{
+    metropolis_monte_carlo_sweep(g, rng);
+    wolff_monte_carlo_cluster(g, rng);
 }
 
 /*! \fn void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,

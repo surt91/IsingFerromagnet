@@ -6,7 +6,7 @@ CC	= gcc
 #~ CFLAGS	= -g -pg
 CFLAGS	= -O2 -march=native -pipe -DTHREADED
 LFLAGS	= -lm -lgsl -lgslcblas -lpthread
-WARNLEVEL= -Wall
+WARNLEVEL= -Wall # -pedantic
 
 all: $(TARGET)
 
