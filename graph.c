@@ -140,30 +140,76 @@ void gs_clear_graph(gs_graph_t *g)
 */
 void print_graph_for_graph_viz(gs_graph_t *g)
 {
-    int i=0, num_nodes = g->num_nodes;
+    int i, j;
     int n;
     gs_edge_t *list;
 
-    int L = g->L;
+    int L;
 
-    printf("strict graph test\n");
-    printf("{\n");
-    for(i=0;i<num_nodes;i++)
+    int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
+    int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
+    double dx, dy, dx2, dy2;
+    double tmp_length;
+    int tmp_idx, tmp_node_idx;
+    char suffix[3];
+
+    L = g->L;
+
+    printf("strict graph test {\n");
+    //~ printf("subgraph clusterA {\n");
+
+    for(i=0;i<g->num_nodes;i++)
     {
         if(g->node[i].spin == 1)
-            printf("%d [pos=\"%f,%f!\",label=\"\",shape=\"circle\",\
+            printf("x%d [pos=\"%f,%f!\",label=\"\",shape=\"circle\",\
                 fillcolor=\"black\",style=\"filled\"];\n", i, g->node[i].x, g->node[i].y);
         else
-            printf("%d [pos=\"%f,%f!\",label=\"\",shape=\"circle\",\
+            printf("x%d [pos=\"%f,%f!\",label=\"\",shape=\"circle\",\
                 fillcolor=\"white\",style=\"filled\"];\n", i, g->node[i].x, g->node[i].y);
-        /* printf("%d [pos=\"%f,%f!\",label=\"%d\",shape=\"circle\"];\n", i, g->node[i].x, g->node[i].y, g->node[i].spin); */
+    }
+    //~ printf("}\n");
+    for(i=0;i<g->num_nodes;i++)
+    {
         list = g->node[i].neighbors;
         for(n=0;n<g->node[i].num_neighbors;n++)
         {
-            /* Drucke keine periodischen Randbedingungen */
-            //~ if(i+1 == list[n].index || i - 1 == list[n].index || i - L == list[n].index || i + L == list[n].index)
-                //~ printf("%d -- %d [label=\" %.2f\"]\n", i, list->index, list->weight);
-                printf("%d -- %d [penwidth=\" %.2f\"]\n", i, list[n].index, list[n].weight*10);
+            /* Berücksichtige periodischen Randbedingungen */
+            tmp_length = L;
+            tmp_idx = 0;
+            tmp_node_idx = i;
+            for(j=1;j<9;j++)
+            {
+                dx = g->node[i].x - g->node[list[n].index].x;
+                dy = g->node[i].y - g->node[list[n].index].y;
+                dx2 = dx + L*verschiebung_x[j];
+                dy2 = dy + L*verschiebung_y[j];
+                if(dx*dx+dy*dy > dx2*dx2+dy2*dy2)
+                {
+                    if(tmp_length > dx2*dx2+dy2*dy2)
+                    {
+                        tmp_length = dx2*dx2+dy2*dy2;
+                        tmp_idx    = j;
+                        tmp_node_idx = list[n].index;
+                    }
+                }
+            }
+            if(tmp_idx)
+            {
+                snprintf(suffix ,3, "x%d", tmp_idx);
+                if(g->node[tmp_node_idx].spin == 1)
+                    printf("x%d%s [pos=\"%f,%f!\",label=\"\",shape=\"circle\",\
+                        fillcolor=\"black\",style=\"filled\"];\n", list[n].index, suffix,
+                        g->node[tmp_node_idx].x - L*verschiebung_x[tmp_idx],
+                        g->node[tmp_node_idx].y - L*verschiebung_y[tmp_idx]);
+                else
+                    printf("x%d%s [pos=\"%f,%f!\",label=\"\",shape=\"circle\",\
+                        fillcolor=\"white\",style=\"filled\"];\n", list[n].index, suffix,
+                        g->node[tmp_node_idx].x - L*verschiebung_x[tmp_idx],
+                        g->node[tmp_node_idx].y - L*verschiebung_y[tmp_idx]);
+            }
+            else
+                suffix[0] = '\0';
+            printf("x%d -- x%d%s [penwidth=\" %.2f\"]\n", i, list[n].index, suffix, list[n].weight*10);
         }
     }
     printf("}\n\n");
