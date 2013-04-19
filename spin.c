@@ -185,7 +185,7 @@ options_t get_cl_args(int argc, char *argv[])
     if(! wolff_flag)
         /* Kein Wolff -> Metropolis */
         o.mc_fkt = &metropolis_monte_carlo_sweep;
-    else if(par_temp_flag)
+    else if(o.par_temp_flag)
         /* Wolff und Parallel Tempering
          * -> führe vorher einen Metropolis Sweep aus */
         o.mc_fkt = &metroplis_sweep_and_wolff_cluster;
