@@ -500,8 +500,8 @@ void create_edges_regular(gs_graph_t *g)
     \brief Fügt Kanten zu einem Graphen hinzu, wodurch ein
             Relative Neighborhood Graph erzeugt werden soll.
 
-            Kantengewichte (J) werden durch eine übergebene Funktion aus
-            dem (euklidischen) Abstand der Knoten ermittelt
+    Kantengewichte (J) werden durch eine übergebene Funktion aus
+    dem (euklidischen) Abstand der Knoten ermittelt
 
     \param [in,out]    g    Graph, der modifiziert werden soll
 */
@@ -519,9 +519,9 @@ void create_edges_relative_neighborhood(gs_graph_t *g)
     \brief Ändert die Kantengewichte eines Graphen abhängig vom Abstand
             der Knoten nach einem exponentiellen Zusammenhang.
 
-            Dieser Exponentielle Zusammenhang ist
-            \f$ J = e^{-\alpha d} \f$
-            wobei d der Abstand er Knoten ist
+    Dieser Exponentielle Zusammenhang ist
+    \f$ J = e^{-\alpha d} \f$
+    wobei d der Abstand er Knoten ist
 
     \param [in,out]    g     Graph, der modifiziert werden soll
     \param [in]        f     Gewichtungsfunktion
