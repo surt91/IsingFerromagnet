@@ -236,6 +236,69 @@ void print_graph_for_gnuplot(gs_graph_t *g)
     }
 }
 
+/*! \fn void svg_circle(double x, double y, int filled, FILE *file)
+    \brief Schreibt einen Kreis in die gegebene Datei im SVG Format
+
+    \param x       x-Koordinate des Kreis Mittelpunkts
+    \param y       y-Koordinate des Kreis Mittelpunkts
+    \param filled  Soll der Kreis gefüllt sein? 1: gefüllt -1: nicht gefüllt
+    \param file    File Handler der Output Datei
+*/
+void svg_circle(double x, double y, int filled, FILE *file)
+{
+    if(filled == 1)
+        fprintf(file, "<circle cx='%f' cy='%f' r='8' stroke='black'\
+              stroke-width='2' fill='black'/>\n", (x+1)*40, (y+1)*40);
+    else
+        fprintf(file, "<circle cx='%f' cy='%f' r='8' stroke='black'\
+              stroke-width='2' fill='white'/>\n", (x+1)*40, (y+1)*40);
+}
+
+/*! \fn void svg_circle(double x, double y, int filled, FILE *file)
+    \brief Schreibt einen Kreis in die gegebene Datei im SVG Format
+
+    \param x1      x-Anfangspunkt der Linie
+    \param x2      x-Endpunkt der Linie
+    \param y1      y-Anfangspunkt der Linie
+    \param y2      y-Endpunkt der Linie
+    \param file    File Handler der Output Datei
+*/
+void svg_line(double x1, double x2, double y1, double y2, FILE *file)
+{
+    fprintf(file, "<line x1='%f' x2='%f' y1='%f' y2='%f' \
+                        stroke='black' stroke-width='2' />\n",
+                        (x1+1)*40, (x2+1)*40, (y1+1)*40, (y2+1)*40);
+}
+
+/*! \fn int point_not_in_domain(double x, double  y, int L)
+    \brief Liefert das der Acht Felder um den Graphen, in dem sich der
+            Punkt befindet.
+
+    \param x      x-Koordinate des Punkts
+    \param y      x-Koordinate des Punkts
+    \param L      Kantenlänge des Graphen
+*/
+int point_not_in_domain(double x, double  y, int L)
+{
+    int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
+    int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
+    double tmp_x, tmp_y;
+    int j;
+
+    for(j=1;j<9;j++)
+    {
+        tmp_x = x + L*verschiebung_x[j];
+        tmp_y = y + L*verschiebung_y[j];
+        /* Wenn der verschobene Punkt drin liegt, liegt der
+         * "originale" nicht drin */
+        if(tmp_x > 0 && tmp_x < L-1 && tmp_y > 0 && tmp_y < L-1)
+        {
+            return(j);
+        }
+    }
+    return(0);
+}
+
 /*! \fn void print_graph_svg(gs_graph_t *g)
     \brief gibt den Graphen als SVG aus
 
@@ -248,8 +311,11 @@ void print_graph_svg(gs_graph_t *g)
     int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
     int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
     double dx, dy, dx2, dy2;
+    double x, y;
+    double n1_x, n1_y, n2_x, n2_y;
+    int n2_i;
     double tmp_length;
-    int tmp_idx, tmp_node_idx;
+    int tmp_idx;
     gs_edge_t *list;
     FILE *svg_file;
 
@@ -270,56 +336,64 @@ void print_graph_svg(gs_graph_t *g)
                         version='1.1' baseProfile='full'>\n");
 
     /* Rahmen */
-    fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.05;' />\n", 0.5, 0.5, g->L+0.5, 0.5);
-    fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.05;' />\n", 0.5, g->L+0.5, 0.5, 0.5);
-    fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.05;' />\n", g->L+0.5, g->L+0.5, +0.5, g->L+0.5);
-    fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.05;' />\n", g->L+0.5, 0.5, g->L+0.5, g->L+0.5);
-
-    /* Knoten */
-    for(i=0;i<g->num_nodes;i++)
-    {
-        if(g->node[i].spin == 1)
-            fprintf(svg_file, "<circle cx='%f' cy='%f' r='0.1' stroke='black' stroke-width='0.02' fill='black'/>\n", g->node[i].x+1, g->node[i].y+1);
-        else
-            fprintf(svg_file, "<circle cx='%f' cy='%f' r='0.1' stroke='black' stroke-width='0.02' fill='white'/>\n", g->node[i].x+1, g->node[i].y+1);
-    }
+    svg_line(-0.5, g->L-0.5, -0.5, -0.5,svg_file);
+    svg_line(g->L-0.5, g->L-0.5, -0.5, g->L-0.5,svg_file);
+    svg_line(g->L-0.5, -0.5, g->L-0.5, g->L-0.5,svg_file);
+    svg_line(-0.5, -0.5, -0.5, g->L-0.5,svg_file);
 
     /* Kanten */
     for(i=0;i<g->num_nodes;i++)
     {
+        n1_x = g->node[i].x;
+        n1_y = g->node[i].y;
+        n1_x += L * verschiebung_x[point_not_in_domain(n1_x, n1_y, L)];
+        n1_y += L * verschiebung_y[point_not_in_domain(n1_x, n1_y, L)];
+
         list = g->node[i].neighbors;
         for(n=0;n<g->node[i].num_neighbors;n++)
         {
-            /* Berücksichtige periodischen Randbedingungen */
+            n2_i = list[n].index;
+            n2_x = g->node[n2_i].x;
+            n2_y = g->node[n2_i].y;
+            n2_x += L * verschiebung_x[point_not_in_domain(n2_x, n2_y, L)];
+            n2_y += L * verschiebung_y[point_not_in_domain(n2_x, n2_y, L)];
             tmp_length = L;
-            tmp_idx = 0;
-            tmp_node_idx = i;
+            tmp_idx  = 0;
+            /* Berücksichtige periodischen Randbedingungen */
             for(j=1;j<9;j++)
             {
-                dx = g->node[i].x - g->node[list[n].index].x;
-                dy = g->node[i].y - g->node[list[n].index].y;
+                dx = n1_x - n2_x;
+                dy = n1_y - n2_y;
                 dx2 = dx + L*verschiebung_x[j];
                 dy2 = dy + L*verschiebung_y[j];
-                if(dx*dx+dy*dy > dx2*dx2+dy2*dy2)
-                    if(tmp_length > dx2*dx2+dy2*dy2)
+                if(dx*dx+dy*dy > dx2*dx2+dy2*dy2)    /* Such kürzeste */
+                    if(tmp_length > dx2*dx2+dy2*dy2)         /* Kante */
                     {
                         tmp_length = dx2*dx2+dy2*dy2;
                         tmp_idx    = j;
-                        tmp_node_idx = list[n].index;
                     }
             }
-            if(tmp_idx)
+            if(tmp_idx) /* Kante zeigt auf periodischen Punkt */
             {
-                /* für die hier gesetzen Punkte muss ich noch alle Nachbarn durchgehen */
-                if(g->node[tmp_node_idx].spin == 1)
-                    fprintf(svg_file, "<circle cx='%f' cy='%f' r='0.1' stroke='black' stroke-width='0.02' fill='black'/>\n", g->node[tmp_node_idx].x - L*verschiebung_x[tmp_idx]+1, g->node[tmp_node_idx].y - L*verschiebung_y[tmp_idx]+1);
-                else
-                    fprintf(svg_file, "<circle cx='%f' cy='%f' r='0.1' stroke='black' stroke-width='0.02' fill='white'/>\n", g->node[tmp_node_idx].x - L*verschiebung_x[tmp_idx]+1, g->node[tmp_node_idx].y - L*verschiebung_y[tmp_idx]+1);
-                fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.02;' />\n", g->node[i].x+1, g->node[tmp_node_idx].x - L*verschiebung_x[tmp_idx]+1, g->node[i].y+1, g->node[tmp_node_idx].y - L*verschiebung_y[tmp_idx]+1);
+                x = n2_x - L*verschiebung_x[tmp_idx];
+                y = n2_y - L*verschiebung_y[tmp_idx];
+                svg_line(n1_x, x, n1_y, y, svg_file);
+                /* zeichne zusätzlich den periodischen Punkt */
+                svg_circle(x, y , g->node[n2_i].spin, svg_file);
             }
             else
-                fprintf(svg_file, "<line x1='%f' x2='%f' y1='%f' y2='%f' style='stroke:black; stroke-width:0.02;' />\n", g->node[i].x+1, g->node[list[n].index].x+1, g->node[i].y+1, g->node[list[n].index].y+1);
+                svg_line(n1_x, n2_x, n1_y, n2_y, svg_file);
         }
+    }
+    /* Knoten */ /* (Seperat, damit keine Kante über einem Knoten ist) */
+    for(i=0;i<g->num_nodes;i++)
+    {
+        n1_x = g->node[i].x;
+        n1_y = g->node[i].y;
+        n1_x += L * verschiebung_x[point_not_in_domain(n1_x, n1_y, L)];
+        n1_y += L * verschiebung_y[point_not_in_domain(n1_x, n1_y, L)];
+        svg_circle(n1_x, n1_y, g->node[i].spin, svg_file);
+
     }
 
     /* Schreibe Footer */
