@@ -161,7 +161,7 @@ void print_graph_for_graph_viz(gs_graph_t *g)
         for(n=0;n<g->node[i].num_neighbors;n++)
         {
             /* Drucke keine periodischen Randbedingungen */
-            if(i+1 == list[n].index || i - 1 == list[n].index || i - L == list[n].index || i + L == list[n].index)
+            //~ if(i+1 == list[n].index || i - 1 == list[n].index || i - L == list[n].index || i + L == list[n].index)
                 //~ printf("%d -- %d [label=\" %.2f\"]\n", i, list->index, list->weight);
                 printf("%d -- %d [penwidth=\" %.2f\"]\n", i, list[n].index, list[n].weight*10);
         }

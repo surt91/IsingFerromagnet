@@ -22,7 +22,11 @@ int main(int argc, char *argv[])
 
     o = get_cl_args(argc, argv);
 
+    fprintf(stderr,"Starte Initialisierung\n");
     list_of_graphs = init_graphs(o);
+    fprintf(stderr,"  Initialisierung abgeschlossen\n");
+
+    print_graph_for_graph_viz(list_of_graphs[0]);
 
     do_mc_simulation(list_of_graphs, o);
 
@@ -88,7 +92,7 @@ options_t get_cl_args(int argc, char *argv[])
 
 
     opterr = 0;
-    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:o:u:i:wp")) != -1)
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:u:i:wp")) != -1)
         switch (c)
         {
             case 'T':
@@ -131,6 +135,9 @@ options_t get_cl_args(int argc, char *argv[])
             case 's':
                 o.sigma = atof(optarg);
                 break;
+            case 'a':
+                o.alpha = atof(optarg);
+                break;
             case 'o':
                 custom_file_name = 1;
                 strncpy(o.filename, optarg, MAX_LEN_FILENAME);
@@ -160,6 +167,7 @@ options_t get_cl_args(int argc, char *argv[])
                 fprintf(stderr,"    -Nx    x Monte Carlo sweeps                 (int)\n");
                 fprintf(stderr,"    -ex    Equilibrium nach x sweeps angenommen (int)\n");
                 fprintf(stderr,"    -sx    sigma x                           (double)\n");
+                fprintf(stderr,"    -ax    alpha x                           (double)\n");
                 fprintf(stderr,"    -ox    filename (max. 79 Zeichen)        (string)\n");
                 fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
                 fprintf(stderr,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
@@ -211,6 +219,7 @@ options_t get_cl_args(int argc, char *argv[])
         printf("    t_eq  = %d\n", o.t_eq);
         printf("    seed  = %d\n", seed);
         printf("    sigma = %f\n", o.sigma);
+        printf("    alpha = %f\n", o.alpha);
         if(o.start_order)
             printf("    spins starten alle up\n");
         else
@@ -253,8 +262,8 @@ gs_graph_t **init_graphs(const options_t o)
     move_graph_nodes(g, o.moving_fkt, o.rng, o.sigma);
 
     /* Verknüpfe die Knoten */
-    create_edges_regular(g);
-    assign_weights_with_function(g, o.weighting_fkt, o.alpha);
+    //create_edges_regular(g);
+    create_edges_relative_neighborhood(g, o);
 
     for(nT=0;nT<o.num_temps;nT++)
     {
@@ -496,7 +505,7 @@ void create_edges_regular(gs_graph_t *g)
     }
 }
 
-/*! \fn void create_edges_relative_neighborhood(gs_graph_t *g)
+/*! \fn void create_edges_relative_neighborhood(gs_graph_t *g, options_t o)
     \brief Fügt Kanten zu einem Graphen hinzu, wodurch ein
             Relative Neighborhood Graph erzeugt werden soll.
 
@@ -505,73 +514,94 @@ void create_edges_regular(gs_graph_t *g)
 
     \param [in,out]    g    Graph, der modifiziert werden soll
 */
-void create_edges_relative_neighborhood(gs_graph_t *g)
+void create_edges_relative_neighborhood(gs_graph_t *g, options_t o)
 {
-    /* Zuerst kachele einen Graphen, aus neun Kopien des Originalgraphen,
-        um die periodischen Randbedingen zu beachten.
-        Erstelle den Graphen und berechne aus den Abständen, die dabei
-        berechnet werden können die Kantengewichte.
-        Danach lösche die Kopien. */
-}
-
-/*! \fn void assign_weights_with_function(gs_graph_t *g,
-                   double (*f)(double alpha, double dist), double alpha)
-    \brief Ändert die Kantengewichte eines Graphen abhängig vom Abstand
-            der Knoten nach einem exponentiellen Zusammenhang.
-
-    Dieser Exponentielle Zusammenhang ist
-    \f$ J = e^{-\alpha d} \f$
-    wobei d der Abstand er Knoten ist
-
-    \param [in,out]    g     Graph, der modifiziert werden soll
-    \param [in]        f     Gewichtungsfunktion
-    \param [in]        alpha Gewichtungsfaktor
-*/
-void assign_weights_with_function(gs_graph_t *g,
-                   double (*f)(double alpha, double dist), const double alpha)
-{
-    int i,j;
+    /*! Prinzip:
+        -#  Zuerst kachele einen Graphen, aus neun Kopien des Originalgraphen,
+            um die periodischen Randbedingen zu beachten.
+            - Index 0 ist der original Graph, der Rest wird im
+              Uhrzeigersinn beginnend über dem Original durchnummeriert
+        -#  Erstelle den Graphen und berechne aus den Abständen, die dabei
+            berechnet werden können die Kantengewichte.
+        -#  Lösche die Kopien. */
+    int i, j, k;
+    int n, m;
     int L;
-    int n;
-    double weight, dist;
-    double dx, dy;
+    /* Die folgenden Array, geben an, in welche Richtung der Graph mit
+     * gleichem Index verschoben werden soll */
+    int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
+    int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
+    int flag;
+
+    gs_graph_t *gekachelte[9];
+    gs_node_t node1, node2, node3;
+    double dist12, dist13, dist23;
+    double weight;
 
     L = g->L;
 
-    for(i=0;i<g->num_nodes;i++)
-        for(n=0;n<g->node[i].num_neighbors;n++)     /* Über alle Nachbarn */
+    /* Graphen kacheln */
+    gekachelte[0] = g;
+    for(i=1;i<9;i++)
+        gekachelte[i] = gs_copy_graph(g);
+
+    for(i=1;i<9;i++)
+        for(j=0;j<gekachelte[i]->num_nodes;j++)
         {
-            j=g->node[i].neighbors[n].index;
-
-            /* !!! */
-            /* Funktioniert nur im regulären Gitter: Muss ersetzt werden */
-            /* !!! */
-
-            /* Prüfe, ob der Knoten ein rechter oder linker Randknoten ist
-                Wenn ja, reduziere den Abstand in x-Richtung um L */
-            if(    (i%L == 0   && j%L == L-1)    /* i links, j rechts */
-                || (i%L == L-1 && j%L == 0)   )  /* i rechts, j links */
-            {
-                dx = abs(g->node[j].x - g->node[i].x) - L;
-            }
-            else
-                dx = g->node[j].x - g->node[i].x;
-
-            /* Prüfe, ob der Knoten ein oberer oder unterer Randknoten ist
-                Wenn ja, reduziere den Abstand in y-Richtung um L */
-            if(    (i/L == 0   && j/L == L-1)    /* i oben, j unten */
-                || (i/L == L-1 && j/L == 0)   )  /* i unten, j oben */
-            {
-                dy = abs(g->node[j].y - g->node[i].y) - L;
-            }
-            else
-                dy = g->node[j].y - g->node[i].y;
-
-            dist = sqrt(dx*dx + dy*dy);
-
-            weight = f(alpha,dist);
-            g->node[i].neighbors[n].weight = weight;
+            gekachelte[i]->node[j].x += verschiebung_x[i]*L;
+            gekachelte[i]->node[j].y += verschiebung_y[i]*L;
         }
+
+    /* Knoten verbinden */
+    /* Versuche jeden Knoten aus g_0 mit allen Knoten aus g_0..8 zu verbinden */
+    for(i=0;i<g->num_nodes;i++)                /* Alle Knoten aus g_0 */
+    {
+        if(o.verbose)
+            fprintf(stderr, "%5d/%5d\n", i, g->num_nodes-1);
+        node1 = g->node[i];
+        for(j=0;j<9;j++)                       /* Alle Graphen g_0..8 */
+            for(k=i+1;k<g->num_nodes;k++)     /* Alle Knoten aus g_0..8,
+                                      die noch nicht überprüft wurden */
+            {
+                if(k==i)
+                    continue;
+                node2 = gekachelte[j]->node[k];
+                dist12 = (node1.x-node2.x)*(node1.x-node2.x)
+                                + (node1.y-node2.y)*(node1.y-node2.y);
+                /* Check Kriterium */
+                flag = 1;
+                for(m=0;m<g->num_nodes;m++)        /* Alle Knoten */
+                {
+                    for(n=0;n<9;n++)               /* Alle Graphen g_0..8 */
+                    {
+
+                        if(m==k || m==i)
+                        {
+                            continue;
+                        }
+                        node3 = gekachelte[n]->node[m];
+                        dist13 = (node1.x-node3.x)*(node1.x-node3.x)
+                                + (node1.y-node3.y)*(node1.y-node3.y);
+                        dist23 = (node2.x-node3.x)*(node2.x-node3.x)
+                                + (node2.y-node3.y)*(node2.y-node3.y);
+                        if( (dist13 < dist12 && dist23 < dist12) )
+                        {
+                            flag = 0;
+                            break;
+                        }
+                    }
+                }
+                if(flag)
+                {
+                    weight = o.weighting_fkt(o.alpha, sqrt(dist12));
+                    gs_insert_edge(g, i, k, weight);
+                }
+            }
+    }
+
+    /* Kachelung freigeben */
+    for(i=1;i<9;i++)
+        gs_clear_graph(gekachelte[i]);
 }
 
 /*! \fn void init_spins_randomly(gs_graph_t *g, gsl_rng *rng)

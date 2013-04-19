@@ -62,7 +62,10 @@ double exponential_decay(const double alpha, const double x);
 
 gs_graph_t **init_graphs(const options_t options);
 void move_graph_nodes(gs_graph_t *g, double (*f)(const gsl_rng *, double), gsl_rng *rng, const double sigma);
+
 void create_edges_regular(gs_graph_t *g);
+void create_edges_relative_neighborhood(gs_graph_t *g, options_t o);
+
 void assign_weights_with_function(gs_graph_t *g,
                 double (*f)(const double alpha, const double dist),
                                                     const double alpha);
