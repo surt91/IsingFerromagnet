@@ -310,6 +310,7 @@ void print_graph_svg(gs_graph_t *g)
             }
             if(tmp_idx)
             {
+                /* für die hier gesetzen Punkte muss ich noch alle Nachbarn durchgehen */
                 if(g->node[tmp_node_idx].spin == 1)
                     fprintf(svg_file, "<circle cx='%f' cy='%f' r='0.1' stroke='black' stroke-width='0.02' fill='black'/>\n", g->node[tmp_node_idx].x - L*verschiebung_x[tmp_idx]+1, g->node[tmp_node_idx].y - L*verschiebung_y[tmp_idx]+1);
                 else
