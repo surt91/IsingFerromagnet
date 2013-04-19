@@ -185,7 +185,7 @@ options_t get_cl_args(int argc, char *argv[])
     if(! wolff_flag)
         o.mc_fkt = &metropolis_monte_carlo_sweeps;
     else
-        o.mc_fkt = &wolff_monte_carlo_sweeps;
+        o.mc_fkt = &wolff_monte_carlo_cluster;
 
     /* Setup RNG */
     gsl_rng_env_setup();
@@ -390,7 +390,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         {
             for(nT=0;nT<o.num_temps;nT++)
             {
-                o.mc_fkt(list_of_graphs[nT]);
+                o.mc_fkt(list_of_graphs[nT], o.rng);
 
                 list_of_graphs[nT]->M = calculate_magnetisation(list_of_graphs[nT]);
             }
@@ -719,10 +719,9 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
     }
 }
 
-/*! \fn void wolff_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
-    \brief Führt N Monte Carlo Sweeps durch mit dem Wolff Cluster Algorithmus
+/*! \fn void wolff_monte_carlo_cluster(gs_graph_t *g, gsl_rng *rng)
+    \brief Flippt einen Wolff Cluster
 
-    Dabei besteht ein Sweep aus einem Clusterschritt.\n
     Ablauf:
     - Cluster bilden
         - Einen zufälligen Seed Spin wählen
@@ -738,9 +737,9 @@ void metropolis_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
     \param [in,out]    g    Graph, der modifiziert werden soll
     \param [in]      rng    Zufallszahlengenerator
 */
-void wolff_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
+void wolff_monte_carlo_cluster(gs_graph_t *g, gsl_rng *rng)
 {
-    int i,n,j;                                   /* Counter Variablen */
+    int i,j;                                   /* Counter Variablen */
     int cur_index;              /* Welchen Spin betrachte ich gerade? */
     gs_edge_t *list;                 /* Temporär: finden der Nachbarn */
     int *cluster;     /* Liste der in den Cluster aufgenommenen Spins */
@@ -753,46 +752,43 @@ void wolff_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng)
     stack_of_spins_with_untestet_neighbors = create_stack(g->num_nodes);
     cluster = malloc(g->num_nodes*sizeof(int));
 
-    //~ for(n=0;n<g->num_nodes;n++)
-    for(n=0;n<5;n++)
-    {
-        /* Initialisierung */
-        for(i=0;i<g->num_nodes;i++)
-            cluster[i]=0;
+    /* Initialisierung */
+    for(i=0;i<g->num_nodes;i++)
+        cluster[i]=0;
 
-        /* Wähle zufälligen seed */
-        cur_index = (int) (gsl_rng_uniform(rng) * g->num_nodes);
-        cluster[cur_index] = 1;
-        push(&stack_of_spins_with_untestet_neighbors, cur_index);
-        while(!is_empty(&stack_of_spins_with_untestet_neighbors))
+    /* Wähle zufälligen seed */
+    cur_index = (int) (gsl_rng_uniform(rng) * g->num_nodes);
+    cluster[cur_index] = 1;
+    push(&stack_of_spins_with_untestet_neighbors, cur_index);
+    while(!is_empty(&stack_of_spins_with_untestet_neighbors))
+    {
+        cur_index = pop(&stack_of_spins_with_untestet_neighbors);
+        /* Suche nach benachbarten Knoten mit gleichem Spin */
+        list = g->node[cur_index].neighbors;
+        for(j=0;j<g->node[cur_index].num_neighbors;j++)
         {
-            cur_index = pop(&stack_of_spins_with_untestet_neighbors);
-            /* Suche nach benachbarten Knoten mit gleichem Spin */
-            list = g->node[cur_index].neighbors;
-            for(j=0;j<g->node[cur_index].num_neighbors;j++)
+            /* Wenn dieser Nachbar noch nicht im Cluster ist, und den
+             * gleichen Spin hat ... */
+            if( (!cluster[list[j].index]) &&
+                (g->node[list[j].index].spin == g->node[cur_index].spin))
             {
-                /* Wenn dieser Nachbar noch nicht im Cluster ist, und den
-                 * gleichen Spin hat ... */
-                if( (!cluster[list[j].index]) &&
-                    (g->node[list[j].index].spin == g->node[cur_index].spin))
+                /* ... gib ihm die Chance in den Cluster zu kommen */
+                /* Nicht vorher berechenbar, da J beliebig */
+                p_add = 1-exp(-2*list[j].weight/g->T);
+                if(p_add > gsl_rng_uniform(rng))
                 {
-                    /* ... gib ihm die Chance in den Cluster zu kommen */
-                    /* Nicht vorher berechenbar, da J beliebig */
-                    p_add = 1-exp(-2*list[j].weight/g->T);
-                    if(p_add > gsl_rng_uniform(rng))
-                    {
-                        cluster[list[j].index] = 1;
-                        push(&stack_of_spins_with_untestet_neighbors, list[j].index);
-                    }
+                    cluster[list[j].index] = 1;
+                    push(&stack_of_spins_with_untestet_neighbors, list[j].index);
                 }
             }
         }
-
-        /* Jetzt flippe alle Spins im Cluster */
-        for(i=0;i<g->num_nodes;i++)
-            if(cluster[i])
-                g->node[i].spin *= -1;
     }
+
+    /* Jetzt flippe alle Spins im Cluster */
+    for(i=0;i<g->num_nodes;i++)
+        if(cluster[i])
+            g->node[i].spin *= -1;
+
     g->E = calculate_energy(g);
     free(cluster);
     clear_stack(&stack_of_spins_with_untestet_neighbors);

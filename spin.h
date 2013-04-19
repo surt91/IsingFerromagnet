@@ -75,7 +75,7 @@ double calculate_magnetisation(const gs_graph_t *g);
 
 void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t options);
 void metropolis_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng);
-void wolff_monte_carlo_sweeps(gs_graph_t *g, gsl_rng *rng);
+void wolff_monte_carlo_cluster(gs_graph_t *g, gsl_rng *rng);
 void par_temp(gs_graph_t **list_of_graphs, int *map_of_temps,
             const options_t o, double *par_temp_versuche, double *par_temp_erfolge);
 
