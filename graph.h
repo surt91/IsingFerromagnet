@@ -27,7 +27,7 @@ typedef struct
     double x;                        //!< horizontale Position des Spins
     double y;                          //!< vertikale Position der Spins
     int num_neighbors;                          //!< Anzahl der Nachbarn
-    gs_edge_t *neighbors;                 //!< Pointer auf Array der Kanten
+    gs_edge_t *neighbors;              //!< Pointer auf Array der Kanten
 } gs_node_t;
 
 /*! \struct gs_graph_t;

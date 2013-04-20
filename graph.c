@@ -199,8 +199,8 @@ int point_not_in_domain(double x, double  y, int L)
 /*! \fn void print_graph_svg(gs_graph_t *g, char* svg_filename)
     \brief gibt den Graphen als SVG aus
 
-    \param g    Array des Graphs
-    \param o    Optionen (Dateiname)
+    \param  g               Array des Graphs
+    \param  svg_filename    Name der Output SVG Datei
 */
 void print_graph_svg(gs_graph_t *g, char* svg_filename)
 {

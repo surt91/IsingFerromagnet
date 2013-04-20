@@ -568,6 +568,7 @@ inline int check_relative_neighborhood(double dist12, gs_node_t node1, gs_node_t
 
     \param [in]    node1    Erster  Knoten
     \param [in]    node2    Zweiter Knoten
+    \param [in]    dist12   euklidischer Abstand von node1 und node2
     \param [out]   x0       untere x-Grenze
     \param [out]   x1       obere  x-Grenze
     \param [out]   y0       untere y-Grenze
@@ -611,6 +612,7 @@ inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_nod
 
     \param [in]    node1    Erster  Knoten
     \param [in]    node2    Zweiter Knoten
+    \param [in]    dist12   euklidischer Abstand von node1 und node2
     \param [out]   x0       untere x-Grenze
     \param [out]   x1       obere  x-Grenze
     \param [out]   y0       untere y-Grenze

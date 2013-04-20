@@ -33,7 +33,13 @@
 #include "stack.h"
 #include "list.h"
 
+/*! \def MIN(X,Y)
+ * Minimum von zwei Zahlen
+ */
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
+/*! \def MAX(X,Y)
+ * Maximum von zwei Zahlen
+ */
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 /*! \struct options_t;
@@ -76,10 +82,6 @@ inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t nod
 inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3);
 inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1);
 void create_edges(gs_graph_t *g, options_t o);
-
-void assign_weights_with_function(gs_graph_t *g,
-                double (*f)(const double alpha, const double dist),
-                                                    const double alpha);
 
 void init_spins_randomly(gs_graph_t *g, gsl_rng *rng);
 void init_spins_up(gs_graph_t *g);
