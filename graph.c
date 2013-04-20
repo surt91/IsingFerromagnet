@@ -184,7 +184,7 @@ int point_not_in_domain(double x, double  y, int L)
         tmp_y = y + L*verschiebung_y[j];
         /* Wenn der verschobene Punkt drin liegt, liegt der
          * "originale" nicht drin */
-        if(tmp_x > 0 && tmp_x < L-1 && tmp_y > 0 && tmp_y < L-1)
+        if(tmp_x > 0 && tmp_x < L && tmp_y > 0 && tmp_y < L)
         {
             return(j);
         }
@@ -230,10 +230,10 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename)
                         version='1.1' baseProfile='full'>\n");
 
     /* Rahmen */
-    svg_line(-0.5, g->L-0.5, -0.5, -0.5,svg_file);
-    svg_line(g->L-0.5, g->L-0.5, -0.5, g->L-0.5,svg_file);
-    svg_line(g->L-0.5, -0.5, g->L-0.5, g->L-0.5,svg_file);
-    svg_line(-0.5, -0.5, -0.5, g->L-0.5,svg_file);
+    svg_line(0, g->L, 0, 0, svg_file);
+    svg_line(g->L, g->L, 0, g->L, svg_file);
+    svg_line(g->L, 0, g->L, g->L, svg_file);
+    svg_line(0, 0, 0, g->L, svg_file);
 
     /* Kanten */
     for(i=0;i<g->num_nodes;i++)
