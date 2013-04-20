@@ -8,15 +8,16 @@ def f(l,t_eq):
     call(["time", "./test", "-T{0}".format(t),
            "-L{0}".format(l), "-e{0}".format(t_eq),
            "-N{0}".format(t_eq+500),
-           "", "-u1", "-x13", "-w", "-p"])
+           "-v", "-u1", "-x13", "-w", "-p",
+           "-s0.1", "-a0.6", "-gOut.svg", "-t2"])
 
 if __name__ == '__main__':
     # Tupel aus L, T_eq
     # Also Grosse und Equilibriums Zeit
     # Diese sind durch tests in zeiten.par eingetragen
     configs = [ ( 16,  200*2),
-                ( 32,  400*2),
-                ( 64, 1000*2)
+                ( 32,  400*2)
+                #~ ( 64, 1000*2)
                 #~ (128, 2000*2)
                                   ]
     # Generieren der Ergebnisse
