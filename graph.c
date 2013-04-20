@@ -291,4 +291,5 @@ void print_graph_svg(gs_graph_t *g)
 
     /* Schreibe Footer */
     fprintf(svg_file, "</svg>");
+    fclose(svg_file);
 }
