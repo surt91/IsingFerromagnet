@@ -31,6 +31,10 @@
 
 #include "graph.h"
 #include "stack.h"
+#include "list.h"
+
+#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
+#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 /*! \struct options_t;
     \brief Optionen für die MC Simulation, die per Kommandozeilenargument
@@ -41,11 +45,14 @@ typedef struct
     int L;                                  //!< Kantenlänge des Gitters
     int N;                        //!< Anzahl der zu berechnenden Sweeps
     int t_eq;                            //!< geschätze Equilibriumszeit
-    double (*moving_fkt)(const gsl_rng *, double);     //!< Unordnungsfunktion
+    double (*moving_fkt)(const gsl_rng *, double); //!< Unordnungsfunkt.
     double sigma;                               //!< Unordnungsparameter
     double (*weighting_fkt)(double, double);    //!< Gewichtungsfunktion
     double alpha;                               //!< Gewichtungsparamter
     int start_order;                                   //!< Startordnung
+    int (*graph_fkt)(double, gs_node_t, gs_node_t, gs_node_t); //!<Graph
+    void (*graph_cell_border_fkt)(gs_node_t, gs_node_t, double,
+                                     int*, int*, int*, int*); //!< Graph
     void (*mc_fkt)(gs_graph_t *, gsl_rng *);//!< Monte Carlo Algorithmus
     int par_temp_flag;      //!< soll parallel Tempering genutzt werden?
     int num_temps;            //!< Wieviele Temperaturen für pT gegeben?
@@ -64,8 +71,11 @@ double exponential_decay(const double alpha, const double x);
 gs_graph_t **init_graphs(const options_t options);
 void move_graph_nodes(gs_graph_t *g, double (*f)(const gsl_rng *, double), gsl_rng *rng, const double sigma);
 
-void create_edges_regular(gs_graph_t *g);
-void create_edges_relative_neighborhood(gs_graph_t *g, options_t o);
+inline int check_relative_neighborhood(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3);
+inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1);
+inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3);
+inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1);
+void create_edges(gs_graph_t *g, options_t o);
 
 void assign_weights_with_function(gs_graph_t *g,
                 double (*f)(const double alpha, const double dist),

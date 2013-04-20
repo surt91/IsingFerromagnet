@@ -53,4 +53,6 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename);
 void gs_clear_graph(gs_graph_t *g);
 int gs_edge_exists(gs_graph_t *g, int from, int to);
 
+int point_not_in_domain(double x, double  y, int L);
+
 #endif /* _GRAPH_H */

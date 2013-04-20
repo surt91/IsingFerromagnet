@@ -59,6 +59,7 @@ options_t get_cl_args(int argc, char *argv[])
     int seed;
     int custom_file_name;
     int wolff_flag;
+    int graph_type;
     char temp_string[20];
     extern char *optarg;
 
@@ -74,11 +75,13 @@ options_t get_cl_args(int argc, char *argv[])
     o.N=2000;
     /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
     o.t_eq = 1000;
+    /* Parameter, der den Graphentyp beschreibt */
+    graph_type = 1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
-    o.moving_fkt = gsl_ran_gaussian;
+    o.moving_fkt = &gsl_ran_gaussian;
     o.sigma = 0;
     /* Parameter, der die Gewichtung der Kanten bestimmt */
-    o.weighting_fkt = exponential_decay;
+    o.weighting_fkt = &exponential_decay;
     o.alpha = 0;
     /* Anfangsbedingung der Spins: 0: zufällig, 1: alle up */
     o.start_order = 0;
@@ -97,7 +100,7 @@ options_t get_cl_args(int argc, char *argv[])
 
 
     opterr = 0;
-    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:g:u:i:wp")) != -1)
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:g:u:i:wpt:")) != -1)
         switch (c)
         {
             case 'T':
@@ -143,6 +146,9 @@ options_t get_cl_args(int argc, char *argv[])
             case 'a':
                 o.alpha = atof(optarg);
                 break;
+            case 't':
+                graph_type = atoi(optarg);
+                break;
             case 'o':
                 custom_file_name = 1;
                 strncpy(o.filename, optarg, MAX_LEN_FILENAME);
@@ -176,6 +182,7 @@ options_t get_cl_args(int argc, char *argv[])
                 fprintf(stderr,"    -ex    Equilibrium nach x sweeps angenommen (int)\n");
                 fprintf(stderr,"    -sx    sigma x                           (double)\n");
                 fprintf(stderr,"    -ax    alpha x                           (double)\n");
+                fprintf(stderr,"    -tx    Graphtyp: (1: RNG, 2: Gabriel)       (int)\n");
                 fprintf(stderr,"    -ox    filename (max. 79 Zeichen)        (string)\n");
                 fprintf(stderr,"    -gx    SVG Filename (max. 79 Zeichen)    (string)\n");
                 fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
@@ -211,6 +218,18 @@ options_t get_cl_args(int argc, char *argv[])
          * -> führe nur Wolff aus */
         o.mc_fkt = &wolff_monte_carlo_cluster;
 
+    /* Welchen Graphen bauen? */
+    if(graph_type == 1)
+    {
+        o.graph_fkt = &check_relative_neighborhood;
+        o.graph_cell_border_fkt = &get_cell_border_relative_neighborhood;
+    }
+    else
+    {
+        o.graph_fkt = &check_gabriel;
+        o.graph_cell_border_fkt = &get_cell_border_gabriel;
+    }
+
     /* Setup RNG */
     gsl_rng_env_setup();
     o.rng = gsl_rng_alloc (gsl_rng_mt19937);
@@ -233,14 +252,22 @@ options_t get_cl_args(int argc, char *argv[])
             printf("    spins starten alle up\n");
         else
             printf("    spins starten zufällig\n");
+
         if(wolff_flag)
             printf("    Wolff Algorithmus\n");
         else
             printf("    Metropolis Algorithmus\n");
+
+        if(graph_type == 1)
+            printf("    Relative Neighborhood Graph\n");
+        else
+            printf("    Gabriel Graph\n");
+
         if(o.par_temp_flag)
             printf("    Parallel Tempering aktiviert\n");
         else
             printf("    Parallel Tempering deaktiviert\n");
+
         printf("    Filename: '%s'\n",o.filename);
         printf("    \n");
     }
@@ -272,7 +299,7 @@ gs_graph_t **init_graphs(const options_t o)
 
     /* Verknüpfe die Knoten */
     //create_edges_regular(g);
-    create_edges_relative_neighborhood(g, o);
+    create_edges(g, o);
 
     for(nT=0;nT<o.num_temps;nT++)
     {
@@ -514,7 +541,93 @@ void create_edges_regular(gs_graph_t *g)
     }
 }
 
-/*! \fn void create_edges_relative_neighborhood(gs_graph_t *g, options_t o)
+/*! \fn inline int check_relative_neighborhood(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3)
+    \brief Prüft, ob node3 im Lune zwischen node1 und node2 liegt
+
+    \param [in]    dist12   Abstandsquadrat zwischen node1 und node2
+    \param [in]    node1    Erster  Knoten
+    \param [in]    node2    Zweiter Knoten
+    \param [in]    node3    Dritter Knoten
+*/
+inline int check_relative_neighborhood(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3)
+{
+    double dist13, dist23;
+    dist12*=dist12;
+    /* Überprüfe diesen Punkte */
+    dist13 = (node1.x-node3.x)*(node1.x-node3.x)
+            + (node1.y-node3.y)*(node1.y-node3.y);
+    dist23 = (node2.x-node3.x)*(node2.x-node3.x)
+            + (node2.y-node3.y)*(node2.y-node3.y);
+    if( (dist13 < dist12 && dist23 < dist12) )
+        return(0);
+    else
+        return(1);
+}
+/*! \fn inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1)
+    \brief Gibt die "Bounding Box" der zu überprüfenden Knoten an
+
+    \param [in]    node1    Erster  Knoten
+    \param [in]    node2    Zweiter Knoten
+    \param [out]   x0       untere x-Grenze
+    \param [out]   x1       obere  x-Grenze
+    \param [out]   y0       untere y-Grenze
+    \param [out]   y1       obere y-Grenze
+*/
+inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1)
+{
+    *x0 = MAX(floor(node1.x-dist12), floor(node2.x-dist12));
+    *x1 = MIN(ceil(node1.x+dist12), ceil(node2.x+dist12));
+    *y0 = MAX(floor(node1.y-dist12), floor(node2.y-dist12));
+    *y1 = MIN(ceil(node1.y+dist12), ceil(node2.y+dist12));
+}
+
+/*! \fn inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3)
+    \brief Prüft, ob node3 im Kreis zwischen node1 und node2 liegt
+
+    \param [in]    dist12   Abstand zwischen node1 und node2
+    \param [in]    node1    Erster  Knoten
+    \param [in]    node2    Zweiter Knoten
+    \param [in]    node3    Dritter Knoten
+*/
+inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3)
+{
+    double dist3m;
+    double mid_x, mid_y;
+    /* Mittelpunkt */
+    mid_x = (node1.x+node2.x)/2;
+    mid_y = (node1.y+node2.y)/2;
+    /* Überprüfe diesen Punkte */
+    dist3m = (mid_x-node3.x)*(mid_x-node3.x)
+            + (mid_y-node3.y)*(mid_y-node3.y);
+
+    if( (sqrt(dist3m) <= dist12/2) )
+        return(0);
+    else
+        return(1);
+}
+
+/*! \fn inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1)
+    \brief Gibt die "Bounding Box" der zu überprüfenden Knoten an
+
+    \param [in]    node1    Erster  Knoten
+    \param [in]    node2    Zweiter Knoten
+    \param [out]   x0       untere x-Grenze
+    \param [out]   x1       obere  x-Grenze
+    \param [out]   y0       untere y-Grenze
+    \param [out]   y1       obere y-Grenze
+*/
+inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1)
+{
+    double mid_x, mid_y;
+    mid_x = (node1.x+node2.x)/2;
+    mid_y = (node1.y+node2.y)/2;
+    *x0 = floor(mid_x-dist12/2);
+    *x1 = ceil(mid_x+dist12/2);
+    *y0 = floor(mid_y-dist12/2);
+    *y1 = ceil(mid_y+dist12/2);
+}
+
+/*! \fn void create_edges(gs_graph_t *g, options_t o)
     \brief Fügt Kanten zu einem Graphen hinzu, wodurch ein
             Relative Neighborhood Graph erzeugt werden soll.
 
@@ -522,30 +635,49 @@ void create_edges_regular(gs_graph_t *g)
     dem (euklidischen) Abstand der Knoten ermittelt
 
     \param [in,out]    g    Graph, der modifiziert werden soll
+    \param [in]        o    Optionen (weighting Funktion)
 */
-void create_edges_relative_neighborhood(gs_graph_t *g, options_t o)
+void create_edges(gs_graph_t *g, options_t o)
 {
     /*! Prinzip:
         -#  Zuerst kachele einen Graphen, aus neun Kopien des Originalgraphen,
             um die periodischen Randbedingen zu beachten.
             - Index 0 ist der original Graph, der Rest wird im
               Uhrzeigersinn beginnend über dem Original durchnummeriert
-        -#  Erstelle den Graphen und berechne aus den Abständen, die dabei
+        -#  Zeichne die Kanten ein
+            - Dies kann durch verschiedene Bedingungsfunktionen zB. für
+              einen Relative Neighborhood Graphen oder Gabriel Graph
+              angepasst werden.
+            - Beim naiven Ansatz (für jedes Knotenpaar alle Knoten
+              testen, ob sie im Lune liegen -> O(n^3) ) steigt der
+              Rechenaufwand extrem.
+            - Hier wird der ALG-2-CELL Algorithmus \cite melchert2013percolation
+              verwendet, der das Gebiet in Zellen einteilt, die eine
+              Liste aller Knoten in ihrem Bereich enthalten. So muss
+              nur eine kleinere Untermenge des Graphen getestet werden.
+        -#  Berechne aus den Abständen, die dabei
             berechnet werden können die Kantengewichte.
         -#  Lösche die Kopien. */
-    int i, j, k;
+    int i, j, k, l;
     int n, m;
+    int x, y;
     int L;
     /* Die folgenden Array, geben an, in welche Richtung der Graph mit
      * gleichem Index verschoben werden soll */
     int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
     int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
-    int point_found;
 
     gs_graph_t *gekachelte[9];
     gs_node_t node1, node2, node3;
-    double dist12, dist13, dist23;
+    double dist12;
     double weight;
+    elem_t ***cell_list;
+    elem_t *list;
+
+    int found;
+    int x0,x1,y0,y1;
+
+    double n_x, n_y;
 
     L = g->L;
 
@@ -561,6 +693,25 @@ void create_edges_relative_neighborhood(gs_graph_t *g, options_t o)
             gekachelte[i]->node[j].y += verschiebung_y[i]*L;
         }
 
+    /* Allokation und Initialisierung der cell-list vgl. O. Melchert */
+    cell_list = (elem_t***) malloc(L * sizeof(elem_t**));
+    for(i=0;i<L;i++)
+        cell_list[i] = (elem_t**) malloc(L * sizeof(elem_t*));
+    for(i=0;i<L;i++)
+        for(j=0;j<L;j++)
+            cell_list[i][j] = NULL;
+
+    for(i=0;i<g->num_nodes;i++)
+    {
+        n_x = g->node[i].x;
+        n_y = g->node[i].y;
+        n_x += L * verschiebung_x[point_not_in_domain(n_x, n_y, L)];
+        n_y += L * verschiebung_y[point_not_in_domain(n_x, n_y, L)];
+        n = (int)floor(n_y);
+        m = (int)floor(n_x);
+        cell_list[n][m] = insert_element(cell_list[n][m], create_element(i), NULL);
+    }
+
     /* Knoten verbinden */
     /* Versuche jeden Knoten aus g_0 mit allen Knoten aus g_0..8 zu verbinden */
     for(i=0;i<g->num_nodes;i++)                /* Alle Knoten aus g_0 */
@@ -572,31 +723,49 @@ void create_edges_relative_neighborhood(gs_graph_t *g, options_t o)
             for(k=i+1;k<g->num_nodes;k++)     /* Alle Knoten aus g_0..8,
                                       die noch nicht überprüft wurden */
             {
+                found = 0;
                 if(k==i)
                     continue;
                 node2 = gekachelte[j]->node[k];
-                dist12 = (node1.x-node2.x)*(node1.x-node2.x)
-                                + (node1.y-node2.y)*(node1.y-node2.y);
+                dist12 = sqrt( (node1.x-node2.x)*(node1.x-node2.x)
+                                + (node1.y-node2.y)*(node1.y-node2.y) );
                 /* Check Kriterium */
-                point_found = 0;
-                for(m=0;m<g->num_nodes && !point_found;m++)
-                {
-                    if(m==k || m==i)
-                        continue;
-                    for(n=0;n<9 && !point_found;n++)
+                /* Dies muss nur für Knoten in Cells zwischen node1 und
+                 * node2 geschehen. Sobald ein Knoten im Lune gefunden
+                 * wurde, kann die Suche abgebrochen werden. */
+                /* Hier werden die Zellen, die eine rechteckige
+                 * "Bounding Box" um den Lune bilden überprüft. */
+                /* Berechne Indizes der zu durchsuchenden Cells */
+
+                o.graph_cell_border_fkt(node1, node2, dist12, &x0, &x1, &y0, &y1);
+
+                for(x=x0;x<x1 && !found;x++)
+                    for(y=y0;y<y1 && !found;y++)
                     {
-                        node3 = gekachelte[n]->node[m];
-                        dist13 = (node1.x-node3.x)*(node1.x-node3.x)
-                                + (node1.y-node3.y)*(node1.y-node3.y);
-                        dist23 = (node2.x-node3.x)*(node2.x-node3.x)
-                                + (node2.y-node3.y)*(node2.y-node3.y);
-                        if( (dist13 < dist12 && dist23 < dist12) )
-                            point_found = 1;
+                        /* Überprüfe die Liste möglicher Knoten */
+                        /* % L berücksichtige periodische Randbedingungen */
+                        /* y+3*L stellt sicher, dass keine negativen Indizes auftauchen */
+                        list = cell_list[(y+3*L)%L][(x+3*L)%L];
+                        while(list != NULL && !found)
+                        {
+                            if(list->value == k || list->value == i)
+                            {
+                                list = list->next;
+                                continue;
+                            }
+                            for(l=0;l<9 && !found;l++)
+                            {
+                                node3 = gekachelte[l]->node[list->value];
+                                /* teste, ob Knoten im Lune liegt */
+                                if(!o.graph_fkt(dist12, node1, node2, node3))
+                                    found = 1;
+                            }
+                            list = list->next;
+                        }
                     }
-                }
-                if(!point_found)
+                if(!found)
                 {
-                    weight = o.weighting_fkt(o.alpha, sqrt(dist12));
+                    weight = o.weighting_fkt(o.alpha, dist12);
                     gs_insert_edge(g, i, k, weight);
                 }
             }
@@ -605,7 +774,18 @@ void create_edges_relative_neighborhood(gs_graph_t *g, options_t o)
     /* Kachelung freigeben */
     for(i=1;i<9;i++)
         gs_clear_graph(gekachelte[i]);
+
+    for(i=0;i<L;i++)
+    {
+        for(j=0;j<L;j++)
+        {
+            clear_list(cell_list[i][j]);
+        }
+        free(cell_list[i]);
+    }
+    free(cell_list);
 }
+
 
 /*! \fn void init_spins_randomly(gs_graph_t *g, gsl_rng *rng)
     \brief Weist den Spins im gs_graph_t g zufällige Werte zu
