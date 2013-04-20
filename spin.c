@@ -713,7 +713,7 @@ void metropolis_monte_carlo_sweep(gs_graph_t *g, gsl_rng *rng)
     int n;
     int num_nodes;
     int to_flip_idx;
-    int delta_E;
+    double delta_E;
     double A;
     gs_edge_t *list;
 
@@ -737,6 +737,9 @@ void metropolis_monte_carlo_sweep(gs_graph_t *g, gsl_rng *rng)
             delta_E += g->node[list[n].index].spin * list[n].weight;
         }
         /* Hier werden die Koeffizienten berücksichtigt: E = 2s_k*sum */
+        /* !!! */
+        /* Stimmt das so für allgemeine J ? */
+        /* !!! */
         delta_E *= 2 * g->node[to_flip_idx].spin;
         /*! - Berechne die Wahrscheinlichkeit, mit der der Flip akzeptiert
             wird.
