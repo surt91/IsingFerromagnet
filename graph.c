@@ -142,9 +142,13 @@ void svg_circle(double x, double y, int filled, FILE *file)
     if(filled == 1)
         fprintf(file, "<circle cx='%f' cy='%f' r='8' stroke='black'\
               stroke-width='2' fill='black'/>\n", (x+1)*40, (y+1)*40);
-    else
+    else if(filled == -1)
         fprintf(file, "<circle cx='%f' cy='%f' r='8' stroke='black'\
               stroke-width='2' fill='white'/>\n", (x+1)*40, (y+1)*40);
+    else
+        fprintf(file, "<circle cx='%f' cy='%f' r='8' stroke='black'\
+              stroke-width='2' stroke-dasharray='2,3' fill='white'/>\n",
+                                                    (x+1)*40, (y+1)*40);
 }
 
 /*! \fn void svg_circle(double x, double y, int filled, FILE *file)
@@ -207,6 +211,7 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename)
     double dx, dy, dx2, dy2;
     double x, y;
     double n1_x, n1_y, n2_x, n2_y;
+    double off;
     int n2_i;
     double tmp_length;
     int tmp_idx;
@@ -230,10 +235,11 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename)
                         version='1.1' baseProfile='full'>\n");
 
     /* Rahmen */
-    svg_line(0, g->L, 0, 0, svg_file);
-    svg_line(g->L, g->L, 0, g->L, svg_file);
-    svg_line(g->L, 0, g->L, g->L, svg_file);
-    svg_line(0, 0, 0, g->L, svg_file);
+    off = 0;
+    svg_line(   0+off, g->L+off,    0+off,    0+off, svg_file);
+    svg_line(g->L+off, g->L+off,    0+off, g->L+off, svg_file);
+    svg_line(g->L+off,    0+off, g->L+off, g->L+off, svg_file);
+    svg_line(   0+off,    0+off,    0+off, g->L+off, svg_file);
 
     /* Kanten */
     for(i=0;i<g->num_nodes;i++)
@@ -273,7 +279,7 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename)
                 y = n2_y - L*verschiebung_y[tmp_idx];
                 svg_line(n1_x, x, n1_y, y, svg_file);
                 /* zeichne zusätzlich den periodischen Punkt */
-                svg_circle(x, y , g->node[n2_i].spin, svg_file);
+                svg_circle(x, y , 0, svg_file);
             }
             else
                 svg_line(n1_x, n2_x, n1_y, n2_y, svg_file);
