@@ -192,12 +192,13 @@ int point_not_in_domain(double x, double  y, int L)
     return(0);
 }
 
-/*! \fn void print_graph_svg(gs_graph_t *g)
+/*! \fn void print_graph_svg(gs_graph_t *g, char* svg_filename)
     \brief gibt den Graphen als SVG aus
 
-    \param g   : Array des Graphs
+    \param g    Array des Graphs
+    \param o    Optionen (Dateiname)
 */
-void print_graph_svg(gs_graph_t *g)
+void print_graph_svg(gs_graph_t *g, char* svg_filename)
 {
     int i, n ,j;
     int L;
@@ -214,10 +215,10 @@ void print_graph_svg(gs_graph_t *g)
 
     L=g->L;
 
-    svg_file = fopen("graph.svg", "w");
+    svg_file = fopen(svg_filename, "w");
     if(svg_file == NULL)
     {
-        fprintf(stderr,"ERROR: %s kann nicht geöffnet werden","graph.svg");
+        fprintf(stderr,"ERROR: %s kann nicht geöffnet werden",svg_filename);
         exit(-1);
     }
 

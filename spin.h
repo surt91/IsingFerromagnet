@@ -52,6 +52,7 @@ typedef struct
     double *list_of_temps;                //!< Liste der pT Temperaturen
     int verbose;                                 //!< Gesprächiger Modus
     char filename[MAX_LEN_FILENAME];               //!< Output Dateiname
+    char svg_filename[MAX_LEN_FILENAME];     //!< Graph Output Dateiname
     gsl_rng *rng;                           //!< Random Number Generator
 
 } options_t;

@@ -26,9 +26,12 @@ int main(int argc, char *argv[])
         fprintf(stderr,"Starte Initialisierung\n");
     list_of_graphs = init_graphs(o);
 
-    print_graph_svg(list_of_graphs[0]);
-
+    if(o.verbose)
+        fprintf(stderr,"Starte Monte Carlo Simulation\n");
     do_mc_simulation(list_of_graphs, o);
+
+    if(o.svg_filename[0] != '\0')
+        print_graph_svg(list_of_graphs[0], o.svg_filename);
 
     /* gebe Speicher frei */
     for(nT=0;nT<o.num_temps;nT++)
@@ -89,10 +92,12 @@ options_t get_cl_args(int argc, char *argv[])
     /* weitere Optionen */
     o.verbose = 0;
     custom_file_name = 0;
+    /* SVG Output */
+    o.svg_filename[0]='\0';
 
 
     opterr = 0;
-    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:u:i:wp")) != -1)
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:g:u:i:wp")) != -1)
         switch (c)
         {
             case 'T':
@@ -142,6 +147,9 @@ options_t get_cl_args(int argc, char *argv[])
                 custom_file_name = 1;
                 strncpy(o.filename, optarg, MAX_LEN_FILENAME);
                 break;
+            case 'g':
+                strncpy(o.svg_filename, optarg, MAX_LEN_FILENAME);
+                break;
             case 'u':
                 o.start_order = atoi(optarg);
                 break;
@@ -169,6 +177,7 @@ options_t get_cl_args(int argc, char *argv[])
                 fprintf(stderr,"    -sx    sigma x                           (double)\n");
                 fprintf(stderr,"    -ax    alpha x                           (double)\n");
                 fprintf(stderr,"    -ox    filename (max. 79 Zeichen)        (string)\n");
+                fprintf(stderr,"    -gx    SVG Filename (max. 79 Zeichen)    (string)\n");
                 fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
                 fprintf(stderr,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
                 fprintf(stderr,"    -px    Parallel Tempering mit einer Komma        \n");

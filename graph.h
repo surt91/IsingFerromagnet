@@ -49,7 +49,7 @@ typedef struct
 void gs_insert_edge(gs_graph_t *g, int from, int to, double weight);
 gs_graph_t *gs_create_graph(int L);
 gs_graph_t *gs_copy_graph(gs_graph_t *g);
-void print_graph_svg(gs_graph_t *g);
+void print_graph_svg(gs_graph_t *g, char* svg_filename);
 void gs_clear_graph(gs_graph_t *g);
 int gs_edge_exists(gs_graph_t *g, int from, int to);
 
