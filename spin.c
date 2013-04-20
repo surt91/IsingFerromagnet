@@ -531,7 +531,7 @@ void create_edges_relative_neighborhood(gs_graph_t *g, options_t o)
      * gleichem Index verschoben werden soll */
     int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
     int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
-    int flag;
+    int point_found;
 
     gs_graph_t *gekachelte[9];
     gs_node_t node1, node2, node3;
@@ -569,29 +569,23 @@ void create_edges_relative_neighborhood(gs_graph_t *g, options_t o)
                 dist12 = (node1.x-node2.x)*(node1.x-node2.x)
                                 + (node1.y-node2.y)*(node1.y-node2.y);
                 /* Check Kriterium */
-                flag = 1;
-                for(m=0;m<g->num_nodes;m++)        /* Alle Knoten */
+                point_found = 0;
+                for(m=0;m<g->num_nodes && !point_found;m++)
                 {
-                    for(n=0;n<9;n++)               /* Alle Graphen g_0..8 */
+                    if(m==k || m==i)
+                        continue;
+                    for(n=0;n<9 && !point_found;n++)
                     {
-
-                        if(m==k || m==i)
-                        {
-                            continue;
-                        }
                         node3 = gekachelte[n]->node[m];
                         dist13 = (node1.x-node3.x)*(node1.x-node3.x)
                                 + (node1.y-node3.y)*(node1.y-node3.y);
                         dist23 = (node2.x-node3.x)*(node2.x-node3.x)
                                 + (node2.y-node3.y)*(node2.y-node3.y);
                         if( (dist13 < dist12 && dist23 < dist12) )
-                        {
-                            flag = 0;
-                            break;
-                        }
+                            point_found = 1;
                     }
                 }
-                if(flag)
+                if(!point_found)
                 {
                     weight = o.weighting_fkt(o.alpha, sqrt(dist12));
                     gs_insert_edge(g, i, k, weight);
