@@ -653,13 +653,19 @@ void create_edges(gs_graph_t *g, options_t o)
             - Beim naiven Ansatz (für jedes Knotenpaar alle Knoten
               testen, ob sie im Lune liegen -> O(n^3) ) steigt der
               Rechenaufwand extrem.
-            - Hier wird der ALG-2-CELL Algorithmus \cite melchert2013percolation
-              verwendet, der das Gebiet in Zellen einteilt, die eine
-              Liste aller Knoten in ihrem Bereich enthalten. So muss
-              nur eine kleinere Untermenge des Graphen getestet werden.
+            - Hier wird der Cell Teil des ALG-2-CELL Algorithmus
+              \cite melchert2013percolation mit dem naiven Ansatz
+              kombiniert ("ALG-1-CELL"). Das Gebiet wird in Zellen
+              einteilt, die eine Liste aller Knoten in ihrem Bereich
+              enthalten. So muss nur eine kleinere Untermenge des
+              Graphen getestet werden.
+              Dadurch liegt die Laufzeit zwar noch in O(n^3), ist aber
+              dennoch deutlich schneller (2-3 Größenordungen auf L=32),
+              als der naive Ansatz.
         -#  Berechne aus den Abständen, die dabei
             berechnet werden können die Kantengewichte.
-        -#  Lösche die Kopien. */
+        -#  Lösche die Kopien.
+     */
     int i, j, k, l;
     int n, m;
     int x, y;

@@ -27,7 +27,7 @@ void push(stack_t *stack, int item)
         stack->value[stack->index++] = item;
     else
     {
-        fprintf(stderr,"Stackoverflow ;)");
+        fprintf(stderr,"Stackoverflow ;)\n");
         exit(-1);
     }
 }
@@ -44,7 +44,7 @@ int pop(stack_t *stack)
         return(stack->value[--stack->index]);
     else
     {
-        fprintf(stderr,"Stackunderflow ;)");
+        fprintf(stderr,"Stackunderflow ;)\n");
         exit(-1);
     }
 
