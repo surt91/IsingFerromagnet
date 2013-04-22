@@ -451,11 +451,8 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
 
                 list_of_graphs[nT]->M = calculate_magnetisation(list_of_graphs[nT]);
             }
-            for(nT=0;nT<o.num_temps;nT++)
-            {
-                write_data_to_file(data_out_file,list_of_graphs,map_of_temps,o,i);
-                par_temp(list_of_graphs, map_of_temps, o, par_temp_versuche,par_temp_erfolge);
-            }
+            write_data_to_file(data_out_file,list_of_graphs,map_of_temps,o,i);
+            par_temp(list_of_graphs, map_of_temps, o, par_temp_versuche,par_temp_erfolge);
         }
     #endif
 
@@ -936,9 +933,6 @@ void metropolis_monte_carlo_sweep(gs_graph_t *g, gsl_rng *rng)
             delta_E += g->node[list[n].index].spin * list[n].weight;
         }
         /* Hier werden die Koeffizienten berücksichtigt: E = 2s_k*sum */
-        /* !!! */
-        /* Stimmt das so für allgemeine J ? */
-        /* !!! */
         delta_E *= 2 * g->node[to_flip_idx].spin;
         /*! - Berechne die Wahrscheinlichkeit, mit der der Flip akzeptiert
             wird.
