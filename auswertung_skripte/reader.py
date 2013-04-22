@@ -24,6 +24,10 @@ class output_reader():
     # Temperatur (Liste)
     ## @var L
     # Kantenlänge (int)
+    ## @var sigma
+    # Unordnungsparameter (double)
+    ## @var x
+    # Unordnungsrealisierung (int)
     ## @var N
     # Anzahl Sweeps (Liste)
     ## @var M
@@ -51,6 +55,8 @@ class output_reader():
             self.T = "".join(header).rpartition("T=")[2]
             self.T = [float(i) for i in self.T.split(",")[0:-1]]
 
+            self.sigma = "".join(header).rpartition("sigma=")[2].partition (" #")[0]
+            self.x = "".join(header).rpartition("x=")[2].partition (" #")[0]
             self.L = "".join(header).rpartition("L=")[2].partition (" #")[0]
 
             # Zwischenspeichern, da Einträge im Reader verbraucht werden

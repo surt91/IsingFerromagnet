@@ -56,6 +56,8 @@ typedef struct
     double (*weighting_fkt)(double, double);    //!< Gewichtungsfunktion
     double alpha;                               //!< Gewichtungsparamter
     int start_order;                                   //!< Startordnung
+    int seed;                                                  //!< Seed
+
     int (*graph_fkt)(double, gs_node_t, gs_node_t, gs_node_t); //!<Graph
     void (*graph_cell_border_fkt)(gs_node_t, gs_node_t, double,
                                      int*, int*, int*, int*); //!< Graph

@@ -56,7 +56,6 @@ options_t get_cl_args(int argc, char *argv[])
 {
     int c;
     int i, j, nT;
-    int seed;
     int custom_file_name;
     int wolff_flag;
     int graph_type;
@@ -86,7 +85,7 @@ options_t get_cl_args(int argc, char *argv[])
     /* Anfangsbedingung der Spins: 0: zufällig, 1: alle up */
     o.start_order = 0;
     /* Seed für Zufallsgenerator */
-    seed = 42;
+    o.seed = 42;
     /* Soll Wolff Algorithmus benutzt werden? */
     wolff_flag = 0;
     /* Soll Parallel Tempering Algorithmus benutzt werden? */
@@ -133,7 +132,7 @@ options_t get_cl_args(int argc, char *argv[])
                 o.L = atoi(optarg);
                 break;
             case 'x':
-                seed = atoi(optarg);
+                o.seed = atoi(optarg);
                 break;
             case 'N':
                 o.N = atoi(optarg);
@@ -206,7 +205,7 @@ options_t get_cl_args(int argc, char *argv[])
     if(!custom_file_name)
     {
         /* standard Dateiname */
-        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_L_%d_s_%.1f_x_%d.dat", o.L, o.sigma, seed);
+        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_s_%.1f_x_%d_L_%d.dat", o.sigma, o.seed, o.L);
     }
 
     /* Welchen Algorithmus nutzen? */
@@ -237,7 +236,7 @@ options_t get_cl_args(int argc, char *argv[])
     /* Setup RNG */
     gsl_rng_env_setup();
     o.rng = gsl_rng_alloc (gsl_rng_mt19937);
-    gsl_rng_set(o.rng, seed);
+    gsl_rng_set(o.rng, o.seed);
 
     if(o.verbose)
     {
@@ -250,7 +249,7 @@ options_t get_cl_args(int argc, char *argv[])
         printf("           \n");
         printf("    N     = %d\n", o.N);
         printf("    t_eq  = %d\n", o.t_eq);
-        printf("    seed  = %d\n", seed);
+        printf("    seed  = %d\n", o.seed);
         printf("    sigma = %f\n", o.sigma);
         printf("    alpha = %f\n", o.alpha);
         if(o.start_order)
@@ -386,7 +385,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         exit(-1);
     }
     /* Schreibe Header */
-    fprintf(data_out_file, "# N E M # L=%d # T= ", list_of_graphs[0]->L);
+    fprintf(data_out_file, "# N E M # sigma=%.2f # x=%d # L=%d # T= ", o.sigma, o.seed, list_of_graphs[0]->L);
     for(nT=0;nT<o.num_temps;nT++)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
