@@ -206,7 +206,7 @@ options_t get_cl_args(int argc, char *argv[])
     if(!custom_file_name)
     {
         /* standard Dateiname */
-        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_L_%d.dat", o.L);
+        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_L_%d_s_%.1f_x_%d.dat", o.L, o.sigma, seed);
     }
 
     /* Welchen Algorithmus nutzen? */
@@ -243,9 +243,10 @@ options_t get_cl_args(int argc, char *argv[])
     {
         printf("gewählte Parameter:\n");
         printf("    L     = %d\n", o.L);
-        printf("    T     =  \n");
+        printf("    T     = ");
         for(i=0;i<o.num_temps;i++)
-            printf("            %f,\n",(o.list_of_temps)[i]);
+            printf("%.2f, ",(o.list_of_temps)[i]);
+        printf("\n");
         printf("           \n");
         printf("    N     = %d\n", o.N);
         printf("    t_eq  = %d\n", o.t_eq);
@@ -732,8 +733,8 @@ void create_edges(gs_graph_t *g, options_t o)
     /* Versuche jeden Knoten aus g_0 mit allen Knoten aus g_0..8 zu verbinden */
     for(i=0;i<g->num_nodes;i++)                /* Alle Knoten aus g_0 */
     {
-        if(o.verbose)
-            fprintf(stderr, "%5d/%5d\n", i, g->num_nodes-1);
+        //~ if(o.verbose)
+            //~ fprintf(stderr, "%5d/%5d\n", i, g->num_nodes-1);
         node1 = g->node[i];
         for(j=0;j<9;j++)                       /* Alle Graphen g_0..8 */
             for(k=i+1;k<g->num_nodes;k++)     /* Alle Knoten aus g_0..8,
