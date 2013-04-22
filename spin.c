@@ -495,7 +495,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
 */
 double exponential_decay(const double alpha, const double x)
 {
-    return(exp(-alpha*x));
+    return(exp(-alpha*(x-1)));
 }
 
 /*! \fn void move_graph_nodes(gs_graph_t *g, double (*f)(const gsl_rng *, double), gsl_rng *rng, const double sigma)
