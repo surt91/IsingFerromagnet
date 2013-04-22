@@ -64,6 +64,7 @@ typedef struct
     int num_temps;            //!< Wieviele Temperaturen für pT gegeben?
     double *list_of_temps;                //!< Liste der pT Temperaturen
     int verbose;                                 //!< Gesprächiger Modus
+    int zip;                                        //!< gzip Outputfile
     char filename[MAX_LEN_FILENAME];               //!< Output Dateiname
     char svg_filename[MAX_LEN_FILENAME];     //!< Graph Output Dateiname
     gsl_rng *rng;                           //!< Random Number Generator

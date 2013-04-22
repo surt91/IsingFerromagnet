@@ -94,13 +94,14 @@ options_t get_cl_args(int argc, char *argv[])
     o.num_temps = 1;
     /* weitere Optionen */
     o.verbose = 0;
+    o.zip = 0;
     custom_file_name = 0;
     /* SVG Output */
     o.svg_filename[0]='\0';
 
 
     opterr = 0;
-    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:g:u:i:wpt:")) != -1)
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:g:u:i:wpt:z")) != -1)
         switch (c)
         {
             case 'T':
@@ -162,6 +163,9 @@ options_t get_cl_args(int argc, char *argv[])
             case 'v':
                 o.verbose = 1;
                 break;
+            case 'z':
+                o.zip = 1;
+                break;
             case 'w':
                 wolff_flag = 1;
                 break;
@@ -187,8 +191,8 @@ options_t get_cl_args(int argc, char *argv[])
                 fprintf(stderr,"    -gx    SVG Filename (max. 79 Zeichen)    (string)\n");
                 fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
                 fprintf(stderr,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
-                fprintf(stderr,"    -px    Parallel Tempering mit einer Komma        \n");
-                fprintf(stderr,"            getrennten Liste der zu berechnenden Temperaturen \n");
+                fprintf(stderr,"    -p     Parallel Tempering                        \n");
+                fprintf(stderr,"    -z     gzip outputfile                           \n");
                 exit(1);
             default:
                 abort ();
@@ -339,6 +343,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
     FILE *data_out_file;
     int nT;
     int *map_of_temps;
+    char command[MAX_LEN_FILENAME+10];
 
     #ifdef THREADED
         /* Multithreading */
@@ -468,6 +473,12 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
     }
 
     fclose(data_out_file);
+    if(o.zip)
+    {
+        sprintf(command, "gzip %s", o.filename);
+        system(command);                           /* gzip Outputfile */
+    }
+
     free(par_temp_versuche);
     free(par_temp_erfolge);
     #ifdef THREADED
