@@ -74,6 +74,8 @@ options_t get_cl_args(int argc, char *argv[])
     o.N=2000;
     /* nach wie vielen Sweeps ist das Equilibrium erreicht (vgl. t_eq.dat) */
     o.t_eq = 1000;
+    /* alle wieviel sweeps soll ein Wert gespeichert werden (tau) */
+    o.tau = 1;
     /* Parameter, der den Graphentyp beschreibt */
     graph_type = 1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
@@ -140,6 +142,9 @@ options_t get_cl_args(int argc, char *argv[])
             case 'e':
                 o.t_eq = atoi(optarg);
                 break;
+            case 'i':
+                o.tau = atoi(optarg);
+                break;
             case 's':
                 o.sigma = atof(optarg);
                 break;
@@ -183,6 +188,7 @@ options_t get_cl_args(int argc, char *argv[])
                 fprintf(stderr,"    -xx    seed x                               (int)\n");
                 fprintf(stderr,"    -Nx    x Monte Carlo sweeps                 (int)\n");
                 fprintf(stderr,"    -ex    Equilibrium nach x sweeps angenommen (int)\n");
+                fprintf(stderr,"    -ix    autokorrelationszeit                 (int)\n");
                 fprintf(stderr,"    -sx    sigma x                           (double)\n");
                 fprintf(stderr,"    -ax    alpha x                           (double)\n");
                 fprintf(stderr,"    -tx    Graphtyp: (1: RNG, 2: Gabriel)       (int)\n");
@@ -1114,7 +1120,7 @@ void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
     int j;
     int nT;
     /* Schreibe in Datei */
-    if(N > o.t_eq)
+    if(N > o.t_eq && !(N % o.tau))
     {
         fprintf(data_out_file, "%d ", N);
         for(nT=0;nT<o.num_temps;nT++)
