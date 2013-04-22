@@ -4,8 +4,6 @@
 import csv
 from numpy import mean, var, sqrt, std
 
-#~ from scipy.integrate import trapz
-
 class output_reader():
     """!
         Diese Klasse kümmert sich um das Auslesen einzelner Daten Dateien.
@@ -52,12 +50,12 @@ class output_reader():
             reader = csv.reader(csvfile, delimiter=' ')
             header = reader.next()
 
-            self.T = "".join(header).rpartition("T=")[2]
+            self.T = " ".join(header).rpartition("T=")[2]
             self.T = [float(i) for i in self.T.split(",")[0:-1]]
 
-            self.sigma = "".join(header).rpartition("sigma=")[2].partition (" #")[0]
-            self.x = "".join(header).rpartition("x=")[2].partition (" #")[0]
-            self.L = "".join(header).rpartition("L=")[2].partition (" #")[0]
+            self.sigma = " ".join(header).rpartition("sigma=")[2].partition (" #")[0]
+            self.x = " ".join(header).rpartition("x=")[2].partition (" #")[0]
+            self.L = " ".join(header).rpartition("L=")[2].partition (" #")[0]
 
             # Zwischenspeichern, da Einträge im Reader verbraucht werden
             alle = [i for i in reader]
