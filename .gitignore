@@ -1,16 +1,22 @@
 docs/
 
 test
+
+# Daten
 *.dat
+*.db
+
+# Bilder
 *.png
 *.svg
 *.dot
-*.o
-*.out
 
+# Kompilate
+*.o
 *.pyc
 
+# Sonstiges
 *~
-
+*.out
 *_tmp*
 
