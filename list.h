@@ -7,6 +7,7 @@
 struct elem_struct
 {
     int                value;    //!< Der Inhalt
+    int               kachel;    //!< Der Inhalt
     struct elem_struct *next;    //!< Pointer zum Nachfolger (NULL, wenn letzter)
 };
 
@@ -15,7 +16,7 @@ typedef struct elem_struct elem_t;
 elem_t *remove_node(elem_t *head, elem_t *elem);
 
 void clear_list(elem_t *head);
-elem_t *create_element(int value);
+elem_t *create_element(int value, int kachel);
 int delete_element(elem_t *elem);
 elem_t *insert_element(elem_t *head, elem_t *elem, elem_t *ort);
 void print_list(elem_t *list);

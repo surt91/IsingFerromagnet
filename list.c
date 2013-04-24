@@ -53,11 +53,12 @@ void clear_list(elem_t *head)
 /*      create_element()
     Erstellt ein neues Element der Liste. Aus Kapitel 'Listen'
 */
-elem_t *create_element(int value)
+elem_t *create_element(int value, int kachel)
 {
     elem_t *elem;
     elem = (elem_t *) malloc (sizeof(elem_t));
     elem->value = value;
+    elem->kachel = kachel;
     elem->next = NULL;
 
     return(elem);

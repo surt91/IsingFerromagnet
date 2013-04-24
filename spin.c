@@ -593,12 +593,17 @@ inline int check_relative_neighborhood(double dist12, gs_node_t node1, gs_node_t
     \param [out]   y0       untere y-Grenze
     \param [out]   y1       obere y-Grenze
 */
-inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1)
+inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t node2, double dist12, int L, int *x0, int *x1, int *y0, int *y1)
 {
     *x0 = MAX(floor(node1.x-dist12), floor(node2.x-dist12));
     *x1 = MIN(ceil(node1.x+dist12), ceil(node2.x+dist12));
     *y0 = MAX(floor(node1.y-dist12), floor(node2.y-dist12));
     *y1 = MIN(ceil(node1.y+dist12), ceil(node2.y+dist12));
+
+    *x0 = MAX(*x0, -L);
+    *x1 = MIN(*x1, 2*L-1);
+    *y0 = MAX(*y0, -L);
+    *y1 = MIN(*y1, 2*L-1);
 }
 
 /*! \fn inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3)
@@ -637,7 +642,7 @@ inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_nod
     \param [out]   y0       untere y-Grenze
     \param [out]   y1       obere y-Grenze
 */
-inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1)
+inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dist12, int L, int *x0, int *x1, int *y0, int *y1)
 {
     double mid_x, mid_y;
     mid_x = (node1.x+node2.x)/2;
@@ -646,6 +651,11 @@ inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dis
     *x1 = ceil(mid_x+dist12/2);
     *y0 = floor(mid_y-dist12/2);
     *y1 = ceil(mid_y+dist12/2);
+
+    *x0 = MAX(*x0, -L);
+    *x1 = MIN(*x1, 2*L-1);
+    *y0 = MAX(*y0, -L);
+    *y1 = MIN(*y1, 2*L-1);
 }
 
 /*! \fn void create_edges(gs_graph_t *g, options_t o)
@@ -685,7 +695,7 @@ void create_edges(gs_graph_t *g, options_t o)
             berechnet werden können die Kantengewichte.
         -#  Lösche die Kopien.
      */
-    int i, j, k, l;
+    int i, j, k;
     int n, m;
     int x, y;
     int L;
@@ -721,30 +731,29 @@ void create_edges(gs_graph_t *g, options_t o)
         }
 
     /* Allokation und Initialisierung der cell-list vgl. O. Melchert */
-    cell_list = (elem_t***) malloc(L * sizeof(elem_t**));
-    for(i=0;i<L;i++)
-        cell_list[i] = (elem_t**) malloc(L * sizeof(elem_t*));
-    for(i=0;i<L;i++)
-        for(j=0;j<L;j++)
+    cell_list = (elem_t***) malloc(3*L * sizeof(elem_t**));
+    for(i=0;i<3*L;i++)
+        cell_list[i] = (elem_t**) malloc(3*L * sizeof(elem_t*));
+    for(i=0;i<3*L;i++)
+        for(j=0;j<3*L;j++)
             cell_list[i][j] = NULL;
 
-    for(i=0;i<g->num_nodes;i++)
-    {
-        n_x = g->node[i].x;
-        n_y = g->node[i].y;
-        n_x += L * verschiebung_x[point_not_in_domain(n_x, n_y, L)];
-        n_y += L * verschiebung_y[point_not_in_domain(n_x, n_y, L)];
-        n = (int)floor(n_y);
-        m = (int)floor(n_x);
-        cell_list[n][m] = insert_element(cell_list[n][m], create_element(i), NULL);
-    }
+    for(j=0;j<9;j++)
+        for(i=0;i<gekachelte[j]->num_nodes;i++)
+        {
+            n_x = gekachelte[j]->node[i].x;
+            n_y = gekachelte[j]->node[i].y;
+            n = (int)floor(n_y);
+            m = (int)floor(n_x);
+            /* Da n und m negativ sein können, werden die Indizes hier
+             * verschoben */
+            cell_list[n+L][m+L] = insert_element(cell_list[n+L][m+L], create_element(i,j), NULL);
+        }
 
     /* Knoten verbinden */
     /* Versuche jeden Knoten aus g_0 mit allen Knoten aus g_0..8 zu verbinden */
     for(i=0;i<g->num_nodes;i++)                /* Alle Knoten aus g_0 */
     {
-        //~ if(o.verbose)
-            //~ fprintf(stderr, "%5d/%5d\n", i, g->num_nodes-1);
         node1 = g->node[i];
         for(j=0;j<9;j++)                       /* Alle Graphen g_0..8 */
             for(k=i+1;k<g->num_nodes;k++)     /* Alle Knoten aus g_0..8,
@@ -764,15 +773,13 @@ void create_edges(gs_graph_t *g, options_t o)
                  * "Bounding Box" um den Lune bilden überprüft. */
                 /* Berechne Indizes der zu durchsuchenden Cells */
 
-                o.graph_cell_border_fkt(node1, node2, dist12, &x0, &x1, &y0, &y1);
+                o.graph_cell_border_fkt(node1, node2, dist12, L, &x0, &x1, &y0, &y1);
 
                 for(x=x0;x<x1 && !found;x++)
                     for(y=y0;y<y1 && !found;y++)
                     {
                         /* Überprüfe die Liste möglicher Knoten */
-                        /* % L berücksichtige periodische Randbedingungen */
-                        /* y+3*L stellt sicher, dass keine negativen Indizes auftauchen */
-                        list = cell_list[(y+3*L)%L][(x+3*L)%L];
+                        list = cell_list[y+L][x+L];
                         while(list != NULL && !found)
                         {
                             if(list->value == k || list->value == i)
@@ -780,13 +787,10 @@ void create_edges(gs_graph_t *g, options_t o)
                                 list = list->next;
                                 continue;
                             }
-                            for(l=0;l<9 && !found;l++)
-                            {
-                                node3 = gekachelte[l]->node[list->value];
-                                /* teste, ob Knoten im Lune liegt */
-                                if(!o.graph_fkt(dist12, node1, node2, node3))
-                                    found = 1;
-                            }
+                            node3 = gekachelte[list->kachel]->node[list->value];
+                            /* teste, ob Knoten im Lune liegt */
+                            if(!o.graph_fkt(dist12, node1, node2, node3))
+                                found = 1;
                             list = list->next;
                         }
                     }
@@ -802,9 +806,9 @@ void create_edges(gs_graph_t *g, options_t o)
     for(i=1;i<9;i++)
         gs_clear_graph(gekachelte[i]);
 
-    for(i=0;i<L;i++)
+    for(i=0;i<3*L;i++)
     {
-        for(j=0;j<L;j++)
+        for(j=0;j<3*L;j++)
         {
             clear_list(cell_list[i][j]);
         }
