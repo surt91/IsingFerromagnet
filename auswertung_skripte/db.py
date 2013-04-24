@@ -7,6 +7,7 @@ import zlib
 
 import array
 from numpy import mean, var
+from numpy import std
 
 from reader import *
 
@@ -64,58 +65,66 @@ class Database():
     def writeBinderForGnuplot(self, name):
         c = self.conn.cursor()
         for s in self.getSigmas():
-            c.execute('SELECT binder FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT binder,binderErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
+            dx = [i[1] for i in x]
             x = [i[0] for i in x]
 
-            self.writeFileForGnuplot(name+"_{0}".format(s)+".dat", x)
+            self.writeFileForGnuplot(name+"_{0}".format(s)+".dat", x, dx)
 
     def writeMeanForGnuplot(self, name):
         c = self.conn.cursor()
         for s in self.getSigmas():
-            c.execute('SELECT meanM FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT meanM,meanMErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
+            dx = [i[1] for i in x]
             x = [i[0] for i in x]
 
-            self.writeFileForGnuplot(name+"M_{0}".format(s)+".dat", x)
+            self.writeFileForGnuplot(name+"_M_{0}".format(s)+".dat", x, dx)
         for s in self.getSigmas():
-            c.execute('SELECT meanE FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT meanE,meanEErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
+            dx = [i[1] for i in x]
             x = [i[0] for i in x]
 
-            self.writeFileForGnuplot(name+"E_{0}".format(s)+".dat", x)
+            self.writeFileForGnuplot(name+"_E_{0}".format(s)+".dat", x, dx)
     def writeVarForGnuplot(self, name):
         c = self.conn.cursor()
         for s in self.getSigmas():
-            c.execute('SELECT varM FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT varM,varMErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
+            dx = [i[1] for i in x]
             x = [i[0] for i in x]
 
-            self.writeFileForGnuplot(name+"M_{0}".format(s)+".dat", x)
+            self.writeFileForGnuplot(name+"_M_{0}".format(s)+".dat", x, dx)
         for s in self.getSigmas():
-            c.execute('SELECT varE FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT varE,varEErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
+            dx = [i[1] for i in x]
             x = [i[0] for i in x]
 
-            self.writeFileForGnuplot(name+"E_{0}".format(s)+".dat", x)
+            self.writeFileForGnuplot(name+"_E_{0}".format(s)+".dat", x, dx)
 
-    def writeFileForGnuplot(self, name, x):
+    def writeFileForGnuplot(self, name, x, dx):
         Ls = sorted(list(set(self.getLs())))
         Ts = sorted(list(set(self.getTs())))
         numL = len(set(Ls))
         numT = len(set(Ts))
 
-        f = open("data/"+name, "w")
+        f = open("../data/"+name, "w")
+        f.write("# In der ersten Spalte steht die Temperatur in den Spalten daneben stehen Werte und Fehlerwerte für jeweils ein L.")
         f.write("# L: ")
         for l in Ls:
             f.write(" {0}".format(l))
 
         # Zeilen
         for i in range(numT):
-            f.write("\n{0}".format(Ts[i]))
+            f.write("\n{0}  ".format(Ts[i]))
             # Spalten
             for j in range(numL):
                 f.write(" {0}".format(x[j+i*numL]))
+                f.write(" {0}  ".format(dx[j+i*numL]))
+        f.close()
 
     def createNewDatabase(self, dataPath):
         print("create new Database: '{0}'".format(self.dbPath))
@@ -135,7 +144,7 @@ class Database():
     def calculateNewDatabase(self):
         print("calculating")
         self.conn.execute("""CREATE TABLE calculated_data
-            (sigma real, L integer, T real, binder real, meanM real, meanE real, varM real, varE real)""")
+            (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real)""")
 
         sigmas = self.getSigmas()
         Ls = self.getLs()
@@ -146,13 +155,14 @@ class Database():
             for L in Ls:
                 print "L: ", L
                 for T in Ts:
-                    binder = self.getAverageM(self.getBinder, s, L, T)
-                    mM = self.getAverageM(mean, s, L, T)
-                    mE = self.getAverageE(mean, s, L, T)
-                    vM = self.getAverageM(var, s, L, T)
-                    vE = self.getAverageE(var, s, L, T)
-                    rows.append((s, L, T, binder, mM, mE, vM, vE))
-        self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?)', rows)
+                    # Ist es korrekt hier einfach den Standardfehler des Mittelwerts zu nehmen?
+                    binder, binderErr = self.getAverageM(self.getBinder, s, L, T)
+                    mM, mMErr = self.getAverageM(mean, s, L, T)
+                    mE, mEErr = self.getAverageE(mean, s, L, T)
+                    vM, vMErr = self.getAverageM(var, s, L, T)
+                    vE, vEErr = self.getAverageE(var, s, L, T)
+                    rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr))
+        self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
         self.conn.commit()
 
     def getXs(self):
@@ -217,9 +227,11 @@ class Database():
         return f(self.getEForSigmaLT(sigma, L, T, x))
 
     def getAverageM(self, f, sigma, L, T):
-        return mean([self.getExpectationM(f, sigma, L, T, x) for x in self.getXs()])
+        lst = [self.getExpectationM(f, sigma, L, T, x) for x in self.getXs()]
+        return mean(lst), std(lst)
     def getAverageE(self, f, sigma, L, T):
-        return mean([self.getExpectationE(f, sigma, L, T, x) for x in self.getXs()])
+        lst = [self.getExpectationE(f, sigma, L, T, x) for x in self.getXs()]
+        return mean(lst), std(lst)
 
 if __name__ == '__main__':
     a=Database()
