@@ -517,10 +517,14 @@ double exponential_decay(const double alpha, const double x)
 void move_graph_nodes(gs_graph_t *g, double (*f)(const gsl_rng *, double), gsl_rng *rng, const double sigma)
 {
     int n;
+    const int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
+    const int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
     for(n=0;n<g->num_nodes; n++)
     {
         g->node[n].x += f(rng, sigma);
         g->node[n].y += f(rng, sigma);
+        g->node[n].x += g->L * verschiebung_x[point_not_in_domain(g->node[n].x, g->node[n].y, g->L)];
+        g->node[n].y += g->L * verschiebung_y[point_not_in_domain(g->node[n].x, g->node[n].y, g->L)];
     }
 }
 
@@ -687,8 +691,8 @@ void create_edges(gs_graph_t *g, options_t o)
     int L;
     /* Die folgenden Array, geben an, in welche Richtung der Graph mit
      * gleichem Index verschoben werden soll */
-    int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
-    int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
+    const int verschiebung_x[9] = {0,0,1,1,1,0,-1,-1,-1};
+    const int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
 
     gs_graph_t *gekachelte[9];
     gs_node_t node1, node2, node3;
