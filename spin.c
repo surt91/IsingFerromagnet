@@ -255,6 +255,7 @@ options_t get_cl_args(int argc, char *argv[])
         printf("           \n");
         printf("    N     = %d\n", o.N);
         printf("    t_eq  = %d\n", o.t_eq);
+        printf("    tau   = %d\n", o.tau);
         printf("    seed  = %d\n", o.seed);
         printf("    sigma = %f\n", o.sigma);
         printf("    alpha = %f\n", o.alpha);
