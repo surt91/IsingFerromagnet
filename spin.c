@@ -695,7 +695,7 @@ void create_edges(gs_graph_t *g, options_t o)
             berechnet werden können die Kantengewichte.
         -#  Lösche die Kopien.
      */
-    int i, j, k;
+    int i, j, k, l, q, r, s;
     int n, m;
     int x, y;
     int L;
@@ -775,8 +775,9 @@ void create_edges(gs_graph_t *g, options_t o)
 
                 o.graph_cell_border_fkt(node1, node2, dist12, L, &x0, &x1, &y0, &y1);
 
-                for(x=x0;x<x1 && !found;x++)
-                    for(y=y0;y<y1 && !found;y++)
+                /* Trickreiche Schleife, damit man aus der Mitte startet */
+                for(x=(x0+x1)/2,l=0,q=-1;x<=x1 && !found;x-=q*l++,q*=-1)
+                    for(y=(y0+y1)/2,s=0,r=-1;y<=y1 && !found;y-=r*s++,r*=-1)
                     {
                         /* Überprüfe die Liste möglicher Knoten */
                         list = cell_list[y+L][x+L];
