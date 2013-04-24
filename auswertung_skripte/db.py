@@ -105,7 +105,7 @@ class Database():
         numL = len(set(Ls))
         numT = len(set(Ts))
 
-        f = open(name, "w")
+        f = open("data/"+name, "w")
         f.write("# L: ")
         for l in Ls:
             f.write(" {0}".format(l))
@@ -133,6 +133,7 @@ class Database():
             self.conn.commit()
 
     def calculateNewDatabase(self):
+        print("calculating")
         self.conn.execute("""CREATE TABLE calculated_data
             (sigma real, L integer, T real, binder real, meanM real, meanE real, varM real, varE real)""")
 
@@ -220,4 +221,5 @@ class Database():
     def getAverageE(self, f, sigma, L, T):
         return mean([self.getExpectationE(f, sigma, L, T, x) for x in self.getXs()])
 
-a=Database()
+if __name__ == '__main__':
+    a=Database()
