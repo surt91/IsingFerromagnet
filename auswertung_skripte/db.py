@@ -125,6 +125,17 @@ class Database():
                 f.write(" {0}".format(x[j+i*numL]))
                 f.write(" {0}  ".format(dx[j+i*numL]))
         f.close()
+        f = open("../data/"+name.replace(".dat",".gp"), "w")
+        f.write("set terminal png\n")
+        f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
+        f.write("set xlabel 'Temperatur'\n")
+        f.write("set ylabel '{0}'\n".format(name.partition("_")[0]))
+        f.write("set key right\n")
+
+        f.write("plot ")
+        for [i,l] in enumerate(Ls):
+            f.write("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'L = {0}'".format(l)))
+        f.close()
 
     def createNewDatabase(self, dataPath):
         print("create new Database: '{0}'".format(self.dbPath))
