@@ -5,14 +5,15 @@ from reader import *
 import os
 from subprocess import call
 
+from getConfig import getConfig
+
 path = "../data/corr"
 N = 150
 
-t=",".join([str(i) for i in arange(0.1,3.3,0.1)]) #passend fur 16 und 32 fur grossere muss ich noch finden
-#~ for s in arange(0,1.3,0.1):
-    #for l in [16,32,64,128]:
+config = getConfig()
+
 for s in [0,1]:
-    for l in [16, 32, 64, 128]:
+    for [l,t,t_eq,tau] in config:
         call(["time", "../test", "-T{0}".format(t),
                "-L{0}".format(l), "-e0",
                "-N{0}".format(N),

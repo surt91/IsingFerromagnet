@@ -5,6 +5,7 @@ import numpy
 from reader import *
 import os
 from subprocess import call
+from getConfig import getConfig
 
 def autocorr(x):
     """! Autokorreltationsfunktion
@@ -32,21 +33,20 @@ if __name__ == "__main__":
     path = "../data/tau"
     N = 500
 
-    t=",".join([str(i) for i in arange(0.1,3.3,0.1)]) #passend fur 16 und 32 fur grossere muss ich noch finden
-    #~ for s in arange(0,1.3,0.1):
-        #for l in [16,32,64,128]:
+    config = getConfig()
+
     for s in [0,1]:
-        for [l,e] in [(16,30*2), (32,30*2), (64,100*2), (128,200*2)]:
+        for [l,t,t_eq,tau] in config:
             filename = "{2}/S_{0}_L_{1}_ra.dat".format(s,l, path)
             call(["time", "../test", "-T{0}".format(t),
-                   "-L{0}".format(l), "-e{0}".format(e),
+                   "-L{0}".format(l), "-e{0}".format(t_eq),
                    "-N{0}".format(N),
                    "-v", "-u0", "-x42", "-w", "-p",
                    "-s{0}".format(s), "-a0.5",
                    "-t1", "-o{0}".format(filename)])
             r = output_reader(filename)
             tauM = [getAutocorrTime(r.M[i]) for i in range(len(r.T))]
-            print "L = 16"
+            print "L = {0}".format(l)
             print "T tau"
             for i in range(len(r.T)):
                 print "{0}  {1}".format(r.T[i], tauM[i])
