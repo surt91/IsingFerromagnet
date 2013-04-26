@@ -23,11 +23,11 @@ int main(int argc, char *argv[])
     o = get_cl_args(argc, argv);
 
     if(o.verbose)
-        fprintf(stderr,"Starte Initialisierung\n");
+        fprintf(stdout,"Starte Initialisierung\n");
     list_of_graphs = init_graphs(o);
 
     if(o.verbose)
-        fprintf(stderr,"Starte Monte Carlo Simulation\n");
+        fprintf(stdout,"Starte Monte Carlo Simulation\n");
     do_mc_simulation(list_of_graphs, o);
 
     if(o.svg_filename[0] != '\0')
@@ -177,27 +177,27 @@ options_t get_cl_args(int argc, char *argv[])
                 o.par_temp_flag = 1;
                 break;
             case '?':
-                fprintf(stderr,
+                fprintf(stdout,
                         "Unknown option character `\\x%x'.\n", optopt);
             case 'h':
-                fprintf(stderr,"Benutzung: %s -[hTLxNesou]\n",argv[0]);
-                fprintf(stderr,"    -h     Zeigt diese Hilfe                         \n");
-                fprintf(stderr,"    -v     gesprächiger Modus                        \n");
-                fprintf(stderr,"    -Tx    Temperatur x                      (double)\n");
-                fprintf(stderr,"    -Lx    Länge x                              (int)\n");
-                fprintf(stderr,"    -xx    seed x                               (int)\n");
-                fprintf(stderr,"    -Nx    x Monte Carlo sweeps                 (int)\n");
-                fprintf(stderr,"    -ex    Equilibrium nach x sweeps angenommen (int)\n");
-                fprintf(stderr,"    -ix    autokorrelationszeit                 (int)\n");
-                fprintf(stderr,"    -sx    sigma x                           (double)\n");
-                fprintf(stderr,"    -ax    alpha x                           (double)\n");
-                fprintf(stderr,"    -tx    Graphtyp: (1: RNG, 2: Gabriel)       (int)\n");
-                fprintf(stderr,"    -ox    filename (max. 79 Zeichen)        (string)\n");
-                fprintf(stderr,"    -gx    SVG Filename (max. 79 Zeichen)    (string)\n");
-                fprintf(stderr,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
-                fprintf(stderr,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
-                fprintf(stderr,"    -p     Parallel Tempering                        \n");
-                fprintf(stderr,"    -z     gzip outputfile                           \n");
+                fprintf(stdout,"Benutzung: %s -[hTLxNesou]\n",argv[0]);
+                fprintf(stdout,"    -h     Zeigt diese Hilfe                         \n");
+                fprintf(stdout,"    -v     gesprächiger Modus                        \n");
+                fprintf(stdout,"    -Tx    Temperatur x                      (double)\n");
+                fprintf(stdout,"    -Lx    Länge x                              (int)\n");
+                fprintf(stdout,"    -xx    seed x                               (int)\n");
+                fprintf(stdout,"    -Nx    x Monte Carlo sweeps                 (int)\n");
+                fprintf(stdout,"    -ex    Equilibrium nach x sweeps angenommen (int)\n");
+                fprintf(stdout,"    -ix    autokorrelationszeit                 (int)\n");
+                fprintf(stdout,"    -sx    sigma x                           (double)\n");
+                fprintf(stdout,"    -ax    alpha x                           (double)\n");
+                fprintf(stdout,"    -tx    Graphtyp: (1: RNG, 2: Gabriel)       (int)\n");
+                fprintf(stdout,"    -ox    filename (max. 79 Zeichen)        (string)\n");
+                fprintf(stdout,"    -gx    SVG Filename (max. 79 Zeichen)    (string)\n");
+                fprintf(stdout,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
+                fprintf(stdout,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
+                fprintf(stdout,"    -p     Parallel Tempering                        \n");
+                fprintf(stdout,"    -z     gzip outputfile                           \n");
                 exit(1);
             default:
                 abort ();
@@ -465,15 +465,15 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
 
     if(o.verbose)
     {
-        fprintf(stderr,"Akzeptanzniveaus: \n");
-        fprintf(stderr,"T: ");
+        fprintf(stdout,"Akzeptanzniveaus: \n");
+        fprintf(stdout,"T: ");
         for(nT=0;nT<o.num_temps;nT++)
-            fprintf(stderr,"%.2f      ",list_of_graphs[map_of_temps[nT]]->T);
-        fprintf(stderr,"\n");
-        fprintf(stderr,"A: ");
+            fprintf(stdout,"%.2f      ",list_of_graphs[map_of_temps[nT]]->T);
+        fprintf(stdout,"\n");
+        fprintf(stdout,"A: ");
         for(nT=0;nT<o.num_temps;nT++)
-            fprintf(stderr,"     %.2f ", par_temp_erfolge[map_of_temps[nT]]/par_temp_versuche[map_of_temps[nT]]);
-        fprintf(stderr,"\n");
+            fprintf(stdout,"     %.2f ", par_temp_erfolge[map_of_temps[nT]]/par_temp_versuche[map_of_temps[nT]]);
+        fprintf(stdout,"\n");
     }
 
     fclose(data_out_file);
