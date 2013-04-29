@@ -1,4 +1,5 @@
 docs/
+data/
 
 test
 
@@ -19,4 +20,3 @@ test
 *~
 *.out
 *_tmp*
-
