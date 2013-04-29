@@ -38,9 +38,9 @@ class Database():
         # lade Datenbank und hole sie in den Speicher
         self.conn = sqlite3.connect(self.dbPath)
 
-        self.writeBinderForGnuplot("Binder")
-        self.writeMeanForGnuplot("Mean")
-        self.writeVarForGnuplot("Var")
+        self.writeBinderForGnuplot()
+        self.writeMeanForGnuplot()
+        self.writeVarForGnuplot()
 
         self.conn.close()
 
@@ -69,59 +69,30 @@ class Database():
 
         return g
 
-    def writeBinderForGnuplot(self, name):
+    def writeForGnuplot(self, name, val, valErr):
         c = self.conn.cursor()
-        for s in self.getSigmas():
-            c.execute('SELECT T,binder,binderErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+        for s in self.getDifferent("sigma"):
+            c.execute('SELECT {0},{1} FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC'.format(val, valErr), (s,))
             x = c.fetchall()
-            dx = [i[2] for i in x]
-            t = [i[0] for i in x]
-            x = [i[1] for i in x]
+            dx = [i[1] for i in x]
+            x = [i[0] for i in x]
 
-            self.writeFileForGnuplot(name+"_{0}".format(s)+".dat", t, x, dx)
+            self.writeFileForGnuplot(name+"_{0}".format(s)+".dat", x, dx)
 
-    def writeMeanForGnuplot(self, name):
-        c = self.conn.cursor()
-        for s in self.getSigmas():
-            c.execute('SELECT T,meanM,meanMErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
-            x = c.fetchall()
-            dx = [i[2] for i in x]
-            t = [i[0] for i in x]
-            x = [i[1] for i in x]
+    def writeBinderForGnuplot(self):
+        self.writeForGnuplot("Binder", "binder", "binderErr")
+    def writeMeanForGnuplot(self):
+        self.writeForGnuplot("Mean_M_", "meanM", "meanMErr")
+        self.writeForGnuplot("Mean_E_", "meanE", "meanEErr")
+    def writeVarForGnuplot(self):
+        self.writeForGnuplot("Var_M_", "varM", "varMErr")
+        self.writeForGnuplot("Var_E_", "varE", "varEErr")
 
-            self.writeFileForGnuplot(name+"_M_{0}".format(s)+".dat", t, x, dx)
-        for s in self.getSigmas():
-            c.execute('SELECT T,meanE,meanEErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
-            x = c.fetchall()
-            dx = [i[2] for i in x]
-            t = [i[0] for i in x]
-            x = [i[1] for i in x]
-
-            self.writeFileForGnuplot(name+"_E_{0}".format(s)+".dat", t, x, dx)
-    def writeVarForGnuplot(self, name):
-        c = self.conn.cursor()
-        for s in self.getSigmas():
-            c.execute('SELECT T,varM,varMErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
-            x = c.fetchall()
-            dx = [i[2] for i in x]
-            t = [i[0] for i in x]
-            x = [i[1] for i in x]
-
-            self.writeFileForGnuplot(name+"_M_{0}".format(s)+".dat", t, x, dx)
-        for s in self.getSigmas():
-            c.execute('SELECT T,varE,varEErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
-            x = c.fetchall()
-            dx = [i[2] for i in x]
-            t = [i[0] for i in x]
-            x = [i[1] for i in x]
-
-            self.writeFileForGnuplot(name+"_E_{0}".format(s)+".dat", t, x, dx)
-
-    def writeFileForGnuplot(self, name, t, x, dx):
-        Ls = sorted(list(set(self.getLs())))
-        #~ Ts = sorted(list(set(self.getTs())))
+    def writeFileForGnuplot(self, name, x, dx):
+        Ls = sorted(list(set(self.getDifferent("L"))))
+        Ts = sorted(list(set(self.getDifferent("T"))))
         numL = len(set(Ls))
-        #~ numT = len(set(Ts))
+        numT = len(set(Ts))
 
         f = open("../data/out/"+name, "w")
         f.write("# Je drei Spalten beschreiben ein L: Temperatur, Wert, Fehler\n")
@@ -131,10 +102,10 @@ class Database():
         f.write("\n")
 
         # Zeilen
-        for i in range(len(set(t))):
+        for i in range(numT):
+            f.write("{0}".format(Ts[i]))
             # Spalten
             for j in range(numL):
-                f.write(" {0}".format(t[j+i*numL]))
                 f.write(" {0}".format(x[j+i*numL]))
                 f.write(" {0}  ".format(dx[j+i*numL]))
             f.write("\n")
@@ -149,7 +120,7 @@ class Database():
         f.write("plot ")
         tmpStr = ""
         for [i,l] in enumerate(Ls):
-            tmpStr+=("'{0}' using {1}:{2}:{3} w yerrorbar title {4}, ".format(name, 3*i+1, 3*i+2, 3*i+3, "'L = {0}'".format(l)))
+            tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'L = {0}'".format(l)))
         f.write(tmpStr[:-2])
         f.close()
 
@@ -158,7 +129,6 @@ class Database():
 
         self.conn.execute("""CREATE TABLE rawdata
             (n blob, sigma real, L integer, x integer, T real, M blob, E blob)""")
-
         for f in os.listdir(dataPath):
             if not ".dat" in f:
                 continue
@@ -166,7 +136,7 @@ class Database():
             r = output_reader(os.path.join(dataPath,f))
             t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i])) for i in range(len(r.T))]
             self.conn.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?)', t)
-            self.conn.commit()
+        self.conn.commit()
         self.conn.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
 
     def calculateNewDatabase(self):
@@ -174,9 +144,9 @@ class Database():
         self.conn.execute("""CREATE TABLE calculated_data
             (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real)""")
 
-        sigmas = self.getSigmas()
-        Ls = self.getLs()
-        Ts = self.getTs()
+        sigmas = self.getDifferent("sigma")
+        Ls = self.getDifferent("L")
+        Ts = self.getDifferent("T")
         rows=[]
         for s in sigmas:
             logging.info("sigma: %f" % s)
@@ -193,39 +163,12 @@ class Database():
         self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
         self.conn.commit()
 
-    def getXs(self):
+    def getDifferent(self, val):
         c = self.conn.cursor()
         try:
-            c.execute('SELECT x FROM rawdata')
+            c.execute('SELECT {0} FROM rawdata'.format(val))
         except :
-            c.execute('SELECT x FROM calculated_data')
-        x = c.fetchall()
-        x = (i[0] for i in x)
-        return list(set(x))
-    def getTs(self):
-        c = self.conn.cursor()
-        try:
-            c.execute('SELECT T FROM rawdata')
-        except :
-            c.execute('SELECT T FROM calculated_data')
-        x = c.fetchall()
-        x = (i[0] for i in x)
-        return list(set(x))
-    def getLs(self):
-        c = self.conn.cursor()
-        try:
-            c.execute('SELECT L FROM rawdata')
-        except :
-            c.execute('SELECT L FROM calculated_data')
-        x = c.fetchall()
-        x = (i[0] for i in x)
-        return list(set(x))
-    def getSigmas(self):
-        c = self.conn.cursor()
-        try:
-            c.execute('SELECT sigma FROM rawdata')
-        except :
-            c.execute('SELECT sigma FROM calculated_data')
+            c.execute('SELECT {0} FROM calculated_data'.format(val))
         x = c.fetchall()
         x = (i[0] for i in x)
         return list(set(x))
