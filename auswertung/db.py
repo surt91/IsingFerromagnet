@@ -89,12 +89,16 @@ class Database():
         self.writeForGnuplot("Var_E", "varE", "varEErr")
 
     def writeFileForGnuplot(self, name, x, dx):
+        directory = "../data/out/"
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
         Ls = sorted(list(set(self.getDifferent("L"))))
         Ts = sorted(list(set(self.getDifferent("T"))))
         numL = len(set(Ls))
         numT = len(set(Ts))
 
-        f = open("../data/out/"+name, "w")
+        f = open(os.path.join(directory,name), "w")
         f.write("# Je drei Spalten beschreiben ein L: Temperatur, Wert, Fehler\n")
         f.write("# L: ")
         for l in Ls:
@@ -110,7 +114,7 @@ class Database():
                 f.write(" {0}  ".format(dx[j+i*numL]))
             f.write("\n")
         f.close()
-        f = open("../data/out/"+name.replace(".dat",".gp"), "w")
+        f = open(os.path.join(directory,name.replace(".dat",".gp")), "w")
         f.write("set terminal png\n")
         f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
         f.write("set xlabel 'Temperatur'\n")

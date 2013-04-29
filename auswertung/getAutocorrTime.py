@@ -30,14 +30,16 @@ def getAutocorrTime(m):
     return tau
 
 if __name__ == "__main__":
-    path = "../data/tau"
+    directory = "../data/tau"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     N = 500
 
     config = getConfig()
 
     for s in [0,1]:
         for [l,t,t_eq,tau] in config:
-            filename = "{2}/S_{0}_L_{1}_ra.dat".format(s,l, path)
+            filename = "{2}/S_{0}_L_{1}_ra.dat".format(s,l, directory)
             call(["time", "../test", "-T{0}".format(t),
                    "-L{0}".format(l), "-e{0}".format(t_eq),
                    "-N{0}".format(N),

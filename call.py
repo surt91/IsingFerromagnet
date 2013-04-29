@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import os
 from subprocess import call
 from numpy import arange
 from auswertung.getConfig import getConfig
@@ -19,6 +20,9 @@ def f(config):
                        "-t1", "-i{0}".format(tau)])
 
 if __name__ == '__main__':
+    directory = "data/"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     # Also Grosse und Equilibriums Zeit
     # Diese sind durch tests in zeiten.par eingetragen
     configs = getConfig()
