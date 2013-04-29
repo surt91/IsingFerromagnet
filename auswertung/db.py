@@ -70,65 +70,72 @@ class Database():
     def writeBinderForGnuplot(self, name):
         c = self.conn.cursor()
         for s in self.getSigmas():
-            c.execute('SELECT binder,binderErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT T,binder,binderErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
-            dx = [i[1] for i in x]
-            x = [i[0] for i in x]
+            dx = [i[2] for i in x]
+            t = [i[0] for i in x]
+            x = [i[1] for i in x]
 
-            self.writeFileForGnuplot(name+"_{0}".format(s)+".dat", x, dx)
+            self.writeFileForGnuplot(name+"_{0}".format(s)+".dat", t, x, dx)
 
     def writeMeanForGnuplot(self, name):
         c = self.conn.cursor()
         for s in self.getSigmas():
-            c.execute('SELECT meanM,meanMErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT T,meanM,meanMErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
-            dx = [i[1] for i in x]
-            x = [i[0] for i in x]
+            dx = [i[2] for i in x]
+            t = [i[0] for i in x]
+            x = [i[1] for i in x]
 
-            self.writeFileForGnuplot(name+"_M_{0}".format(s)+".dat", x, dx)
+            self.writeFileForGnuplot(name+"_M_{0}".format(s)+".dat", t, x, dx)
         for s in self.getSigmas():
-            c.execute('SELECT meanE,meanEErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT T,meanE,meanEErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
-            dx = [i[1] for i in x]
-            x = [i[0] for i in x]
+            dx = [i[2] for i in x]
+            t = [i[0] for i in x]
+            x = [i[1] for i in x]
 
-            self.writeFileForGnuplot(name+"_E_{0}".format(s)+".dat", x, dx)
+            self.writeFileForGnuplot(name+"_E_{0}".format(s)+".dat", t, x, dx)
     def writeVarForGnuplot(self, name):
         c = self.conn.cursor()
         for s in self.getSigmas():
-            c.execute('SELECT varM,varMErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT T,varM,varMErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
-            dx = [i[1] for i in x]
-            x = [i[0] for i in x]
+            dx = [i[2] for i in x]
+            t = [i[0] for i in x]
+            x = [i[1] for i in x]
 
-            self.writeFileForGnuplot(name+"_M_{0}".format(s)+".dat", x, dx)
+            self.writeFileForGnuplot(name+"_M_{0}".format(s)+".dat", t, x, dx)
         for s in self.getSigmas():
-            c.execute('SELECT varE,varEErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
+            c.execute('SELECT T,varE,varEErr FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC', (s,))
             x = c.fetchall()
-            dx = [i[1] for i in x]
-            x = [i[0] for i in x]
+            dx = [i[2] for i in x]
+            t = [i[0] for i in x]
+            x = [i[1] for i in x]
 
-            self.writeFileForGnuplot(name+"_E_{0}".format(s)+".dat", x, dx)
+            self.writeFileForGnuplot(name+"_E_{0}".format(s)+".dat", t, x, dx)
 
-    def writeFileForGnuplot(self, name, x, dx):
+    def writeFileForGnuplot(self, name, t, x, dx):
         Ls = sorted(list(set(self.getLs())))
-        Ts = sorted(list(set(self.getTs())))
+        #~ Ts = sorted(list(set(self.getTs())))
         numL = len(set(Ls))
-        numT = len(set(Ts))
+        #~ numT = len(set(Ts))
 
         f = open("../data/"+name, "w")
-        f.write("# In der ersten Spalte steht die Temperatur in den Spalten daneben stehen Werte und Fehlerwerte für jeweils ein L.")
+        f.write("# Je drei Spalten beschreiben ein L: Temperatur, Wert, Fehler\n")
         f.write("# L: ")
         for l in Ls:
             f.write(" {0}".format(l))
+        f.write("\n")
 
         # Zeilen
-        for i in range(numT):
-            f.write("\n{0}  ".format(Ts[i]))
+        for i in range(len(set(t))):
             # Spalten
             for j in range(numL):
+                f.write(" {0}".format(t[j+i*numL]))
                 f.write(" {0}".format(x[j+i*numL]))
                 f.write(" {0}  ".format(dx[j+i*numL]))
+            f.write("\n")
         f.close()
         f = open("../data/"+name.replace(".dat",".gp"), "w")
         f.write("set terminal png\n")
@@ -140,7 +147,7 @@ class Database():
         f.write("plot ")
         tmpStr = ""
         for [i,l] in enumerate(Ls):
-            tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'L = {0}'".format(l)))
+            tmpStr+=("'{0}' using {1}:{2}:{3} w yerrorbar title {4}, ".format(name, 3*i+1, 3*i+2, 3*i+3, "'L = {0}'".format(l)))
         f.write(tmpStr[:-2])
         f.close()
 
