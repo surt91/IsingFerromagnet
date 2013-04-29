@@ -1,6 +1,8 @@
 #! /usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+import os
+
 T=[]
 A=[]
 S=[]
@@ -29,6 +31,7 @@ with open("log.txt", 'r') as f:
             a[i][j] = [A[n] for n in range(len(T)) if S[n] == s and L[n] == l]
 
     aOut = [[[0 for x in a[i][j][0]] for j in range(len(set(L)))] for i in range(len(set(S)))]
+    tOut = [[[0 for x in a[i][j][0]] for j in range(len(set(L)))] for i in range(len(set(S)))]
     for [i,s] in enumerate(sorted(list(set(S)))):
         for [j,l] in enumerate(sorted(list(set(L)))):
             for x in a[i][j]:
@@ -37,18 +40,39 @@ with open("log.txt", 'r') as f:
 
     for [i,s] in enumerate(sorted(list(set(S)))):
         for [j,l] in enumerate(sorted(list(set(L)))):
+            tOut[i][j] = t[i][j][0]
             for n in range(len(aOut[i][j])):
                 aOut[i][j][n] /= num
 
 
-    for [i,s] in enumerate(sorted(list(set(S)))):
-        print "sigma = ", s
-        for [j,l] in enumerate(sorted(list(set(L)))):
-            print "L = ", l
-            for [n,x] in enumerate(aOut[i][j]):
-                print " {0:.2f}".format(t[i][j][0][n]),
-                if x < 0.3:
-                    print '\033[91m', "{0:.2f}".format(x), '\033[0m'
-                else:
-                    print " {0:.2f}".format(x)
-            print
+    for [j,l] in enumerate(sorted(list(set(L)))):
+        name = "L_"+str(l)
+        directory = "../data/temps/"
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        f = open(os.path.join(directory,name+".gp"), "w")
+        #~ f.write("set terminal  postscript eps enhanced\n")
+        #~ f.write("set output '{0}'\n".format(name+".eps"))
+        f.write("set terminal png\n")
+        f.write("set output '{0}'\n".format(name+".png"))
+        f.write("set xlabel 'Temperatur'\n")
+        f.write("set ylabel '{0}'\n".format("Akzeptanz"))
+        f.write("set key right\n")
+
+        f.write("plot ")
+        tmpStr = ""
+        for [i,s] in enumerate(sorted(list(set(S)))):
+            tmpStr+=("'{0}' using 1:{1} w l title {2}, ".format(name+".dat", i+2, "'sigma" +" = {0}'".format(s)))
+        f.write(tmpStr[:-2])
+        f.close()
+
+        f = open(os.path.join(directory,name+".dat"), "w")
+        i=0
+        for [n,tx] in enumerate(tOut[i][j][:-1]):
+            f.write("{0}".format(tx))
+            for [i,s] in enumerate(sorted(list(set(S)))):
+                # Spalten
+                f.write(" {0}  ".format(aOut[i][j][n]))
+            i+=1
+            f.write("\n")
