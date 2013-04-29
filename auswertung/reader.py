@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import csv
+import logging
 from numpy import mean, var, sqrt, std
 
 class output_reader():
@@ -43,10 +44,10 @@ class output_reader():
             und in der dritten die Magnetisierung pro Spin.
         """
         if not ".dat" in filename:
-            print "Kein gültiger name: "+filename
+            logging.info("Kein gültiger name: "+filename)
             return
         with open(filename, 'rb') as csvfile:
-            print "reading: ", filename
+            logging.info("reading: " + filename)
             reader = csv.reader(csvfile, delimiter=' ')
             header = reader.next()
 
@@ -64,4 +65,4 @@ class output_reader():
             self.E = [[float(j[2*i+1]) for j in alle] for i in range(len(self.T))]
             self.M = [[float(j[2*i+2]) for j in alle] for i in range(len(self.T))]
 
-            print "finished reading"
+            logging.info("finished reading")

@@ -4,12 +4,17 @@
 import os
 import sqlite3
 import zlib
+import logging
 
 import array
 from numpy import mean, var
 from numpy import std
 
 from reader import *
+
+logging.basicConfig(level=logging.INFO,
+                format='%(asctime)s -- %(levelname)s :: %(message)s',
+                datefmt='%d.%m.%YT%H:%M:%S')
 
 class Database():
     def __init__(self, dbPath = "data.db", dataPath = "../data"):
@@ -21,11 +26,11 @@ class Database():
             self.createNewDatabase(dataPath)
             self.calculateNewDatabase()
             # Copy Database to file
-            print "copy Database to {0}".format(self.dbPath)
+            logging.info("copy Database to {0}".format(self.dbPath))
             new_db = sqlite3.connect(self.dbPath)
             query = "".join(line for line in self.conn.iterdump() if "calculated_data" in line)
             new_db.executescript(query)
-            print "  copied"
+            logging.info("  copied")
             self.conn.close()
 
         # lade Datenbank und hole sie in den Speicher
@@ -140,7 +145,7 @@ class Database():
         f.close()
 
     def createNewDatabase(self, dataPath):
-        print("create new Database: '{0}'".format(self.dbPath))
+        logging.info("create new Database: '{0}'".format(self.dbPath))
 
         self.conn.execute("""CREATE TABLE rawdata
             (n blob, sigma real, L integer, x integer, T real, M blob, E blob)""")
@@ -155,7 +160,7 @@ class Database():
             self.conn.commit()
 
     def calculateNewDatabase(self):
-        print("calculating")
+        logging.info("calculating")
         self.conn.execute("""CREATE TABLE calculated_data
             (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real)""")
 
@@ -164,9 +169,9 @@ class Database():
         Ts = self.getTs()
         rows=[]
         for s in sigmas:
-            print "sigma: ", s
+            logging.info("sigma: %f" % s)
             for L in Ls:
-                print "L: ", L
+                logging.info("L: %d" % L)
                 for T in Ts:
                     # Ist es korrekt hier einfach den Standardfehler des Mittelwerts zu nehmen?
                     binder, binderErr = self.getAverageM(self.getBinder, s, L, T)
