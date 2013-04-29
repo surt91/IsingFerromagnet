@@ -133,8 +133,10 @@ class Database():
         f.write("set key right\n")
 
         f.write("plot ")
+        tmpStr = ""
         for [i,l] in enumerate(Ls):
-            f.write("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'L = {0}'".format(l)))
+            tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'L = {0}'".format(l)))
+        f.write(tmpStr[:-2])
         f.close()
 
     def createNewDatabase(self, dataPath):
