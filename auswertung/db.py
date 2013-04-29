@@ -28,7 +28,9 @@ class Database():
             # Copy Database to file
             logging.info("copy Database to {0}".format(self.dbPath))
             new_db = sqlite3.connect(self.dbPath)
-            query = "".join(line for line in self.conn.iterdump() if "calculated_data" in line)
+            self.conn.execute("""DROP TABLE rawdata""")
+            self.conn.execute("""VACUUM""")
+            query = "".join(line for line in self.conn.iterdump())
             new_db.executescript(query)
             logging.info("  copied")
             self.conn.close()
@@ -121,7 +123,7 @@ class Database():
         numL = len(set(Ls))
         #~ numT = len(set(Ts))
 
-        f = open("../data/"+name, "w")
+        f = open("../data/out/"+name, "w")
         f.write("# Je drei Spalten beschreiben ein L: Temperatur, Wert, Fehler\n")
         f.write("# L: ")
         for l in Ls:
@@ -137,7 +139,7 @@ class Database():
                 f.write(" {0}  ".format(dx[j+i*numL]))
             f.write("\n")
         f.close()
-        f = open("../data/"+name.replace(".dat",".gp"), "w")
+        f = open("../data/out/"+name.replace(".dat",".gp"), "w")
         f.write("set terminal png\n")
         f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
         f.write("set xlabel 'Temperatur'\n")
@@ -165,6 +167,7 @@ class Database():
             t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i])) for i in range(len(r.T))]
             self.conn.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?)', t)
             self.conn.commit()
+        self.conn.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
 
     def calculateNewDatabase(self):
         logging.info("calculating")
@@ -227,36 +230,21 @@ class Database():
         x = (i[0] for i in x)
         return list(set(x))
 
-    def getMForSigmaLT(self, sigma, L, T, x):
-        c = self.conn.cursor()
-        c.execute('SELECT M FROM rawdata WHERE sigma = ? AND L = ? AND T = ? AND x = ?', (sigma, L, T, x))
-        try:
-            M = self.getVal(c.fetchone()[0])
-        except TypeError:
-            M = [0]
-        c.close()
-        return M
-    def getEForSigmaLT(self, sigma, L, T, x):
-        c = self.conn.cursor()
-        c.execute('SELECT E FROM rawdata WHERE sigma = ? AND L = ? AND T = ? AND x = ?', (sigma, L, T, x))
-        try:
-            E = self.getVal(c.fetchone()[0])
-        except TypeError:
-            E = [0]
-        c.close()
-        return E
-
-    def getExpectationM(self, f, sigma, L, T, x):
-        return f(list(map(abs,self.getMForSigmaLT(sigma, L, T, x))))
-    def getExpectationE(self, f, sigma, L, T, x):
-        return f(self.getEForSigmaLT(sigma, L, T, x))
-
     def getAverageM(self, f, sigma, L, T):
-        lst = [self.getExpectationM(f, sigma, L, T, x) for x in self.getXs()]
-        return mean(lst), std(lst)
+        c = self.conn.cursor()
+        c.execute('SELECT M FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
+        lst = c.fetchall()
+        c.close()
+        # Berechne die Erwartungswerte
+        M = [f(list(map(abs,self.getVal(i[0])))) for i in lst]
+        # berechne den Mittelwert der Erwartungswerte
+        return mean(M), std(M)
     def getAverageE(self, f, sigma, L, T):
-        lst = [self.getExpectationE(f, sigma, L, T, x) for x in self.getXs()]
-        return mean(lst), std(lst)
+        c = self.conn.cursor()
+        c.execute('SELECT E FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
+        E = [f(self.getVal(i[0])) for i in c.fetchall()]
+        c.close()
+        return mean(E), std(E)
 
 if __name__ == '__main__':
     a=Database()
