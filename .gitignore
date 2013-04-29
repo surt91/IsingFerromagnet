@@ -1,9 +1,9 @@
 docs/
-data/
 
 test
 
 # Daten
+data/
 *.dat
 *.db
 

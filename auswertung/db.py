@@ -82,11 +82,11 @@ class Database():
     def writeBinderForGnuplot(self):
         self.writeForGnuplot("Binder", "binder", "binderErr")
     def writeMeanForGnuplot(self):
-        self.writeForGnuplot("Mean_M_", "meanM", "meanMErr")
-        self.writeForGnuplot("Mean_E_", "meanE", "meanEErr")
+        self.writeForGnuplot("Mean_M", "meanM", "meanMErr")
+        self.writeForGnuplot("Mean_E", "meanE", "meanEErr")
     def writeVarForGnuplot(self):
-        self.writeForGnuplot("Var_M_", "varM", "varMErr")
-        self.writeForGnuplot("Var_E_", "varE", "varEErr")
+        self.writeForGnuplot("Var_M", "varM", "varMErr")
+        self.writeForGnuplot("Var_E", "varE", "varEErr")
 
     def writeFileForGnuplot(self, name, x, dx):
         Ls = sorted(list(set(self.getDifferent("L"))))
