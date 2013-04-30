@@ -93,10 +93,10 @@ class Database():
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        Ls = sorted(list(set(self.getDifferent("L"))))
-        Ts = sorted(list(set(self.getDifferent("T"))))
-        numL = len(set(Ls))
-        numT = len(set(Ts))
+        Ls = sorted(self.getDifferent("L"))
+        Ts = sorted(self.getDifferent("T"))
+        numL = len(Ls)
+        numT = len(Ts)
 
         f = open(os.path.join(directory,name), "w")
         f.write("# Je drei Spalten beschreiben ein L: Temperatur, Wert, Fehler\n")
@@ -170,12 +170,12 @@ class Database():
     def getDifferent(self, val):
         c = self.conn.cursor()
         try:
-            c.execute('SELECT {0} FROM rawdata'.format(val))
+            c.execute('SELECT DISTINCT {0} FROM rawdata'.format(val))
         except :
-            c.execute('SELECT {0} FROM calculated_data'.format(val))
+            c.execute('SELECT DISTINCT {0} FROM calculated_data'.format(val))
         x = c.fetchall()
-        x = (i[0] for i in x)
-        return list(set(x))
+        x = [i[0] for i in x]
+        return x
 
     def getAverageM(self, f, sigma, L, T):
         c = self.conn.cursor()
