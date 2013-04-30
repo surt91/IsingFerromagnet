@@ -68,11 +68,9 @@ with open("log.txt", 'r') as f:
         f.close()
 
         f = open(os.path.join(directory,name+".dat"), "w")
-        i=0
-        for [n,tx] in enumerate(tOut[i][j][:-1]):
+        for [n,tx] in enumerate(tOut[0][j][:-1]):
             f.write("{0}".format(tx))
             for [i,s] in enumerate(sorted(list(set(S)))):
                 # Spalten
                 f.write(" {0}  ".format(aOut[i][j][n]))
-            i+=1
             f.write("\n")

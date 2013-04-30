@@ -75,7 +75,7 @@ if __name__ == "__main__":
         f.close()
 
         f = open(filename, "w")
-        for [n,T] in enumerate(out[j][i][0]):
+        for [n,T] in enumerate(out[j][0][0]):
             f.write("{0}".format(T))
             for [i,s] in enumerate(sigmas):
                 # Spalten
