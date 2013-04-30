@@ -1,4 +1,5 @@
 #! /usr/bin/env python2
+# -*- coding: utf-8 -*-
 
 from numpy import arange, mean
 import numpy
@@ -8,7 +9,7 @@ from subprocess import call
 from getConfig import getConfig
 
 def autocorr(x):
-    """! Autokorreltationsfunktion
+    """! autocorr()
 
     Diese Funktion berechnet die Autokorrelationsfunktion.
     Berechnung erfolgt per FFT und Faltung. O(nlog(n))
@@ -18,7 +19,9 @@ def autocorr(x):
     return numpy.correlate(x, x, mode='full')[len(x)-1:]
 
 def getAutocorrTime(m):
-    """! Berechnet die Autokorrelationszeit \f$ \tau \f$
+    """! getAutocorrTime()
+
+        Berechnet die Autokorrelationszeit \f$ \tau \f$
 
         Die Berechnung erfolgt durch Integration (hier sollte eine
         Summation genau genug sein) der Autokorrelationsfunktion.

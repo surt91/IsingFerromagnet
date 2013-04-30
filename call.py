@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import os
 from subprocess import call
@@ -6,6 +7,7 @@ from numpy import arange
 from auswertung.getConfig import getConfig
 
 def f(config):
+    """Diese Funktion startet die Simulation für verschiedene Parameter"""
     for s in arange(0,1.3,0.1):
         for [l,t,t_eq,tau] in config:
             #~ if s == 0: end = 1
@@ -23,8 +25,6 @@ if __name__ == '__main__':
     directory = "data/"
     if not os.path.exists(directory):
         os.makedirs(directory)
-    # Also Grosse und Equilibriums Zeit
-    # Diese sind durch tests in zeiten.par eingetragen
     configs = getConfig()
     # Generieren der Ergebnisse
     f(configs)

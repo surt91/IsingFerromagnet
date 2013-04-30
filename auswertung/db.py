@@ -18,6 +18,12 @@ logging.basicConfig(level=logging.INFO,
 
 class Database():
     def __init__(self, dbPath = "data.db", dataPath = "../data"):
+        """! Constructor
+
+            Erstellt eine SQLite Datenbank aus den Daten in dataPath, wenn
+            sie noch nicht exisitert, ansonsten liest es sie und gibt
+            Dateien zum Plotten wichtiger Messgrößen aus.
+        """
         self.dbPath = dbPath
 
         if not os.path.isfile(self.dbPath):
@@ -46,12 +52,16 @@ class Database():
 
     @staticmethod
     def getVal(x):
+        """! wandelt den gezippten String der Werte aus der Datenbank in
+        ein Array zurück """
         a = array.array('d')
         a.fromstring(zlib.decompress(x))
         return a
 
     @staticmethod
     def setVal(x):
+        """! wandelt ein Array mit Werten in einen gezppten String zum
+        Speichern in der Datenbank um"""
         a = array.array('d')
         a.extend(x)
         return buffer(zlib.compress(a.tostring()))
@@ -70,6 +80,8 @@ class Database():
         return g
 
     def writeForGnuplot(self, name, val, valErr):
+        """! Sammelt die Werte die geplottet werden sollen und gibt sie
+        an die Funktion weiter, die die Datein Schreibt """
         c = self.conn.cursor()
         for s in self.getDifferent("sigma"):
             c.execute('SELECT {0},{1} FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC'.format(val, valErr), (s,))
@@ -89,6 +101,8 @@ class Database():
         self.writeForGnuplot("Var_E", "varE", "varEErr")
 
     def writeFileForGnuplot(self, name, x, dx):
+        """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
+        erstellen """
         directory = "../data/out/"
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -129,6 +143,8 @@ class Database():
         f.close()
 
     def createNewDatabase(self, dataPath):
+        """! Liest die Datendatein aus und sortiert ihre Inhalte in die
+        Datenbank ein """
         logging.info("create new Database: '{0}'".format(self.dbPath))
 
         self.conn.execute("""CREATE TABLE rawdata
@@ -144,6 +160,8 @@ class Database():
         self.conn.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
 
     def calculateNewDatabase(self):
+        """! Liest die Rohdaten aus der Datenbank und berechnet daraus
+        die Mittelwerte der Erwartungswerte """
         logging.info("calculating")
         self.conn.execute("""CREATE TABLE calculated_data
             (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real)""")
@@ -168,6 +186,8 @@ class Database():
         self.conn.commit()
 
     def getDifferent(self, val):
+        """! Gibt eine Liste aus, in der alle vorkommenden Werte der
+        angefragten Spalte vorkommen """
         c = self.conn.cursor()
         try:
             c.execute('SELECT DISTINCT {0} FROM rawdata'.format(val))
@@ -178,6 +198,8 @@ class Database():
         return x
 
     def getAverageM(self, f, sigma, L, T):
+        """! Liefert den über verschiedene Realisierungen gemittelten
+        Erwartungswert von f(|M|) aus: mean(<f(|M|)>) """
         c = self.conn.cursor()
         c.execute('SELECT M FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
         lst = c.fetchall()
@@ -187,6 +209,8 @@ class Database():
         # berechne den Mittelwert der Erwartungswerte
         return mean(M), std(M)
     def getAverageE(self, f, sigma, L, T):
+        """! Liefert den über verschiedene Realisierungen gemittelten
+        Erwartungswert von f(E) aus: mean(<f(E)>) """
         c = self.conn.cursor()
         c.execute('SELECT E FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
         E = [f(self.getVal(i[0])) for i in c.fetchall()]
