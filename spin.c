@@ -435,6 +435,12 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
                     write_data_to_file_wrap_for_threads(i);
 
                     bool_par_temp_already_running = 1;
+                    if(i==o.t_eq)
+                        for(j=0;j<o.num_temps-1;j++)
+                        {
+                            par_temp_versuche[j]=0;
+                            par_temp_erfolge[j]=0;
+                        }
                     par_temp_wrap_for_threads();
                 }
                 pthread_mutex_unlock(&par_temp_mutex);
@@ -1146,8 +1152,9 @@ void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
         {
             /* An welcher Stelle liegt die nT-te Temperatur? */
             j = map_of_temps[nT];
-            fprintf(data_out_file, "%f %f ", list_of_graphs[j]->E,
-                 list_of_graphs[j]->M/list_of_graphs[j]->num_nodes);
+            fprintf(data_out_file, "%f %f ",
+                    list_of_graphs[j]->E/list_of_graphs[j]->num_nodes,
+                    list_of_graphs[j]->M/list_of_graphs[j]->num_nodes);
         }
         fprintf(data_out_file, "\n");
     }
