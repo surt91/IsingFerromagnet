@@ -349,6 +349,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
     double *par_temp_versuche, *par_temp_erfolge;
     FILE *data_out_file;
     int nT;
+    int j;
     int *map_of_temps;
     char command[MAX_LEN_FILENAME+10];
 
@@ -459,6 +460,14 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
                 list_of_graphs[nT]->M = calculate_magnetisation(list_of_graphs[nT]);
             }
             write_data_to_file(data_out_file,list_of_graphs,map_of_temps,o,i);
+
+            /* Fange erst mit dem Zählen an, wenn du im Equilibrium bist */
+            if(i==o.t_eq)
+                for(j=0;j<o.num_temps-1;j++)
+                {
+                    par_temp_versuche[j]=0;
+                    par_temp_erfolge[j]=0;
+                }
             par_temp(list_of_graphs, map_of_temps, o, par_temp_versuche,par_temp_erfolge);
         }
     #endif

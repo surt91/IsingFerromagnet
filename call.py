@@ -16,7 +16,7 @@ def f(config):
             for x in range(1,end+1):
                 call(["time", "./test", "-T{0}".format(t),
                        "-L{0}".format(l), "-e{0}".format(t_eq),
-                       "-N{0}".format(t_eq+500),
+                       "-N{0}".format(t_eq+100*tau),
                        "-v", "-u0", "-x{0}".format(x), "-w", "-p",
                        "-s{0}".format(s), "-a0.5", #"-gOut_s_{0}_x_{1}_L{2}.svg".format(s,x,l),
                        "-t1", "-i{0}".format(tau)])
