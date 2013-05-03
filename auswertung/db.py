@@ -49,6 +49,7 @@ class Database():
         self.writeMeanForGnuplot()
         self.writeVarForGnuplot()
         self.writeAutoForGnuplot()
+        self.writeParTempForGnuplot()
 
         self.conn.close()
 
@@ -127,7 +128,9 @@ class Database():
         self.writeForGnuplot("Var_M", "varM", "varMErr")
         self.writeForGnuplot("Var_E", "varE", "varEErr")
     def writeAutoForGnuplot(self):
-        self.writeForGnuplot("Auto", "auto", None)
+        self.writeForGnuplot("Autokorrelationszeit", "auto", None)
+    def writeParTempForGnuplot(self):
+        self.writeForGnuplot("Akzeptanz", "A", None)
 
     def writeFileForGnuplot(self, name, x, dx):
         """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
@@ -177,14 +180,14 @@ class Database():
         logging.info("create new Database: '{0}'".format(self.dbPath))
 
         self.conn.execute("""CREATE TABLE rawdata
-            (n blob, sigma real, L integer, x integer, T real, M blob, E blob)""")
+            (n blob, sigma real, L integer, x integer, T real, M blob, E blob, A real)""")
         for f in os.listdir(dataPath):
             if not ".dat" in f:
                 continue
 
             r = output_reader(os.path.join(dataPath,f))
-            t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i])) for i in range(len(r.T))]
-            self.conn.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?)', t)
+            t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i]) for i in range(len(r.T))]
+            self.conn.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?)', t)
         self.conn.commit()
         self.conn.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
 
@@ -193,7 +196,7 @@ class Database():
         die Mittelwerte der Erwartungswerte """
         logging.info("calculating")
         self.conn.execute("""CREATE TABLE calculated_data
-            (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real, auto real)""")
+            (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real, auto real, A real)""")
 
         sigmas = self.getDifferent("sigma")
         Ls = self.getDifferent("L")
@@ -211,8 +214,9 @@ class Database():
                     vM, vMErr = self.getAverageM(var, s, L, T)
                     vE, vEErr = self.getAverageE(var, s, L, T)
                     auto = self.getAverageM(self.getAutocorrTime, s, L, T, signed=True)[0]
-                    rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr, auto))
-        self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
+                    A = self.getAverageA(s, L, T)
+                    rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr, auto, A))
+        self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
         self.conn.commit()
 
     def getDifferent(self, val):
@@ -226,6 +230,15 @@ class Database():
         x = c.fetchall()
         x = [i[0] for i in x]
         return x
+
+    def getAverageA(self, sigma, L, T):
+        """! Liefert die über verschiedene Realisierungen gemittelten
+        Parallel Tempering Akzeptanzraten """
+        c = self.conn.cursor()
+        c.execute('SELECT A FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
+        A = [i[0] for i in c.fetchall()]
+        c.close()
+        return mean(A)
 
     def getAverageM(self, f, sigma, L, T, signed = False):
         """! Liefert den über verschiedene Realisierungen gemittelten

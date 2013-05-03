@@ -33,6 +33,8 @@ class output_reader():
     # Magnetisierung pro Spin (Liste)
     ## @var E
     # Energie (Liste)
+    ## @var A
+    # Parallel Tempering Akzeptanz (Liste)
 
     def __init__(self, filename):
         """! Construktor
@@ -60,9 +62,13 @@ class output_reader():
 
             # Zwischenspeichern, da Einträge im Reader verbraucht werden
             alle = [i for i in reader]
+            footer = alle[-1][:-1]
+            del alle[-1]
 
             self.N = [int(i[0]) for i in alle]
             self.E = [[float(j[2*i+1]) for j in alle] for i in range(len(self.T))]
             self.M = [[float(j[2*i+2]) for j in alle] for i in range(len(self.T))]
+
+            self.A = [float(j) for j in footer[2:]]
 
             logging.info("finished reading")

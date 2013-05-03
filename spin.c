@@ -489,6 +489,10 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         for(nT=0;nT<o.num_temps;nT++)
             fprintf(stdout,"     %.2f ", par_temp_erfolge[map_of_temps[nT]]/par_temp_versuche[map_of_temps[nT]]);
         fprintf(stdout,"\n");
+        fprintf(data_out_file,"# A: ");
+        for(nT=0;nT<o.num_temps;nT++)
+            fprintf(data_out_file,"%.2f ", par_temp_erfolge[map_of_temps[nT]]/par_temp_versuche[map_of_temps[nT]]);
+        fprintf(data_out_file,"\n");
     }
 
     fclose(data_out_file);
