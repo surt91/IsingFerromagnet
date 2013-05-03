@@ -9,6 +9,7 @@ import logging
 import array
 from numpy import mean, var
 from numpy import std
+import numpy
 
 from reader import *
 
@@ -47,6 +48,7 @@ class Database():
         self.writeBinderForGnuplot()
         self.writeMeanForGnuplot()
         self.writeVarForGnuplot()
+        self.writeAutoForGnuplot()
 
         self.conn.close()
 
@@ -79,14 +81,39 @@ class Database():
 
         return g
 
+    @staticmethod
+    def getAutocorrTime(m):
+        """! getAutocorrTime()
+
+            Berechnet die Autokorrelationszeit \f$ \tau \f$
+            durch Integration der Autokorrelationsfunktion
+
+            Berechnung erfolgt per FFT und Faltung. O(nlog(n))
+            vgl. http://stackoverflow.com/questions/643699/how-can-i-use-numpy-correlate-to-do-autocorrelation
+
+            Die Berechnung erfolgt durch Integration (hier sollte eine
+            Summation genau genug sein) der Autokorrelationsfunktion.
+            vgl. \cite newman1999monte S. 62 (3.20)
+        """
+        auto = numpy.correlate(m, m, mode='full')[len(m)-1:]
+        x0 = auto[0]
+        tau = sum(auto)/x0
+        return tau
+
     def writeForGnuplot(self, name, val, valErr):
         """! Sammelt die Werte die geplottet werden sollen und gibt sie
         an die Funktion weiter, die die Datein Schreibt """
         c = self.conn.cursor()
         for s in self.getDifferent("sigma"):
-            c.execute('SELECT {0},{1} FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC'.format(val, valErr), (s,))
+            if valErr:
+                c.execute('SELECT {0},{1} FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC'.format(val, valErr), (s,))
+            else:
+                c.execute('SELECT {0} FROM calculated_data WHERE sigma = ? ORDER BY T ASC, L ASC'.format(val), (s,))
             x = c.fetchall()
-            dx = [i[1] for i in x]
+            if valErr:
+                dx = [i[1] for i in x]
+            else:
+                dx = [0 for i in x]
             x = [i[0] for i in x]
 
             self.writeFileForGnuplot(name+"_{0}".format(s)+".dat", x, dx)
@@ -99,6 +126,8 @@ class Database():
     def writeVarForGnuplot(self):
         self.writeForGnuplot("Var_M", "varM", "varMErr")
         self.writeForGnuplot("Var_E", "varE", "varEErr")
+    def writeAutoForGnuplot(self):
+        self.writeForGnuplot("Auto", "auto", None)
 
     def writeFileForGnuplot(self, name, x, dx):
         """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
@@ -164,7 +193,7 @@ class Database():
         die Mittelwerte der Erwartungswerte """
         logging.info("calculating")
         self.conn.execute("""CREATE TABLE calculated_data
-            (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real)""")
+            (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real, auto real)""")
 
         sigmas = self.getDifferent("sigma")
         Ls = self.getDifferent("L")
@@ -181,8 +210,9 @@ class Database():
                     mE, mEErr = self.getAverageE(mean, s, L, T)
                     vM, vMErr = self.getAverageM(var, s, L, T)
                     vE, vEErr = self.getAverageE(var, s, L, T)
-                    rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr))
-        self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
+                    auto = self.getAverageM(self.getAutocorrTime, s, L, T, signed=True)[0]
+                    rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr, auto))
+        self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
         self.conn.commit()
 
     def getDifferent(self, val):
@@ -197,7 +227,7 @@ class Database():
         x = [i[0] for i in x]
         return x
 
-    def getAverageM(self, f, sigma, L, T):
+    def getAverageM(self, f, sigma, L, T, signed = False):
         """! Liefert den über verschiedene Realisierungen gemittelten
         Erwartungswert von f(|M|) aus: mean(<f(|M|)>) """
         c = self.conn.cursor()
@@ -205,7 +235,11 @@ class Database():
         lst = c.fetchall()
         c.close()
         # Berechne die Erwartungswerte
-        M = [f(list(map(abs,self.getVal(i[0])))) for i in lst]
+        if signed:
+            M = [f(list(self.getVal(i[0]))) for i in lst]
+        else:
+            M = [f(list(map(abs,self.getVal(i[0])))) for i in lst]
+
         # berechne den Mittelwert der Erwartungswerte
         return mean(M), std(M)
     def getAverageE(self, f, sigma, L, T):
