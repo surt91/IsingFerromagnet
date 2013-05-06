@@ -34,8 +34,9 @@ int main(int argc, char *argv[])
         print_graph_svg(list_of_graphs[0], o.svg_filename);
 
     /* gebe Speicher frei */
-    for(nT=0;nT<o.num_temps;nT++)
-        gs_clear_graph(list_of_graphs[nT]);
+    for(nT=1;nT<o.num_temps;nT++)
+        gs_clear_shallow_graph(list_of_graphs[nT]);
+    gs_clear_graph(list_of_graphs[0]);
     free(list_of_graphs);
     free(o.list_of_temps);
     gsl_rng_free(o.rng);
@@ -326,12 +327,12 @@ gs_graph_t **init_graphs(const options_t o)
         g->M = calculate_magnetisation(g);
 
         /* Speichere eine Kopie des Graphen im Array der Graphen */
-        list_of_graphs[nT] = gs_copy_graph(g);
+        list_of_graphs[nT] = gs_shallow_copy_graph(g);
 
         /* Setze Temperatur */
         list_of_graphs[nT]->T = o.list_of_temps[nT];
     }
-    gs_clear_graph(g);
+    gs_clear_shallow_graph(g);
 
     return(list_of_graphs);
 }
@@ -740,7 +741,7 @@ void create_edges(gs_graph_t *g, options_t o)
     /* Graphen kacheln */
     gekachelte[0] = g;
     for(i=1;i<9;i++)
-        gekachelte[i] = gs_copy_graph(g);
+        gekachelte[i] = gs_deep_copy_graph(g);
 
     for(i=1;i<9;i++)
         for(j=0;j<gekachelte[i]->num_nodes;j++)
@@ -853,9 +854,9 @@ void init_spins_randomly(gs_graph_t *g, gsl_rng *rng)
     for(i=0;i<num_nodes;i++)
     {
         if(gsl_rng_uniform(rng)<0.5)
-            g->node[i].spin = 1;
+            g->spins[i] = 1;
         else
-            g->node[i].spin = -1;
+            g->spins[i] = -1;
     }
 }
 
@@ -871,7 +872,7 @@ void init_spins_up(gs_graph_t *g)
     num_nodes = g->num_nodes;
 
     for(i=0;i<num_nodes;i++)
-        g->node[i].spin = 1;
+        g->spins[i] = 1;
 }
 
 /*! \fn double calculate_energy(const gs_graph_t *g)
@@ -898,10 +899,10 @@ double calculate_energy(const gs_graph_t *g)
     for(i=0;i<num_nodes;i++)                      /* Über alle Knoten */
     {
         E_sk = 0;
-        sk = g->node[i].spin;
+        sk = g->spins[i];
         list = g->node[i].neighbors;
         for(n=0;n<g->node[i].num_neighbors;n++) /* Über alle Nachbarn */
-            E_sk += g->node[list[n].index].spin * list[n].weight;
+            E_sk += g->spins[list[n].index] * list[n].weight;
         E_sk *= sk;
         E += E_sk;
     }
@@ -925,7 +926,7 @@ double calculate_magnetisation(const gs_graph_t *g)
     num_nodes = g->num_nodes;
 
     for(i=0;i<num_nodes;i++)                      /* Über alle Knoten */
-        M += g->node[i].spin;
+        M += g->spins[i];
 
     return(M);
 }
@@ -965,10 +966,10 @@ void metropolis_monte_carlo_sweep(gs_graph_t *g, gsl_rng *rng)
         for(n=0;n<g->node[to_flip_idx].num_neighbors;n++)
         {
             /* Hier wird die Summe ausgeführt: E += s_j * J_{ij} */
-            delta_E += g->node[list[n].index].spin * list[n].weight;
+            delta_E += g->spins[list[n].index] * list[n].weight;
         }
         /* Hier werden die Koeffizienten berücksichtigt: E = 2s_k*sum */
-        delta_E *= 2 * g->node[to_flip_idx].spin;
+        delta_E *= 2 * g->spins[to_flip_idx];
         /*! - Berechne die Wahrscheinlichkeit, mit der der Flip akzeptiert
             wird.
             \f[ A = \left\{
@@ -983,7 +984,7 @@ void metropolis_monte_carlo_sweep(gs_graph_t *g, gsl_rng *rng)
         if(A > gsl_rng_uniform(rng))
         {
             /* drehe den Spin um */
-            g->node[to_flip_idx].spin *= -1;
+            g->spins[to_flip_idx] *= -1;
 
             g->E += delta_E;
         }
@@ -1041,7 +1042,7 @@ void wolff_monte_carlo_cluster(gs_graph_t *g, gsl_rng *rng)
             /* Wenn dieser Nachbar noch nicht im Cluster ist, und den
              * gleichen Spin hat ... */
             if( (!cluster[list[j].index]) &&
-                (g->node[list[j].index].spin == g->node[cur_index].spin))
+                (g->spins[list[j].index] == g->spins[cur_index]))
             {
                 /* ... gib ihm die Chance in den Cluster zu kommen */
                 /* Nicht vorher berechenbar, da J beliebig */
@@ -1058,7 +1059,7 @@ void wolff_monte_carlo_cluster(gs_graph_t *g, gsl_rng *rng)
     /* Jetzt flippe alle Spins im Cluster */
     for(i=0;i<g->num_nodes;i++)
         if(cluster[i])
-            g->node[i].spin *= -1;
+            g->spins[i] *= -1;
 
     g->E = calculate_energy(g);
     free(cluster);

@@ -18,6 +18,7 @@ gs_graph_t *gs_create_graph(int L)
     g->num_nodes = num_nodes;
     g->L = L;
     g->node = (gs_node_t *) malloc(num_nodes*sizeof(gs_node_t));
+    g->spins = (short int *) malloc(g->num_nodes*sizeof(short int));
 
     for(n=0;n<num_nodes; n++)
     {
@@ -30,13 +31,42 @@ gs_graph_t *gs_create_graph(int L)
     return(g);
 }
 
-/*! \fn gs_graph_t *gs_copy_graph(gs_graph_t *g)
+/*! \fn gs_graph_t *gs_shallow_copy_graph(gs_graph_t *g)
+    \brief Liefert eine Kopie des Graphen g, wobei aber die Knoten (also
+    die Struktur des Graphen mit dem Original geteilt wird)
+
+    \param [in]     g   zu kopierender Graph
+    \return kopierter Graph
+*/
+gs_graph_t *gs_shallow_copy_graph(gs_graph_t *g)
+{
+    gs_graph_t *copy;
+    int n;
+
+    copy = (gs_graph_t *) malloc(sizeof(gs_graph_t));
+    copy->num_nodes = g->num_nodes;
+    copy->L = g->L;
+    copy->node = g->node;
+    copy->spins = (short int *) malloc(g->num_nodes*sizeof(short int));
+
+    for(n=0;n<g->num_nodes; n++)
+    {
+        copy->spins[n] = g->spins[n];
+    }
+    copy->T = g->T;
+    copy->E = g->E;
+    copy->M = g->M;
+
+    return(copy);
+}
+
+/*! \fn gs_graph_t *gs_deep_copy_graph(gs_graph_t *g)
     \brief Liefert eine Kopie des Graphen g
 
     \param [in]     g   zu kopierender Graph
     \return kopierter Graph
 */
-gs_graph_t *gs_copy_graph(gs_graph_t *g)
+gs_graph_t *gs_deep_copy_graph(gs_graph_t *g)
 {
     gs_graph_t *copy;
     int n, i;
@@ -45,6 +75,7 @@ gs_graph_t *gs_copy_graph(gs_graph_t *g)
     copy->num_nodes = g->num_nodes;
     copy->L = g->L;
     copy->node = (gs_node_t *) malloc(g->num_nodes*sizeof(gs_node_t));
+    copy->spins = (short int *) malloc(g->num_nodes*sizeof(short int));
 
     for(n=0;n<g->num_nodes; n++)
     {
@@ -54,7 +85,7 @@ gs_graph_t *gs_copy_graph(gs_graph_t *g)
             copy->node[n].neighbors[i] = g->node[n].neighbors[i];
         copy->node[n].x = g->node[n].x;
         copy->node[n].y = g->node[n].y;
-        copy->node[n].spin = g->node[n].spin;
+        copy->spins[n] = g->spins[n];
     }
     copy->T = g->T;
     copy->E = g->E;
@@ -126,6 +157,17 @@ void gs_clear_graph(gs_graph_t *g)
         free(g->node[i].neighbors);
     }
     free(g->node);
+    free(g->spins);
+    free(g);
+}
+/*! \fn void gs_clear_shallow_graph(gs_graph_t *g)
+    \brief Löscht eine Kante im Graphen g.
+
+    \param [in,out] g   Graph, der gelöscht werden soll
+*/
+void gs_clear_shallow_graph(gs_graph_t *g)
+{
+    free(g->spins);
     free(g);
 }
 
@@ -292,7 +334,7 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename)
         n1_y = g->node[i].y;
         n1_x += L * verschiebung_x[point_not_in_domain(n1_x, n1_y, L)];
         n1_y += L * verschiebung_y[point_not_in_domain(n1_x, n1_y, L)];
-        svg_circle(n1_x, n1_y, g->node[i].spin, svg_file);
+        svg_circle(n1_x, n1_y, g->spins[i], svg_file);
 
     }
 

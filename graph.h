@@ -23,7 +23,7 @@ typedef struct
 */
 typedef struct
 {
-    int spin;                                     //!< Up = 1; down = -1
+    //~ int spin;                                     //!< Up = 1; down = -1
     double x;                        //!< horizontale Position des Spins
     double y;                          //!< vertikale Position der Spins
     int num_neighbors;                          //!< Anzahl der Nachbarn
@@ -43,14 +43,17 @@ typedef struct
     double              T;                   //!< Temperatur des Systems
     double              M;               //!< Magnetisierung des Systems
     double              E;                      //!< Energie des Systems
+    short int      *spins;  //!< Spin Konfiguration: node[i] -> spins[i]
     gs_node_t       *node;             //!< Pointer auf ein Array Knoten
 } gs_graph_t;
 
 void gs_insert_edge(gs_graph_t *g, int from, int to, double weight);
 gs_graph_t *gs_create_graph(int L);
-gs_graph_t *gs_copy_graph(gs_graph_t *g);
+gs_graph_t *gs_shallow_copy_graph(gs_graph_t *g);
+gs_graph_t *gs_deep_copy_graph(gs_graph_t *g);
 void print_graph_svg(gs_graph_t *g, char* svg_filename);
 void gs_clear_graph(gs_graph_t *g);
+void gs_clear_shallow_graph(gs_graph_t *g);
 int gs_edge_exists(gs_graph_t *g, int from, int to);
 
 int point_not_in_domain(double x, double  y, int L);
