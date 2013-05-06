@@ -2,6 +2,7 @@ docs/
 
 test
 ising
+jobname.jobList
 
 # Daten
 data/
@@ -21,3 +22,6 @@ data/
 *~
 *.out
 *_tmp*
+*.txt
+*.bak
+*.gp

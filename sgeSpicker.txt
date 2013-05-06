@@ -1,0 +1,24 @@
+# Auf hero anmelden
+ssh mohu0982@hero.hpc.uni-oldenburg.de
+
+# Datei von und auf Hero kopieren
+scp mohu0982@hero.hpc.uni-oldenburg.de:Bachelor/x.tar.gz ~/tmp
+scp ising jobname.jobList jobarray.sge mohu0982@hero.hpc.uni-oldenburg.de:Bachelor
+
+# Job(array) starten
+qsub jobarray.sge
+
+# jobs allgemein betrachten
+qstat
+
+# job genauer betrachten
+qstat -j 697635 | less
+
+# einen Knoten betrachten
+qstat -f -l hostname=mpcs104
+
+# auf Knoten gehen und guchen (mit ssh weiter) zB für top
+qrsh
+
+# nach dem Job: Statistiken
+qacct -j 697635
