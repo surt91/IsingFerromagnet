@@ -1,9 +1,16 @@
+/*! \file */
 #ifndef _LIST_H
 #define _LIST_H
 
 #include <stdio.h>
 #include <stdlib.h>
 
+/*! \struct elem_struct
+    \brief Listenelement eine einfachen linked list
+
+    Dabei nimmt value den Index des Knotens auf und Kachel den Index des
+    Graphen.
+*/
 struct elem_struct
 {
     int                value;    //!< Der Inhalt

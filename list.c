@@ -1,12 +1,11 @@
 #include "list.h"
 
-/*      remove_node()
-    löscht einen Eintrag aus der Liste
-    Parameter:
-            head : erstes Element der Liste (Pointer auf Liste)
-            elem : pointer auf das zu löschende Element
-    Return
-        (new) pointer auf den Listenanfang
+/*! \fn remove_node()
+    \brief löscht einen Eintrag aus der Liste
+
+    \param [in] head erstes Element der Liste (Pointer auf Liste)
+    \param [in] elem pointer auf das zu löschende Element
+    \return (new) pointer auf den Listenanfang
 */
 elem_t *remove_node(elem_t *head, elem_t *elem)
 {
@@ -37,12 +36,10 @@ elem_t *remove_node(elem_t *head, elem_t *elem)
     return(head);
 }
 
-/*      clear_list()
-    Löscht eine ganze Liste (zB. Um am Ende den Speicher frei zu geben)
-        Parameter:
-            head : erstes Element der Liste (Pointer auf Liste)
-    Return
-            (nothing)
+/*! \fn clear_list()
+    \brief Löscht eine ganze Liste (zB. Um am Ende den Speicher frei zu geben)
+
+    \param [in] head erstes Element der Liste (Pointer auf Liste)
 */
 void clear_list(elem_t *head)
 {
@@ -50,8 +47,12 @@ void clear_list(elem_t *head)
         head = remove_node(head, head);
 }
 
-/*      create_element()
-    Erstellt ein neues Element der Liste. Aus Kapitel 'Listen'
+/*! \fn create_element()
+    \brief Erstellt ein neues Element der Liste. Aus Kapitel 'Listen'
+
+    \param [in] value  Inhalt
+    \param [in] kachel Inhalt
+    \return (new) pointer auf den Listenanfang
 */
 elem_t *create_element(int value, int kachel)
 {
@@ -64,8 +65,11 @@ elem_t *create_element(int value, int kachel)
     return(elem);
 }
 
-/*      delete_element()
-    Löscht ein Element der Liste. Aus Kapitel 'Listen'
+/*! \fn delete_element()
+    \brief Löscht ein Element der Liste. Aus Kapitel 'Listen'
+
+    \param [in] elem zu löschendes Element
+    \return Status
 */
 int delete_element(elem_t *elem)
 {
@@ -83,9 +87,14 @@ int delete_element(elem_t *elem)
     return(0);
 }
 
-/*      insert_element()
-    Fügt ein Element in eine Liste "head" ein, hinter dem Element ort.
+/*! \fn insert_element()
+    \brief Fügt ein Element in eine Liste "head" ein, hinter dem Element ort.
     Aus Kapitel 'Listen'
+
+    \param [in] head Listenanfang
+    \param [in] elem Element, das hinzugefügt werden soll
+    \param [in] ort  stelle, an der es hinzugefügt werden soll
+    \return (new) pointer auf den Listenanfang
 */
 elem_t *insert_element(elem_t *head, elem_t *elem, elem_t *ort)
 {
@@ -102,8 +111,10 @@ elem_t *insert_element(elem_t *head, elem_t *elem, elem_t *ort)
     return(head);
 }
 
-/*      print_list()
-    Gibt die Liste aus. Aus Kapitel 'Listen'
+/*! \fn print_list()
+    \brief Gibt die Liste aus. Aus Kapitel 'Listen'
+
+    \param [in] list Liste, die Gedruckt werden soll
 */
 void print_list(elem_t *list)
 {
