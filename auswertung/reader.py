@@ -21,18 +21,25 @@ class output_reader():
 
     ## @var T
     # Temperatur (Liste)
+
     ## @var L
     # Kantenlänge (int)
+
     ## @var sigma
     # Unordnungsparameter (double)
+
     ## @var x
     # Unordnungsrealisierung (int)
+
     ## @var N
     # Anzahl Sweeps (Liste)
+
     ## @var M
     # Magnetisierung pro Spin (Liste)
+
     ## @var E
     # Energie (Liste)
+
     ## @var A
     # Parallel Tempering Akzeptanz (Liste)
 
