@@ -1,6 +1,6 @@
 OBJ 	= graph.o stack.o list.o spin.o
 
-TARGET	= test
+TARGET	= ising
 LINK	= gcc
 CC	= gcc
 #~ CFLAGS	= -g -pg #-DTHREADED
