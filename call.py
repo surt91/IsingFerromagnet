@@ -8,20 +8,17 @@ from auswertung.getConfig import getConfig
 
 def f(config):
     """Diese Funktion startet die Simulation für verschiedene Parameter"""
-    for s in arange(0,1.3,0.1):
-        for [l,t,t_eq,tau] in config:
-            #~ if s == 0: end = 1
-            #~ else: end = 12
-            end = 12
-            for x in range(1,end+1):
-                opts = ["./ising", "-T{0}".format(t),
-                       "-L{0}".format(l), "-e{0}".format(t_eq),
-                       "-N{0}".format(t_eq+100*tau),
-                       "-v", "-u0", "-x{0}".format(x), "-w", "-p",
-                       "-s{0}".format(s), "-a0.5", #"-gOut_s_{0}_x_{1}_L{2}.svg".format(s,x,l),
-                       "-t1", "-i{0}".format(tau)]
-                print " ".join(opts)
-                call(opts)
+    for [s,l,t,t_eq,tau] in config:
+        end = 12
+        for x in range(1,end+1):
+            opts = ["./ising", "-T{0}".format(t),
+                   "-L{0}".format(l), "-e{0}".format(t_eq),
+                   "-N{0}".format(t_eq+100*tau),
+                   "-v", "-u0", "-x{0}".format(x), "-w", "-p",
+                   "-s{0}".format(s), "-a0.5", #"-gOut_s_{0}_x_{1}_L{2}.svg".format(s,x,l),
+                   "-t1", "-i{0}".format(tau)]
+            print " ".join(opts)
+            #~ call(opts)
 
 if __name__ == '__main__':
     directory = "data/"
