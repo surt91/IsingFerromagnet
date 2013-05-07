@@ -119,6 +119,24 @@ class Database():
 
             self.writeFileForGnuplot(name+"_{0}".format(s)+".dat", x, dx)
 
+    def writeForGnuplot2(self, name, val, valErr):
+        """! Sammelt die Werte die geplottet werden sollen und gibt sie
+        an die Funktion weiter, die die Datein Schreibt """
+        c = self.conn.cursor()
+        for l in self.getDifferent("L"):
+            if valErr:
+                c.execute('SELECT {0},{1} FROM calculated_data WHERE L = ? ORDER BY T ASC, sigma ASC'.format(val, valErr), (l,))
+            else:
+                c.execute('SELECT {0} FROM calculated_data WHERE L = ? ORDER BY T ASC, sigma ASC'.format(val), (l,))
+            x = c.fetchall()
+            if valErr:
+                dx = [i[1] for i in x]
+            else:
+                dx = [0 for i in x]
+            x = [i[0] for i in x]
+
+            self.writeFileForGnuplot2(name+"_L_{0}".format(l)+".dat", x, dx)
+
     def writeBinderForGnuplot(self):
         self.writeForGnuplot("Binder", "binder", "binderErr")
     def writeMeanForGnuplot(self):
@@ -129,6 +147,7 @@ class Database():
         self.writeForGnuplot("Var_E", "varE", "varEErr")
     def writeAutoForGnuplot(self):
         self.writeForGnuplot("Autokorrelationszeit", "auto", None)
+        self.writeForGnuplot2("Autokorrelationszeit", "auto", None)
     def writeParTempForGnuplot(self):
         self.writeForGnuplot("Akzeptanz", "A", None)
 
@@ -171,6 +190,48 @@ class Database():
         tmpStr = ""
         for [i,l] in enumerate(Ls):
             tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'L = {0}'".format(l)))
+        f.write(tmpStr[:-2])
+        f.close()
+
+    def writeFileForGnuplot2(self, name, x, dx):
+        """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
+        erstellen """
+        directory = "../data/out/"
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        Ss = sorted(self.getDifferent("sigma"))
+        Ts = sorted(self.getDifferent("T"))
+        numS = len(Ss)
+        numT = len(Ts)
+
+        f = open(os.path.join(directory,name), "w")
+        f.write("# Je drei Spalten beschreiben ein Sigma: Temperatur, Wert, Fehler\n")
+        f.write("# Sigma: ")
+        for s in Ss:
+            f.write(" {0}".format(s))
+        f.write("\n")
+
+        # Zeilen
+        for i in range(numT):
+            f.write("{0}".format(Ts[i]))
+            # Spalten
+            for j in range(numS):
+                f.write(" {0}".format(x[j+i*numS]))
+                f.write(" {0}  ".format(dx[j+i*numS]))
+            f.write("\n")
+        f.close()
+        f = open(os.path.join(directory,name.replace(".dat",".gp")), "w")
+        f.write("set terminal png\n")
+        f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
+        f.write("set xlabel 'Temperatur'\n")
+        f.write("set ylabel '{0}'\n".format(name.partition("_")[0]))
+        f.write("set key right\n")
+
+        f.write("plot ")
+        tmpStr = ""
+        for [i,s] in enumerate(Ss):
+            tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'s = {0}'".format(s)))
         f.write(tmpStr[:-2])
         f.close()
 
