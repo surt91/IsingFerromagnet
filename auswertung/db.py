@@ -84,11 +84,10 @@ class Database():
         """! Berechnet die spezifische Wärme
 
             vgl. \cite newman1999monte S. 59 (3.15)
+            abgewandelt mit der Eigenschaft: var(n*e) = n^2*var(e)
         """
         N = L*L
-        E = e*N
-        beta2 = 1/T/T
-        c = var(E)/N*beta2
+        c = var(e)*N/T**2
         return c
 
     @staticmethod
@@ -358,6 +357,4 @@ class Database():
         return mean(E), std(E)
 
 if __name__ == '__main__':
-    import cProfile
-    cProfile.run(Database())
-    #~ a=Database()
+    a=Database()
