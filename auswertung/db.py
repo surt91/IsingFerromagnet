@@ -49,12 +49,13 @@ class Database():
         # lade Datenbank und hole sie in den Speicher
         self.conn = sqlite3.connect(self.dbPath)
 
+        logging.info("start writing files for Gnuplot")
         self.writeBinderForGnuplot()
         self.writeMeanForGnuplot()
         self.writeVarForGnuplot()
         self.writeAutoForGnuplot()
         self.writeParTempForGnuplot()
-
+        logging.info("  finished")
         self.conn.close()
 
     @staticmethod
