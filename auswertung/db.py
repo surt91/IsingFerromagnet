@@ -35,11 +35,15 @@ class Database():
             # Copy Database to file
             logging.info("copy Database to {0}".format(self.dbPath))
             new_db = sqlite3.connect(self.dbPath)
+            logging.info("  drop rawdata")
             self.conn.execute("""DROP TABLE rawdata""")
+            logging.info("  vacuum")
             self.conn.execute("""VACUUM""")
+            logging.info("  dump")
             query = "".join(line for line in self.conn.iterdump())
+            logging.info("  create")
             new_db.executescript(query)
-            logging.info("  copied")
+            logging.info("  finished")
             self.conn.close()
 
         # lade Datenbank und hole sie in den Speicher
@@ -70,7 +74,35 @@ class Database():
         return buffer(zlib.compress(a.tostring()))
 
     @staticmethod
-    def getBinder(m):
+    def getMean(x,T,L):
+        """! Berechnet den Mittelwert
+        """
+        return mean(x)
+
+    @staticmethod
+    def getSpecificHeat(e,T,L):
+        """! Berechnet die spezifische Wärme
+
+            vgl. \cite newman1999monte S. 59 (3.15)
+        """
+        N = L*L
+        E = e*N
+        beta2 = 1/T/T
+        c = var(E)/N*beta2
+        return c
+
+    @staticmethod
+    def getSusceptibility(m,T,L):
+        """! Berechnet die Suszeptibilität
+
+            vgl. \cite newman1999monte S. 59 (3.16)
+        """
+        N = L*L
+        chi = var(m)/T*N
+        return chi
+
+    @staticmethod
+    def getBinder(m,T,L):
         """! Berechnet die Binder Kumulante
 
             vgl. \cite katzgraber2011introduction S. 12 (19)
@@ -83,7 +115,7 @@ class Database():
         return g
 
     @staticmethod
-    def getAutocorrTime(m):
+    def getAutocorrTime(m,T,L):
         """! getAutocorrTime()
 
             Berechnet die Autokorrelationszeit \f$ \tau \f$
@@ -143,8 +175,8 @@ class Database():
         self.writeForGnuplot("Mean_M", "meanM", "meanMErr")
         self.writeForGnuplot("Mean_E", "meanE", "meanEErr")
     def writeVarForGnuplot(self):
-        self.writeForGnuplot("Var_M", "varM", "varMErr")
-        self.writeForGnuplot("Var_E", "varE", "varEErr")
+        self.writeForGnuplot("Susceptibility", "varM", "varMErr")
+        self.writeForGnuplot("Specific_Heat", "varE", "varEErr")
     def writeAutoForGnuplot(self):
         self.writeForGnuplot("Autokorrelationszeit", "auto", None)
         self.writeForGnuplot2("Autokorrelationszeit", "auto", None)
@@ -270,10 +302,10 @@ class Database():
                 for T in Ts:
                     # Ist es korrekt hier einfach den Standardfehler des Mittelwerts zu nehmen?
                     binder, binderErr = self.getAverageM(self.getBinder, s, L, T)
-                    mM, mMErr = self.getAverageM(mean, s, L, T)
-                    mE, mEErr = self.getAverageE(mean, s, L, T)
-                    vM, vMErr = self.getAverageM(var, s, L, T)
-                    vE, vEErr = self.getAverageE(var, s, L, T)
+                    mM, mMErr = self.getAverageM(self.getMean, s, L, T)
+                    mE, mEErr = self.getAverageE(self.getMean, s, L, T)
+                    vM, vMErr = self.getAverageM(self.getSusceptibility, s, L, T)
+                    vE, vEErr = self.getAverageE(self.getSpecificHeat, s, L, T)
                     auto = self.getAverageM(self.getAutocorrTime, s, L, T, signed=True)[0]
                     A = self.getAverageA(s, L, T)
                     rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr, auto, A))
@@ -310,9 +342,9 @@ class Database():
         c.close()
         # Berechne die Erwartungswerte
         if signed:
-            M = [f(list(self.getVal(i[0]))) for i in lst]
+            M = [f(list(self.getVal(i[0])),T,L) for i in lst]
         else:
-            M = [f(list(map(abs,self.getVal(i[0])))) for i in lst]
+            M = [f(list(map(abs,self.getVal(i[0]))),T,L) for i in lst]
 
         # berechne den Mittelwert der Erwartungswerte
         return mean(M), std(M)
@@ -321,9 +353,11 @@ class Database():
         Erwartungswert von f(E) aus: mean(<f(E)>) """
         c = self.conn.cursor()
         c.execute('SELECT E FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
-        E = [f(self.getVal(i[0])) for i in c.fetchall()]
+        E = [f(self.getVal(i[0]),T,L) for i in c.fetchall()]
         c.close()
         return mean(E), std(E)
 
 if __name__ == '__main__':
-    a=Database()
+    import cProfile
+    cProfile.run(Database())
+    #~ a=Database()
