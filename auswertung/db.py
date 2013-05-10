@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO,
                 datefmt='%d.%m.%YT%H:%M:%S')
 
 class Database():
-    def __init__(self, dbPath = "data.db", dataPath = "../data"):
+    def __init__(self, dbPath = "data.db", dataPath = "../data", graphType=1):
         """! Constructor
 
             Erstellt eine SQLite Datenbank aus den Daten in dataPath, wenn
@@ -28,6 +28,7 @@ class Database():
             Dateien zum Plotten wichtiger Messgrößen aus.
         """
         self.dbPath = dbPath
+        self.graphType = graphType
 
         if not os.path.isfile(self.dbPath):
             # Generate new Database in memory
@@ -293,6 +294,8 @@ class Database():
                 continue
 
             r = output_reader(os.path.join(dataPath,f))
+            if r.graphType != self.graphType:
+                continue
             t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i]) for i in range(len(r.T))]
             self.conn.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?)', t)
         self.conn.commit()
@@ -372,4 +375,5 @@ class Database():
         return mean(E), std(E)
 
 if __name__ == '__main__':
-    a=Database()
+    a=Database( dbPath = "dataRNG.db", dataPath = "../data", graphType=1)
+    b=Database( dbPath = "dataGG.db", dataPath = "../data", graphType=2)

@@ -66,6 +66,7 @@ class output_reader():
             self.sigma = " ".join(header).rpartition("sigma=")[2].partition (" #")[0]
             self.x = " ".join(header).rpartition("x=")[2].partition (" #")[0]
             self.L = " ".join(header).rpartition("L=")[2].partition (" #")[0]
+            self.graphType = " ".join(header).rpartition("type=")[2].partition (" #")[0]
 
             # Zwischenspeichern, da Einträge im Reader verbraucht werden
             alle = [i for i in reader]

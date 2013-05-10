@@ -59,7 +59,6 @@ options_t get_cl_args(int argc, char *argv[])
     int i, j, nT;
     int custom_file_name;
     int wolff_flag;
-    int graph_type;
     char temp_string[20];
     extern char *optarg;
 
@@ -78,7 +77,7 @@ options_t get_cl_args(int argc, char *argv[])
     /* alle wieviel sweeps soll ein Wert gespeichert werden (tau) */
     o.tau = 1;
     /* Parameter, der den Graphentyp beschreibt */
-    graph_type = 1;
+    o.graph_type = 1;
     /* Parameter, der die Verschiebung der einzelnen Knoten bestimmt */
     o.moving_fkt = &gsl_ran_gaussian;
     o.sigma = 0;
@@ -100,7 +99,6 @@ options_t get_cl_args(int argc, char *argv[])
     custom_file_name = 0;
     /* SVG Output */
     o.svg_filename[0]='\0';
-
 
     opterr = 0;
     while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:g:u:i:wpt:z")) != -1)
@@ -153,7 +151,7 @@ options_t get_cl_args(int argc, char *argv[])
                 o.alpha = atof(optarg);
                 break;
             case 't':
-                graph_type = atoi(optarg);
+                o.graph_type = atoi(optarg);
                 break;
             case 'o':
                 custom_file_name = 1;
@@ -212,7 +210,7 @@ options_t get_cl_args(int argc, char *argv[])
     if(!custom_file_name)
     {
         /* standard Dateiname */
-        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_s_%.1f_x_%d_L_%d.dat", o.sigma, o.seed, o.L);
+        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_s_%.1f_x_%d_L_%d_type_%d.dat", o.sigma, o.seed, o.L, o.graph_type);
     }
 
     /* Welchen Algorithmus nutzen? */
@@ -229,7 +227,7 @@ options_t get_cl_args(int argc, char *argv[])
         o.mc_fkt = &wolff_monte_carlo_cluster;
 
     /* Welchen Graphen bauen? */
-    if(graph_type == 1)
+    if(o.graph_type == 1)
     {
         o.graph_fkt = &check_relative_neighborhood;
         o.graph_cell_border_fkt = &get_cell_border_relative_neighborhood;
@@ -270,7 +268,7 @@ options_t get_cl_args(int argc, char *argv[])
         else
             printf("    Metropolis Algorithmus\n");
 
-        if(graph_type == 1)
+        if(o.graph_type == 1)
             printf("    Relative Neighborhood Graph\n");
         else
             printf("    Gabriel Graph\n");
@@ -394,7 +392,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         exit(-1);
     }
     /* Schreibe Header */
-    fprintf(data_out_file, "# N E M # sigma=%.2f # x=%d # L=%d # T= ", o.sigma, o.seed, list_of_graphs[0]->L);
+    fprintf(data_out_file, "# N E M # sigma=%.2f # x=%d # L=%d # type=%d # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type);
     for(nT=0;nT<o.num_temps;nT++)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");

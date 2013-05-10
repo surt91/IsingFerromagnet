@@ -65,6 +65,7 @@ typedef struct
     int par_temp_flag;      //!< soll parallel Tempering genutzt werden?
     int num_temps;            //!< Wieviele Temperaturen für pT gegeben?
     double *list_of_temps;                //!< Liste der pT Temperaturen
+    int graph_type;                               //!< Welcher Graph Typ
     int verbose;                                 //!< Gesprächiger Modus
     int zip;                                        //!< gzip Outputfile
     char filename[MAX_LEN_FILENAME];               //!< Output Dateiname
