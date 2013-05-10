@@ -171,17 +171,23 @@ class Database():
 
     def writeBinderForGnuplot(self):
         self.writeForGnuplot("Binder", "binder", "binderErr")
+        self.writeForGnuplot2("Binder", "binder", "binderErr")
     def writeMeanForGnuplot(self):
         self.writeForGnuplot("Mean_M", "meanM", "meanMErr")
         self.writeForGnuplot("Mean_E", "meanE", "meanEErr")
+        self.writeForGnuplot2("Mean_M", "meanM", "meanMErr")
+        self.writeForGnuplot2("Mean_E", "meanE", "meanEErr")
     def writeVarForGnuplot(self):
         self.writeForGnuplot("Susceptibility", "varM", "varMErr")
         self.writeForGnuplot("Specific_Heat", "varE", "varEErr")
+        self.writeForGnuplot2("Susceptibility", "varM", "varMErr")
+        self.writeForGnuplot2("Specific_Heat", "varE", "varEErr")
     def writeAutoForGnuplot(self):
         self.writeForGnuplot("Autokorrelationszeit", "auto", None)
         self.writeForGnuplot2("Autokorrelationszeit", "auto", None)
     def writeParTempForGnuplot(self):
         self.writeForGnuplot("Akzeptanz", "A", None)
+        self.writeForGnuplot2("Akzeptanz", "A", None)
 
     def writeFileForGnuplot(self, name, x, dx):
         """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
