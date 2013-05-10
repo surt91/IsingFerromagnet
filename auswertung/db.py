@@ -11,6 +11,8 @@ from numpy import mean, var
 from numpy import std
 import numpy
 
+from random import choice
+
 from reader import *
 
 logging.basicConfig(level=logging.INFO,
@@ -132,6 +134,12 @@ class Database():
         x0 = auto[0]
         tau = sum(auto)/x0
         return tau
+
+    @staticmethod
+    def bootstrap_variance(x, n_resample, f):
+        N = range(len(x))
+        h = [f([choice(x) for _ in N]) for _ in range(n_sample)]
+        return var(h)
 
     def writeForGnuplot(self, name, val, valErr):
         """! Sammelt die Werte die geplottet werden sollen und gibt sie
