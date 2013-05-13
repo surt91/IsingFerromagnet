@@ -1,0 +1,72 @@
+\documentclass[a4paper,12pt,titlepage,twoside]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{ae}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{url}
+
+\usepackage{booktabs}
+
+%~ \captionsetup{figurename=Abb. ,tablename=Tab. ,format=hang}
+\captionsetup{figurename=Abb. ,tablename=Tab., format=plain}
+
+%für Anführungszeichen unten und oben
+\newcommand{\emphgqq}[1]%
+{\emph{{\glqq}#1{\grqq}}}
+\newcommand{\gqq}[1]%
+{{\glqq}#1{\grqq}}
+\newcommand{\eqq}[1]%
+{{\textquotedblleft}#1{\textquotedblright}}
+
+%\abs{Ausdruck} %Betragsstriche, die skalieren - abgekürzt
+\newcommand{\abs}[1]{\ensuremath{\left\vert#1\right\vert}}
+% und das gleiche füur große Klammern
+\newcommand{\brac}[1]{\ensuremath{\left(#1\right)}}
+% ein nicht kursives d für Ableitungen/Integrale, mit etwas Platz davor, um sich etwas abzusetzten
+\newcommand{\de}{\ensuremath{\,\mathrm{d}}}
+% Für Einheiten: schreibt sie nicht kursiv und lässt etwas Platz zur Zahl vorher
+\newcommand{\eh}[1]{\ensuremath{\,\mathrm{#1}}}
+% einfaches Gradzeichen
+\newcommand{\gr}{\ensuremath{^{\circ}}}
+% Fehlerfortpfanzung
+% dy/dz * delta z
+\newcommand{\fehler}[2]%
+{\ensuremath{\abs{\frac{\partial #1}{\partial #2}}\cdot \Delta #2}}
+
+\hyphenation{}
+
+\title{Ferromagnet auf ad-hoc Netzwerk}
+\author{Hendrik Schawe}
+\date{}
+
+\begin{document}
+    \maketitle
+
+    \cleardoublepage
+    \tableofcontents
+
+    \clearpage
+    \section{Einleitung}
+        %~ \input{0_Einleitung}
+
+    \section{Theorie}
+        \input{1_Theorie}
+
+    \section{Auswertung}
+        %~ \input{3_Auswertung}
+
+    \section{Zusammenfassung}
+        %~ \input{4_Zusammenfassung}
+
+    \bibliography{lit}
+    \bibliographystyle{alpha}
+\end{document}
