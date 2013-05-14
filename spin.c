@@ -539,8 +539,10 @@ void move_graph_nodes(gs_graph_t *g, double (*f)(const gsl_rng *, double), gsl_r
     const int verschiebung_y[9] = {0,1,1,0,-1,-1,-1,0,1};
     for(n=0;n<g->num_nodes; n++)
     {
+        /* Verschiebe Punkte zufällig */
         g->node[n].x += f(rng, sigma);
         g->node[n].y += f(rng, sigma);
+        /* Falls die Punkte aus dem Bereich geschoben werden, schiebe sie periodisch wieder rein */
         g->node[n].x += g->L * verschiebung_x[point_not_in_domain(g->node[n].x, g->node[n].y, g->L)];
         g->node[n].y += g->L * verschiebung_y[point_not_in_domain(g->node[n].x, g->node[n].y, g->L)];
     }
@@ -581,7 +583,7 @@ void create_edges_regular(gs_graph_t *g)
 /*! \fn inline int check_relative_neighborhood(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3)
     \brief Prüft, ob node3 im Lune zwischen node1 und node2 liegt
 
-    \param [in]    dist12   Abstandsquadrat zwischen node1 und node2
+    \param [in]    dist12   Abstand zwischen node1 und node2
     \param [in]    node1    Erster  Knoten
     \param [in]    node2    Zweiter Knoten
     \param [in]    node3    Dritter Knoten
@@ -589,7 +591,7 @@ void create_edges_regular(gs_graph_t *g)
 inline int check_relative_neighborhood(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3)
 {
     double dist13, dist23;
-    dist12*=dist12;
+    dist12*=dist12; /* Mache Abstandsquadrat aus dem Abstand */
     /* Überprüfe diesen Punkte */
     dist13 = (node1.x-node3.x)*(node1.x-node3.x)
             + (node1.y-node3.y)*(node1.y-node3.y);
@@ -614,9 +616,9 @@ inline int check_relative_neighborhood(double dist12, gs_node_t node1, gs_node_t
 inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t node2, double dist12, int L, int *x0, int *x1, int *y0, int *y1)
 {
     *x0 = MAX(floor(node1.x-dist12), floor(node2.x-dist12));
-    *x1 = MIN(ceil(node1.x+dist12), ceil(node2.x+dist12));
+    *x1 = MIN( ceil(node1.x+dist12),  ceil(node2.x+dist12));
     *y0 = MAX(floor(node1.y-dist12), floor(node2.y-dist12));
-    *y1 = MIN(ceil(node1.y+dist12), ceil(node2.y+dist12));
+    *y1 = MIN( ceil(node1.y+dist12),  ceil(node2.y+dist12));
 
     *x0 = MAX(*x0, -L);
     *x1 = MIN(*x1, 2*L-1);
@@ -641,7 +643,7 @@ inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_nod
     mid_y = (node1.y+node2.y)/2;
     /* Überprüfe diesen Punkte */
     dist3m = (mid_x-node3.x)*(mid_x-node3.x)
-            + (mid_y-node3.y)*(mid_y-node3.y);
+           + (mid_y-node3.y)*(mid_y-node3.y);
 
     if( (sqrt(dist3m) <= dist12/2) )
         return(0);
@@ -666,9 +668,9 @@ inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dis
     mid_x = (node1.x+node2.x)/2;
     mid_y = (node1.y+node2.y)/2;
     *x0 = floor(mid_x-dist12/2);
-    *x1 = ceil(mid_x+dist12/2);
+    *x1 =  ceil(mid_x+dist12/2);
     *y0 = floor(mid_y-dist12/2);
-    *y1 = ceil(mid_y+dist12/2);
+    *y1 =  ceil(mid_y+dist12/2);
 
     *x0 = MAX(*x0, -L);
     *x1 = MIN(*x1, 2*L-1);
