@@ -210,7 +210,7 @@ options_t get_cl_args(int argc, char *argv[])
     if(!custom_file_name)
     {
         /* standard Dateiname */
-        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_s_%.1f_x_%d_L_%d_type_%d.dat", o.sigma, o.seed, o.L, o.graph_type);
+        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_s_%.2f_x_%03d_L_%03d_type_%d.dat", o.sigma, o.seed, o.L, o.graph_type);
     }
 
     /* Welchen Algorithmus nutzen? */
