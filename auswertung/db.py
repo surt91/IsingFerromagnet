@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO,
                 datefmt='%d.%m.%YT%H:%M:%S')
 
 class Database():
-    def __init__(self, dbPath = "data.db", dataPath = "../data", graphType=1):
+    def __init__(self, dbPath="data.db", dbRawPath="dataRaw.db", dataPath="../data", graphType=1):
         """! Constructor
 
             Erstellt eine SQLite Datenbank aus den Daten in dataPath, wenn
@@ -28,28 +28,29 @@ class Database():
             Dateien zum Plotten wichtiger Messgrößen aus.
         """
         self.dbPath = dbPath
+        self.dbRawPath = dbRawPath
         self.graphType = graphType
 
         if not os.path.isfile(self.dbPath):
-            # Generate new Database in memory
-            self.conn = sqlite3.connect(":memory:")
+            try:
+                os.remove(self.dbRawPath)
+            except: pass
+            # Generate new Raw Database
+            self.connRaw = sqlite3.connect(self.dbRawPath)
             self.createNewDatabase(dataPath)
+
+            # Generate new Database
+            self.conn = sqlite3.connect(self.dbPath)
             self.calculateNewDatabase()
-            # Copy Database to file
-            logging.info("copy Database to {0}".format(self.dbPath))
-            new_db = sqlite3.connect(self.dbPath)
-            logging.info("  drop rawdata")
-            self.conn.execute("""DROP TABLE rawdata""")
+
+            # Cleanup Databse
             logging.info("  vacuum")
             self.conn.execute("""VACUUM""")
-            logging.info("  dump")
-            query = "".join(line for line in self.conn.iterdump())
-            logging.info("  create")
-            new_db.executescript(query)
-            logging.info("  finished")
+
+            # Close Databases
+            self.connRaw.close()
             self.conn.close()
 
-        # lade Datenbank und hole sie in den Speicher
         self.conn = sqlite3.connect(self.dbPath)
 
         logging.info("start writing files for Gnuplot")
@@ -64,6 +65,7 @@ class Database():
         logging.info("  Parallel Tempering Akzeptanzraten")
         self.writeParTempForGnuplot()
         logging.info("  finished")
+
         self.conn.close()
 
     @staticmethod
@@ -292,19 +294,19 @@ class Database():
         Datenbank ein """
         logging.info("create new Database: '{0}'".format(self.dbPath))
 
-        self.conn.execute("""CREATE TABLE rawdata
+        self.connRaw.execute("""CREATE TABLE rawdata
             (n blob, sigma real, L integer, x integer, T real, M blob, E blob, A real)""")
-        for f in os.listdir(dataPath):
+        for f in sorted(os.listdir(dataPath)):
             if not ".dat" in f:
                 continue
 
             r = output_reader(os.path.join(dataPath,f))
-            if r.graphType != self.graphType:
+            if int(r.graphType) != int(self.graphType):
                 continue
             t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i]) for i in range(len(r.T))]
-            self.conn.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?)', t)
-        self.conn.commit()
-        self.conn.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
+            self.connRaw.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?)', t)
+        self.connRaw.commit()
+        self.connRaw.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
 
     def calculateNewDatabase(self):
         """! Liest die Rohdaten aus der Datenbank und berechnet daraus
@@ -337,10 +339,11 @@ class Database():
     def getDifferent(self, val):
         """! Gibt eine Liste aus, in der alle vorkommenden Werte der
         angefragten Spalte vorkommen """
-        c = self.conn.cursor()
         try:
+            c = self.connRaw.cursor()
             c.execute('SELECT DISTINCT {0} FROM rawdata'.format(val))
         except :
+            c = self.conn.cursor()
             c.execute('SELECT DISTINCT {0} FROM calculated_data'.format(val))
         x = c.fetchall()
         x = [i[0] for i in x]
@@ -349,7 +352,7 @@ class Database():
     def getAverageA(self, sigma, L, T):
         """! Liefert die über verschiedene Realisierungen gemittelten
         Parallel Tempering Akzeptanzraten """
-        c = self.conn.cursor()
+        c = self.connRaw.cursor()
         c.execute('SELECT A FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
         A = [i[0] for i in c.fetchall()]
         c.close()
@@ -358,7 +361,7 @@ class Database():
     def getAverageM(self, f, sigma, L, T, signed = False):
         """! Liefert den über verschiedene Realisierungen gemittelten
         Erwartungswert von f(|M|) aus: mean(<f(|M|)>) """
-        c = self.conn.cursor()
+        c = self.connRaw.cursor()
         c.execute('SELECT M FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
         lst = c.fetchall()
         c.close()
@@ -370,10 +373,11 @@ class Database():
 
         # berechne den Mittelwert der Erwartungswerte
         return mean(M), std(M)
+
     def getAverageE(self, f, sigma, L, T):
         """! Liefert den über verschiedene Realisierungen gemittelten
         Erwartungswert von f(E) aus: mean(<f(E)>) """
-        c = self.conn.cursor()
+        c = self.connRaw.cursor()
         c.execute('SELECT E FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
         E = [f(self.getVal(i[0]),T,L) for i in c.fetchall()]
         c.close()
@@ -381,4 +385,4 @@ class Database():
 
 if __name__ == '__main__':
     a=Database( dbPath = "dataRNG.db", dataPath = "../data", graphType=1)
-    b=Database( dbPath = "dataGG.db", dataPath = "../data", graphType=2)
+    #~ b=Database( dbPath = "dataGG.db", dataPath = "../data", graphType=2)
