@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO,
                 datefmt='%d.%m.%YT%H:%M:%S')
 
 class Database():
-    def __init__(self, dbPath="data.db", dbRawPath="dataRaw.db", dataPath="../data", graphType=1):
+    def __init__(self, dbPath="data.db", dbRawPath="dataRaw.db", dataPath="../data", graphType=1, autocorrFlag=False):
         """! Constructor
 
             Erstellt eine SQLite Datenbank aus den Daten in dataPath, wenn
@@ -30,14 +30,17 @@ class Database():
         self.dbPath = dbPath
         self.dbRawPath = dbRawPath
         self.graphType = graphType
+        self.autocorrFlag = autocorrFlag
 
         if not os.path.isfile(self.dbPath):
-            try:
-                os.remove(self.dbRawPath)
-            except: pass
-            # Generate new Raw Database
-            self.connRaw = sqlite3.connect(self.dbRawPath)
-            self.createNewDatabase(dataPath)
+            if not os.path.isfile(self.dbRawPath):
+                logging.info("Datenbank mit Rohdaten nicht vorhanden!")
+                # Generate new Raw Database
+                self.connRaw = sqlite3.connect(self.dbRawPath)
+                self.createNewDatabase(dataPath)
+            else:
+                logging.info("Datenbank mit Rohdaten gefunden!")
+                self.connRaw = sqlite3.connect(self.dbRawPath)
 
             # Generate new Database
             self.conn = sqlite3.connect(self.dbPath)
@@ -60,8 +63,9 @@ class Database():
         self.writeMeanForGnuplot()
         logging.info("  Wärmekapazität, Suzeptibilität")
         self.writeVarForGnuplot()
-        logging.info("  Autokorrelationszeiten")
-        self.writeAutoForGnuplot()
+        if self.autocorrFlag:
+            logging.info("  Autokorrelationszeiten")
+            self.writeAutoForGnuplot()
         logging.info("  Parallel Tempering Akzeptanzraten")
         self.writeParTempForGnuplot()
         logging.info("  finished")
@@ -308,6 +312,23 @@ class Database():
         self.connRaw.commit()
         self.connRaw.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
 
+    def addToDatabase(self, dataPath):
+        """! Liest die Datendatein aus und sortiert ihre Inhalte in die
+        Datenbank ein """
+        logging.info("add to Database: '{0}'".format(self.dbPath))
+
+        for f in sorted(os.listdir(dataPath)):
+            if not ".dat" in f:
+                continue
+
+            r = output_reader(os.path.join(dataPath,f))
+            if int(r.graphType) != int(self.graphType):
+                continue
+            t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i]) for i in range(len(r.T))]
+            self.connRaw.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?)', t)
+        self.connRaw.commit()
+        self.connRaw.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
+
     def calculateNewDatabase(self):
         """! Liest die Rohdaten aus der Datenbank und berechnet daraus
         die Mittelwerte der Erwartungswerte """
@@ -315,9 +336,15 @@ class Database():
         self.conn.execute("""CREATE TABLE calculated_data
             (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real, auto real, A real)""")
 
+        logging.info("suche Verschiedene Sigmas")
         sigmas = self.getDifferent("sigma")
+        logging.info("  sigma: {0}".format(", ".join(map(str,sigmas))))
+        logging.info("suche Verschiedene Ls")
         Ls = self.getDifferent("L")
+        logging.info("  L: {0}".format(", ".join(map(str,Ls))))
+        logging.info("suche Verschiedene Ts")
         Ts = self.getDifferent("T")
+        logging.info("  T: {0}".format(", ".join(map(str,Ts))))
         rows=[]
         for s in sigmas:
             logging.info("sigma: %f" % s)
@@ -330,7 +357,10 @@ class Database():
                     mE, mEErr = self.getAverageE(self.getMean, s, L, T)
                     vM, vMErr = self.getAverageM(self.getSusceptibility, s, L, T)
                     vE, vEErr = self.getAverageE(self.getSpecificHeat, s, L, T)
-                    auto = self.getAverageM(self.getAutocorrTime, s, L, T, signed=True)[0]
+                    if self.autocorrFlag:
+                        auto = self.getAverageM(self.getAutocorrTime, s, L, T, signed=True)[0]
+                    else:
+                        auto = 0
                     A = self.getAverageA(s, L, T)
                     rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr, auto, A))
         self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
@@ -384,5 +414,5 @@ class Database():
         return mean(E), std(E)
 
 if __name__ == '__main__':
-    a=Database( dbPath = "dataRNG.db", dataPath = "../data", graphType=1)
+    a=Database( dbPath = "data.db", dataPath = "../data", graphType=1)
     #~ b=Database( dbPath = "dataGG.db", dataPath = "../data", graphType=2)
