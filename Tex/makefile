@@ -9,4 +9,4 @@ $(DOKUMENT).pdf: $(DOKUMENT).tex
 	pdflatex $(DOKUMENT)
 
 clean:
-	rm *.log *.aux *.bbl *.blg *.toc *.pdf
+	rm *.log *.aux *.bbl *.blg *.toc $(DOKUMENT).pdf
