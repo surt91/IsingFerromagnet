@@ -41,7 +41,8 @@ class Database():
             else:
                 logging.info("Datenbank mit Rohdaten gefunden!")
                 self.connRaw = sqlite3.connect(self.dbRawPath)
-
+            if not os.path.isdir("tmp"):
+                self.addToDatabase("tmp")
             # Generate new Database
             self.conn = sqlite3.connect(self.dbPath)
             self.calculateNewDatabase()
@@ -327,7 +328,6 @@ class Database():
             t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i]) for i in range(len(r.T))]
             self.connRaw.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?)', t)
         self.connRaw.commit()
-        self.connRaw.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
 
     def calculateNewDatabase(self):
         """! Liest die Rohdaten aus der Datenbank und berechnet daraus
