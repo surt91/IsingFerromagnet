@@ -19,15 +19,16 @@ class BinderIntersections():
 
     def getBinderForSigmaAndL(self, sigma, L):
         c = self.conn.cursor()
-        c.execute('SELECT T,binder FROM calculated_data WHERE sigma = ?\
-                    AND L = ? AND T BETWEEN ? AND ? ORDER BY T ASC',
+        c.execute('SELECT T,binder,binderErr FROM calculated_data\
+            WHERE sigma = ? AND L = ? AND T BETWEEN ? AND ? ORDER BY T ASC',
                                          (sigma, L, self.down, self.up))
 
         x = c.fetchall()
 
+        dy = [i[2] for i in x if i[1]]
         y = [i[1] for i in x if i[1]]
         x = [i[0] for i in x if i[1]]
-        return x, y
+        return x, y, dy
 
     def findIntersection(self, fun1, fun2, x0):
         return fsolve(lambda x : fun1(x) - fun2(x), x0)
@@ -36,8 +37,8 @@ class BinderIntersections():
         self.down = down
         self.up = up
 
-        x1,y1 = self.getBinderForSigmaAndL(sigma, L1)
-        x2,y2 = self.getBinderForSigmaAndL(sigma, L2)
+        x1,y1,dy1 = self.getBinderForSigmaAndL(sigma, L1)
+        x2,y2,dy2 = self.getBinderForSigmaAndL(sigma, L2)
         try:
             p1 = numpy.polyfit(x1, y1, self.deg)
             p2 = numpy.polyfit(x2, y2, self.deg)
@@ -45,12 +46,12 @@ class BinderIntersections():
             return 0
 
         if write:
-            self.writeForGnuplot(p1, p2, x1, x2, y1, y2, L1, L2, sigma)
+            self.writeForGnuplot(p1, p2, x1, x2, y1, y2, dy1, dy2, L1, L2, sigma)
 
         result = self.findIntersection(lambda x : numpy.polyval(p1,x), lambda x : numpy.polyval(p2,x), (self.up + self.down)/2)
         return result
 
-    def writeForGnuplot(self, p1, p2, x1, x2, y1, y2, L1, L2, sigma):
+    def writeForGnuplot(self, p1, p2, x1, x2, y1, y2, dy1, dy2, L1, L2, sigma):
         directory = "../data/binderIntersect/"
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -69,21 +70,21 @@ class BinderIntersections():
         f.close()
 
         f = open(os.path.join(directory,"tmp{0}_s_{1}.dat".format(L1,sigma)), "w")
-        for [x,y] in zip(map(str,x1),map(str,y1)):
-            f.write(" ".join([x, y]))
+        for [x,y,dy] in zip(map(str,x1), map(str,y1), map(str,dy1)):
+            f.write(" ".join([x, y, dy]))
             f.write("\n")
         f.close()
 
         f = open(os.path.join(directory,"tmp{0}_s_{1}.dat".format(L2,sigma)), "w")
-        for [x,y] in zip(map(str,x2),map(str,y2)):
-            f.write(" ".join([x, y]))
+        for [x,y,dy] in zip(map(str,x2), map(str,y2), map(str,dy2)):
+            f.write(" ".join([x, y, dy]))
             f.write("\n")
         f.close()
 
         f = open(os.path.join(directory,"plotAll_s_{0}.gp".format(sigma)), "w")
         f.write("set terminal png\n")
         f.write('set output "out_s_{0}.png"\n'.format(sigma))
-        f.write('plot "tmpFit16_s_{0}.dat" u 1:2 w l lc rgb "red", "tmpFit32_s_{0}.dat" u 1:2 w l lc rgb "green", "tmpFit64_s_{0}.dat" u 1:2 w l lc rgb "blue", "tmp16_s_{0}.dat" u 1:2 w p lc rgb "red", "tmp32_s_{0}.dat" u 1:2 w p lc rgb "green", "tmp64_s_{0}.dat" u 1:2 w p lc rgb "blue"\n'.format(sigma))
+        f.write('plot "tmpFit16_s_{0}.dat" u 1:2 w l lc rgb "red", "tmpFit32_s_{0}.dat" u 1:2 w l lc rgb "green", "tmpFit64_s_{0}.dat" u 1:2 w l lc rgb "blue", "tmp16_s_{0}.dat" u 1:2:3 w ye lc rgb "red", "tmp32_s_{0}.dat" u 1:2:3 w ye lc rgb "green", "tmp64_s_{0}.dat" u 1:2:3 w ye lc rgb "blue"\n'.format(sigma))
         f.close()
 
 
