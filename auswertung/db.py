@@ -301,16 +301,9 @@ class Database():
 
         self.connRaw.execute("""CREATE TABLE rawdata
             (n blob, sigma real, L integer, x integer, T real, M blob, E blob, A real)""")
-        for f in sorted(os.listdir(dataPath)):
-            if not ".dat" in f:
-                continue
 
-            r = output_reader(os.path.join(dataPath,f))
-            if int(r.graphType) != int(self.graphType):
-                continue
-            t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i]) for i in range(len(r.T))]
-            self.connRaw.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?)', t)
-        self.connRaw.commit()
+        self.addToDatabase(dataPath)
+
         self.connRaw.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
 
     def addToDatabase(self, dataPath):
