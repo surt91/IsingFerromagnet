@@ -41,7 +41,7 @@ class Database():
             else:
                 logging.info("Datenbank mit Rohdaten gefunden!")
                 self.connRaw = sqlite3.connect(self.dbRawPath)
-            if not os.path.isdir("tmp"):
+            if os.path.isdir("tmp"):
                 self.addToDatabase("tmp")
             # Generate new Database
             self.conn = sqlite3.connect(self.dbPath)
