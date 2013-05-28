@@ -57,42 +57,45 @@ class BinderIntersections():
             os.makedirs(directory)
 
         X = numpy.arange(self.down, self.up, (self.up - self.down)/500)
-        f = open(os.path.join(directory,"tmpFit{0}_s_{1}.dat".format(L1,sigma)), "w")
+        f = open(os.path.join(directory,"tmpFit{0}_s_{1:.3f}.dat".format(L1,sigma)), "w")
         for x in X:
             f.write(" ".join([str(x), str(numpy.polyval(p1,x))]))
             f.write("\n")
         f.close()
 
-        f = open(os.path.join(directory,"tmpFit{0}_s_{1}.dat".format(L2,sigma)), "w")
+        f = open(os.path.join(directory,"tmpFit{0}_s_{1:.3f}.dat".format(L2,sigma)), "w")
         for x in X:
             f.write(" ".join([str(x), str(numpy.polyval(p2,x))]))
             f.write("\n")
         f.close()
 
-        f = open(os.path.join(directory,"tmp{0}_s_{1}.dat".format(L1,sigma)), "w")
+        f = open(os.path.join(directory,"tmp{0}_s_{1:.3f}.dat".format(L1,sigma)), "w")
         for [x,y,dy] in zip(map(str,x1), map(str,y1), map(str,dy1)):
             f.write(" ".join([x, y, dy]))
             f.write("\n")
         f.close()
 
-        f = open(os.path.join(directory,"tmp{0}_s_{1}.dat".format(L2,sigma)), "w")
+        f = open(os.path.join(directory,"tmp{0}_s_{1:.3f}.dat".format(L2,sigma)), "w")
         for [x,y,dy] in zip(map(str,x2), map(str,y2), map(str,dy2)):
             f.write(" ".join([x, y, dy]))
             f.write("\n")
         f.close()
 
-        f = open(os.path.join(directory,"plotAll_s_{0}.gp".format(sigma)), "w")
+        f = open(os.path.join(directory,"plotAll_s_{0:.3f}.gp".format(sigma)), "w")
         f.write("set terminal png\n")
-        f.write('set output "out_s_{0}.png"\n'.format(sigma))
-        f.write('plot "tmpFit16_s_{0}.dat" u 1:2 w l lc rgb "red", "tmpFit32_s_{0}.dat" u 1:2 w l lc rgb "green", "tmpFit64_s_{0}.dat" u 1:2 w l lc rgb "blue", "tmp16_s_{0}.dat" u 1:2:3 w ye lc rgb "red", "tmp32_s_{0}.dat" u 1:2:3 w ye lc rgb "green", "tmp64_s_{0}.dat" u 1:2:3 w ye lc rgb "blue"\n'.format(sigma))
+        f.write('set output "out_s_{0:.3f}.png"\n'.format(sigma))
+        f.write('plot "tmpFit16_s_{0:.3f}.dat" u 1:2 w l lc rgb "red", "tmpFit32_s_{0:.3f}.dat" u 1:2 w l lc rgb "green", "tmpFit64_s_{0:.3f}.dat" u 1:2 w l lc rgb "blue", "tmp16_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "red", "tmp32_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "green", "tmp64_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "blue"\n'.format(sigma))
         f.close()
 
 
 if __name__ == "__main__":
     a = BinderIntersections()
-    for [s, down, up] in zip(   (0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2),
-                                (2.10, 2.10, 2.10, 1.50, 1.50, 1.20, 1.35,1.25,1.2, 1.2, 1.15,1.15,1.15, 1.15, 1.15, 1.15),
-                                (2.40, 2.40, 2.30, 2.00, 1.70, 1.80, 1.5, 1.4, 1.4, 1.4, 1.4, 1.3, 1.3, 1.3, 1.3, 1.3)):
+    for [s, down, up] in zip(   (0.00, 0.03, 0.05, 0.08, 0.10, 0.12, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10, 1.20),
+                                (2.20, 2.20, 2.20, 2.20, 2.10, 2.00, 1.80, 1.50, 1.40, 1.35, 1.25, 1.20, 1.20, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15),
+                                (2.35, 2.35, 2.35, 2.30, 2.30, 2.20, 2.00, 1.70, 1.55, 1.50, 1.40, 1.35, 1.30, 1.30, 1.30, 1.30, 1.30, 1.30, 1.30)):
         print s, a.getIntersection(s, 16, 32, down=down, up=up)
         print s, a.getIntersection(s, 32, 64, down=down, up=up)
         print s, a.getIntersection(s, 64, 16, down=down, up=up)
+        print s, a.getIntersection(s, 16, 128, down=down, up=up)
+        print s, a.getIntersection(s, 32, 128, down=down, up=up)
+        print s, a.getIntersection(s, 64, 128, down=down, up=up)
