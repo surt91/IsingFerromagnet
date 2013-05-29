@@ -262,35 +262,34 @@ class Database():
         numL = len(Ls)
         numT = len(Ts)
 
-        f = open(os.path.join(directory,name), "w")
-        f.write("# Je drei Spalten beschreiben ein L: Temperatur, Wert, Fehler\n")
-        f.write("# L: ")
-        for l in Ls:
-            f.write(" {0}".format(l))
-        f.write("\n")
-
-        # Zeilen
-        for i in range(numT):
-            f.write("{0}".format(Ts[i]))
-            # Spalten
-            for j in range(numL):
-                f.write(" {0}".format(x[j+i*numL]))
-                f.write(" {0}  ".format(dx[j+i*numL]))
+        with open(os.path.join(directory,name), "w") as f:
+            f.write("# Je drei Spalten beschreiben ein L: Temperatur, Wert, Fehler\n")
+            f.write("# L: ")
+            for l in Ls:
+                f.write(" {0}".format(l))
             f.write("\n")
-        f.close()
-        f = open(os.path.join(directory,name.replace(".dat",".gp")), "w")
-        f.write("set terminal png\n")
-        f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
-        f.write("set xlabel 'Temperatur'\n")
-        f.write("set ylabel '{0}'\n".format(name.partition("_")[0]))
-        f.write("set key right\n")
 
-        f.write("plot ")
-        tmpStr = ""
-        for [i,l] in enumerate(Ls):
-            tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'L = {0}'".format(l)))
-        f.write(tmpStr[:-2])
-        f.close()
+            # Zeilen
+            for i in range(numT):
+                f.write("{0}".format(Ts[i]))
+                # Spalten
+                for j in range(numL):
+                    f.write(" {0}".format(x[j+i*numL]))
+                    f.write(" {0}  ".format(dx[j+i*numL]))
+                f.write("\n")
+
+        with open(os.path.join(directory,name.replace(".dat",".gp")), "w") as f:
+            f.write("set terminal png\n")
+            f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
+            f.write("set xlabel 'Temperatur'\n")
+            f.write("set ylabel '{0}'\n".format(name.partition("_")[0]))
+            f.write("set key right\n")
+
+            f.write("plot ")
+            tmpStr = ""
+            for [i,l] in enumerate(Ls):
+                tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'L = {0}'".format(l)))
+            f.write(tmpStr[:-2])
 
     def writeFileForGnuplot2(self, name, x, dx):
         """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
@@ -304,35 +303,33 @@ class Database():
         numS = len(Ss)
         numT = len(Ts)
 
-        f = open(os.path.join(directory,name), "w")
-        f.write("# Je drei Spalten beschreiben ein Sigma: Temperatur, Wert, Fehler\n")
-        f.write("# Sigma: ")
-        for s in Ss:
-            f.write(" {0}".format(s))
-        f.write("\n")
-
-        # Zeilen
-        for i in range(numT):
-            f.write("{0}".format(Ts[i]))
-            # Spalten
-            for j in range(numS):
-                f.write(" {0}".format(x[j+i*numS]))
-                f.write(" {0}  ".format(dx[j+i*numS]))
+        with open(os.path.join(directory,name), "w") as f:
+            f.write("# Je drei Spalten beschreiben ein Sigma: Temperatur, Wert, Fehler\n")
+            f.write("# Sigma: ")
+            for s in Ss:
+                f.write(" {0}".format(s))
             f.write("\n")
-        f.close()
-        f = open(os.path.join(directory,name.replace(".dat",".gp")), "w")
-        f.write("set terminal png\n")
-        f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
-        f.write("set xlabel 'Temperatur'\n")
-        f.write("set ylabel '{0}'\n".format(name.partition("_")[0]))
-        f.write("set key right\n")
 
-        f.write("plot ")
-        tmpStr = ""
-        for [i,s] in enumerate(Ss):
-            tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'s = {0}'".format(s)))
-        f.write(tmpStr[:-2])
-        f.close()
+            # Zeilen
+            for i in range(numT):
+                f.write("{0}".format(Ts[i]))
+                # Spalten
+                for j in range(numS):
+                    f.write(" {0}".format(x[j+i*numS]))
+                    f.write(" {0}  ".format(dx[j+i*numS]))
+                f.write("\n")
+        with open(os.path.join(directory,name.replace(".dat",".gp")), "w") as f:
+            f.write("set terminal png\n")
+            f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
+            f.write("set xlabel 'Temperatur'\n")
+            f.write("set ylabel '{0}'\n".format(name.partition("_")[0]))
+            f.write("set key right\n")
+
+            f.write("plot ")
+            tmpStr = ""
+            for [i,s] in enumerate(Ss):
+                tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'s = {0}'".format(s)))
+            f.write(tmpStr[:-2])
 
     def createNewDatabase(self, dataPath):
         """! Liest die Datendatein aus und sortiert ihre Inhalte in die
