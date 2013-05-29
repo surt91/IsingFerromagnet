@@ -6,6 +6,8 @@ from scipy.optimize import fsolve
 import numpy
 from subprocess import call
 import os
+from itertools import combinations
+from numpy import mean, std
 
 import warnings
 warnings.simplefilter('ignore', numpy.RankWarning)
@@ -93,18 +95,21 @@ if __name__ == "__main__":
         os.makedirs(directory)
 
     a = BinderIntersections()
+    sizes = [16,32,64,128]
+    print [x for x in combinations(sizes, 2)]
+    sigmas = (0.00, 0.03, 0.05, 0.08, 0.10, 0.12, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10, 1.20)
+    results = {}
+    for [s, down, up] in zip(   sigmas,
+                                (2.25, 2.25, 2.25, 2.23, 2.18, 2.08, 1.85, 1.60, 1.45, 1.38, 1.30, 1.24, 1.22, 1.20, 1.18, 1.17, 1.18, 1.18, 1.18),
+                                (2.30, 2.30, 2.30, 2.30, 2.25, 2.15, 1.95, 1.68, 1.55, 1.45, 1.38, 1.32, 1.30, 1.28, 1.26, 1.26, 1.24, 1.24, 1.24)):
+        tmpIntersects = [a.getIntersection(s, L1, L2, down=down, up=up) for [L1,L2] in combinations(sizes, 2)]
+        results.update({s:tmpIntersects})
+
     with open(os.path.join(directory,"Tc.dat"), "w") as f:
-        for [s, down, up] in zip(   (0.00, 0.03, 0.05, 0.08, 0.10, 0.12, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10, 1.20),
-                                    (2.20, 2.20, 2.20, 2.20, 2.10, 2.00, 1.80, 1.50, 1.40, 1.35, 1.25, 1.20, 1.20, 1.15, 1.15, 1.15, 1.15, 1.15, 1.15),
-                                    (2.35, 2.35, 2.35, 2.30, 2.30, 2.20, 2.00, 1.70, 1.55, 1.50, 1.40, 1.35, 1.30, 1.30, 1.30, 1.30, 1.30, 1.30, 1.30)):
-            f.write("{0} {1}\n".format(s,a.getIntersection(s, 16, 32, down=down, up=up)))
-            f.write("{0} {1}\n".format(s,a.getIntersection(s, 32, 64, down=down, up=up)))
-            f.write("{0} {1}\n".format(s,a.getIntersection(s, 64, 16, down=down, up=up)))
-            f.write("{0} {1}\n".format(s,a.getIntersection(s, 128, 16, down=down, up=up)))
-            f.write("{0} {1}\n".format(s,a.getIntersection(s, 128, 32, down=down, up=up)))
-            f.write("{0} {1}\n".format(s,a.getIntersection(s, 128, 64, down=down, up=up)))
+        for s in sigmas:
+            f.write("{0} {1} {2}\n".format(s, mean(results[s]), std(results[s])))
 
     with open(os.path.join(directory,"plotTc.gp"), "w") as f:
         f.write("set terminal png\n")
         f.write('set output "Tc.png"\n')
-        f.write("plot 'Tc.dat'\n")
+        f.write("plot 'Tc.dat' w ye\n")
