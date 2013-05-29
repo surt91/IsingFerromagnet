@@ -79,15 +79,17 @@ class BinderIntersections():
         with open(os.path.join(directory,"plotAll_s_{0:.3f}.gp".format(sigma)), "w") as f:
             f.write("set terminal png\n")
             f.write('set output "out_s_{0:.3f}.png"\n'.format(sigma))
-            f.write('plot "tmpFit16_s_{0:.3f}.dat" u 1:2 w l lc rgb "red", \
-                          "tmpFit32_s_{0:.3f}.dat" u 1:2 w l lc rgb "green", \
-                          "tmpFit64_s_{0:.3f}.dat" u 1:2 w l lc rgb "blue", \
-                          "tmpFit128_s_{0:.3f}.dat" u 1:2 w l lc rgb "yellow", \
-                          "tmp16_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "red", \
-                          "tmp32_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "green", \
-                          "tmp64_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "blue", \
-                          "tmp128_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "yellow"\n'.format(sigma))
-
+            f.write('plot "tmpFit16_s_{0:.3f}.dat" u 1:2 w l lc rgb "red" title "Fit: L = 16", \
+                          "tmpFit32_s_{0:.3f}.dat" u 1:2 w l lc rgb "green" title "Fit: L = 32", \
+                          "tmpFit64_s_{0:.3f}.dat" u 1:2 w l lc rgb "blue" title "Fit: L = 64", \
+                          "tmpFit128_s_{0:.3f}.dat" u 1:2 w l lc rgb "yellow" title "Fit: L = 128", \
+                          "tmp16_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "red" title "L = 16", \
+                          "tmp32_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "green" title "L = 32", \
+                          "tmp64_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "blue" title "L = 64", \
+                          "tmp128_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "yellow" title "L = 128"\n'.format(sigma))
+            f.write("set xlabel 'Temperatur'\n")
+            f.write("set ylabel 'Binder'\n")
+            f.write("set key right\n")
 
 if __name__ == "__main__":
     directory = "../data/binderIntersect/"
@@ -113,3 +115,6 @@ if __name__ == "__main__":
         f.write("set terminal png\n")
         f.write('set output "Tc.png"\n')
         f.write("plot 'Tc.dat' w ye\n")
+        f.write("set xlabel 'sigma'\n")
+        f.write("set ylabel 'T'\n")
+        f.write("set key right\n")
