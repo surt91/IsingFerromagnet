@@ -71,6 +71,11 @@ class Database():
         self.writeParTempForGnuplot()
         logging.info("  finished")
 
+        logging.info("start writing files for Scalana")
+        logging.info("  binder")
+        self.writeBinderForScalana()
+        logging.info("  finished")
+
         self.conn.close()
 
     @staticmethod
@@ -154,9 +159,28 @@ class Database():
         h = [f([choice(x) for _ in N]) for _ in range(n_sample)]
         return var(h)
 
+    def writeForScalana(self, name, val, valErr):
+        """! Sammelt die Werte die für Scalana und gibt sie
+        an die Funktion weiter, die die Dateien schreibt """
+        c = self.conn.cursor()
+        for s in self.getDifferent("sigma"):
+            for l in self.getDifferent("L"):
+                if valErr:
+                    c.execute('SELECT {0},{1} FROM calculated_data WHERE sigma = ? AND L = ? ORDER BY T ASC'.format(val, valErr), (s,l))
+                else:
+                    c.execute('SELECT {0} FROM calculated_data WHERE sigma = ? AND L = ? ORDER BY T ASC'.format(val), (s,l))
+                x = c.fetchall()
+                if valErr:
+                    dx = [i[1] for i in x]
+                else:
+                    dx = [0 for i in x]
+                x = [i[0] for i in x]
+
+                self.writeFileForScalana(name+"_S_{0:.2f}_L_{1}".format(s,l)+".dat", x, dx)
+
     def writeForGnuplot(self, name, val, valErr):
         """! Sammelt die Werte die geplottet werden sollen und gibt sie
-        an die Funktion weiter, die die Datein Schreibt """
+        an die Funktion weiter, die die Dateien schreibt """
         c = self.conn.cursor()
         for s in self.getDifferent("sigma"):
             if valErr:
@@ -170,11 +194,11 @@ class Database():
                 dx = [0 for i in x]
             x = [i[0] for i in x]
 
-            self.writeFileForGnuplot(name+"_{0}".format(s)+".dat", x, dx)
+            self.writeFileForGnuplot(name+"_{0:.2f}".format(s)+".dat", x, dx)
 
     def writeForGnuplot2(self, name, val, valErr):
         """! Sammelt die Werte die geplottet werden sollen und gibt sie
-        an die Funktion weiter, die die Datein Schreibt """
+        an die Funktion weiter, die die Dateien schreibt """
         c = self.conn.cursor()
         for l in self.getDifferent("L"):
             if valErr:
@@ -193,6 +217,8 @@ class Database():
     def writeBinderForGnuplot(self):
         self.writeForGnuplot("Binder", "binder", "binderErr")
         self.writeForGnuplot2("Binder", "binder", "binderErr")
+    def writeBinderForScalana(self):
+        self.writeForScalana("ScalanaBinder", "binder", "binderErr")
     def writeMeanForGnuplot(self):
         self.writeForGnuplot("Mean_M", "meanM", "meanMErr")
         self.writeForGnuplot("Mean_E", "meanE", "meanEErr")
@@ -209,6 +235,20 @@ class Database():
     def writeParTempForGnuplot(self):
         self.writeForGnuplot("Akzeptanz", "A", None)
         self.writeForGnuplot2("Akzeptanz", "A", None)
+
+    def writeFileForScalana(self, name, x, dx):
+        """! Schreibt die Datendatei, für Scalada"""
+        directory = "../data/out/"
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        Ts = sorted(self.getDifferent("T"))
+        numT = len(Ts)
+
+        with open(os.path.join(directory,name), "w") as f:
+            for i in range(numT):
+                if x[i]:
+                    f.write("{0} {1} {2}\n".format(Ts[i], x[i], dx[i]))
 
     def writeFileForGnuplot(self, name, x, dx):
         """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
