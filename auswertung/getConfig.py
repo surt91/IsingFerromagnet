@@ -13,15 +13,15 @@ def getConfig():
     # minimal:
     #~ t16=",".join([str(i) for i in arange(0.1,2.0,0.15)]+[str(i) for i in arange(2.0,3.3,0.2)])
     # genug Daten an Tc:
-    t16l=",".join([str(i) for i in arange(0.1,2.0,0.15)]+[str(i) for i in arange(2.0,2.4,0.02)]+[str(i) for i in arange(2.4,3.3,0.2)])
-    t16m=",".join([str(i) for i in arange(0.1,1.5,0.15)]+[str(i) for i in arange(1.5,2.0,0.02)]+[str(i) for i in arange(2.0,3.3,0.2)])
+    t16l=",".join([str(i) for i in arange(0.1,1.8,0.15)]+[str(i) for i in arange(1.8,2.4,0.02)]+[str(i) for i in arange(2.4,3.3,0.2)])
+    t16m=",".join([str(i) for i in arange(0.1,1.4,0.15)]+[str(i) for i in arange(1.4,2.0,0.02)]+[str(i) for i in arange(2.0,3.3,0.2)])
     t16h=",".join([str(i) for i in arange(0.1,1.1,0.15)]+[str(i) for i in arange(1.1,1.5,0.02)]+[str(i) for i in arange(1.5,3.3,0.2)])
     # minimal:
     #~ t32l=",".join([str(i) for i in arange(0.1,0.9,0.14)]+[str(i) for i in arange(0.9,3.3,0.09)])
     #~ t32h=",".join([str(i) for i in arange(0.1,0.9,0.14)]+[str(i) for i in arange(0.9,3.3,0.09)])
     # genug Daten an Tc:
-    t32l=",".join([str(i) for i in arange(0.1,0.9,0.14)]+[str(i) for i in arange(0.9,2.0,0.09)]+[str(i) for i in arange(2.0,2.4,0.02)]+[str(i) for i in arange(2.4,3.3,0.09)])
-    t32m=",".join([str(i) for i in arange(0.1,0.9,0.14)]+[str(i) for i in arange(0.9,1.5,0.09)]+[str(i) for i in arange(1.5,2.0,0.02)]+[str(i) for i in arange(2.0,3.3,0.09)])
+    t32l=",".join([str(i) for i in arange(0.1,0.9,0.14)]+[str(i) for i in arange(0.9,1.8,0.09)]+[str(i) for i in arange(1.8,2.4,0.02)]+[str(i) for i in arange(2.4,3.3,0.09)])
+    t32m=",".join([str(i) for i in arange(0.1,0.9,0.14)]+[str(i) for i in arange(0.9,1.4,0.09)]+[str(i) for i in arange(1.4,2.0,0.02)]+[str(i) for i in arange(2.0,3.3,0.09)])
     t32h=",".join([str(i) for i in arange(0.1,0.9,0.14)]+[str(i) for i in arange(0.9,1.1,0.09)]+[str(i) for i in arange(1.1,1.5,0.02)]+[str(i) for i in arange(1.5,3.3,0.09)])
     # minimal:
     #~ t64l=",".join([str(i) for i in arange(0.1,0.9,0.15)]+[str(i) for i in arange(0.9,2.30,0.03)]+[str(i) for i in arange(2.30,3.3,0.05)]) #passend fur 64
@@ -44,11 +44,9 @@ def getConfig():
     c16  = [(s,  realisierungUnordnung[16],  sweeps[16],  16,  t16l,  equilibrium[16],  autokorr[16]) for s in sigmas if 0.0<=s<0.2] \
          + [(s,  realisierungUnordnung[16],  sweeps[16],  16,  t16m,  equilibrium[16],  autokorr[16]) for s in sigmas if 0.2<=s<0.3] \
          + [(s,  realisierungUnordnung[16],  sweeps[16],  16,  t16h,  equilibrium[16],  autokorr[16]) for s in sigmas if 0.3<=s<1.3]
-    #~ c16 = [(s,  realisierungUnordnung[16],  sweeps[16],  16,  t16h,  equilibrium[16],  autokorr[16]) for s in sigmas if 0.3<=s<1.3]
     c32  = [(s,  realisierungUnordnung[32],  sweeps[32],  32,  t32l,  equilibrium[32],  autokorr[32]) for s in sigmas if 0.0<=s<0.2] \
          + [(s,  realisierungUnordnung[32],  sweeps[32],  32,  t32m,  equilibrium[32],  autokorr[32]) for s in sigmas if 0.2<=s<0.3] \
          + [(s,  realisierungUnordnung[32],  sweeps[32],  32,  t32h,  equilibrium[32],  autokorr[32]) for s in sigmas if 0.3<=s<1.3]
-    #~ c32 = [(s,  realisierungUnordnung[32],  sweeps[32],  32,  t32h,  equilibrium[32],  autokorr[32]) for s in sigmas if 0.3<=s<1.3]
     c64  = [(s,  realisierungUnordnung[64],  sweeps[64],  64,  t64l,  equilibrium[64],  autokorr[64]) for s in sigmas if 0.0<=s<0.2] \
          + [(s,  realisierungUnordnung[64],  sweeps[64],  64,  t64m,  equilibrium[64],  autokorr[64]) for s in sigmas if 0.2<=s<0.3] \
          + [(s,  realisierungUnordnung[64],  sweeps[64],  64,  t64h,  equilibrium[64],  autokorr[64]) for s in sigmas if 0.3<=s<1.3]
@@ -60,11 +58,11 @@ def getConfig():
          + [(s, realisierungUnordnung[256], sweeps[256], 256, t256h, equilibrium[256], autokorr[256]) for s in sigmas if 0.3<=s<1.3]
 
     #configs = c16 + c32 + c64 + c128 + c256
-    configs = c128 + c64 + c32 + c16
-    #configs = c32 + c16
+    #configs = c128 + c64 + c32 + c16
+    #configs = c16
     #configs = c32
     #configs = c64
-    #configs = c128
+    configs = c128
     #configs = c256
     #configs = c256 + c128 + c64
 
