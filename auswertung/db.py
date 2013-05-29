@@ -346,6 +346,8 @@ class Database():
         self.addToDatabase(dataPath)
 
         self.connRaw.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
+        self.connRaw.execute("""CREATE INDEX idx_ex2 ON rawdata(L)""")
+        self.connRaw.execute("""CREATE INDEX idx_ex3 ON rawdata(T)""")
 
     def addToDatabase(self, dataPath):
         """! Liest die Datendatein aus und sortiert ihre Inhalte in die
@@ -399,6 +401,8 @@ class Database():
                     rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr, auto, A))
         self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
         self.conn.commit()
+        self.conn.execute("""CREATE INDEX idx_ex1 ON calculated_data(sigma,T,L)""")
+        self.conn.execute("""CREATE INDEX idx_ex2 ON calculated_data(L,T,sigma)""")
 
     def getDifferent(self, val):
         """! Gibt eine Liste aus, in der alle vorkommenden Werte der
