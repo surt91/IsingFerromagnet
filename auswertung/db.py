@@ -74,6 +74,8 @@ class Database():
         logging.info("start writing files for Scalana")
         logging.info("  binder")
         self.writeBinderForScalana()
+        logging.info("  Suzeptibilität")
+        self.writeVarForScalana()
         logging.info("  finished")
 
         self.conn.close()
@@ -219,6 +221,8 @@ class Database():
         self.writeForGnuplot2("Binder", "binder", "binderErr")
     def writeBinderForScalana(self):
         self.writeForScalana("ScalanaBinder", "binder", "binderErr")
+    def writeVarForScalana(self):
+        self.writeForScalana("ScalanaSusceptibility", "varM", "varMErr")
     def writeMeanForGnuplot(self):
         self.writeForGnuplot("Mean_M", "meanM", "meanMErr")
         self.writeForGnuplot("Mean_E", "meanE", "meanEErr")
