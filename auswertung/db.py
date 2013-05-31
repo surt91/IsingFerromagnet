@@ -74,6 +74,8 @@ class Database():
         logging.info("start writing files for Scalana")
         logging.info("  binder")
         self.writeBinderForScalana()
+        logging.info("  Mittelwerte E,M")
+        self.writeMeanForScalana()
         logging.info("  Suzeptibilität")
         self.writeVarForScalana()
         logging.info("  finished")
@@ -220,18 +222,25 @@ class Database():
         self.writeForGnuplot2("Binder", "binder", "binderErr")
     def writeBinderForScalana(self):
         self.writeForScalana("ScalanaBinder", "binder", "binderErr")
-    def writeVarForScalana(self):
-        self.writeForScalana("ScalanaSusceptibility", "varM", "varMErr")
+
     def writeMeanForGnuplot(self):
         self.writeForGnuplot("Mean_M", "meanM", "meanMErr")
         self.writeForGnuplot("Mean_E", "meanE", "meanEErr")
         self.writeForGnuplot2("Mean_M", "meanM", "meanMErr")
         self.writeForGnuplot2("Mean_E", "meanE", "meanEErr")
+    def writeMeanForScalana(self):
+        self.writeForScalana("ScalanaMean_M", "meanM", "meanMErr")
+        self.writeForScalana("ScalanaMean_E", "meanE", "meanEErr")
+
     def writeVarForGnuplot(self):
         self.writeForGnuplot("Susceptibility", "varM", "varMErr")
         self.writeForGnuplot("Specific_Heat", "varE", "varEErr")
         self.writeForGnuplot2("Susceptibility", "varM", "varMErr")
         self.writeForGnuplot2("Specific_Heat", "varE", "varEErr")
+    def writeVarForScalana(self):
+        self.writeForScalana("ScalanaSusceptibility", "varM", "varMErr")
+        self.writeForScalana("ScalanaSpecific_Heat", "varE", "varEErr")
+
     def writeAutoForGnuplot(self):
         self.writeForGnuplot("Autokorrelationszeit", "auto", None)
         self.writeForGnuplot2("Autokorrelationszeit", "auto", None)
@@ -241,7 +250,7 @@ class Database():
 
     def writeFileForScalana(self, name, x, dx):
         """! Schreibt die Datendatei, für Scalada"""
-        directory = "../data/out/"
+        directory = "../data/scalana/"
         if not os.path.exists(directory):
             os.makedirs(directory)
 
