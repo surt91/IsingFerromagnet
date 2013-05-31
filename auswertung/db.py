@@ -157,9 +157,8 @@ class Database():
 
     @staticmethod
     def bootstrap_stderr(x, n_resample, f):
-        N = len(x)
         h = [f([choice(x) for _ in x]) for _ in range(n_resample)]
-        return sqrt(var(h))
+        return std(h)
 
     def writeForScalana(self, name, val, valErr):
         """! Sammelt die Werte die für Scalana und gibt sie
