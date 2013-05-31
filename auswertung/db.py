@@ -158,7 +158,7 @@ class Database():
     @staticmethod
     def bootstrap_stderr(x, n_resample, f):
         N = len(x)
-        h = [f([choice(x) for _ in x]) for _ in range(n_sample)]
+        h = [f([choice(x) for _ in x]) for _ in range(n_resample)]
         return sqrt(var(h))
 
     def writeForScalana(self, name, val, valErr):
@@ -440,7 +440,7 @@ class Database():
             M = [f(list(map(abs,self.getVal(i[0]))),T,L) for i in lst]
 
         # berechne den Mittelwert der Erwartungswerte
-        return mean(M), bootstrap_stderr(M, 200, mean)
+        return mean(M), self.bootstrap_stderr(M, 200, mean)
 
     def getAverageE(self, f, sigma, L, T):
         """! Liefert den über verschiedene Realisierungen gemittelten
@@ -449,7 +449,7 @@ class Database():
         c.execute('SELECT E FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
         E = [f(self.getVal(i[0]),T,L) for i in c.fetchall()]
         c.close()
-        return mean(E), bootstrap_stderr(E, 200, mean)
+        return mean(E), self.bootstrap_stderr(E, 200, mean)
 
 if __name__ == '__main__':
     a=Database( dbPath = "data.db", dataPath = "../data", graphType=1)
