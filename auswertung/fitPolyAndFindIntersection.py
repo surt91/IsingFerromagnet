@@ -48,6 +48,9 @@ class BinderIntersections():
         x1,y1,dy1 = self.getBinderForSigmaAndL(sigma, L1)
         x2,y2,dy2 = self.getBinderForSigmaAndL(sigma, L2)
         try:
+            p1 = numpy.polyfit(x1, y1, self.deg, w=dy1)
+            p2 = numpy.polyfit(x2, y2, self.deg, w=dy2)
+        except TypeError: # Numpy Version ist zu alt, fitte ohne Gewichte
             p1 = numpy.polyfit(x1, y1, self.deg)
             p2 = numpy.polyfit(x2, y2, self.deg)
         except:
