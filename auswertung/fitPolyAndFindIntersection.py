@@ -91,11 +91,11 @@ class BinderIntersections():
             f.write('plot "tmpFit16_s_{0:.3f}.dat" u 1:2 w l lc rgb "red" title "Fit: L = 16", \
                           "tmpFit32_s_{0:.3f}.dat" u 1:2 w l lc rgb "green" title "Fit: L = 32", \
                           "tmpFit64_s_{0:.3f}.dat" u 1:2 w l lc rgb "blue" title "Fit: L = 64", \
-                          "tmpFit128_s_{0:.3f}.dat" u 1:2 w l lc rgb "yellow" title "Fit: L = 128", \
+                          "tmpFit128_s_{0:.3f}.dat" u 1:2 w l lc rgb "violet" title "Fit: L = 128", \
                           "tmp16_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "red" title "L = 16", \
                           "tmp32_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "green" title "L = 32", \
                           "tmp64_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "blue" title "L = 64", \
-                          "tmp128_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "yellow" title "L = 128"\n'.format(sigma))
+                          "tmp128_s_{0:.3f}.dat" u 1:2:3 w ye lc rgb "violet" title "L = 128"\n'.format(sigma))
             f.write("set xlabel 'Temperatur'\n")
             f.write("set ylabel 'Binder'\n")
             f.write("set key right\n")
@@ -111,8 +111,8 @@ if __name__ == "__main__":
     logging.info("possible intersections: " + str([x for x in combinations(sizes, 2)]))
 
     sigmas = (0.00, 0.03, 0.05, 0.08, 0.10, 0.12, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10, 1.20)
-    downs  = (2.25, 2.25, 2.25, 2.23, 2.18, 2.08, 1.85, 1.60, 1.45, 1.38, 1.30, 1.24, 1.22, 1.20, 1.18, 1.17, 1.18, 1.18, 1.18)
-    ups    = (2.30, 2.30, 2.30, 2.30, 2.25, 2.15, 1.95, 1.68, 1.55, 1.45, 1.38, 1.32, 1.30, 1.28, 1.26, 1.26, 1.24, 1.24, 1.24)
+    downs  = (2.25, 2.25, 2.25, 2.23, 2.18, 2.07, 1.85, 1.60, 1.45, 1.38, 1.30, 1.24, 1.22, 1.20, 1.18, 1.17, 1.18, 1.18, 1.18)
+    ups    = (2.30, 2.30, 2.30, 2.30, 2.25, 2.15, 1.95, 1.68, 1.53, 1.45, 1.38, 1.32, 1.30, 1.28, 1.26, 1.26, 1.24, 1.24, 1.24)
     results = {}
 
     for [s, down, up] in zip(sigmas, downs, ups):
