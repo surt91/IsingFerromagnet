@@ -28,6 +28,9 @@ class output_reader():
     ## @var sigma
     # Unordnungsparameter (double)
 
+    ## @var J
+    # mittleres J (double)
+
     ## @var x
     # Unordnungsrealisierung (int)
 
@@ -67,6 +70,8 @@ class output_reader():
             self.x = " ".join(header).rpartition("x=")[2].partition (" #")[0]
             self.L = " ".join(header).rpartition("L=")[2].partition (" #")[0]
             self.graphType = " ".join(header).rpartition("type=")[2].partition (" #")[0]
+            self.J = " ".join(header).rpartition("<J>=")[2].partition (" #")[0]
+            if self.J == "# N E M": self.J="0"
 
             # Zwischenspeichern, da Einträge im Reader verbraucht werden
             alle = [i for i in reader]

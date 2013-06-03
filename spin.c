@@ -25,6 +25,8 @@ int main(int argc, char *argv[])
     if(o.verbose)
         fprintf(stdout,"Starte Initialisierung\n");
     list_of_graphs = init_graphs(o);
+    if(o.verbose)
+        fprintf(stdout,"<J> = %f\n", get_mean_weight(list_of_graphs[0]));
 
     if(o.verbose)
         fprintf(stdout,"Starte Monte Carlo Simulation\n");
@@ -392,7 +394,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         exit(-1);
     }
     /* Schreibe Header */
-    fprintf(data_out_file, "# N E M # sigma=%.2f # x=%d # L=%d # type=%d # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type);
+    fprintf(data_out_file, "# N E M # sigma=%.3f # x=%d # L=%d # type=%d # <J>=%.6f # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type, get_mean_weight(list_of_graphs[0]));
     for(nT=0;nT<o.num_temps;nT++)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
@@ -838,6 +840,27 @@ void create_edges(gs_graph_t *g, options_t o)
     free(cell_list);
 }
 
+/*! \fn double get_mean_weight(gs_graph_t *g)
+    \brief Diese Funktion gibt den Mittelwert der Kantengewichte im
+            Graphen g aus
+
+    \param [in] g Graph über den gemittelt wird
+    \return Mittelwert der Kantengewichte
+*/
+double get_mean_weight(gs_graph_t *g)
+{
+    int n, i;
+    double sum = 0;
+    int count = 0;
+    for(n=0;n<g->num_nodes; n++)
+        for(i=0;i<g->node[n].num_neighbors;i++)
+        {
+            sum += g->node[n].neighbors[i].weight;
+            count++;
+        }
+    /* Es sollte egal sein, dass über jede Kante zweimal summiert wird */
+    return (sum / count);
+}
 
 /*! \fn void init_spins_randomly(gs_graph_t *g, gsl_rng *rng)
     \brief Weist den Spins im gs_graph_t g zufällige Werte zu
