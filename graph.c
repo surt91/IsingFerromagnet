@@ -171,7 +171,7 @@ void gs_clear_shallow_graph(gs_graph_t *g)
     free(g);
 }
 
-/*! \fn void svg_circle(double x, double y, int filled, FILE *file)
+/*! \fn void svg_circle(double x, double y, int filled, double scale FILE *file)
     \brief Schreibt einen Kreis in die gegebene Datei im SVG Format
 
     \param x       x-Koordinate des Kreis Mittelpunkts
@@ -179,21 +179,21 @@ void gs_clear_shallow_graph(gs_graph_t *g)
     \param filled  Soll der Kreis gefüllt sein? 1: gefüllt -1: nicht gefüllt
     \param file    File Handler der Output Datei
 */
-void svg_circle(double x, double y, int filled, FILE *file)
+void svg_circle(double x, double y, int filled, double scale, FILE *file)
 {
     if(filled == 1)
         fprintf(file, "<circle cx='%f' cy='%f' r='8' stroke='black'\
-              stroke-width='2' fill='black'/>\n", (x+1)*40, (y+1)*40);
+              stroke-width='2' fill='black'/>\n", (x+1)*scale, (y+1)*scale);
     else if(filled == -1)
         fprintf(file, "<circle cx='%f' cy='%f' r='8' stroke='black'\
-              stroke-width='2' fill='white'/>\n", (x+1)*40, (y+1)*40);
+              stroke-width='2' fill='white'/>\n", (x+1)*scale, (y+1)*scale);
     else
         fprintf(file, "<circle cx='%f' cy='%f' r='8' stroke='black'\
               stroke-width='2' stroke-dasharray='2,3' fill='white'/>\n",
-                                                    (x+1)*40, (y+1)*40);
+                                                    (x+1)*scale, (y+1)*scale);
 }
 
-/*! \fn void svg_circle(double x, double y, int filled, FILE *file)
+/*! \fn void svg_line(double x1, double x2, double y1, double y2, double scale, FILE *file)
     \brief Schreibt einen Kreis in die gegebene Datei im SVG Format
 
     \param x1      x-Anfangspunkt der Linie
@@ -202,11 +202,11 @@ void svg_circle(double x, double y, int filled, FILE *file)
     \param y2      y-Endpunkt der Linie
     \param file    File Handler der Output Datei
 */
-void svg_line(double x1, double x2, double y1, double y2, FILE *file)
+void svg_line(double x1, double x2, double y1, double y2, double scale, FILE *file)
 {
     fprintf(file, "<line x1='%f' x2='%f' y1='%f' y2='%f' \
                         stroke='black' stroke-width='2' />\n",
-                        (x1+1)*40, (x2+1)*40, (y1+1)*40, (y2+1)*40);
+                        (x1+1)*scale, (x2+1)*scale, (y1+1)*scale, (y2+1)*scale);
 }
 
 /*! \fn int point_not_in_domain(double x, double  y, int L)
@@ -253,7 +253,7 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename)
     double dx, dy, dx2, dy2;
     double x, y;
     double n1_x, n1_y, n2_x, n2_y;
-    double off;
+    double off, scale;
     int n2_i;
     double tmp_length;
     int tmp_idx;
@@ -269,19 +269,21 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename)
         exit(-1);
     }
 
+    off = 0;
+    scale = 40;
+
     /* Schreibe Header */
     fprintf(svg_file, "<?xml version='1.0' encoding='UTF-8'?> \n\
                         <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>\n\
                         <svg xmlns='http://www.w3.org/2000/svg'\n\
                         xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events'\n\
-                        version='1.1' baseProfile='full'>\n");
+                        version='1.1' baseProfile='full'  viewBox='%f %f %f %f'>\n", -scale, -scale, (g->L+off+4)*scale, (g->L+off+4)*scale);
 
     /* Rahmen */
-    off = 0;
-    svg_line(   0+off, g->L+off,    0+off,    0+off, svg_file);
-    svg_line(g->L+off, g->L+off,    0+off, g->L+off, svg_file);
-    svg_line(g->L+off,    0+off, g->L+off, g->L+off, svg_file);
-    svg_line(   0+off,    0+off,    0+off, g->L+off, svg_file);
+    svg_line(   0+off, g->L+off,    0+off,    0+off, scale, svg_file);
+    svg_line(g->L+off, g->L+off,    0+off, g->L+off, scale, svg_file);
+    svg_line(g->L+off,    0+off, g->L+off, g->L+off, scale, svg_file);
+    svg_line(   0+off,    0+off,    0+off, g->L+off, scale, svg_file);
 
     /* Kanten */
     for(i=0;i<g->num_nodes;i++)
@@ -319,12 +321,12 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename)
             {
                 x = n2_x - L*verschiebung_x[tmp_idx];
                 y = n2_y - L*verschiebung_y[tmp_idx];
-                svg_line(n1_x, x, n1_y, y, svg_file);
+                svg_line(n1_x, x, n1_y, y, scale, svg_file);
                 /* zeichne zusätzlich den periodischen Punkt */
-                svg_circle(x, y , 0, svg_file);
+                svg_circle(x, y , 0, scale, svg_file);
             }
             else
-                svg_line(n1_x, n2_x, n1_y, n2_y, svg_file);
+                svg_line(n1_x, n2_x, n1_y, n2_y, scale, svg_file);
         }
     }
     /* Knoten */ /* (Seperat, damit keine Kante über einem Knoten ist) */
@@ -334,7 +336,7 @@ void print_graph_svg(gs_graph_t *g, char* svg_filename)
         n1_y = g->node[i].y;
         n1_x += L * verschiebung_x[point_not_in_domain(n1_x, n1_y, L)];
         n1_y += L * verschiebung_y[point_not_in_domain(n1_x, n1_y, L)];
-        svg_circle(n1_x, n1_y, g->spins[i], svg_file);
+        svg_circle(n1_x, n1_y, g->spins[i], scale, svg_file);
 
     }
 
