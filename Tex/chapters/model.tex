@@ -54,11 +54,11 @@
     nodes in the cells which contain the lune.
 
 \subsection{Model}
-    The used model is a modified 2D Ising model where the sites are
-    displaced nodes of a square lattice with periodic boundary
-    conditions. The displacement is randomly gauss distributed with the
-    standard deviation \(\sigma\). This \(\sigma\) is also called
-    \emph{disturbance paramter} in the following.
+    The used model is a modified 2D Ising model where the \(N\)sites are
+    displaced nodes of a square lattice of edgelength \(L\) with
+    periodic boundary conditions. The displacement is randomly gauss
+    distributed with the standard deviation \(\sigma\). This \(\sigma\)
+    is also called \emph{disturbance paramter} in the following.
     The hamiltonian of the Ising model is
     \(\hat{H} = \sum_{<i,j>}J_{ij}s_{i}s_{j}\)
     where \(<i,j>\) refers to by edges connected nodes.
@@ -69,3 +69,16 @@
     distance \(d_{ij}\) between the nodes \(i\) and \(j\). \(J\) is
     called \emph{interaction}.\\
     For \(\sigma = 0\) this is the standard Ising model with \(J = 1\).
+
+\subsection{Determining the Critical Temperature $T_c$}
+    Because the searched for property -- the critical temperature \(T_c\)
+    -- is only defined for infinite systems, hence every computer
+    simulation will show some \emph{finte size effects}.
+    [vielleicht Bild von intensiver Größe?]
+    Despite of this one can obtain \(T_c\) by finite size scaling
+    methods \cite[S. ??]{Newman1998} which also yield the critical
+    exponents [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma
+    die exponenten reproduziert hat].\\
+    Though if one is just interested in the critical Temperature an
+    easier approach is to find the intersections of the binder cumulants
+    \(G\) \cite{Binder1981} for different system sizes \(L=\sqrt N\).\\
