@@ -1,0 +1,35 @@
+\subsubsection{Algorithm}
+    Monte Carlo simulations are used to obtain any properties of the
+    model.
+    %Importance Sampling
+    %Detailed Balance
+    %Ergodicity
+    \paragraph{Metropolis}
+        A basic Monte Carlo algorithm is the Metropolis algorithm
+        \cite{Metropolis1953} ... [einzelheiten]
+    \paragraph{Wolff}
+        Close to the critical temperature \(T_c\) the Metropolis
+        gets slower. Using a cluster algorithm like the Wolff
+        algorithm \cite{Wolff1989} speeds things up.
+        ... [einzelheiten]
+    \paragraph{Parallel Tempering}
+        The main aim is to obtain the critical temperatures
+        \(T_c\) for different disturbance paramters \(\sigma\).
+        Therefore it is necessary to simulate for many temperatures,
+        so that \emph{Parallel Tempering}\footnote{Before R. H.
+            Swendsen published this paper, a algorithm \(MC^3\) was
+            already published with the same idea. [citation needed]}
+        \cite{ParallelTempering1986} is a suited algorithm. Parallel
+        Tempering simulates many identical systems at different
+        temperatures and periodically swaps the spin configurations
+        between two neighboring temperatures with probability
+        \(\). Some good descriptions are in
+        \cite[S. ??]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}.
+    \paragraph{Implementation Details}
+        Here a mixture of the above three algorithms is used.
+        Each sweep a Metropolis sweep, a Wolff cluster step and a
+        Parallel Tempering swap are performed.
+    %~ Monte Carlo Simulationen:\\
+        %~ Wolff-Cluster Algorithmus \cite{Wolff1989} (siehe auch \cite[S. xx]{NewmanBarkema1999}),
+        %~ Metropolis Sweep \cite{Metropolis1953} (siehe auch \cite[S. xx]{NewmanBarkema1999}),
+        %~ Parallel Tempering \cite{ParallelTempering1986} (siehe auch \cite[S. xx]{NewmanBarkema1999} \cite[S. xx]{Katzgraber2011})\\

@@ -1,0 +1,71 @@
+%~ \subsection{Model and Implementation}
+%~ I will desribe the model in this section in a bottom-up fashion.
+%~ First describing all parts and then connecting them.
+
+%~ \subsubsection{Graphs}
+    %~ A graph is a set of nodes \(V\) and edges \(E\).
+\subsection{Gabriel- and Relative Neighborhood Graph}
+\label{sec:graphtypes}
+    The Gabriel Graph \cite{Gabriel1969} is a subgraph of the
+    Delaunay Triangulation. Two nodes \(i\) and \(j\) with distance
+    \(d_{ij}\) are connected with an edge if a circle with it's
+    center on the middlepoint between \(i\) and \(j\) and radius
+    \(r = \frac d 2\) contains no other nodes. This area will be
+    called \emph{lune} in the following. See also Figure
+    \ref{fig:lunes}.\\
+    The Relative Neighborhood Graph \cite{Toussaint1980} is a
+    subgraph of the Gabriel Graph. Two nodes \(i\) and \(j\) with
+    distance \(d_{ij}\) are connected if no other node is in the
+    \emph{lune}. The lune is defined as the intersection of two
+    circles with radius \(r = d\) and centers on \(i\) and \(j\).
+    See also Figure \ref{fig:lunes}.
+    \begin{figure}[htbp]
+        \centering
+        %~ \subfigure{\input{GG_def}}
+        %~ \subfigure{\input{RNG_def}}
+        \subfigure{\input{images/GG_RNG_def}}
+        \subfigure{\includegraphics[width=0.3\textwidth]{images/GGL12S03.pdf}}
+        \subfigure{\includegraphics[width=0.3\textwidth]{images/RNGL12S03.pdf}}
+        \caption[Definition of the lunes and examples of the Gabriel
+                and Relative Neighborhood Graph]
+                {Left: Lunes of Gabriel Graph (red) and Relative
+                    Neighborhood Graph (blue and red). Middle:
+                    Example of a Gabriel Graph. Periodic nodes are
+                    dashed. Right: Example of a Relative
+                    Neighborhood Graph. Periodic nodes are dashed.}
+        \label{fig:lunes}
+    \end{figure}
+
+    To construct these graphs the simple way is to test for every
+    pair of nodes for every node if it lies in the lune of the pair.
+    That is of complexity \(O (n^3)\).\\
+    To reduce the complexity one can first create a Delaunay
+    Triangulation in complexity \(O (n \log n)\)
+    \cite{Leach1992} and test the criterion for each edge, because
+    the Delaunay Triangulation is a supergraph of both. But the
+    implementation of a Delaunay Triangulation algorithm is not
+    trivial and the generation of the graphs is not time critical in
+    the scope of this bachelor thesis.\\
+    So a tradeoff is to use basicly the simple method but only test
+    the criterion for nodes which are near to the lune and abort if
+    one node inside the lune is found. To determine which nodes are
+    near the lune one can save the position of every node in a
+    \emph{cell list} according to \cite{RNGCell} and just test the
+    nodes in the cells which contain the lune.
+
+\subsection{Model}
+    The used model is a modified 2D Ising model where the sites are
+    displaced nodes of a square lattice with periodic boundary
+    conditions. The displacement is randomly gauss distributed with the
+    standard deviation \(\sigma\). This \(\sigma\) is also called
+    \emph{disturbance paramter} in the following.
+    The hamiltonian of the Ising model is
+    \(\hat{H} = \sum_{<i,j>}J_{ij}s_{i}s_{j}\)
+    where \(<i,j>\) refers to by edges connected nodes.
+    The edges are constructed according to the in section
+    \ref{sec:graphtypes} defined rules. So that the lattice resembles a
+    proximity graph. Each node \(i\) has a spin \(s_i = \pm 1\). Each
+    edge has a weight \(J_{ij} = \exp (\alpha (1-d_{ij}))\) with the
+    distance \(d_{ij}\) between the nodes \(i\) and \(j\). \(J\) is
+    called \emph{interaction}.\\
+    For \(\sigma = 0\) this is the standard Ising model with \(J = 1\).

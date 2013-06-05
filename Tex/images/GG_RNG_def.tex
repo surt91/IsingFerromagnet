@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+    \clip (-2,2.25) rectangle (2,-1.75);
+
+    \begin{scope}
+        \clip (-1, 0.5) circle(2.06155281281);
+        \fill[fill=blue!20] (1, 0) circle(2.06155281281);
+    \end{scope}
+
+    \fill[fill=red!20] (0, 0.25) circle(1.0307764064);
+    \draw (0, 0.25) circle(1.0307764064);
+
+    \draw (-1, 0.5) circle(2.06155281281);
+    \fill (-1, 0.5) circle(0.1);
+    \draw (1, 0) circle(2.06155281281);
+    \fill (1, 0) circle(0.1);
+    \draw (1, 0) -- (-1, 0.5);
+\end{tikzpicture}

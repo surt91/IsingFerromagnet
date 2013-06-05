@@ -1,23 +1,69 @@
-\documentclass[a4paper,12pt,titlepage,twoside]{scrartcl}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage[utf8]{inputenc}
-\usepackage[ngerman]{babel}
-\usepackage{ae}
-\usepackage{amsmath}
-\usepackage{amssymb}
+\documentclass[a4paper,headsepline,bibtotocnumbered,12pt,titlepage]{scrartcl} % scrartcl
+\usepackage[english]{babel}
 \usepackage{graphicx}
-\usepackage{enumitem}
-\usepackage{caption}
-\usepackage{subcaption}
+\usepackage[FIGTOPCAP,tight,raggedright,nooneline]{subfigure}
+\usepackage{upgreek}
 \usepackage{float}
-\usepackage{wrapfig}
+\usepackage{units}
 \usepackage{url}
+\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
+\usepackage{amsmath}
+\usepackage{longtable}
+%~ \usepackage{here}
+\usepackage[automark]{scrpage2}
+\pagestyle{scrheadings}
+\clearscrheadfoot
+\ohead{\pagemark}
+\ihead{\headmark}
+\usepackage{setspace}
+\linespread{1.25}
+\usepackage{geometry}
+\geometry{a4paper, top=21mm, left=30mm, right=30mm, bottom=21mm,
+          headsep=10mm, footskip=12mm}
+\usepackage[utf8]{inputenc}
+\addtokomafont{sectioning}{\rmfamily}
+%\renewcommand{\figurename}{Abb.}
+\usepackage[bf]{caption}
+\captionsetup{format=plain}
+%\renewcommand*{\captionfont}{\itshape}
+\setlength{\parindent}{0pt}
+%\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
+%\makeatletter \@addtoreset{figure}{section} \makeatother
+%\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+%\makeatletter \@addtoreset{equation}{section} \makeatother
+%\sloppy
+\fussy
+
+\usepackage{amsfonts}
+\newcommand{\change}[1]{{#1}}
+%\usepackage[ngerman,num]{isodate}
+
+%\usepackage{natbib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%~ \documentclass[a4paper,12pt,titlepage,twoside]{scrartcl}
+\usepackage[T1]{fontenc}
+%~ \usepackage{lmodern}
+%~ \usepackage[utf8]{inputenc}
+%~ \usepackage[ngerman]{babel}
+\usepackage{ae}
+%~ \usepackage{amsmath}
+%~ \usepackage{amssymb}
+%~ \usepackage{graphicx}
+%~ \usepackage{enumitem}
+%~ \usepackage{caption}
+%~ \usepackage{subcaption}
+%~ \usepackage{float}
+%~ \usepackage{wrapfig}
+%~ \usepackage{url}
+
+\usepackage{tikz}
+\usetikzlibrary{patterns}
 
 \usepackage{booktabs}
 
 %~ \captionsetup{figurename=Abb. ,tablename=Tab. ,format=hang}
-\captionsetup{figurename=Abb. ,tablename=Tab., format=plain}
+%~ \captionsetup{figurename=Abb. ,tablename=Tab., format=plain}
 
 %für Anführungszeichen unten und oben
 \newcommand{\emphgqq}[1]%
@@ -44,29 +90,39 @@
 
 \hyphenation{}
 
-\title{Ferromagnet auf ad-hoc Netzwerk}
-\author{Hendrik Schawe}
-\date{}
-
+%~ \title{Ferromagnet auf ad-hoc Netzwerk}
+%~ \author{Hendrik Schawe}
+%~ \date{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
-    \maketitle
-
-    \cleardoublepage
+    \input{chapters/title.tex}
+    \setcounter{page}{1}
+    \pagenumbering{roman}
     \tableofcontents
+    \newpage
+    \listoffigures
+    \newpage
+    \setcounter{page}{1}
+    \pagenumbering{arabic}
 
-    \clearpage
-    \section{Einleitung}
-        \input{0_Einleitung}
+    \newpage
+    \section{Introduction}
+        \input{chapters/introduction}
 
-    \section{Theorie}
-        \input{1_Theorie}
+    \section{Monte Carlo Simulations}
+        \input{chapters/monte_carlo}
+
+    \section{Model and Impelementation}
+        \input{chapters/model}
 
     \section{Auswertung}
-        \input{2_Auswertung}
+        \input{chapters/Auswertung}
 
     \section{Zusammenfassung}
         %~ \input{4_Zusammenfassung}
 
     \bibliography{lit}
-    \bibliographystyle{alpha}
+    %~ \bibliographystyle{alpha}
+    \bibliographystyle{amsplain}
+
 \end{document}
