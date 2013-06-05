@@ -352,10 +352,14 @@ class Database():
             (n blob, sigma real, L integer, x integer, T real, M blob, E blob, A real)""")
 
         self.addToDatabase(dataPath)
-
+        
+        logging.info("start creating indices")
         self.connRaw.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
+        logging.info("  s,L,T finished")
         self.connRaw.execute("""CREATE INDEX idx_ex2 ON rawdata(L)""")
+        logging.info("  L finished")
         self.connRaw.execute("""CREATE INDEX idx_ex3 ON rawdata(T)""")
+        logging.info("  T finished")
 
     def addToDatabase(self, dataPath):
         """! Liest die Datendatein aus und sortiert ihre Inhalte in die
