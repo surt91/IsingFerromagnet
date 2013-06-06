@@ -394,7 +394,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         exit(-1);
     }
     /* Schreibe Header */
-    fprintf(data_out_file, "# N E M # sigma=%.3f # x=%d # L=%d # type=%d # <J>=%.6f # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type, get_mean_weight(list_of_graphs[0]));
+    fprintf(data_out_file, "# N E M # sigma=%.3f # x=%d # L=%d # type=%d # <J>=%.6f # deg=%.6f # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type, get_mean_weight(list_of_graphs[0]), get_mean_deg(list_of_graphs[0]));
     for(nT=0;nT<o.num_temps;nT++)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
@@ -860,6 +860,23 @@ double get_mean_weight(gs_graph_t *g)
         }
     /* Es sollte egal sein, dass über jede Kante zweimal summiert wird */
     return (sum / count);
+}
+
+/*! \fn double get_mean_deg(gs_graph_t *g)
+    \brief Diese Funktion gibt den mittlere Kantenzahl pro Knoten aus
+
+    \param [in] g Graph über den gemittelt wird
+    \return mittlere Kantenzahl pro Knoten aus
+*/
+double get_mean_deg(gs_graph_t *g)
+{
+    int n, i;
+    int count = 0;
+    for(n=0;n<g->num_nodes; n++)
+        for(i=0;i<g->node[n].num_neighbors;i++)
+            count++;
+    /* Korrektur, da über jede Kante zweimal summiert wird */
+    return (count/g->num_nodes/2);
 }
 
 /*! \fn void init_spins_randomly(gs_graph_t *g, gsl_rng *rng)
