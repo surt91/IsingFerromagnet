@@ -101,21 +101,45 @@ class BinderIntersections():
             f.write("set key right\n")
 
 if __name__ == "__main__":
-    directory = "../data/binderIntersect/"
-    if not os.path.exists(directory):
-        os.makedirs(directory)
 
-    a = BinderIntersections()
     sizes = [16,32,64,128]
 
     logging.info("possible intersections: " + str([x for x in combinations(sizes, 2)]))
 
-    sigmas = (0.00, 0.03, 0.05, 0.08, 0.10, 0.12, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10, 1.20)
-    downs  = (2.25, 2.25, 2.25, 2.23, 2.18, 2.07, 1.85, 1.60, 1.45, 1.38, 1.30, 1.24, 1.22, 1.20, 1.18, 1.17, 1.18, 1.18, 1.18)
-    ups    = (2.30, 2.30, 2.30, 2.30, 2.25, 2.15, 1.95, 1.68, 1.53, 1.45, 1.38, 1.32, 1.30, 1.28, 1.26, 1.26, 1.24, 1.24, 1.24)
+    sigmas    = (0.00, 0.03, 0.05, 0.08, 0.10, 0.12, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.00, 1.10, 1.20)
+    downsRNG  = (2.25, 2.25, 2.25, 2.23, 2.18, 2.07, 1.85, 1.60, 1.45, 1.38, 1.30, 1.24, 1.22, 1.20, 1.18, 1.17, 1.18, 1.18, 1.18)
+    upsRNG    = (2.30, 2.30, 2.30, 2.30, 2.25, 2.15, 1.95, 1.68, 1.53, 1.45, 1.38, 1.32, 1.30, 1.28, 1.26, 1.26, 1.24, 1.24, 1.24)
+    downsGG   = (2.25, 2.80, 2.80, 2.80, 2.85, 2.85, 2.85, 2.80, 2.60, 2.50, 2.30, 2.20, 2.15, 2.15, 2.10, 2.10, 2.00, 2.00, 2.00)
+    upsGG     = (2.30, 2.95, 2.95, 3.00, 3.00, 3.00, 3.00, 2.90, 2.80, 2.70, 2.40, 2.30, 2.30, 2.30, 2.25, 2.20, 2.20, 2.20, 2.20)
     results = {}
 
-    for [s, down, up] in zip(sigmas, downs, ups):
+
+    directory = "../dataRNG/binderIntersect/"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    a = BinderIntersections("dataRNG.db")
+    for [s, down, up] in zip(sigmas, downsRNG, upsRNG):
+        tmpIntersects = [a.getIntersection(s, L1, L2, down=down, up=up) for [L1,L2] in combinations(sizes, 2)]
+        results.update({s:tmpIntersects})
+
+    with open(os.path.join(directory,"Tc.dat"), "w") as f:
+        for s in sigmas:
+            f.write("{0} {1} {2}\n".format(s, mean(results[s]), std(results[s])))
+
+    with open(os.path.join(directory,"plotTc.gp"), "w") as f:
+        f.write("set terminal png\n")
+        f.write('set output "Tc.png"\n')
+        f.write("plot 'Tc.dat' w ye\n")
+        f.write("set xlabel 'sigma'\n")
+        f.write("set ylabel 'T'\n")
+        f.write("set key right\n")
+
+
+    directory = "../dataGG/binderIntersect/"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    a = BinderIntersections("dataGG.db")
+    for [s, down, up] in zip(sigmas, downsGG, upsGG):
         tmpIntersects = [a.getIntersection(s, L1, L2, down=down, up=up) for [L1,L2] in combinations(sizes, 2)]
         results.update({s:tmpIntersects})
 

@@ -29,6 +29,7 @@ class Database():
         """
         self.dbPath = dbPath
         self.dbRawPath = dbRawPath
+        self.dataPath = dataPath
         self.graphType = graphType
         self.autocorrFlag = autocorrFlag
 
@@ -250,7 +251,7 @@ class Database():
 
     def writeFileForScalana(self, name, x, dx):
         """! Schreibt die Datendatei, für Scalada"""
-        directory = "../data/scalana/"
+        directory = os.path.join(self.dataPath,"scalana")
         if not os.path.exists(directory):
             os.makedirs(directory)
 
@@ -265,7 +266,7 @@ class Database():
     def writeFileForGnuplot(self, name, x, dx):
         """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
         erstellen """
-        directory = "../data/out/"
+        directory = os.path.join(self.dataPath,"out")
         if not os.path.exists(directory):
             os.makedirs(directory)
 
@@ -306,7 +307,7 @@ class Database():
     def writeFileForGnuplot2(self, name, x, dx):
         """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
         erstellen """
-        directory = "../data/out/"
+        directory = os.path.join(self.dataPath,"out")
         if not os.path.exists(directory):
             os.makedirs(directory)
 
@@ -352,7 +353,7 @@ class Database():
             (n blob, sigma real, L integer, x integer, T real, M blob, E blob, A real)""")
 
         self.addToDatabase(dataPath)
-        
+
         logging.info("start creating indices")
         self.connRaw.execute("""CREATE INDEX idx_ex1 ON rawdata(sigma,L,T)""")
         logging.info("  s,L,T finished")
@@ -464,5 +465,5 @@ class Database():
         return mean(E), self.bootstrap_stderr(E, 200, mean)
 
 if __name__ == '__main__':
-    a=Database( dbPath = "data.db", dataPath = "../data", graphType=1)
-    #~ b=Database( dbPath = "dataGG.db", dataPath = "../data", graphType=2)
+    a=Database( dbPath = "dataRNG.db", dataPath = "../dataRNG", graphType=1)
+    b=Database( dbPath = "dataGG.db", dataPath = "../dataGG", graphType=2)
