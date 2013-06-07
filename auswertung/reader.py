@@ -71,7 +71,8 @@ class output_reader():
             self.L = " ".join(header).rpartition("L=")[2].partition (" #")[0]
             self.graphType = " ".join(header).rpartition("type=")[2].partition (" #")[0]
             self.J = " ".join(header).rpartition("<J>=")[2].partition (" #")[0]
-            if self.J == "# N E M": self.J="0"
+            self.sumJ = " ".join(header).rpartition("sumJ=")[2].partition (" #")[0]
+            self.deg = " ".join(header).rpartition("deg=")[2].partition (" #")[0]
 
             # Zwischenspeichern, da Einträge im Reader verbraucht werden
             alle = [i for i in reader]

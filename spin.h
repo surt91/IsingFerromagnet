@@ -88,6 +88,7 @@ inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dis
 void create_edges(gs_graph_t *g, options_t o);
 double get_mean_weight(gs_graph_t *g);
 double get_mean_deg(gs_graph_t *g);
+double get_sum_weight(gs_graph_t *g);
 
 void init_spins_randomly(gs_graph_t *g, gsl_rng *rng);
 void init_spins_up(gs_graph_t *g);

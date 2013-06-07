@@ -25,8 +25,6 @@ int main(int argc, char *argv[])
     if(o.verbose)
         fprintf(stdout,"Starte Initialisierung\n");
     list_of_graphs = init_graphs(o);
-    if(o.verbose)
-        fprintf(stdout,"<J> = %f\n", get_mean_weight(list_of_graphs[0]));
 
     if(o.verbose)
         fprintf(stdout,"Starte Monte Carlo Simulation\n");
@@ -394,7 +392,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         exit(-1);
     }
     /* Schreibe Header */
-    fprintf(data_out_file, "# N E M # sigma=%.3f # x=%d # L=%d # type=%d # <J>=%.6f # deg=%.6f # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type, get_mean_weight(list_of_graphs[0]), get_mean_deg(list_of_graphs[0]));
+    fprintf(data_out_file, "# N E M # sigma=%.3f # x=%d # L=%d # type=%d # <J>=%.6f # deg=%.6f # sumJ=%.6f # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type, get_mean_weight(list_of_graphs[0]), get_mean_deg(list_of_graphs[0]), get_sum_weight(list_of_graphs[0]));
     for(nT=0;nT<o.num_temps;nT++)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
@@ -862,6 +860,24 @@ double get_mean_weight(gs_graph_t *g)
     return (sum / count);
 }
 
+/*! \fn double get_sum_weight(gs_graph_t *g)
+    \brief Diese Funktion gibt die Summe der Kantengewichte pro Knoten
+            im Graphen g aus
+
+    \param [in] g Graph der untersucht wird
+    \return Summe der Kantengewichte pro Knoten
+*/
+double get_sum_weight(gs_graph_t *g)
+{
+    int n, i;
+    double sum = 0;
+    for(n=0;n<g->num_nodes; n++)
+        for(i=0;i<g->node[n].num_neighbors;i++)
+            sum += g->node[n].neighbors[i].weight;
+
+    return (sum / g->num_nodes);
+}
+
 /*! \fn double get_mean_deg(gs_graph_t *g)
     \brief Diese Funktion gibt den mittlere Kantenzahl pro Knoten aus
 
@@ -875,8 +891,8 @@ double get_mean_deg(gs_graph_t *g)
     for(n=0;n<g->num_nodes; n++)
         for(i=0;i<g->node[n].num_neighbors;i++)
             count++;
-    /* Korrektur, da über jede Kante zweimal summiert wird */
-    return (count/g->num_nodes/2);
+
+    return (count/g->num_nodes);
 }
 
 /*! \fn void init_spins_randomly(gs_graph_t *g, gsl_rng *rng)
