@@ -61,8 +61,8 @@
     distributed with the standard deviation \(\sigma\). This \(\sigma\)
     is also called \emph{disturbance paramter} in the following.
     The hamiltonian of the Ising model is
-    \(\hat{H} = \sum_{<i,j>}J_{ij}s_{i}s_{j}\)
-    where \(<i,j>\) refers to by edges connected nodes.
+    \(\hat{H} = \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}\)
+    where \(\avg{i,j}\) refers to by edges connected nodes.
     The edges are constructed according to the in section
     \ref{sec:graphtypes} defined rules. So that the lattice resembles a
     proximity graph. Each node \(i\) has a spin \(s_i = \pm 1\). Each
@@ -73,13 +73,13 @@
     for which exists an analytical solution \cite{Onsager1944}.\\
 
     For evaluation the Monte Carlo simulation is is run till the system
-    is equilibrated after \(t_eq\) sweeps. Then the simulation continues
+    is equilibrated after \(t_{eq}\) sweeps. Then the simulation continues
     and the magnetisation per site \(m\) and energy of the system \(E\)
     are calculated and saved for every \(2\tau\) sweeps. Where \(\tau\)
     denotes the \emph{autocorrelation time} after which two states of
     the system are not correlated anymore.
-    For every observable \(O\) the expected value \(<O>\) is averaged
-    over different randomly generated lattices \(\overline{<O>}\). The
+    For every observable \(O\) the expected value \(\avg{O}\) is averaged
+    over different randomly generated lattices \(\overline{\avg{O}}\). The
     errors are estimated by bootstrapping.
 
 \subsection{Critical Temperature $T_c$ and Critical Exponents}
@@ -92,18 +92,18 @@
     exponents. The critical exponents should not be influenced by the
     disturbance paramter \(\sigma\) [citation needed]. So they will be
     used for consistency cross checking and comparision with the known
-    exact values.\\
-    [theorie mit dem Collaps]
-    [Erklärung autoscale]
-    [Am besten hier direkt die ganze Auswertung rein]
-    [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma
+    exact values \cite[S. 59]{Pelissetto2002}.\\
+    %~ [theorie mit dem Collaps]
+    %~ [Erklärung autoscale]
+    %~ [Am besten hier direkt die ganze Auswertung rein]
+    %~ [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma
     die exponenten reproduziert hat].\\
     Though if one is just interested in the critical Temperature an
     easier approach is to find the intersections of the binder cumulants
-    \(g = (3-\frac{<m^4>}{2<m^2>^2}\) \cite{Binder1981} of different
+    \(g = \brac{3-\frac{\avg{m^4}}{2\avg{m^2}^2}}\) \cite{Binder1981} of different
     system sizes \(L=\sqrt N\).
     Therefore a polynom of degree 4 is fitted to \(g\) in vicinity of
-    the intersection. [vgl. Grafik (villeicht)]
-    %The arithmetic average of the intersections are plotted [hier schon?]
-    [Und den rest der Auswertung]
+    the intersection. %[vgl. Grafik (villeicht)]
+    The arithmetic average of the intersections are plotted [hier schon?]
+    %~ [Und den rest der Auswertung]
     \\
