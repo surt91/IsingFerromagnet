@@ -51,7 +51,8 @@
     one node inside the lune is found. To determine which nodes are
     near the lune one can save the position of every node in a
     \emph{cell list} according to \cite{RNGCell} and just test the
-    nodes in the cells which contain the lune.
+    nodes in the cells which resemble a rectangular bounding box of the
+    lune.
 
 \subsection{Model}
     The used model is a modified 2D Ising model where the \(N\)sites are
@@ -68,17 +69,33 @@
     edge has a weight \(J_{ij} = \exp (\alpha (1-d_{ij}))\) with the
     distance \(d_{ij}\) between the nodes \(i\) and \(j\). \(J\) is
     called \emph{interaction}.\\
-    For \(\sigma = 0\) this is the standard Ising model with \(J = 1\).
+    For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
+    for which exists an analytical solution \cite{Onsager1944}.\\
 
-\subsection{Determining the Critical Temperature $T_c$}
+    For evaluation the Monte Carlo simulation is is run till the system
+    is equilibrated after \(t_eq\) sweeps. Then the simulation continues
+    and the magnetisation per site \(m\) and energy of the system \(E\)
+    are calculated and saved for every \(2\tau\) sweeps. Where \(\tau\)
+    denotes the \emph{autocorrelation time} after which two states of
+    the system are not correlated anymore.
+    For every observable \(O\) the expected value \(<O>\) is averaged
+    over different randomly generated lattices \(\overline{<O>}\). The
+    errors are estimated by bootstrapping.
+
+\subsection{Critical Temperature $T_c$ and Critical Exponents}
     Because the searched for property -- the critical temperature \(T_c\)
     -- is only defined for infinite systems, hence every computer
     simulation will show some \emph{finte size effects}.
     [vielleicht Bild von intensiver Größe?]
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{Newman1998} which also yield the critical
-    exponents [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma
+    exponents. The critical exponents should not be influenced by the
+    disturbance paramter \(\sigma\) [citation needed]. So they will be
+    used for consistency cross checking and comparision with the known
+    exact values.\\
+    [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma
     die exponenten reproduziert hat].\\
     Though if one is just interested in the critical Temperature an
     easier approach is to find the intersections of the binder cumulants
-    \(G\) \cite{Binder1981} for different system sizes \(L=\sqrt N\).\\
+    \(g = (3-\frac{<m^4>}{2<m^2>^2}\) \cite{Binder1981} of different
+    system sizes \(L=\sqrt N\).\\
