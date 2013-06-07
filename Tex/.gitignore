@@ -3,5 +3,7 @@
 *.bbl
 *.blg
 *.toc
+*.lof
 
-*.pdf
+Ferromagnet.pdf
+! images/*
