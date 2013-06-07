@@ -4,15 +4,17 @@
 import os
 from reader import *
 
-def getJFromDat(dataPath):
+def getJFromDat(dataPath, outPath, L):
     J = {}
     sumJ = {}
     deg = {}
+    if not os.path.exists(outPath):
+        os.makedirs(outPath)
 
     for f in sorted(os.listdir(dataPath)):
         if not ".dat" in f:
             continue
-        if not "L_032_" in f:
+        if not "L_{0:03d}_".format(L) in f:
             continue
 
         r = output_reader(os.path.join(dataPath,f))
@@ -39,17 +41,27 @@ def getJFromDat(dataPath):
 
     print dataPath
     print "<J>"
-    for [key, val] in sorted(J.items()):
-        print key, " : ", val[0], "+-", val[1]
-    print " "
-    print "sumJ"
-    for [key, val] in sorted(sumJ.items()):
-        print key, " : ", val[0], "+-", val[1]
-    print " "
-    print "deg"
-    for [key, val] in sorted(deg.items()):
-        print key, " : ", val[0], "+-", val[1]
+    with open(os.path.join(outPath, "meanJ_L{0}.dat".format(L)), "w") as f:
+        for [key, val] in sorted(J.items()):
+            print key, " : ", val[0], "+-", val[1]
+            f.write("{0} {1} {2}\n".format(key,val[0],val[1]))
     print " "
 
-#getJFromDat("../data/GG")
-getJFromDat("../data/RNG")
+    print "sumJ"
+    with open(os.path.join(outPath, "sumJ_L{0}.dat".format(L)), "w") as f:
+        for [key, val] in sorted(sumJ.items()):
+            print key, " : ", val[0], "+-", val[1]
+            f.write("{0} {1} {2}\n".format(key,val[0],val[1]))
+    print " "
+
+    print "deg"
+    with open(os.path.join(outPath, "deg_L{0}.dat".format(L)), "w") as f:
+        for [key, val] in sorted(deg.items()):
+            print key, " : ", val[0], "+-", val[1]
+            f.write("{0} {1} {2}\n".format(key,val[0],val[1]))
+    print " "
+
+getJFromDat("../data/GG", "GG", 16)
+getJFromDat("../data/RNG", "RNG", 16)
+getJFromDat("../data/GG", "GG", 32)
+getJFromDat("../data/RNG", "RNG", 32)
