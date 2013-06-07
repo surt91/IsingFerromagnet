@@ -887,7 +887,7 @@ double get_sum_weight(gs_graph_t *g)
 double get_mean_deg(gs_graph_t *g)
 {
     int n, i;
-    int count = 0;
+    double count = 0;
     for(n=0;n<g->num_nodes; n++)
         for(i=0;i<g->node[n].num_neighbors;i++)
             count++;
