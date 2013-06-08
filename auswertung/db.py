@@ -97,7 +97,7 @@ class Database():
         Speichern in der Datenbank um"""
         a = array.array('d')
         a.extend(x)
-        return buffer(zlib.compress(a.tostring()))
+        return buffer(zlib.compress(a.tostring(),1))
 
     @staticmethod
     def getMean(x,T,L):
