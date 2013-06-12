@@ -84,7 +84,7 @@
     Because the searched for property -- the critical temperature \(T_c\)
     -- is only defined for infinite systems, hence every computer
     simulation will show some \emph{finte size effects}.
-    [vielleicht Bild von intensiver Größe?]
+    %[vielleicht Bild von intensiver Größe?]
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{Newman1998} which also yield the critical
     exponents. The critical exponents should not be influenced by the
@@ -96,14 +96,27 @@
     %~ [Am besten hier direkt die ganze Auswertung rein]
     %~ [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma die exponenten reproduziert hat].\\
     Though if one is just interested in the critical Temperature an
-    easier approach is to find the intersections of the binder cumulants
+    easier approach is to find the intersections of the Binder cumulants
     \(g = 3-\frac{\avg{m^4}}{2\avg{m^2}^2}\) \cite{Binder1981} of different
     system sizes \(L=\sqrt N\).
     Therefore a polynom of degree 4 is fitted to \(g\) in vicinity of
-    the intersection. %[vgl. Grafik (villeicht)]
-    The arithmetic average of the intersections are plotted [hier schon?]
+    the intersection.
+    In figure \ref{fig:binder_fit_s_0} such a fit is plotted for
+    \(\sigma=0\). The cumulants intersect at \(\approx 2.27\).
+    To determine \(T_c\) the intersections are averaged and the standard
+    error is calculated. In this case one gets \(T_c = 2.269(1)\), which
+    is in very good agreement with the exact solution
+    \(T_c = 2.2691...\) \cite{Onsager1944}.\\
+    \begin{figure}[htbp]
+        \centering
+        \subfigure{\includegraphics[width=0.3\textwidth]{images/binder_fit_s_0}}
+        \caption[Binder cumulant fitted with polynom of degree 4]
+                {Binder cumulant fitted with polynom of degree 4
+                (the errorbars are too small to see)}
+        \label{fig:binder_fit_s_0}
+    \end{figure}%[vgl. Grafik (villeicht)]
+    % The arithmetic average of the intersections are plotted [hier schon?]
     %~ [Und den rest der Auswertung]
-    \\
 
 % Erwahnen, dass T_c Graph so aussieht, wie degree graph
 % mit theo ergebnissen von Honeycomb \cite{Wannier1945} vergleichen (fur deg = 3)
