@@ -1,1 +1,26 @@
-Get critical temperatures for different graphs!
+The computing capabilities of modern computers enables researchers to
+collect and analyse vast amounts of data.
+Further statistical systems, for which there exist no analytical soultions
+or only for very simplified or special cases, can be simulated.
+%~ Simulations also have the advantage to be able to measure some quantities
+%~ which are not obtainable by experiment.
+For example to examine phasetransitions, which are defined by the abrupt
+change of an observable ie. the change of the magnetisation of a
+ferromagnet near the Curie temperature or the change of the density of
+water near boiling. Unfortunatly the memory of any computer is small in
+comparison with the thermodynamic limit.
+%~ Of course it is only possible to simulate systems of finite size because
+%~ of the finite memory of computers so the thermodynamic limit can not be
+%~ simulated directly.
+This leads to \emph{finite size effects}. In section \ref{ssec:finitesize}
+will be discussed how to manage them.\\
+
+One of the simplest models with a second order phasetransition is the
+Ising model \cite{Ising1925} which is a simple model of a ferromagnet
+and will be explained in more detail in section \ref{ssec:isingmodel}.
+It is analyticaly solved for two dimensions on some regular lattices
+\cite{Onsager1944} \cite{Wannier1945}.
+In this thesis the critical behavior on some irregular lattices
+resembling proximity graphs (see section \ref{ssec:graphtypes}) will be
+examined using the Monte Carlo simulations described in section
+\ref{sec:montecarlo}.

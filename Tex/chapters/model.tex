@@ -5,7 +5,7 @@
 %~ \subsubsection{Graphs}
     %~ A graph is a set of nodes \(V\) and edges \(E\).
 \subsection{Gabriel- and Relative Neighborhood Graph}
-\label{sec:graphtypes}
+\label{ssec:graphtypes}
     The Gabriel Graph \cite{Gabriel1969} is a subgraph of the
     Delaunay Triangulation. Two nodes \(i\) and \(j\) with distance
     \(d_{ij}\) are connected with an edge if a circle with it's
@@ -53,6 +53,7 @@
     lune.
 
 \subsection{Model}
+\label{ssec:isingmodel}
     The used model is a modified 2D Ising model where the \(N\)sites are
     displaced nodes of a square lattice of edgelength \(L\) with
     periodic boundary conditions. The displacement is randomly gauss
@@ -81,6 +82,7 @@
     errors are estimated by bootstrapping.
 
 \subsection{Critical Temperature $T_c$ and Critical Exponents}
+\label{ssec:finitesize}
     Because the searched for property -- the critical temperature \(T_c\)
     -- is only defined for infinite systems, hence every computer
     simulation will show some \emph{finte size effects}.
