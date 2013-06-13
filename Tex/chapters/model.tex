@@ -57,10 +57,17 @@
     So a tradeoff is to use basicly the simple method but only test
     the criterion for nodes which are near to the lune and abort if
     one node inside the lune is found. To determine which nodes are
-    near the lune one can save the position of every node in a
-    \emph{cell list} according to \cite{RNGCell} and just test the
-    nodes in the cells which resemble a rectangular bounding box of the
-    lune.
+    near the lune one can subdivide the area in \emph{cells} and save
+    for each cell a list with nodes lying inside it \cite{RNGCell}.
+    Now it is just neccessary to test the nodes in the cells which
+    resemble a rectangular bounding box of the lune. Most pairs will be
+    far away from each other and the cells in the middle of the bounding
+    box are completely inside the lune so that only one node has to be
+    tested to discard an edge between them. Connected nodes are near to
+    each other so that only very few cells have to be tested.\\
+    Indeed this method reduced the time needed to construct a Relative
+    Neighborhood graph with \(N=32^2\) and \(N=64^2\) by a factor of
+    over \(15\) respectivly \(40\). But no further analysis was made.
 
 \subsection{Model}
 \label{ssec:isingmodel}
