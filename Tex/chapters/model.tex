@@ -12,26 +12,36 @@
     center on the middlepoint between \(i\) and \(j\) and radius
     \(r = \frac d 2\) contains no other nodes. This area will be
     called \emph{lune} in the following. See also Figure
-    \ref{fig:lunes}.\\
+    \ref{fig:lunes}\subref{sfig:lunes:def}.\\
     The Relative Neighborhood Graph \cite{Toussaint1980} is a
     subgraph of the Gabriel Graph. Two nodes \(i\) and \(j\) with
     distance \(d_{ij}\) are connected if no other node is in the
     \emph{lune}. The lune is defined as the intersection of two
     circles with radius \(r = d\) and centers on \(i\) and \(j\).
-    See also Figure \ref{fig:lunes}.
+    See also Figure \ref{fig:lunes}\subref{sfig:lunes:def}.
     \begin{figure}[htbp]
         \centering
-        \subfigure{\input{images/GG_RNG_def}}
-        \subfigure{\includegraphics[width=0.3\textwidth]{images/GG/L12S03.pdf}}
-        \subfigure{\includegraphics[width=0.3\textwidth]{images/RNG/L12S03.pdf}}
-        \caption[Definition of the lunes and examples of the Gabriel
-                and Relative Neighborhood Graph]
-                {Left: Lunes of Gabriel Graph (red) and Relative
-                    Neighborhood Graph (blue and red). Middle:
-                    Example of a Gabriel Graph. Periodic nodes are
-                    dashed. Right: Example of a Relative
+        \subfigure[Definition of the lunes][]{
+                \label{sfig:lunes:def}
+                \input{images/GG_RNG_def}
+        }
+        \subfigure[Gabriel graph example][]{
+                \label{sfig:lunes:gg}
+                \includegraphics[width=0.3\textwidth]{images/GG/L12S03.pdf}
+        }
+        \subfigure[Relative Neighborhood graph example][]{
+                \label{sfig:lunes:rng}
+                \includegraphics[width=0.3\textwidth]{images/RNG/L12S03.pdf}
+        }
+        \caption[Gabriel - and Relative Neighborhood Graph]
+                {\subref{sfig:lunes:def} Lunes of Gabriel Graph (red)
+                    and Relative Neighborhood Graph (blue and red).
+                 \subref{sfig:lunes:gg} Example of a Gabriel Graph.
+                    Periodic nodes are dashed.
+                 \subref{sfig:lunes:def} Example of a Relative
                     Neighborhood Graph. Periodic nodes are dashed.}
         \label{fig:lunes}
+
     \end{figure}
 
     To construct these graphs the simple way is to test for every
@@ -111,7 +121,10 @@
     \(T_c = 2.2691...\) \cite{Onsager1944}.\\
     \begin{figure}[htbp]
         \centering
-        \subfigure{\includegraphics[width=0.45\textwidth]{plots/binder_fit_s_0}}
+        \subfigure{
+                \label{sfig:binder_fit_s_0}
+                \includegraphics[width=0.45\textwidth]{plots/binder_fit_s_0}
+        }
         \caption[Binder cumulant fitted with polynom of degree 4]
                 {Binder cumulant fitted with polynom of degree 4
                 (the errorbars are too small to see)}
