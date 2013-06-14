@@ -3,7 +3,7 @@ set output 'collapse_s_0.eps'
 
 set key samplen 1. left bottom Left                 # customize key
 set xl "{/Italic (T-T_c) L^{1/{/Symbol n}}}"
-set yl "{/Italic y L}"    # set x,y labels
+set yl "{/Italic g}"                                # set x,y labels
 xc=2.267979
 a=1.006524
 b=0                                                 # set scaling parameters
