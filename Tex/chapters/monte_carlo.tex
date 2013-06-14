@@ -112,7 +112,7 @@ Otherwise the samples might not be representative for the whole system.
     \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}
     the equilibrium is reached after approximately \(N=50\) sweeps for
     either a initial condition of all spins up and all spins random. It
-    does no harm to double that value to be save.
+    does not harm to double that value to be save.
     \begin{figure}[htbp]
         \centering
         \subfigure[Example of an equilibrating Ising system][]{
@@ -135,9 +135,9 @@ Otherwise the samples might not be representative for the whole system.
 
     Because every state is generated from the state before, measurements
     of subsequent states are correlated. To determine when two states
-    are independet, one calculates the autocorrelation function
-    \(\chi(t)\) like in fig. \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}
-    and integrates it to get the autocorrelation time \(\tau = \int \chi(t) \de t\).
+    are independet, one calculates the normalized autocorrelation function
+    \(\frac{\chi(t)}{\chi(0)}\) like in fig. \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}
+    and integrates it to get the autocorrelation time \(\tau = \int \frac{\chi(t)}{\chi(0)} \de t\).
     \(\tau\) is an estimate after which time two samples are not
     correlated anymore. \cite[S. ??]{NewmanBarkema1999} \cite[S. 150f]{Katzgraber2011}.
     To make sure that the error is not underestimated one should wait
