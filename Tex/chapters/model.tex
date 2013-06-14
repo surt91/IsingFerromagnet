@@ -42,10 +42,12 @@
         \caption[Gabriel - and Relative Neighborhood Graph]
                 {\subref{sfig:lunes:def} Lunes of Gabriel Graph (red)
                     and Relative Neighborhood Graph (blue and red).
-                 \subref{sfig:lunes:gg} Example of a Gabriel Graph.
-                    Periodic nodes are dashed.
+                 \subref{sfig:lunes:gg} Example of a Gabriel Graph on
+                    periodic boundary conditions. Periodic nodes are
+                    dashed.
                  \subref{sfig:lunes:def} Example of a Relative
-                    Neighborhood Graph. Periodic nodes are dashed.}
+                    Neighborhood Graph on periodic boundary conditions.
+                    Periodic nodes are dashed.}
         \label{fig:lunes}
 
     \end{figure}
@@ -84,19 +86,19 @@
     is also called \emph{disturbance paramter} in the following.
     The hamiltonian of the Ising model is
     \(\hat{H} = \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}\)
-    where \(\avg{i,j}\) refers to by edges connected nodes.
+    where \(\avg{i,j}\) refers to nodes connected  by edges.
     The edges are constructed according to the in section
-    \ref{sec:graphtypes} defined rules. So that the lattice resembles a
+    \ref{ssec:graphtypes} defined rules. So that the lattice resembles a
     proximity graph. Each node \(i\) has a spin \(s_i = \pm 1\). Each
     edge has a weight \(J_{ij} = \exp (\alpha (1-d_{ij}))\) with the
-    distance \(d_{ij}\) between the nodes \(i\) and \(j\). \(J\) is
-    called \emph{coupling constant}.\\
+    distance \(d_{ij}\) between the nodes \(i\) and \(j\) and
+    \(\alpha = 0.5\). \(J\) is called \emph{coupling constant}.\\
     For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
     for which exists an analytical solution \cite{Onsager1944}.\\
 
     For evaluation the Monte Carlo simulation is is run till the system
     is equilibrated after \(t_{eq}\) sweeps. Then the simulation continues
-    and the magnetisation per site \(m\) and energy of the system \(E\)
+    and the magnetisation per site \(m\) and energy per site \(E\)
     are calculated and saved for every \(2\tau\) sweeps. Where \(\tau\)
     denotes the \emph{autocorrelation time} after which two states of
     the system are not correlated anymore.
@@ -106,12 +108,12 @@
 
 \subsection{Critical Temperature $T_c$ and Critical Exponents}
 \label{ssec:finitesize}
-    Because the searched for property -- the critical temperature \(T_c\)
+    The searched for property -- the critical temperature \(T_c\)
     -- is only defined for infinite systems, hence every computer
     simulation will show some \emph{finte size effects}.
     %[vielleicht Bild von intensiver Größe?]
     Despite of this one can obtain \(T_c\) by finite size scaling
-    methods \cite[S. ??]{Newman1998} which also yield the critical
+    methods \cite[S. ??]{NewmanBarkema1999} which also yield the critical
     exponents. The critical exponents should not be influenced by the
     disturbance paramter \(\sigma\) [citation needed]. So they will be
     used for consistency cross checking and comparision with the known
@@ -120,13 +122,13 @@
     %~ [Erklärung autoscale]
     %~ [Am besten hier direkt die ganze Auswertung rein]
     %~ [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma die exponenten reproduziert hat].\\
-    Though if one is just interested in the critical Temperature an
+    Though if one is just interested in the critical Temperature, an
     easier approach is to find the intersections of the Binder cumulants
     \(g = 3-\frac{\avg{m^4}}{2\avg{m^2}^2}\) \cite{Binder1981} of different
     system sizes \(L=\sqrt N\).
     Therefore a polynom of degree 4 is fitted to \(g\) in vicinity of
     the intersection.
-    In figure \ref{fig:binder_fit_s_0} such a fit is plotted for
+    In fig. \ref{fig:binder_fit_s_0} such a fit is plotted for
     \(\sigma=0\). The cumulants intersect at \(\approx 2.27\).
     To determine \(T_c\) the intersections are averaged and the standard
     error is calculated. In this case one gets \(T_c = 2.269(1)\), which

@@ -2,48 +2,55 @@
 Monte Carlo simulations are (probalby) named after the casino in Monaco
 \cite{NewmanBarkema1999} because both rely on randomness.\\
 The idea behind Monte Carlo simulations is to take random samples of
-the observable which should be measured and estimate the observable from
+the observable, which should be measured, and estimate the observable from
 this samples. In example the Monte Carlo integration chooses random
 points within the bounding box of the fuction and estimates the integral
 as the fraction of points below the function and points above muliplied
-by the area of the bounding box.\\
+by the area of the bounding box.
+Of course one wants to sample more points, where the area below the
+function is big. This can be achieved by \emph{Importance Sampling}. One
+generates random numbers according to some probabilty distribution and
+weights the result accordingly.\\
 %~ To improve this method: \emph{Importance Sampling}
 %~ means that one takes more samples where the contribution of the
 %~ function to the integral is bigger by using random numbers
 %~ distributed........
-It is difficult to create random state of the Ising system in
+The same principle is used to sample properties of statistical systems
+by generating random states.
+But it is difficult to create random state of the Ising system in
 equilibrium, hence one uses \emph{Markov Chains} to generate new states
 \(\nu\) from old ones \(\mu\).
 It is important that the transition probabilities \(A(\mu \to \nu)\)
-obey \emph{Detailed Balance}, that the probability to leave a state is
+obey \emph{Detailed Balance} and \emph{Ergodicity}.
+\emph{Detailed Balance} means  that the probability to leave a state is
 the same as the probability to enter the state in equilibrium
-\(p_\mu A(\mu \to \nu) = p_\nu A(\nu \to \mu)\)
-with \(p_\mu\) the probability to be in state \(\mu\), and
-\emph{Ergodicity}, that every possible state is reachable from every
-other state in finite time. \cite{NewmanBarkema1999} \cite{Katzgraber2011}\\
-Otherwise the samples might not be representative for the whole system.
+\(p_\mu A(\mu \to \nu) = p_\nu A(\nu \to \mu)\) with \(p_\mu\) the
+probability to be in state \(\mu\).
+And \emph{Ergodicity} requires that every possible state is reachable
+from every other state in finite time. \cite{NewmanBarkema1999} \cite{Katzgraber2011}
+Otherwise the samples might not be representative for the whole system.\\
 
 \subsection{Monte Carlo Algorithms}
     \paragraph{Metropolis}
-        Let \(\Delta \hat H(\mu,\nu)\) be the energy difference between
-        the states \(\mu\) and \(\nu\)
+        A Metropolis Monte Carlo simulation of an Ising model will
+        choose a random spin, calculate the energy change
+        \(\Delta \hat H\) defined in eq. \eqref{eq:dH} that would result
+        from a flip of and excute the flip with the probability \(A\)
+        eq. \eqref{eq:metropolis} \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
         \begin{equation}
-            \Delta \hat H = \hat H(\nu) - \hat H(\mu)
+            \Delta \hat H = \hat H(\nu) - \hat H(\mu)\\
+            \label{eq:dH}
         \end{equation}
-        The Metropolis algorithm \cite{Metropolis1953} chooses the transition
-        probability like eq. \ref{eq:metropolis}
         \begin{equation}
             A(\mu \to \nu)
             \begin{cases}
-                1                                   & \Delta \hat H \le 0 \\
-                \exp{\brac{-\beta \Delta \hat H}}   & \Delta \hat H > 0
+                1                                 & \Delta \hat H \le 0 \\
+                \exp{\brac{-\beta \Delta \hat H}} & \Delta \hat H > 0
             \end{cases}
             \label{eq:metropolis}
         \end{equation}
-        A Metropolis Monte Carlo simulation of an Ising model will choose a
-        random spin, calculate the energy change \(\Delta \hat H\) that would
-        result from a flip of and excute the flip with the probability \(A\).
-        \cite{NewmanBarkema1999} \cite{Katzgraber2011}
+        So if a transition lowers the energy it is always done. This
+        results in a good ratio between calculations and transitions.
 
     \paragraph{Wolff}
         Close to the critical temperature \(T_c\) the Metropolis
@@ -52,8 +59,8 @@ Otherwise the samples might not be representative for the whole system.
         Using a cluster algorithm like the Wolff
         algorithm \cite{Wolff1989} speeds things up.
         For an Ising model the Wolff algorithm builds a cluster of sites
-        starting with an random seed and adding neighboring sites with
-        the same spin with probability
+        starting with a random site and adding neighboring sites of the
+        same spin with probability
         \(P_{\mathrm{add}} = 1-\exp\brac{-2\beta J}\)
         where \(J\) is the coupling constant (explained in section
         \ref{ssec:isingmodel}). The neighboring sites of the added sites
@@ -69,27 +76,27 @@ Otherwise the samples might not be representative for the whole system.
         Both situaitions have no advantage against the Metropolis algorithm.
 
     \paragraph{Parallel Tempering}
-        The main aim is to obtain the critical temperatures
-        \(T_c\) for different disturbance paramters \(\sigma\).
-        Therefore it is necessary to simulate for many temperatures,
-        so that \emph{Parallel Tempering}\footnote{Before R. H.
-            Swendsen published this paper, a algorithm \(MC^3\) was
-            already published with the same idea. [citation needed]}
-        \cite{ParallelTempering1986} is a suited algorithm. Parallel
-        Tempering simulates many identical systems at different
+        %~ The main aim is to obtain the critical temperatures
+        %~ \(T_c\) for different disturbance paramters \(\sigma\).
+        %~ Therefore it is necessary to simulate for many temperatures,
+        %~ so that \emph{Parallel Tempering}\footnote{Before R. H.
+            %~ Swendsen published this paper, a algorithm \(MC^3\) was
+            %~ already published with the same idea. [citation needed]}
+        %~ \cite{ParallelTempering1986} is a suited algorithm.
+        Parallel Tempering simulates many identical systems at different
         temperatures and periodically swaps the spin configurations
         between two neighboring temperatures with probability \(P\) from
-        eq. \ref{eq:partemp} \cite[S. ??]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}.
+        eq. \eqref{eq:partemp} \cite[S. ??]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}.
         \begin{equation}
             P((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,\exp\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}}
             \label{eq:partemp}
         \end{equation}
         This has the advantages that correlation times of single
         temperatures are far smaller because their spin configuration
-        get often replaced by other uncorrelated configurations. And in
-        many cases the more important advantage is that a system which
-        is trapped in a local minimum at a given temperature can travel
-        to higher temperatures leave it's local minimum and cool down
+        gets often replaced by an other uncorrelated configuration. In
+        many cases the more important advantage is, that a system which
+        is trapped in a local minimum at a given temperature, can travel
+        to higher temperatures, leave it's local minimum and cool down
         again in a lower minimum.
 
     \paragraph{Implementation Details}
@@ -111,7 +118,7 @@ Otherwise the samples might not be representative for the whole system.
     are no big changes anymore as equilibrium. In fig.
     \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}
     the equilibrium is reached after approximately \(N=50\) sweeps for
-    either a initial condition of all spins up and all spins random. It
+    either an initial condition of all spins up and all spins random. It
     does not harm to double that value to be save.
     \begin{figure}[htbp]
         \centering
