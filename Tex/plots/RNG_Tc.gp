@@ -4,4 +4,4 @@ set output 'RNG_Tc.eps'
 set xlabel '{/Italic {/Symbol s}}'
 set ylabel '{/Italic T}'
 
-plot 'data/RNG_Tc.dat' w ye
+plot 'data/RNG_Tc.dat' w ye ps 2 pt 1
