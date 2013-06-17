@@ -130,18 +130,19 @@
     %~ [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma die exponenten reproduziert hat].\\
     \begin{figure}[htbp]
         \centering
-        \subfigure[Example of a datacollapse to determine critical exponents][]{
-                \label{sfig:collapse_s_0}
-                \includegraphics[width=0.47\textwidth]{plots/collapse_s_0}
-        }
         \subfigure[Example of a Binder cumulant to determine the critical temperature][]{
                 \label{sfig:binder_fit_s_0}
                 \includegraphics[width=0.47\textwidth]{plots/binder_fit_s_0}
         }
+        \subfigure[Example of a datacollapse to determine critical exponents][]{
+                \label{sfig:collapse_s_0}
+                \includegraphics[width=0.47\textwidth]{plots/collapse_s_0}
+        }
         \caption[Examples of determining critical temperature and exponents]
-                {\subref{sfig:collapse_s_0}
-                 \subref{sfig:binder_fit_s_0} Binder cumulant interpolated
-                    with cubic splines (the errorbars are too small to see)}
+                {\subref{sfig:binder_fit_s_0} Binder cumulant interpolated
+                    with cubic splines (the errorbars are too small to see)
+                 \subref{sfig:collapse_s_0} Collapse of the Binder cumulant
+                }
         \label{fig:binder_fit_s_0}
     \end{figure}
     Though if one is just interested in the critical Temperature, an
@@ -155,7 +156,7 @@
     To determine \(T_c\) the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
     are averaged and the standard
     error is calculated. In this case one gets \(T_c = 2.2689\pm0.0002\), which
-    is in very good agreement with the exact solution
+    is in good agreement with the exact solution
     \(T_c = 2.2691...\) \cite{Onsager1944}.\\
 
     % The arithmetic average of the intersections are plotted [hier schon?]
