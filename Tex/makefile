@@ -3,7 +3,7 @@ CHAPTERS = chapters/title.tex \
            chapters/introduction.tex \
            chapters/model.tex \
            chapters/monte_carlo.tex\
-           chapters/Auswertung.tex
+           chapters/results.tex
 
 IMAGES = images/GG_RNG_def.tex
 
