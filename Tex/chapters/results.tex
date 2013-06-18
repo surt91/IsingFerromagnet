@@ -1,8 +1,61 @@
 \subsection{Critical Temperature}
-    The evaluation of the intersections of the Binder cumulants, yields
-    the
+    The evaluation of the Binder cumulant's intersections, yields the
+    critical temperatures \(T_c\), which are normalized and plotted in
+    fig. \ref{fig:Tc}.
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[][]
+        {
+            \label{sfig:Tc:RNG}
+            \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_norm}
+        }
+        \subfigure[][]
+        {
+            \label{sfig:Tc:GG}
+            \includegraphics[width=0.45\textwidth]{plots/GG_Tc_norm}
+        }
+        \caption[Critical Temperature over different disturbance parameters]
+                {Normalized critical temperatures over different
+                 disturbance parameters for
+                 \subref{sfig:Tc:RNG} the Relative Neighborhood Graph and
+                 \subref{sfig:Tc:GG} the Gabriel Graph.
+                }
+        \label{fig:Tc}
+    \end{figure}
+    % I don't know what all that means...
 
 \subsection{Critical Exponents}
+    For \(\sigma \in \{0,0.1,0.5\}\) a finite size scaling analysis was
+    performed to determine the critical exponents \(\beta, \gamma, \nu\)
+    using \texttt{autoscale.py} \cite{autoscale2009}. The values for
+    \(\sigma = 0\) are analytically known \cite{Pelissetto2002}. The
+    values for all other \(\sigma\) should be the same according to ???
+    [citiation needed]. Like in tab. \ref{tab:critExp} to see, most values
+    are matching the expectations. Most \(\beta\) seem to be a bit too
+    big, but they are close enough to the expectations to be explained
+    by the fact that small systems (\(L=32,64\)) were used for the
+    analysis. [citation needed]
+    \begin{table}[htbp]
+        \center
+        \begin{tabular}{l l l l l}
+            \toprule
+             & \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(\nu\)} & \multicolumn{1}{c}{\(\gamma\)} & \multicolumn{1}{c}{\(\beta\)}\\
+            \midrule
+            exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(-\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
+            \midrule
+            Gabriel      & 0.0 & 1.008(4) & -1.735(2) & 0.1262(4)\\
+                         & 0.1 & 1.02(1)  & -1.744(5) & 0.133(6) \\
+                         & 0.5 & 1.009(8) & -1.75(1)  & 0.125(13)\\
+            \midrule
+            Relative N.  & 0.0 & 1.007(2) & -1.739(2) & 0.130(1) \\
+                         & 0.1 & 0.99(1)  & -1.746(5) & 0.133(4) \\
+                         & 0.5 & 1.00(2)  & -1.75(2)  & 0.143(13)\\
+            \bottomrule
+        \end{tabular}
+        \caption{Critical exponents for different \(\sigma\)}
+        \label{tab:critExp}
+    \end{table}
+
     %~ <J>\(\sigma\), Anmerkung zur Anomalie des GG und der Ähnlichkeit von <J> zu \(T_c\)\\
 %~
     %~ Erklärung zu Autokorreltationszeit \(\tau\) und Equilibrierungszeit \(t_eq\)\\
@@ -11,11 +64,3 @@
         %~ Polyfit 4ten Grades durch Binder Kumulante \cite{Binder1981}\\
         %~ Finite Size Scaling Vergleich der Exponenten (AutoScale \cite{Melchert2009}, Vergleich \cite[S. 59]{Pelissetto2002})\\
 
-    \begin{figure}[htbp]
-        \centering
-        \subfigure{\includegraphics[width=0.45\textwidth]{plots/GG_Tc_norm}}
-        \subfigure{\includegraphics[width=0.45\textwidth]{plots/RNG_Tc_norm}}
-        \caption[Critical Temperature over different disturbance parameters]
-                {normalized critical temperatures over different disturbance parameters}
-        \label{fig:Tc}
-    \end{figure}
