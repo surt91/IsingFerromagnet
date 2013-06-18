@@ -8,4 +8,4 @@ set xr [-0.1:1.3]
 set yr [0.4:0.6]
 set size square
 
-plot "< paste data/RNG_Tc.dat data/RNG_sumJ_L32.dat" u 1:($2/$5) w p ps 2 pt 1 title "{/Italic T_c}"
+plot "< paste data/RNG_Tc.dat data/RNG_sumJ_L32.dat" u 1:($2/$5):($3/$5) w ye ps 2 pt 1 title "{/Italic T_c}"
