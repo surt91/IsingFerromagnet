@@ -59,9 +59,38 @@
                  \subref{sfig:Tc_norm:GG} the Gabriel Graph.
                 }
         \label{fig:Tc}
-    \end{figure}
+    \end{figure}\\
     % I don't know what all that means...
-
+    The Gabriel graph, which is shown on the right side of fig. \ref{fig:Tc},
+    jumps from \(\sigma = 0\) to \(\sigma > 0\). This is easily explained
+    by the definition of the Gabriel graph and it's aftereffects for
+    the transition from \(\sigma = 0\). Visible in fig. \ref{fig:GG_sigma}
+    a small change of sigma causes many new egdes to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI}}.
+    To fully understand this, take four nodes forming a square. The edge
+    across does not exist, because the other two nodes are on the edge
+    of the lune. Move one node slightly into the square, causes the lune
+    to get smaller, hence no other nodes are inside or on the edge of
+    the lune anymore and the edge arises.
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[][]
+        {
+            \label{sfig:GG_sigma:zero}
+            \includegraphics[width=0.45\textwidth]{images/GG/sigma_e0}
+        }
+        \subfigure[][]
+        {
+            \label{sfig:GG_sigma:notzero}
+            \includegraphics[width=0.45\textwidth]{images/GG/sigma_g0}
+        }
+        \caption[]
+        {
+            Gabriel graph with periodic boundary conditions
+            for \subref{sfig:GG_sigma:zero} \(\sigma = 0\)
+            \subref{sfig:GG_sigma:notzero} \(\sigma = 0.01\)
+        }
+        \label{fig:GG_sigma}
+    \end{figure}\\
 \subsection{Critical Exponents}
     For \(\sigma \in \{0,0.1,0.5\}\) a finite size scaling analysis was
     performed to determine the critical exponents \(\beta, \gamma, \nu\)
