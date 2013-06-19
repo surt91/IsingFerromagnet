@@ -110,6 +110,7 @@ Otherwise the samples might not be representative for the whole system.\\
     %~ Parallel Tempering \cite{ParallelTempering1986} (siehe auch \cite[S. xx]{NewmanBarkema1999} \cite[S. xx]{Katzgraber2011})\\
 
 \subsection{Equilibration- and Autocorrelation Time}
+\label{ssec:eqtime}
     To generate an equilibrium state one starts with an arbitrary state
     and waits until it is equilibrated. The count of sweeps till
     equilibrium is called \emph{equilibration time} \(t_{eq}\).
@@ -144,8 +145,10 @@ Otherwise the samples might not be representative for the whole system.\\
     Because every state is generated from the state before, measurements
     of subsequent states are correlated. To determine when two states
     are independet, one calculates the normalized autocorrelation function
-    \(\frac{\chi(t)}{\chi(0)}\) like in fig. \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}
-    and integrates it to get the autocorrelation time \(\tau = \int \frac{\chi(t)}{\chi(0)} \de t\).
+    \(\frac{\chi(t)}{\chi(0)}\), which should decay exponentially
+    \(\chi(t) \propto \exp(t/\tau)\). This is visible in the half
+    logarithmic plot \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
+    To get the autocorrelation time one can integrate \(\tau = \int \frac{\chi(t)}{\chi(0)} \de t\).
     \(\tau\) is an estimate after which time two samples are not
     correlated anymore. \cite[S. ??]{NewmanBarkema1999} \cite[S. 150f]{Katzgraber2011}.
     To make sure that the error is not underestimated one should wait
