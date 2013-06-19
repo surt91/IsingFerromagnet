@@ -3,6 +3,8 @@ set output 'RNG_sumJ.eps'
 
 set xlabel '{/Italic {/Symbol s}}'
 set ylabel '{/Italic < {/Symbol S}_{<ij>} J_{ij} >}'
+set xr [-0.1:1.3]
+set yr [2.8:4.1]
 
 set size square
 

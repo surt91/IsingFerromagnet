@@ -3,6 +3,7 @@ set output 'RNG_Tc.eps'
 
 set xlabel '{/Italic {/Symbol s}}'
 set ylabel '{/Italic T}'
+set xr [-0.1:1.3]
 
 set size square
 

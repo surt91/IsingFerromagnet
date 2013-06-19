@@ -1,24 +1,63 @@
 \subsection{Critical Temperature}
     The evaluation of the Binder cumulant's intersections, yields the
-    critical temperatures \(T_c\), which are normalized and plotted in
-    fig. \ref{fig:Tc}.
+    critical temperatures \(T_c\), which are plotted in
+    fig. \ref{fig:Tc}\subref{sfig:Tc:RNG}\subref{sfig:Tc:GG}.
+    Further in fig. \ref{fig:Tc}\subref{sfig:sumJ:RNG}\subref{sfig:sumJ:GG}
+    the mean sum of the coupling constants to all neighbors \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
+    is plotted which is evidently correlated with \(T_c\).
+    That is plausible, because \(T_c\) is dependend on the coupling
+    constant \(J\) (compare \eqref{eq:exactTc}).\\
+    It seems reasonable to normalize the values of \(T_{c}\) by
+    \(\avg{\sum_{\avg{i,j}} J_{ij}}\) which yields the diagramms fig.
+    \ref{fig:Tc}\subref{sfig:Tc_norm:RNG}\subref{sfig:Tc_norm:GG}.
+
+
     \begin{figure}[htbp]
         \centering
         \subfigure[][]
         {
             \label{sfig:Tc:RNG}
-            \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_norm}
+            \includegraphics[width=0.45\textwidth]{plots/RNG_Tc}
         }
         \subfigure[][]
         {
             \label{sfig:Tc:GG}
+            \includegraphics[width=0.45\textwidth]{plots/GG_Tc}
+        }
+
+        \subfigure[][]
+        {
+            \label{sfig:sumJ:RNG}
+            \includegraphics[width=0.45\textwidth]{plots/RNG_sumJ}
+        }
+        \subfigure[][]
+        {
+            \label{sfig:sumJ:GG}
+            \includegraphics[width=0.45\textwidth]{plots/GG_sumJ}
+        }
+
+        \subfigure[][]
+        {
+            \label{sfig:Tc_norm:RNG}
+            \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_norm}
+        }
+        \subfigure[][]
+        {
+            \label{sfig:Tc_norm:GG}
             \includegraphics[width=0.45\textwidth]{plots/GG_Tc_norm}
         }
         \caption[Critical Temperature over different disturbance parameters]
-                {Normalized critical temperatures over different
+                {Top: Critical temperatures over different
                  disturbance parameters for
                  \subref{sfig:Tc:RNG} the Relative Neighborhood Graph and
-                 \subref{sfig:Tc:GG} the Gabriel Graph.
+                 \subref{sfig:Tc:GG} the Gabriel Graph.\\
+                 Middle: Degree over different disturbance parameters for
+                 \subref{sfig:deg:RNG} the Relative Neighborhood Graph and
+                 \subref{sfig:deg:GG} the Gabriel Graph.\\
+                 Bottom: Normalized critical temperatures over different
+                 disturbance parameters for
+                 \subref{sfig:Tc_norm:RNG} the Relative Neighborhood Graph and
+                 \subref{sfig:Tc_norm:GG} the Gabriel Graph.
                 }
         \label{fig:Tc}
     \end{figure}
