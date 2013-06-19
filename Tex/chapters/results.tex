@@ -66,12 +66,12 @@
     jumps from \(\sigma = 0\) to \(\sigma > 0\). This is easily explained
     by the definition of the Gabriel graph and it's aftereffects for
     the transition from \(\sigma = 0\). Visible in fig. \ref{fig:GG_sigma}
-    a small change of sigma causes many new egdes to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI}}.
+    a small change of sigma causes many new egdes to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
     To fully understand this, take four nodes forming a square. The edge
     across does not exist, because the other two nodes are on the edge
-    of the lune. Move one node slightly into the square, causes the lune
+    of the lune. Moving one node slightly into the square, causes the lune
     to get smaller, hence no other nodes are inside or on the edge of
-    the lune anymore and the edge arises.
+    the lune anymore and the edge appears.
     \begin{figure}[htbp]
         \centering
         \subfigure[][]
@@ -92,6 +92,15 @@
         }
         \label{fig:GG_sigma}
     \end{figure}\\
+    Moreover fig. \ref{fig:Tc}\subref{sfig:Tc_norm:RNG}\subref{sfig:Tc_norm:GG}
+    show monotonically decreasing \(T_c\) with increasing disturbance
+    parameter \(\sigma\). The froms of both curves are similar, but the
+    one for the Relative Neighborhood graph \ref{fig:Tc}\subref{sfig:Tc_norm:RNG}
+    is generally lower and spans over a bigger temperature range than
+    the curve of the Gabriel graph \ref{fig:Tc}\subref{sfig:Tc_norm:GG}.
+    % Warum??? Die eigenschaften des Graphen sollten mit der Normalisierung erledigt sein.
+    % RNG: laengere Kanten -> weniger lokale effekte?
+
 \subsection{Critical Exponents}
     For \(\sigma \in \{0,0.1,0.5\}\) a finite size scaling analysis was
     performed to determine the critical exponents \(\beta, \gamma, \nu\)
