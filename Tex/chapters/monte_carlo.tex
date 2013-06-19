@@ -133,22 +133,26 @@ Otherwise the samples might not be representative for the whole system.\\
                 \includegraphics[width=0.47\textwidth]{plots/autoM}
         }
         \caption[Examples for equilibration and autocorrelation]
-                {\subref{sfig:equiandauto:equiE} Example of a Ising
-                    system reaching equilibrium at \(T=2.36\) and
-                 \subref{sfig:equiandauto:autoM} the
-                    autocorrelation of an Ising system at \(T=2.40\)
-                    (only Metropolis sweeps).
-                }
+        {
+            \subref{sfig:equiandauto:equiE} Example of a Ising system
+                \(L=64\) reaching equilibrium at \(T=2.36\) and
+            \subref{sfig:equiandauto:autoM} the autocorrelation of an
+                Ising system \(L=64\) at \(T=2.40\) (only Metropolis
+                sweeps) on half logarithmic axis.
+                The straight line is a exponential fit \(\exp(-t/\tau)\)
+                with \(\tau = 342(1)\).
+        }
         \label{fig:equiandauto}
-    \end{figure}
-
+    \end{figure}\\
     Because every state is generated from the state before, measurements
     of subsequent states are correlated. To determine when two states
     are independet, one calculates the normalized autocorrelation function
     \(\frac{\chi(t)}{\chi(0)}\), which should decay exponentially
     \(\chi(t) \propto \exp(t/\tau)\). This is visible in the half
     logarithmic plot \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
-    To get the autocorrelation time one can integrate \(\tau = \int \frac{\chi(t)}{\chi(0)} \de t\).
+    To get the autocorrelation time one can either fit a exponential
+    function \(\exp(-t/\tau)\) like in fig \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}
+    or integrate \(\tau = \int \frac{\chi(t)}{\chi(0)} \de t\).
     \(\tau\) is an estimate after which time two samples are not
     correlated anymore. \cite[S. ??]{NewmanBarkema1999} \cite[S. 150f]{Katzgraber2011}.
     To make sure that the error is not underestimated one should wait
