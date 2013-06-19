@@ -52,14 +52,14 @@
                 dashed.
         }
         \label{fig:lunes}
-
-    \end{figure}
-
-    To construct these graphs the simple way is to test for every
-    pair of nodes for every node if it lies in the lune of the pair.
-    That is of complexity \(O (n^3)\).\\
+    \end{figure}\\
+    To construct these graphs the simple way is to test for each
+    pair of nodes one has to check for every other node if it lies in
+    the lune of the pair. That is of complexity \(O (N^3)\), because
+    there are \(N(N-1)\) pairs and for each \(N-2\) nodes to test. So
+    the product is of order \(O(N^3)\)\\
     To reduce the complexity one can first create a Delaunay
-    Triangulation in complexity \(O (n \log n)\)
+    Triangulation in complexity \(O (N \log N)\)
     \cite{Leach1992} and test the criterion for each edge, because
     the Delaunay Triangulation is a supergraph of both. But the
     implementation of a Delaunay Triangulation algorithm is not
@@ -78,9 +78,11 @@
     each other so that only very few cells have to be tested.\\
     Indeed this method reduced the time needed to construct a Relative
     Neighborhood graph with \(N=32^2\) and \(N=64^2\) by a factor of
-    over \(15\) respectivly \(40\). But no further analysis was made.
+    over \(15\) respectivly \(40\). Though the complexity is still of
+    order \(O(N^2)\) in the best case, because for every pair at least
+    one check has to be performed.
 
-\subsection{The Disturbed Ising Model}
+\subsection{The Disorderd Ising Model}
 \label{ssec:isingmodel}
     The used model is a modified 2D Ising model where the \(N=L^2\) sites
     are displaced nodes of a square lattice of edge length \(L\) with
@@ -104,9 +106,12 @@
     and the magnetisation per site \(m\) and energy per site \(E\)
     are calculated and saved for every \(2\tau\) sweeps. Where \(\tau\)
     denotes the \emph{autocorrelation time} (see also \ref{ssec:eqtime}).
-    For every observable \(O\) the expected value \(\avg{O}\) is averaged
-    over different randomly generated lattices \(\overline{\avg{O}}\). The
-    errors are estimated by bootstrapping.
+    For every observable \(O\) the expected value \(\avg{O}\) is determined
+    as the mean of \(10000\) measurements for \(L=16,32\) or \(5000\) for
+    \(L=64,128\). The expected values \(\avg{O}\) for \(100\) different
+    random proximity graphs with the same disorder paramter \(\sigma\)
+    are then averaged to \(\overline{\avg{O}}\). The errors are estimated
+    by bootstrapping.
 
 \subsection{Critical Temperature $T_c$ and Critical Exponents}
 \label{ssec:finitesize}
@@ -173,16 +178,16 @@
     Though if one is just interested in the critical Temperature, an
     easier approach is to find the intersections of the Binder cumulants
     \(g\) of different system sizes \(L\).
-    Therefore a cubic spline interpolation is calculated\footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
-    for the measured points.
-    In fig. \ref{fig:gettingCrit}\subref{fig:gettingCrit:binder_fit_s_0}
+    Therefore a cubic spline interpolation\footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
+    is calculated for the measured points.
+    In fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}
     such an interpolation is plotted for \(\sigma=0\). The cumulants
     intersect at \(\approx 2.27 k_{B}\). For the sake of simplicity let
     the Boltzmann constant \(k_{B}=1\) in the following.
     To determine \(T_c\) the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
     are averaged and the standard error is calculated. In this case one
     gets \(T_c = 2.2689\pm0.0002\), which is in good agreement with the
-    exact solution \cite{Onsager1944}
+    exact solution from eq. \eqref{eq:exactTc} \cite{Onsager1944}.
     \begin{equation}
         T_c = 2J/\ln(1+\sqrt 2) = 2.2691...
         \label{eq:exactTc}
