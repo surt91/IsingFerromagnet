@@ -5,6 +5,8 @@ CHAPTERS = chapters/title.tex \
            chapters/monte_carlo.tex\
            chapters/results.tex
 
+BIBFILE = lit.bib
+
 IMAGES = images/GG_RNG_def.tex
 
 GG_LST = plots/GG_Tc_norm.pdf \
@@ -23,7 +25,7 @@ all: $(DOKUMENT).pdf
 
 .PHONY : clean
 
-$(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS) $(IMAGES)
+$(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS) $(IMAGES) $(BIBFILE)
 	pdflatex -interaction=batchmode $(DOKUMENT)
 	bibtex $(DOKUMENT)
 	pdflatex -interaction=batchmode $(DOKUMENT)
