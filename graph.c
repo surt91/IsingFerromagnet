@@ -104,6 +104,7 @@ gs_graph_t *gs_deep_copy_graph(gs_graph_t *g)
 */
 void gs_insert_edge(gs_graph_t *g, int from, int to, double weight)
 {
+    printf("add: %d to %d\n",from, to);
     /* durchsuche den Graphen, ob die Kante schon existiert */
     if(gs_edge_exists(g, from, to))
         return;          /*Kante existiert, Also ist der graph fertig */
@@ -140,6 +141,39 @@ int gs_edge_exists(gs_graph_t *g, int from, int to)
             return(1);
     }
     return(0);
+}
+
+/*! \fn void gs_remove_edge(gs_graph_t *g)
+    \brief Löscht eine Kante im Graphen g.
+
+    \param [in,out] g    Graph, der gelöscht werden soll
+    \param [in]     from Nummer des Knoten #1
+    \param [in]     to   Nummer des Knoten #2
+*/
+void gs_remove_edge(gs_graph_t *g, int from, int to)
+{
+    int n;
+    /* durchsuche den Graphen, ob die Kante existiert */
+    if(!gs_edge_exists(g, from, to))
+        return;    /*Kante existiert nicht, Also ist der graph fertig */
+
+    g->node[from].num_neighbors--;
+    for(n=0;n<g->node[from].num_neighbors;n++)
+        if(g->node[from].neighbors[n].index == to)
+        {
+            g->node[from].neighbors[n].index = g->node[from].neighbors[g->node[from].num_neighbors].index;
+            g->node[from].neighbors[n].weight = g->node[from].neighbors[g->node[from].num_neighbors].weight;
+        }
+    g->node[from].neighbors = (gs_edge_t *) realloc (g->node[from].neighbors, g->node[from].num_neighbors * sizeof(gs_edge_t));
+
+    g->node[to].num_neighbors--;
+    for(n=0;n<g->node[to].num_neighbors;n++)
+        if(g->node[to].neighbors[n].index == from)
+        {
+            g->node[to].neighbors[n].index = g->node[to].neighbors[g->node[to].num_neighbors].index;
+            g->node[to].neighbors[n].weight = g->node[to].neighbors[g->node[to].num_neighbors].weight;
+        }
+    g->node[to].neighbors = (gs_edge_t *) realloc (g->node[to].neighbors, g->node[to].num_neighbors * sizeof(gs_edge_t));
 }
 
 /*! \fn void gs_clear_graph(gs_graph_t *g)

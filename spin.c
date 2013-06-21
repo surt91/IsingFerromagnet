@@ -88,6 +88,8 @@ options_t get_cl_args(int argc, char *argv[])
     o.start_order = 0;
     /* Seed für Zufallsgenerator */
     o.seed = 42;
+    /* soll ein Percolationsübergang erzeugt werden? */
+    o.percolation = 0;
     /* Soll Wolff Algorithmus benutzt werden? */
     wolff_flag = 0;
     /* Soll Parallel Tempering Algorithmus benutzt werden? */
@@ -101,7 +103,7 @@ options_t get_cl_args(int argc, char *argv[])
     o.svg_filename[0]='\0';
 
     opterr = 0;
-    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:g:u:i:wpt:z")) != -1)
+    while ((c = getopt (argc, argv, "hvT:L:x:N:e:s:a:o:g:u:i:wpt:zr")) != -1)
         switch (c)
         {
             case 'T':
@@ -169,6 +171,9 @@ options_t get_cl_args(int argc, char *argv[])
             case 'z':
                 o.zip = 1;
                 break;
+            case 'r':
+                o.percolation = 1;
+                break;
             case 'w':
                 wolff_flag = 1;
                 break;
@@ -196,6 +201,7 @@ options_t get_cl_args(int argc, char *argv[])
                 fprintf(stdout,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");
                 fprintf(stdout,"    -w     Wolff Algorithmus (statt Metropolis)      \n");
                 fprintf(stdout,"    -p     Parallel Tempering                        \n");
+                fprintf(stdout,"    -r     Percolations Übergang                     \n");
                 fprintf(stdout,"    -z     gzip outputfile                           \n");
                 exit(1);
             default:
@@ -278,6 +284,12 @@ options_t get_cl_args(int argc, char *argv[])
         else
             printf("    Parallel Tempering deaktiviert\n");
 
+        if(o.percolation)
+            printf("    Percolation aktiviert\n");
+
+        if(o.svg_filename[0] != '\0')
+            printf("    Graph SVG: '%s'\n", o.svg_filename);
+
         printf("    Filename: '%s'\n",o.filename);
         printf("    \n");
     }
@@ -310,6 +322,13 @@ gs_graph_t **init_graphs(const options_t o)
     /* Verknüpfe die Knoten */
     //create_edges_regular(g);
     create_edges(g, o);
+
+    if(o.percolation)
+    {
+        init_spins_up(g);
+        delete_random_edges_till_percolation(g, o.rng);
+        print_graph_svg(g, "test.svg");
+    }
 
     for(nT=0;nT<o.num_temps;nT++)
     {
@@ -836,6 +855,107 @@ void create_edges(gs_graph_t *g, options_t o)
         free(cell_list[i]);
     }
     free(cell_list);
+}
+
+/*! \fn void delete_random_edges_till_percolation(gs_graph_t *g, gsl_rng *rng)
+    \brief Diese Funktion löscht eine zufällige Kante aus dem Graphen g
+
+    \param [in] g Graph aus dem eine Kante gelöscht werden soll
+*/
+void delete_random_edges_till_percolation(gs_graph_t *g, gsl_rng *rng)
+{
+    int conf = 1; /* 0: einzelner cluster darf aus 1 knoten bestehen
+                     1: einzelner cluster muss mindestens 2 Knoten haben*/
+    int node1, m, node2;
+    double weight;
+    /* suche einen zufälligen Knoten, bis du einen mit mehr als einer
+     * Kante gefunden hast */
+    while(1)
+    {
+        node1 = gsl_rng_uniform(rng) * g->num_nodes;
+        if(g->node[node1].num_neighbors > conf)
+        {
+            m = gsl_rng_uniform(rng) * g->node[node1].num_neighbors;
+            node2 = g->node[node1].neighbors[m].index;
+            if(g->node[node2].num_neighbors > conf)
+            {
+                weight = g->node[node1].neighbors[m].weight;
+                gs_remove_edge(g, node1, node2);
+                if(!test_connectivity_between_nodes(g, node1, node2))
+                {
+                    /* mache letzten Schritt rückgänging */
+                    gs_insert_edge(g, node1, node2, weight);
+                    g->spins[node1] = -1;
+                    return;
+                }
+            }
+        }
+    }
+}
+
+/*! \fn int test_connectivity_between_nodes(gs_graph_t *g, int node1, int node2)
+    \brief Diese Funktion prüft, on zwischen node1 und node2 eine Verbindung
+            durch Kanten besteht.
+
+    Diese Funktion soll per "Depth First Search" http://en.wikipedia.org/wiki/Depth-first_search
+    den Graphen rekursiv durchsuchen.
+
+    \param [in] g     Graph
+    \param [in] node1 Knoten 2
+    \param [in] node2 Knoten 2
+*/
+int test_connectivity_between_nodes(gs_graph_t *g, int node1, int node2)
+{
+    int status;
+    node_t *tree_of_tested_nodes;
+    tree_of_tested_nodes = NULL;
+    tree_of_tested_nodes = gs_depth_first_search(g, node1, node2, tree_of_tested_nodes, &status);
+    clear_tree(tree_of_tested_nodes);
+    return status;
+}
+
+/*! \fn node_t * gs_depth_first_search(gs_graph_t *g, int node, int target, node_t *tree_of_tested_nodes, int *status)
+    \brief Diese Funktion soll per "Depth First Search" http://en.wikipedia.org/wiki/Depth-first_search
+    den Graphen rekursiv durchsuchen.
+
+    \param [in] g      Graph
+    \param [in] node   Momentaner Knoten
+    \param [in] target Zielknoten
+*/
+node_t * gs_depth_first_search(gs_graph_t *g, int node, int target, node_t *tree_of_tested_nodes, int *status)
+{
+    int i, neighbor, p;
+    int tmp = 0;
+    node_t *tr_node;
+
+    if(node == target)
+    {
+        *status = 1;
+        return tree_of_tested_nodes;
+    }
+
+    /* Mache dfs fur alle Nachbarn von node */
+    for(i=0;i<g->node[node].num_neighbors;i++)
+    {
+        neighbor = g->node[node].neighbors[i].index;
+        tr_node = tr_create_node(neighbor);
+        p = 0;
+        tree_of_tested_nodes = tr_insert_node(tree_of_tested_nodes,tr_node,&p);
+        if(p)                     /* node.key schon im Baum vorhanden */
+        {
+            tr_delete_node(tr_node);
+            continue;   /* Muss also nicht mehr berucksichtigt werden */
+        }
+        gs_depth_first_search(g, neighbor, target, tree_of_tested_nodes, &tmp);
+        if(tmp)
+        {
+            *status = 1;
+            return tree_of_tested_nodes;
+        }
+    }
+    /* Nicht gefunden: Graph ist nicht zusammenhangend */
+    *status = 0;
+    return tree_of_tested_nodes;
 }
 
 /*! \fn double get_mean_weight(gs_graph_t *g)

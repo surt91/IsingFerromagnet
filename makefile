@@ -1,10 +1,10 @@
-OBJ 	= graph.o stack.o list.o spin.o
+OBJ 	= graph.o stack.o list.o tree.o spin.o
 
 TARGET	= ising
 LINK	= gcc
 CC	= gcc
 #~ CFLAGS	= -g -pg #-DTHREADED
-#~ LFLAGS	= -lm -lgsl -lgslcblas -lpthread -pg
+#~ LFLAGS	= -lm -lgsl -lgslcblas #-lpthread -pg
 CFLAGS	= -O2 -march=native -pipe # -DTHREADED
 LFLAGS	= -lm -lgsl -lgslcblas # -lpthread
 WARNLEVEL= -Wall # -pedantic

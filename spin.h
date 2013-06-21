@@ -32,6 +32,7 @@
 #include "graph.h"
 #include "stack.h"
 #include "list.h"
+#include "tree.h"
 
 /*! \def MIN(X,Y)
  * Minimum von zwei Zahlen
@@ -68,6 +69,7 @@ typedef struct
     int graph_type;                               //!< Welcher Graph Typ
     int verbose;                                 //!< Gesprächiger Modus
     int zip;                                        //!< gzip Outputfile
+    int percolation;    //!< Soll Percolationsübergang untersucht werden
     char filename[MAX_LEN_FILENAME];               //!< Output Dateiname
     char svg_filename[MAX_LEN_FILENAME];     //!< Graph Output Dateiname
     gsl_rng *rng;                           //!< Random Number Generator
@@ -86,6 +88,9 @@ inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t nod
 inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_node_t node3);
 inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dist12, int L, int *x0, int *x1, int *y0, int *y1);
 void create_edges(gs_graph_t *g, options_t o);
+void delete_random_edges_till_percolation(gs_graph_t *g, gsl_rng *rng);
+int test_connectivity_between_nodes(gs_graph_t *g, int node1, int node2);
+node_t * gs_depth_first_search(gs_graph_t *g, int node, int target, node_t *tree_of_tested_nodes, int *status);
 double get_mean_weight(gs_graph_t *g);
 double get_mean_deg(gs_graph_t *g);
 double get_sum_weight(gs_graph_t *g);
