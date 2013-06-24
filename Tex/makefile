@@ -4,6 +4,7 @@ CHAPTERS = chapters/title.tex \
            chapters/monte_carlo.tex\
            chapters/model.tex \
            chapters/results.tex\
+           chapters/conclusion.tex\
            chapters/erklarung.tex
 
 BIBFILE = lit.bib
