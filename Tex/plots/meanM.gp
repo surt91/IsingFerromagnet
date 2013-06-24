@@ -7,7 +7,7 @@ set xrange [1.5:3.2]
 
 set size square
 
-set key right
+set key samplen 1. left bottom Left
 
 plot 'data/Mean_M_0_00.dat' using 1:2 w p ps 2 lt 1 lc 1 pt 1 title '{/Italic L} = 16',\
      'data/Mean_M_0_00.dat' using 1:2 w l lt 3 lc 1 notitle smooth csplines,\

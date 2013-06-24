@@ -13,6 +13,6 @@ set xr [-5:15]
 
 set size square
 
-p "data/ScalanaBinder_S_0.00_L_32.dat"  u (sx($1,32)):(sy($2,32)):(sy($3,32))  w ye lc 2 ps 2 t "{/Italic L} = 32" \
-, "data/ScalanaBinder_S_0.00_L_64.dat"  u (sx($1,64)):(sy($2,64)):(sy($3,64))  w ye lc 3 ps 2 t "{/Italic L} = 64" \
-, "data/ScalanaBinder_S_0.00_L_128.dat"  u (sx($1,128)):(sy($2,128)):(sy($3,128))  w ye lc 4 ps 2 t "{/Italic L} = 128"
+p "data/ScalanaBinder_S_0.00_L_32.dat"  u (sx($1,32)):(sy($2,32)):(sy($3,32))  w ye lc 2 ps 2 pt 2 t "{/Italic L} = 32" \
+, "data/ScalanaBinder_S_0.00_L_64.dat"  u (sx($1,64)):(sy($2,64)):(sy($3,64))  w ye lc 3 ps 2 pt 3 t "{/Italic L} = 64" \
+, "data/ScalanaBinder_S_0.00_L_128.dat"  u (sx($1,128)):(sy($2,128)):(sy($3,128))  w ye lc 4 ps 2 pt 4 t "{/Italic L} = 128"
