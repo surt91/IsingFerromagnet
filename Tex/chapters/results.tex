@@ -77,12 +77,12 @@
         \subfigure[][]
         {
             \label{sfig:GG_sigma:zero}
-            \includegraphics[width=0.45\textwidth]{images/GG/sigma_e0}
+            \includegraphics[width=0.40\textwidth]{images/GG/sigma_e0}
         }
         \subfigure[][]
         {
             \label{sfig:GG_sigma:notzero}
-            \includegraphics[width=0.45\textwidth]{images/GG/sigma_g0}
+            \includegraphics[width=0.40\textwidth]{images/GG/sigma_g0}
         }
         \caption[]
         {
@@ -93,25 +93,41 @@
         \label{fig:GG_sigma}
     \end{figure}\\
     Moreover fig. \ref{fig:Tc}\subref{sfig:Tc_norm:RNG}\subref{sfig:Tc_norm:GG}
-    show monotonically decreasing \(T_c\) with increasing disorder
-    parameter \(\sigma\). The froms of both curves are similar, but the
+    shows monotonically decreasing \(T_c\) with increasing disorder
+    parameter \(\sigma\). The forms of both curves are similar, but the
     one for the Relative Neighborhood graph \ref{fig:Tc}\subref{sfig:Tc_norm:RNG}
     is generally lower and spans over a bigger temperature range than
     the curve of the Gabriel graph \ref{fig:Tc}\subref{sfig:Tc_norm:GG}.
     % Warum??? Die eigenschaften des Graphen sollten mit der Normalisierung erledigt sein.
     % RNG: laengere Kanten -> weniger lokale effekte?
+    For big \(\sigma\) the curve approaches the limit of randomly
+    distributed nodes, hence \(T_c\) is independet of \(\sigma\) for
+    \(\sigma >> 1\).\\
+    Also both graph types have a plateau at \(0 < \sigma < 0.1\). So
+    small disorder has little influence on the normalized critical temperature.
+    But once the degree of the graph and hence the mean sum of the coupling
+    constants decreases, the normalized critical temperature decreases, too.
+    % The author is not sure what it means.
 
 \subsection{Critical Exponents}
-    For \(\sigma \in \{0,0.1,0.5\}\) a finite size scaling analysis was
+    For \(\sigma \in \{0,0.1,0.2,0.3,0.5,1.0\}\) a finite size scaling analysis was
     performed to determine the critical exponents \(\beta, \gamma, \nu\)
     using \texttt{autoscale.py} \cite{autoscale2009}. The values for
     \(\sigma = 0\) are analytically known \cite{Pelissetto2002}. The
-    values for all other \(\sigma\) should be the same according to ???
-    [citiation needed]. Like in tab. \ref{tab:critExp} to see, most values
+    values for all other \(\sigma\) should be the same as for \(\sigma = 0\)
+    like mentioned before in section \ref{ssec:finitesize}.
+    The values for \(\sigma\) are chosen to represent every interesting
+    region from fig. \ref{fig:Tc}\subref{sfig:Tc_norm:RNG}\subref{sfig:Tc_norm:GG}:
+    the plateau at small \(\sigma\), the steep decline and the plateau at
+    big \(\sigma\).\\
+    Like in tab. \ref{tab:critExp} to see, most values
     are matching the expectations. Most \(\beta\) seem to be a bit too
     big, but they are close enough to the expectations to be explained
     by the fact that small systems (\(L=32,64\)) were used for the
-    analysis. [citation needed]
+    analysis.
+    Anyway, two critical exponents are sufficient to determine the universality
+    class. Therefore this disordered Ising modell is in the same universality
+    class as the standard Ising ferromagnet \cite[p. 145]{Katzgraber2011}.
     \begin{table}[htbp]
         \center
         \begin{tabular}{l l l l l}
@@ -122,11 +138,15 @@
             \midrule
             Gabriel      & 0.0 & 1.008(4) & -1.735(2) & 0.1262(4)\\
                          & 0.1 & 1.02(1)  & -1.744(5) & 0.133(6) \\
-                         & 0.5 & 1.009(8) & -1.75(1)  & 0.125(13)\\
+                         & 0.3 & 1.000(5) & -1.724(16)& 0.129(12)\\
+                         & 0.5 & 1.009(8) & -1.750(12)& 0.125(13)\\
+                         & 1.0 & 1.015(22)& -1.743(17)& 0.123(16)\\
             \midrule
             Relative N.  & 0.0 & 1.007(2) & -1.739(2) & 0.130(1) \\
                          & 0.1 & 0.99(1)  & -1.746(5) & 0.133(4) \\
-                         & 0.5 & 1.00(2)  & -1.75(2)  & 0.143(13)\\
+                         & 0.2 & 1.022(17)& -1.756(14)& 0.123(10)\\
+                         & 0.5 & 1.002(17)& -1.750(16)& 0.143(13)\\
+                         & 1.0 & 1.011(20)& -1.758(16)& 0.138(13)\\
             \bottomrule
         \end{tabular}
         \caption{Critical exponents for different \(\sigma\)}

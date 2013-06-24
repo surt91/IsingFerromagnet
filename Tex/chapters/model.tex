@@ -145,18 +145,21 @@
         }
         \label{fig:smeared_out}
     \end{figure}\\
-    But it is also visible, that there occurs no real jump, but a continuous
+    But in the shown plots there occurs no real jump, but a continuous
     decline. The jump is only present in infinite systems, hence every
     computer simulation will show some \emph{finte size effects}.
     These finite size effects cause a "smearing out" of the phase
-    trasition. This is stronger for smaller system sizes, as showed in
-    fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}.\\
+    trasition. This is stronger for smaller system sizes, as is visible
+    in fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}. Clearly
+    the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{NewmanBarkema1999} which also yield the critical
-    exponents. The critical exponents should not be influenced by the
-    disorder paramter \(\sigma\) [citation needed]. So they will be
-    used for consistency cross checking and comparision with the known
-    exact values \cite[S. 59]{Pelissetto2002}.\\
+    exponents.
+    Studies on random lattices with variing coupling constants \(J\)
+    \cite{Lima2000} and without \cite{Janke1994} suggest, that the
+    critical exponents should not be influenced by the disorder paramter
+    \(\sigma\). So they will be used for consistency cross checking and
+    comparision with the known exact values \cite[S. 59]{Pelissetto2002}.\\
     It is known, that for large \(L\) near the critical temperature the
     equations \eqref{eq:fsscaling:m}, \eqref{eq:fsscaling:chi} and
     \eqref{eq:fsscaling:g} apply \cite[p. 145f]{Katzgraber2011}.
@@ -178,14 +181,9 @@
     Note that \(L=16\) is not used for the collapse, because it is a
     rather small value such that eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
     do not apply very good.\\
-    %~ [theorie mit dem Collaps]
-    %~ [Erklaerung: was sind beta, gamma, nu]
     To accomplish the collapse in an semi-automatic and reproduceable
     way with an error estimate, the programm
     \texttt{autoscale.py} \cite{autoscale2009} is used.
-    %~ [Erklärung autoscale]
-    %~ [Am besten hier direkt die ganze Auswertung rein]
-    %~ [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma die exponenten reproduziert hat].\\
     \begin{figure}[htbp]
         \centering
         \subfigure[Example of a Binder cumulant to determine the critical temperature][]{
@@ -223,9 +221,6 @@
         T_c = 2J/\ln(1+\sqrt 2) = 2.2691...
         \label{eq:exactTc}
     \end{equation}
-
-    % The arithmetic average of the intersections are plotted [hier schon?]
-    %~ [Und den rest der Auswertung]
 
 % Erwahnen, dass T_c Graph so aussieht, wie degree graph
 % mit theo ergebnissen von Honeycomb \cite{Wannier1945} vergleichen (fur deg = 3)
