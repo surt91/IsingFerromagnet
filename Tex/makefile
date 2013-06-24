@@ -1,9 +1,10 @@
 DOKUMENT = Ferromagnet
 CHAPTERS = chapters/title.tex \
            chapters/introduction.tex \
-           chapters/model.tex \
            chapters/monte_carlo.tex\
-           chapters/results.tex
+           chapters/model.tex \
+           chapters/results.tex\
+           chapters/erklarung.tex
 
 BIBFILE = lit.bib
 
