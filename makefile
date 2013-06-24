@@ -1,4 +1,4 @@
-OBJ 	= graph.o stack.o list.o tree.o spin.o
+OBJ 	= graph.o graph_modify.o stack.o list.o tree.o spin.o
 
 TARGET	= ising
 LINK	= gcc
