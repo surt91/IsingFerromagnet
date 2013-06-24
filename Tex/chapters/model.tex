@@ -115,33 +115,42 @@
 
 \subsection{Critical Temperature $T_c$ and Critical Exponents}
 \label{ssec:finitesize}
-    The aim of this thesis is to find the critical  temperature \(T_c\)
-    of the disordered Ising model in dependece of the disorder parameter
-    \(\sigma\). At \(T_c\) the magnetisation \(|m|\) of the system will
-    jump and the susceptibility \(\chi_m = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}\)
-    will diverge. But this behaivior is only present in infinite systems,
-    hence every computer simulation will show some \emph{finte size effects}.
-    Because of this all through computer simulations observed phase
-    transitions will be "smeared out".
-    [todo: Bezug zum Bild]
+    The aim of this thesis is to find the critical temperature \(T_c\)
+    of the disordered Ising model in dependence of the disorder parameter
+    \(\sigma\). At \(T_c\) the mean absolute magnetisation \(\avg{|m|}\) of
+    the system will jump and the susceptibility
+    \(\chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}\)
+    will diverge. In fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}
+    it is easy to see that the jump occurs at lower temperatures \(T\) for higher
+    disorder parameters \(\sigma\) (here with a Relative Neighborhood graph).
     \begin{figure}[htbp]
         \centering
-        \subfigure[todo][]
-        {
-            \label{sfig:smeared_out:meanM}
-            \includegraphics[width=0.45\textwidth]{plots/meanM}
-        }
-        \subfigure[todo][]
+        \subfigure[Dependence of the phase transition on $\sigma$][]
         {
             \label{sfig:smeared_out:meanM_L}
             \includegraphics[width=0.45\textwidth]{plots/Mean_M_L_128}
         }
-        \caption[]
+        \subfigure[Example for finite size effects][]
         {
-            todo
+            \label{sfig:smeared_out:meanM}
+            \includegraphics[width=0.45\textwidth]{plots/meanM}
+        }
+        \caption[Phase Transition and Finite Size Effects]
+        {
+            \subref{sfig:smeared_out:meanM_L}: Effects of the disorder
+            parameter $\sigma$ on the phase transition
+            for an underlying Relative Neighborhood graph with $L=128$.\\
+            \subref{sfig:smeared_out:meanM}: Effects of different system
+            sizes at \(\sigma = 0\). Dotted lines are guides to the eye.
         }
         \label{fig:smeared_out}
     \end{figure}\\
+    But it is also visible, that there occurs no real jump, but a continuous
+    decline. The jump is only present in infinite systems, hence every
+    computer simulation will show some \emph{finte size effects}.
+    These finite size effects cause a "smearing out" of the phase
+    trasition. This is stronger for smaller system sizes, as showed in
+    fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}.\\
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{NewmanBarkema1999} which also yield the critical
     exponents. The critical exponents should not be influenced by the
