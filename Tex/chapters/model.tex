@@ -6,21 +6,25 @@
     %~ A graph is a set of nodes \(V\) and edges \(E\).
 \subsection{Gabriel- and Relative Neighborhood Graph}
 \label{ssec:graphtypes}
+    A graph \(G(V,E)\) is a set of nodes \(V\) and edges \(E\).\\
     All here mentioned graph types are \emph{proximity graphs}. They are
     connecting nodes which are by some metric near to each other.
     Hence they are suited to generalize problems defined on regular
     lattices with nearest neighbor relationships, like the Ising model
     which will be described in more detail in section
-    \ref{ssec:isingmodel}.\\
-    The Gabriel Graph \cite{Gabriel1969} is a subgraph of the
-    Delaunay Triangulation. Two nodes \(i\) and \(j\) with distance
+    \ref{ssec:isingmodel}.
+    In this thesis the distance is always determined by the Euclidian
+    metric, though in principle every metric can be used.\\
+
+    The Gabriel graph \cite{Gabriel1969} is a subgraph of the
+    Delaunay triangulation. Two nodes \(i\) and \(j\) with distance
     \(d_{ij}\) are connected with an edge if a circle with it's
     center on the middlepoint between \(i\) and \(j\) and radius
     \(r = \frac d 2\) contains no other nodes. This area will be
     called \emph{lune} in the following. See also Figure
     \ref{fig:lunes}\subref{sfig:lunes:def}.\\
-    The Relative Neighborhood Graph \cite{Toussaint1980} is a
-    subgraph of the Gabriel Graph. Two nodes \(i\) and \(j\) with
+    The Relative Neighborhood graph \cite{Toussaint1980} is a
+    subgraph of the Gabriel graph. Two nodes \(i\) and \(j\) with
     distance \(d_{ij}\) are connected if no other node is in the
     \emph{lune}. The lune is defined as the intersection of two
     circles with radius \(r = d\) and centers on \(i\) and \(j\).
@@ -61,15 +65,16 @@
     To reduce the complexity one can first create a Delaunay
     Triangulation in complexity \(O (N \log N)\)
     \cite{Leach1992} and test the criterion for each edge, because
-    the Delaunay Triangulation is a supergraph of both. But the
-    implementation of a Delaunay Triangulation algorithm is not
-    trivial and the generation of the graphs is not time critical in
-    the scope of this bachelor thesis.\\
+    the Delaunay triangulation is a supergraph of both. But the
+    implementation of a Delaunay triangulation algorithm is not trivial
+    and the generation of the graphs is not time critical in the scope
+    of this bachelor thesis.\\
     So a tradeoff is to use basicly the simple method but only test
     the criterion for nodes which are near to the lune and abort if
     one node inside the lune is found. To determine which nodes are
     near the lune one can subdivide the area in \emph{cells} and save
-    for each cell a list with nodes lying inside it \cite{RNGCell}.
+    for each cell a list with nodes lying inside it like presented in
+    \cite{RNGCell}.
     Now it is just neccessary to test the nodes in the cells which
     resemble a rectangular bounding box of the lune. Most pairs will be
     far away from each other and the cells in the middle of the bounding
@@ -84,20 +89,24 @@
 
 \subsection{The Disordered Ising Model}
 \label{ssec:isingmodel}
-    The used model is a modified 2D Ising model where the \(N=L^2\) sites
-    are displaced nodes of a square lattice of edge length \(L\) with
-    periodic boundary conditions. The displacement is randomly gauss
+    The examined model is a modified 2D Ising model where the \(N=L^2\)
+    sites are displaced nodes of a square lattice of edge length \(L\)
+    with periodic boundary conditions. The displacement is randomly gauss
     distributed with the standard deviation \(\sigma\). This \(\sigma\)
     is also called \emph{disorder paramter} in the following.
-    The hamiltonian of the Ising model is
-    \(\hat{H} = \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}\)
-    where \(\avg{i,j}\) refers to nodes connected  by edges.
-    The edges are constructed according to the in section
-    \ref{ssec:graphtypes} defined rules. So that the lattice resembles a
-    proximity graph. Each node \(i\) has a spin \(s_i = \pm 1\). Each
-    edge has a weight \(J_{ij} = \exp (\alpha (1-d_{ij}))\) with the
-    distance \(d_{ij}\) between the nodes \(i\) and \(j\) and
-    \(\alpha = 0.5\). \(J\) is called \emph{coupling constant}.\\
+    \begin{equation}
+        \hat{H} = \sum_{\avg{i,j}}J_{ij}s_{i}s_{j} - H \sum_i s_i
+        \label{eq:hamiltonian}
+    \end{equation}
+    Equation \eqref{eq:hamiltonian} is the hamiltonian of the Ising model.
+    The magnetic field \(H=0\) in the scope of this thesis.
+    \(\avg{i,j}\) refers to nodes \(i\) and \(j\) connected by an edge \(E_{ij}\).
+    The edges are constructed according to one of the two the in section
+    \ref{ssec:graphtypes} defined rules. So that the lattice represents
+    a proximity graph. Each node \(i\) has a spin \(s_i = \pm 1\). Each
+    edge \(E_{ij}\) has a weight \(J_{ij} = \exp (\alpha (1-d_{ij}))\).
+    \(d_{ij}\) is the Euclidian distance between the nodes \(i\) and
+    \(j\) and \(\alpha = 0.5\). \(J\) is called \emph{coupling constant}.\\
     For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
     for which exists an analytical solution \cite{Onsager1944}.\\
 
@@ -207,12 +216,13 @@
     \end{figure}\\
     Though if one is just interested in the critical Temperature, an
     easier approach is to find the intersections of the Binder cumulants
-    \(g\) of different system sizes \(L\).
+    \(g\) of different system sizes \(L\) because they are intersecting
+    at \(T_c\) \cite{Binder1981}.
     Therefore a cubic spline interpolation\footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
     is calculated for the measured points.
-    In fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}
-    such an interpolation is plotted for \(\sigma=0\). The cumulants
-    intersect at \(\approx 2.27\).
+    As an example take fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}.
+    Here such interpolations are plotted for \(\sigma=0\) and are
+    intersecting at \(\approx 2.27\).
     To determine \(T_c\) the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
     are averaged and the standard error is calculated. In this case one
     gets \(T_c = 2.2689(2)\), which is in good agreement with the
