@@ -104,7 +104,6 @@ gs_graph_t *gs_deep_copy_graph(gs_graph_t *g)
 */
 void gs_insert_edge(gs_graph_t *g, int from, int to, double weight)
 {
-    printf("add: %d to %d\n",from, to);
     /* durchsuche den Graphen, ob die Kante schon existiert */
     if(gs_edge_exists(g, from, to))
         return;          /*Kante existiert, Also ist der graph fertig */

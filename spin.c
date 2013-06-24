@@ -216,7 +216,7 @@ options_t get_cl_args(int argc, char *argv[])
     if(!custom_file_name)
     {
         /* standard Dateiname */
-        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_s_%.3f_x_%03d_L_%03d_type_%d.dat", o.sigma, o.seed, o.L, o.graph_type);
+        snprintf(o.filename, MAX_LEN_FILENAME, "data/data_s_%.3f_x_%03d_L_%03d_type_%d_r%d.dat", o.sigma, o.seed, o.L, o.graph_type, o.percolation);
     }
 
     /* Welchen Algorithmus nutzen? */
@@ -324,11 +324,7 @@ gs_graph_t **init_graphs(const options_t o)
     create_edges(g, o);
 
     if(o.percolation)
-    {
-        init_spins_up(g);
         delete_random_edges_till_percolation(g, o.rng);
-        print_graph_svg(g, "test.svg");
-    }
 
     for(nT=0;nT<o.num_temps;nT++)
     {
@@ -411,7 +407,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         exit(-1);
     }
     /* Schreibe Header */
-    fprintf(data_out_file, "# N E M # sigma=%.3f # x=%d # L=%d # type=%d # <J>=%.6f # deg=%.6f # sumJ=%.6f # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type, get_mean_weight(list_of_graphs[0]), get_mean_deg(list_of_graphs[0]), get_sum_weight(list_of_graphs[0]));
+    fprintf(data_out_file, "# N E M # sigma=%.3f # x=%d # L=%d # type=%d # r=%d # <J>=%.6f # deg=%.6f # sumJ=%.6f # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type, o.percolation, get_mean_weight(list_of_graphs[0]), get_mean_deg(list_of_graphs[0]), get_sum_weight(list_of_graphs[0]));
     for(nT=0;nT<o.num_temps;nT++)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
