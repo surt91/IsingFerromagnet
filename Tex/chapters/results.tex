@@ -6,9 +6,10 @@ All source code is available at \url{https://github.com/surt91/IsingFerromagnet}
 
 For evaluation the Monte Carlo simulation is run until the system
 is equilibrated after \(t_{eq}\) sweeps. Then the simulation continues
-and the magnetisation per site \(m\) and energy per site \(E\)
-are calculated and saved for every \(2\tau\) sweeps. Where \(\tau\)
-denotes the \emph{autocorrelation time} (see also \ref{ssec:eqtime}).
+and the magnetisation per site \(m=\frac{1}{N}\sum_i s_i\) and energy
+per site \(E=\frac{1}{N}\hat H\) are calculated and saved for every
+\(2\tau\) sweeps. Where \(\tau\) denotes the \emph{autocorrelation time}
+(see also \ref{ssec:eqtime}).
 For every observable \(O\) the expected value \(\avg{O}\) is determined
 as the mean of \(10000\) measurements for \(L=16,32\) or \(5000\) for
 \(L=64,128\). The expected values \(\avg{O}\) for \(100\) different
