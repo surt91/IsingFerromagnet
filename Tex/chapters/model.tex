@@ -1,9 +1,33 @@
-%~ \subsection{Model and Implementation}
-%~ I will desribe the model in this section in a bottom-up fashion.
-%~ First describing all parts and then connecting them.
+\subsection{The Disordered Ising Model}
+\label{ssec:isingmodel}
+    The examined model is a modified 2D Ising model.
+    First, let's define the Ising model and then explain the modifications.
+    The Ising model is a square lattice with edge length \(L\) and
+    \(N=L^2\) sites. Each site has a magnetic moment, the spin. Each
+    spin can take a value \(s \in {-1,+1}\) and interacts with it's
+    nearest neighbors described by the hamiltonian from eq. \eqref{eq:hamiltonian}
+    \begin{equation}
+        \hat{H} = \sum_{\avg{i,j}}J_{ij}s_{i}s_{j} - H \sum_i s_i
+        \label{eq:hamiltonian}
+    \end{equation}
+    \(\avg{i,j}\) refers to nodes \(i\) and \(j\) which are nearest
+    neighbors. And \(J_{ij}\) is the coupling constant between \(i\) and
+    \(j\). Let the magnetic field \(H=0\).\\
+    In this thesis the sites of the square lattice are displaced. The
+    displacement is randomly gauss distributed with the standard
+    deviation \(\sigma\). This \(\sigma\) is also called
+    \emph{disorder paramter} in the following.
+    To determine nearest neighbors, edges are constructed according to
+    one of the two the in section \ref{ssec:graphtypes} defined rules.
+    So that the lattice represents a proximity graph. Each node \(i\)
+    has a spin \(s_i = \pm 1\). Each edge \(E_{ij}\) has a weight
+    \(J_{ij} = \exp (\alpha (1-d_{ij}))\). \(d_{ij}\) is the Euclidian
+    distance between the nodes \(i\) and \(j\) and \(\alpha = 0.5\).
+    \(J\) is called \emph{coupling constant}. This is definition is
+    inspired by \cite{Lima2000}.\\
+    For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
+    for which exists an analytical solution \cite{Onsager1944}.\\
 
-%~ \subsubsection{Graphs}
-    %~ A graph is a set of nodes \(V\) and edges \(E\).
 \subsection{Gabriel- and Relative Neighborhood Graph}
 \label{ssec:graphtypes}
     A graph \(G(V,E)\) is a set of nodes \(V\) and edges \(E\).\\
@@ -87,153 +111,3 @@
     over \(15\) respectivly \(40\). Though the complexity is still of
     order \(O(N^2)\) in the best case, because for every pair at least
     one check has to be performed.
-
-\subsection{The Disordered Ising Model}
-\label{ssec:isingmodel}
-    The examined model is a modified 2D Ising model where the \(N=L^2\)
-    sites are displaced nodes of a square lattice of edge length \(L\)
-    with periodic boundary conditions. The displacement is randomly gauss
-    distributed with the standard deviation \(\sigma\). This \(\sigma\)
-    is also called \emph{disorder paramter} in the following.
-    \begin{equation}
-        \hat{H} = \sum_{\avg{i,j}}J_{ij}s_{i}s_{j} - H \sum_i s_i
-        \label{eq:hamiltonian}
-    \end{equation}
-    Equation \eqref{eq:hamiltonian} is the hamiltonian of the Ising model.
-    The magnetic field \(H=0\) in the scope of this thesis.
-    \(\avg{i,j}\) refers to nodes \(i\) and \(j\) connected by an edge \(E_{ij}\).
-    The edges are constructed according to one of the two the in section
-    \ref{ssec:graphtypes} defined rules. So that the lattice represents
-    a proximity graph. Each node \(i\) has a spin \(s_i = \pm 1\). Each
-    edge \(E_{ij}\) has a weight \(J_{ij} = \exp (\alpha (1-d_{ij}))\).
-    \(d_{ij}\) is the Euclidian distance between the nodes \(i\) and
-    \(j\) and \(\alpha = 0.5\). \(J\) is called \emph{coupling constant}.
-    This is definition is inspired by \cite{Lima2000}.\\
-    For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
-    for which exists an analytical solution \cite{Onsager1944}.\\
-
-    For evaluation the Monte Carlo simulation is is run till the system
-    is equilibrated after \(t_{eq}\) sweeps. Then the simulation continues
-    and the magnetisation per site \(m\) and energy per site \(E\)
-    are calculated and saved for every \(2\tau\) sweeps. Where \(\tau\)
-    denotes the \emph{autocorrelation time} (see also \ref{ssec:eqtime}).
-    For every observable \(O\) the expected value \(\avg{O}\) is determined
-    as the mean of \(10000\) measurements for \(L=16,32\) or \(5000\) for
-    \(L=64,128\). The expected values \(\avg{O}\) for \(100\) different
-    random proximity graphs with the same disorder paramter \(\sigma\)
-    are then averaged to \(\overline{\avg{O}}\). The errors are estimated
-    by bootstrapping.
-
-\subsection{Critical Temperature $T_c$ and Critical Exponents}
-\label{ssec:finitesize}
-    The aim of this thesis is to find the critical temperature \(T_c\)
-    of the disordered Ising model in dependence of the disorder parameter
-    \(\sigma\). At \(T_c\) the mean absolute magnetisation \(\avg{|m|}\) of
-    the system will jump and the susceptibility
-    \(\chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}\)
-    will diverge. In fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}
-    it is easy to see that the jump occurs at lower temperatures \(T\) for higher
-    disorder parameters \(\sigma\) (here with a Relative Neighborhood graph).
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[Dependence of the phase transition on $\sigma$][]
-        {
-            \label{sfig:smeared_out:meanM_L}
-            \includegraphics[width=0.45\textwidth]{plots/Mean_M_L_128}
-        }
-        \subfigure[Example for finite size effects][]
-        {
-            \label{sfig:smeared_out:meanM}
-            \includegraphics[width=0.45\textwidth]{plots/meanM}
-        }
-        \caption[Phase Transition and Finite Size Effects]
-        {
-            \subref{sfig:smeared_out:meanM_L}: Effects of the disorder
-            parameter $\sigma$ on the phase transition
-            for an underlying Relative Neighborhood graph with $L=128$.\\
-            \subref{sfig:smeared_out:meanM}: Effects of different system
-            sizes at \(\sigma = 0\). Dotted lines are guides to the eye.
-        }
-        \label{fig:smeared_out}
-    \end{figure}\\
-    But in the shown plots there occurs no real jump, but a continuous
-    decline. The jump is only present in infinite systems, hence every
-    computer simulation will show some \emph{finte size effects}.
-    These finite size effects cause a "smearing out" of the phase
-    trasition. This is stronger for smaller system sizes, as is visible
-    in fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}. Clearly
-    the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
-    Despite of this one can obtain \(T_c\) by finite size scaling
-    methods \cite[S. ??]{NewmanBarkema1999} which also yield the critical
-    exponents.
-    Studies on random lattices with variing coupling constants \(J\)
-    \cite{Lima2000} and without \cite{Janke1994} suggest, that the
-    critical exponents should not be influenced by the disorder paramter
-    \(\sigma\). So they will be used for consistency cross checking and
-    comparision with the known exact values \cite[S. 59]{Pelissetto2002}.\\
-    It is known, that for large \(L\) near the critical temperature the
-    equations \eqref{eq:fsscaling:m}, \eqref{eq:fsscaling:chi} and
-    \eqref{eq:fsscaling:g} apply \cite[p. 145f]{Katzgraber2011}.
-    \begin{align}
-        \label{eq:fsscaling:m}
-        \avg{m_L} &= L^\frac{\beta}{\nu} \tilde{M}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
-        \label{eq:fsscaling:chi}
-        \chi_L    &= L^\frac{\gamma}{\nu} \tilde{C}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
-        \label{eq:fsscaling:g}
-        g         &\propto \tilde{G}\brac{L^\frac{1}{\nu}\brac{T-T_c}}
-    \end{align}
-    Where \(g = 3-\frac{\avg{m^4}}{2\avg{m^2}^2}\) \cite{Binder1981} is
-    the Binder cumulant and \(\tilde{M}, \tilde{C}\) and \(\tilde{G}\)
-    are unkown scaling functions. To find the exponents
-    \(\beta, \gamma, \nu\) and the critical temperature \(T_c\), one
-    varies them until the measured values of the observables collapse on
-    one curve. Like the obersables from fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}
-    collapse in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}.
-    Note that \(L=16\) is not used for the collapse, because it is a
-    rather small value such that eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
-    do not apply very good.\\
-    To accomplish the collapse in an semi-automatic and reproduceable
-    way with an error estimate, the programm
-    \texttt{autoscale.py} \cite{autoscale2009} is used.
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[Example of a Binder cumulant to determine the critical temperature][]{
-            \label{sfig:gettingCrit:binder_fit_s_0}
-            \includegraphics[width=0.47\textwidth]{plots/binder_fit_s_0}
-        }
-        \subfigure[Example of a datacollapse to determine critical exponents][]{
-            \label{sfig:gettingCrit:collapse_s_0}
-            \includegraphics[width=0.47\textwidth]{plots/collapse_s_0}
-        }
-        \caption[Examples of determining critical temperature and exponents]
-        {
-            The Binder cumulant \(g\) of an square lattice Ising model
-            (\(\sigma=0\))\\
-            \subref{sfig:gettingCrit:binder_fit_s_0} interpolated
-                with cubic splines (the errorbars are too small to see)\\
-            \subref{sfig:gettingCrit:collapse_s_0} collapsed by finite
-                size scaling
-        }
-        \label{fig:gettingCrit}
-    \end{figure}\\
-    Though if one is just interested in the critical Temperature, an
-    easier approach is to find the intersections of the Binder cumulants
-    \(g\) of different system sizes \(L\) because they are intersecting
-    at \(T_c\) \cite{Binder1981}.
-    Therefore a cubic spline interpolation\footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
-    is calculated for the measured points.
-    As an example take fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}.
-    Here such interpolations are plotted for \(\sigma=0\) and are
-    intersecting at \(\approx 2.27\).
-    To determine \(T_c\) the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
-    are averaged and the standard error is calculated. In this case one
-    gets \(T_c = 2.2689(2)\), which is in good agreement with the
-    exact solution from eq. \eqref{eq:exactTc} \cite{Onsager1944}.
-    \begin{equation}
-        T_c = 2J/\ln(1+\sqrt 2) = 2.2691...
-        \label{eq:exactTc}
-    \end{equation}
-
-% Erwahnen, dass T_c Graph so aussieht, wie degree graph
-% mit theo ergebnissen von Honeycomb \cite{Wannier1945} vergleichen (fur deg = 3)
-% cosh(2L_c)=2 mit L_c = J/2kT_c -> T_c \approx 1.52

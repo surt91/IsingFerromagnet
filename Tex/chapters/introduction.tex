@@ -2,26 +2,22 @@ The computing capabilities of modern computers enable researchers to
 collect and analyse vast amounts of data.
 Further statistical systems, for which exist no analytical soultions
 or only for very simplified or special cases, can be simulated.
-%~ Simulations also have the advantage to be able to measure some quantities
-%~ which are not obtainable by experiment.
 For example to examine phasetransitions, which are defined by the abrupt
 change of an observable i.e. the change of the density of water near
 boiling or the change of the magnetisation of a ferromagnet near the
-Curie temperature. Unfortunatly the memory of any computer is small in
-comparison with the thermodynamic limit.
-%~ Of course it is only possible to simulate systems of finite size because
-%~ of the finite memory of computers so the thermodynamic limit can not be
-%~ simulated directly.
-This leads to \emph{finite size effects}. In section \ref{ssec:finitesize}
-will be discussed how to manage them.\\
-One of the simplest models with a second order phasetransition is the
-Ising model \cite{Ising1925} which is a simple model of a ferromagnet
-and will be explained in more detail in section \ref{ssec:isingmodel}.
-It is analytically solved for two dimensions on some regular lattices
-\cite{Onsager1944} \cite{Wannier1945}.
-In this thesis the critical behavior on some irregular lattices
-corresponding to proximity graphs (see section \ref{ssec:graphtypes})
-will be examined using the Monte Carlo simulations described in section
-\ref{sec:montecarlo}. Note that in the scope of this thesis
-the Boltzmann constant \(k_{B}=1\) for the sake of simplicity.
-All source code is available at \url{github [noch hochzuladen]}.
+Curie temperature. One of the simplest models with a second order
+phasetransition is the Ising model \cite{Ising1925} which is a simple
+model of a ferromagnet and will be explained in more detail in section
+\ref{ssec:isingmodel}. It is analytically solved for two dimensions on
+some regular lattices \cite{Onsager1944} \cite{Wannier1945}.
+In this thesis it's behavior near the Curie temperature -- also called
+critical temperature -- on some irregular lattices corresponding to
+proximity graphs (see section \ref{ssec:graphtypes}) will be examined
+using the Monte Carlo simulations described in section \ref{sec:montecarlo}.
+
+Unfortunatly the memory of any computer is small in comparison with the
+thermodynamic limit. This leads to \emph{finite size effects}.
+In section \ref{ssec:finitesize} will be discussed how to manage them.\\
+
+Note that in the scope of this thesis the Boltzmann constant \(k_{B}=1\)
+for the sake of simplicity.
