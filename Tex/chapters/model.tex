@@ -14,18 +14,19 @@
     which will be described in more detail in section
     \ref{ssec:isingmodel}.
     In this thesis the distance is always determined by the Euclidian
-    metric, though in principle every metric can be used.\\
+    metric in two dimensions, though in principle every metric in any
+    dimension can be used.\\
 
     The Gabriel graph \cite{Gabriel1969} is a subgraph of the
     Delaunay triangulation. Two nodes \(i\) and \(j\) with distance
-    \(d_{ij}\) are connected with an edge if a circle with it's
+    \(d_{ij}\) are connected with an edge, if a circle with it's
     center on the middlepoint between \(i\) and \(j\) and radius
     \(r = \frac d 2\) contains no other nodes. This area will be
     called \emph{lune} in the following. See also Figure
     \ref{fig:lunes}\subref{sfig:lunes:def}.\\
     The Relative Neighborhood graph \cite{Toussaint1980} is a
     subgraph of the Gabriel graph. Two nodes \(i\) and \(j\) with
-    distance \(d_{ij}\) are connected if no other node is in the
+    distance \(d_{ij}\) are connected, if no other node is in the
     \emph{lune}. The lune is defined as the intersection of two
     circles with radius \(r = d\) and centers on \(i\) and \(j\).
     See also Figure \ref{fig:lunes}\subref{sfig:lunes:def}.
@@ -106,7 +107,8 @@
     a proximity graph. Each node \(i\) has a spin \(s_i = \pm 1\). Each
     edge \(E_{ij}\) has a weight \(J_{ij} = \exp (\alpha (1-d_{ij}))\).
     \(d_{ij}\) is the Euclidian distance between the nodes \(i\) and
-    \(j\) and \(\alpha = 0.5\). \(J\) is called \emph{coupling constant}.\\
+    \(j\) and \(\alpha = 0.5\). \(J\) is called \emph{coupling constant}.
+    This is definition is inspired by \cite{Lima2000}.\\
     For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
     for which exists an analytical solution \cite{Onsager1944}.\\
 

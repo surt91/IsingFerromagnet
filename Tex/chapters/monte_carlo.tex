@@ -60,9 +60,12 @@ Otherwise the samples might not be representative for the whole system.\\
         algorithm \cite{Wolff1989} speeds things up.
         For an Ising model the Wolff algorithm builds a cluster of sites
         starting with a random site and adding neighboring sites of the
-        same spin with probability
-        \(P_{\mathrm{add}} = 1-\exp\brac{-2\beta J}\)
-        where \(J\) is the coupling constant (explained in section
+        same spin with probability \(P_{\mathrm{add}}\) from eq. \eqref{eq:wolffAdd}
+        \begin{equation}
+            P_{\mathrm{add}} = 1-\exp\brac{-2\beta J}
+            \label{eq:wolffAdd}
+        \end{equation}
+        Where \(J\) is the coupling constant (explained in section
         \ref{ssec:isingmodel}). The neighboring sites of the added sites
         are also considered and so forth. When there are no more sites
         to add, the spin of every site in the cluster is flipped
