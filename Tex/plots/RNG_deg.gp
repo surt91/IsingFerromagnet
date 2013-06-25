@@ -6,5 +6,5 @@ set ylabel 'Degree'
 
 set size square
 
-plot "data/RNG_deg_L16.dat" w ye title "L = 16" pt 1 ps 2,\
-     "data/RNG_deg_L32.dat" w ye title "L = 32" pt 1 ps 2
+plot "data/RNG_deg_L16.dat" w ye title "L = 16" pt 4 ps 2,\
+     "data/RNG_deg_L32.dat" w ye title "L = 32" pt 6 ps 2
