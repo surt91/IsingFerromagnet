@@ -12,19 +12,30 @@
     \end{equation}
     \(\avg{i,j}\) refers to nodes \(i\) and \(j\) which are nearest
     neighbors. And \(J_{ij}\) is the coupling constant between \(i\) and
-    \(j\). Let the magnetic field \(H=0\).\\
-    In this thesis the sites of the square lattice are displaced. The
+    \(j\). If \(J_{ij} > 0 \forall i,j\) the model resembles a ferromagnet.
+    \(H\) denotes the outer magnetic field.\\
+    In this thesis \(H=0\). The most important modification is, that
+    the sites of the square lattice are displaced. The
     displacement is randomly gauss distributed with the standard
-    deviation \(\sigma\). This \(\sigma\) is also called
-    \emph{disorder paramter} in the following.
-    To determine nearest neighbors, edges are constructed according to
-    one of the two the in section \ref{ssec:graphtypes} defined rules.
-    So that the lattice represents a proximity graph. Each node \(i\)
-    has a spin \(s_i = \pm 1\). Each edge \(E_{ij}\) has a weight
-    \(J_{ij} = \exp (\alpha (1-d_{ij}))\). \(d_{ij}\) is the Euclidian
-    distance between the nodes \(i\) and \(j\) and \(\alpha = 0.5\).
-    \(J\) is called \emph{coupling constant}. This is definition is
-    inspired by \cite{Lima2000}.\\
+    deviation \(\sigma\). That is the \(x\) and \(y\) coordinates of the
+    sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
+    from a Gauß distribution
+    \[f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}\]
+    \[x \to x + \Delta x\]
+    \[y \to y + \Delta y\]
+    This \(\sigma\) is also called \emph{disorder paramter} in the following.
+    Because most sites will only have one nearest neighbor after the
+    displacement, the lattice would collapse to many very small clusters.
+    To avoid this, the new "nearest" neighbors are those sites connected
+    by an edge. The edges are constructed according to
+    one of the two the in section \ref{ssec:graphtypes} defined rules,
+    so that the lattice represents a proximity graph. Note that edges
+    of a proximity graph do not cross each other, hence the 2D character
+    of the lattice is preserved. The coupling constant \(J\) gets
+    identified with edge weights. The weight of an edge \(E_{ij}\) is
+    \(J_{ij} = \exp (\alpha (1-d_{ij}))\) where \(d_{ij}\) is the Euclidian
+    distance between the nodes \(i\) and \(j\). The free parameter
+    \(\alpha\) is set to \(\alpha = 0.5\) inspired by \cite{Lima2000}.\\
     For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
     for which exists an analytical solution \cite{Onsager1944}.\\
 
@@ -35,8 +46,7 @@
     connecting nodes which are by some metric near to each other.
     Hence they are suited to generalize problems defined on regular
     lattices with nearest neighbor relationships, like the Ising model
-    which will be described in more detail in section
-    \ref{ssec:isingmodel}.
+    from the section \ref{ssec:isingmodel}.
     In this thesis the distance is always determined by the Euclidian
     metric in two dimensions, though in principle every metric in any
     dimension can be used.\\
