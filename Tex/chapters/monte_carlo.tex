@@ -37,7 +37,7 @@ Otherwise the samples might not be representative for the whole system.\\
         A Metropolis Monte Carlo simulation of an Ising model will
         choose a random spin, calculate the energy change
         \(\Delta \hat H\) defined in eq. \eqref{eq:dH} that would result
-        from a flip of and excute the flip with the probability \(A\)
+        from a flip of that spin and excute the flip with the probability \(A\)
         eq. \eqref{eq:metropolis} \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
         \begin{equation}
             \Delta \hat H = \hat H(\nu) - \hat H(\mu)\\
@@ -52,7 +52,9 @@ Otherwise the samples might not be representative for the whole system.\\
             \label{eq:metropolis}
         \end{equation}
         So if a transition lowers the energy it is always done. This
-        results in a good ratio between calculations and transitions.
+        results in a high ratio between chosen spins and flipped spins.
+        Therefore it minimizes the calculations needed for a change of
+        the state.
 
     \paragraph{Wolff}
         Close to the critical temperature \(T_c\) the Metropolis
@@ -78,7 +80,9 @@ Otherwise the samples might not be representative for the whole system.\\
         the cluster will consist of almost all sites such that all but
         very few spins will be flipped. At high temperatures the cluster
         will only contain very few sites.
-        Both situaitions have no advantage against the Metropolis algorithm.
+        Both situaitions have no advantage against the Metropolis algorithm.\\
+        So one would activate this algorithm near the critical temperature
+        but use a simple Metropolis algorithm at high and low temperatures.
 
     \paragraph{Parallel Tempering}
         %~ The main aim is to obtain the critical temperatures
@@ -102,17 +106,25 @@ Otherwise the samples might not be representative for the whole system.\\
         many cases the more important advantage is, that a system which
         is trapped in a local minimum at a given temperature, can travel
         to higher temperatures, leave it's local minimum and cool down
-        again in a lower minimum.
+        again in a lower minimum.\\
+        In the case of a ferromagnetic Ising model the risk to get trapped
+        in an local energy minimum is very low. Though the autocorrelation
+        decreases significantly. In the scope of this thesis this comes
+        for no cost, because one has to simulate for many temperatures
+        to determine the critical temperature. The additional calculations
+        to determine wheather to swap configurations or not are small in
+        comparison with those that would be needed to generate a new
+        uncorrelated state without \emph{parallel tempering}.
 
     \paragraph{Implementation Details}
         Here a mixture of the above three algorithms is used.
         Each sweep \(N\) Metropolis spin flips, one Wolff cluster flip
-        and one Parallel Tempering swap are performed. Where \(N\) is the
-        count of sites.
-%~ Monte Carlo Simulationen:\\
-    %~ Wolff-Cluster Algorithmus \cite{Wolff1989} (siehe auch \cite[S. xx]{NewmanBarkema1999}),
-    %~ Metropolis Sweep \cite{Metropolis1953} (siehe auch \cite[S. xx]{NewmanBarkema1999}),
-    %~ Parallel Tempering \cite{ParallelTempering1986} (siehe auch \cite[S. xx]{NewmanBarkema1999} \cite[S. xx]{Katzgraber2011})\\
+        and one parallel tempering swap are performed. Where \(N\) is the
+        count of sites.\\
+        Because it is not known before, where the critical temperatures
+        \(T_c\) are located, the Wolff cluster algorithm is used for
+        every temperature. The speed up at criticality is worth the
+        moderate slow down at other temperatures.
 
 \subsection{Equilibration- and Autocorrelation Time}
 \label{ssec:eqtime}
