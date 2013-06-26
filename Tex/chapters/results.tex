@@ -289,16 +289,16 @@ by bootstrapping \cite{Bootstrap}.
     \end{table}
 
 \subsection{Critical Value of the Binder Cumulant}
-    The value of the Binder cumulant at the critical point \(g^*\) is
+    The value of the Binder cumulant at the critical point \(g_c\) is
     depends strongly on boundary conditions but only weakly on the lattice
     structure \cite{BinderValue}. For periodic boundary conditions on a
-    square lattice it is \(g^* \approx 0.916\) according to \cite{BinderValue}
+    square lattice it is \(g_c \approx 0.916\) according to \cite{BinderValue}
         \footnote{Note that \cite{BinderValue} uses an other definition of
             the Binder cumulant, and has to be normalized by \(\frac{2}{3}\)
             to match it's definition in this thesis.}.
     Because the analysis of section \ref{ssec:binderIntersections}
-    yields \(g^*\) anyway, it is easy to check the consistency and
-    behaivior of \(g^*\) in the disordered Ising modell.\\
+    yields \(g_c\) anyway, it is easy to check the consistency and
+    behaivior of \(g_c\) in the disordered Ising modell.\\
     \begin{figure}[htbp]
         \centering
         \subfigure[for a Relative Neighborhood graph][]
@@ -311,9 +311,9 @@ by bootstrapping \cite{Bootstrap}.
             \label{sfig:TcG:GG}
             \includegraphics[width=0.45\textwidth]{plots/GG_TcG}
         }
-        \caption[Values of the Binder cumulant at the critical point $g^*$]
+        \caption[Values of the Binder cumulant at the critical point $g_c$]
         {
-            Values of the Binder cumulant at the critical point \(g^*\)
+            Values of the Binder cumulant at the critical point \(g_c\)
             for\\
             \subref{sfig:TcG:RNG} a Relative Neighborhood graph and\\
             \subref{sfig:TcG:GG} a Gabriel graph for different \(\sigma\).
@@ -323,14 +323,14 @@ by bootstrapping \cite{Bootstrap}.
         }
         \label{fig:TcG}
     \end{figure}\\
-    Considering both plots in fig. \ref{fig:TcG}, \(g^*\) is for low
+    Considering both plots in fig. \ref{fig:TcG}, \(g_c\) is for low
     \(\sigma\) obviously always bigger than the known value. Though the
     deviation is less than \(1\%\). Perhaps this is some inherent flaw
-    of the cubic spline interpolation used to aquire these \(g^*\) values.
+    of the cubic spline interpolation used to aquire these \(g_c\) values.
     For bigger \(\sigma\) the uncertainty gets greater, but the values
     do only differ by a few percent, hence even the big disorder and
     definition of nearest neighbors via a proximity graph does not change
-    \(g^*\) much, as expected.
+    \(g_c\) much. This is the expected behaivior.
 
 
 %~ Darstellung von Suszeptibilität \(\chi\), spezifischer Wärme \(c\), mittlerer Magnetisierung \(<m>\) über Unordnungsparamter \(\sigma\)\\
