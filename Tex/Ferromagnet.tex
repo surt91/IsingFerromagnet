@@ -1,5 +1,5 @@
 \documentclass[a4paper,headsepline,bibtotocnumbered,12pt,titlepage,twoside]{scrartcl} % scrartcl
-\usepackage[english]{babel}
+\usepackage[english,ngerman]{babel}
 \usepackage{graphicx}
 \usepackage[FIGTOPCAP,tight,raggedright,nooneline]{subfigure}
 \usepackage{upgreek}
@@ -99,6 +99,7 @@
 %~ \date{}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+    \selectlanguage{english}
     \input{chapters/title.tex}
     \thispagestyle{empty}
     \cleardoublepage
@@ -139,6 +140,7 @@
     \end{appendix}
 
     \cleardoublepage
+    \selectlanguage{ngerman}
     \input{chapters/erklarung}
 
 \end{document}
