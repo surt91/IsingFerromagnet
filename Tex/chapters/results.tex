@@ -9,7 +9,22 @@ is equilibrated after \(t_{eq}\) sweeps. Then the simulation continues
 and the magnetisation per site \(m=\frac{1}{N}\sum_i s_i\) and energy
 per site \(E=\frac{1}{N}\hat H\) are calculated and saved for every
 \(2\tau\) sweeps. Where \(\tau\) denotes the \emph{autocorrelation time}
-(see also \ref{ssec:eqtime}).
+(see also \ref{ssec:eqtime}). The used values for different system sizes
+are listed in tab. \ref{tab:tauAndTeq} in numbers of sweeps. Note that
+these values are generously rounded up to be on the safe side.
+\begin{table}[htbp]
+    \center
+    \begin{tabular}{l r r r r r}
+        \toprule
+        \(L\)    & 16 &  32 &  64 & 128 & 256\\
+        \midrule
+        \(\tau\) &  3 &   5 &   7 &  12 &  16\\
+        \(t_eq\) & 40 & 100 & 100 & 200 & 600\\
+        \bottomrule
+    \end{tabular}
+    \caption{Autocorrelation Times $\tau$ and Equilibration Times $t_{eq}$}
+    \label{tab:tauAndTeq}
+\end{table}\\
 For every observable \(O\) the expected value \(\avg{O}\) is determined
 as the mean of \(10000\) measurements for \(L=16,32\) or \(5000\) for
 \(L=64,128\). The expected values \(\avg{O}\) for \(100\) different
