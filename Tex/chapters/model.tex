@@ -17,7 +17,7 @@
     In this thesis \(H=0\). The most important modification is, that
     the sites of the square lattice are displaced. The
     displacement is randomly gauss distributed with the standard
-    deviation \(\sigma\). That is the \(x\) and \(y\) coordinates of the
+    deviation \(\sigma\). That is, the \(x\) and \(y\) coordinates of the
     sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
     from a Gauß distribution
     \[f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}\]
@@ -28,16 +28,22 @@
     displacement, the lattice would collapse to many very small clusters.
     To avoid this, the new "nearest" neighbors are those sites connected
     by an edge. The edges are constructed according to
-    one of the two the in section \ref{ssec:graphtypes} defined rules,
+    one of the two in section \ref{ssec:graphtypes} defined rules,
     so that the lattice represents a proximity graph. Note that edges
     of a proximity graph do not cross each other, hence the 2D character
     of the lattice is preserved. The coupling constant \(J\) gets
     identified with edge weights. The weight of an edge \(E_{ij}\) is
     \(J_{ij} = \exp (\alpha (1-d_{ij}))\) where \(d_{ij}\) is the Euclidian
     distance between the nodes \(i\) and \(j\). The free parameter
-    \(\alpha\) is set to \(\alpha = 0.5\) inspired by \cite{Lima2000}.\\
+    \(\alpha\) is set to \(\alpha = 0.5\) inspired by \cite{Lima2000}.
+    The boundary is periodic i.e. nodes near the right edge can be
+    connected to nodes near the left edge and vice versa. Analogous the
+    top and bottom edges are connected. One can imagine that the model
+    lives on the surface of a torus.\\
     For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
-    for which exists an analytical solution \cite{Onsager1944}.\\
+    for which exists an analytical solution \cite{Onsager1944}. And for
+    \(\sigma \gtrsim 1\) the nodes are distributed randomly. This case
+    is studied for constant \(J\) on the Delaunay triangulation\cite{Janke1994}.\\
 
 \subsection{Gabriel- and Relative Neighborhood Graph}
 \label{ssec:graphtypes}
