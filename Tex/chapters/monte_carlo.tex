@@ -11,15 +11,16 @@ Of course one wants to sample more points, where the area below the
 function is big, because points in areas, where the function does
 contribute little to the integral, contribute little to the integral.
 This can be achieved by \emph{Importance Sampling}. One
-generates random numbers according to some probabilty distribution and
-weights the result accordingly.\\
+generates random numbers according to some probabilty distribution, which
+yields more numbers in the range where the function to ingegrate has high
+values and weights the result accordingly.\\
 %~ To improve this method: \emph{Importance Sampling}
 %~ means that one takes more samples where the contribution of the
 %~ function to the integral is bigger by using random numbers
 %~ distributed........
 The same principle is used to sample properties of statistical systems
 by generating random states.
-But it is difficult to create random state of a physical system i.e. the
+But it is difficult to create a random state of a physical system i.e. the
 Ising system in equilibrium, hence one uses \emph{Markov Chains} to
 generate new states \(\nu\) from old ones \(\mu\).
 It is important that the transition probabilities \(A(\mu \to \nu)\)
@@ -33,9 +34,9 @@ from every other state in finite time. \cite{NewmanBarkema1999} \cite{Katzgraber
 Otherwise the samples might not be representative for the whole system.\\
 
 \subsection{Monte Carlo Algorithms}
-    \paragraph{Metropolis}
-        A Metropolis Monte Carlo simulation of an Ising model will
-        choose a random spin, calculate the energy change
+    \subsubsection{Metropolis}
+        A Metropolis Monte Carlo\cite{Metropolis1953} simulation of an
+        Ising model will choose a random spin, calculate the energy change
         \(\Delta \hat H\) defined in eq. \eqref{eq:dH} that would result
         from a flip of that spin and excute the flip with the probability \(A\)
         eq. \eqref{eq:metropolis} \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
@@ -56,7 +57,7 @@ Otherwise the samples might not be representative for the whole system.\\
         Therefore it minimizes the calculations needed for a change of
         the state.
 
-    \paragraph{Wolff}
+    \subsubsection{Wolff}
         Close to the critical temperature \(T_c\) the Metropolis
         gets slower. This is called \emph{critical slowing} down and the
         cause is beyond the scope of this thesis.\\
@@ -84,7 +85,7 @@ Otherwise the samples might not be representative for the whole system.\\
         So one would activate this algorithm near the critical temperature
         but use a simple Metropolis algorithm at high and low temperatures.
 
-    \paragraph{Parallel Tempering}
+    \subsubsection{Parallel Tempering}
         %~ The main aim is to obtain the critical temperatures
         %~ \(T_c\) for different disorder paramters \(\sigma\).
         %~ Therefore it is necessary to simulate for many temperatures,
@@ -92,7 +93,7 @@ Otherwise the samples might not be representative for the whole system.\\
             %~ Swendsen published this paper, a algorithm \(MC^3\) was
             %~ already published with the same idea. [citation needed]}
         %~ \cite{ParallelTempering1986} is a suited algorithm.
-        Parallel Tempering simulates many identical systems at different
+        Parallel Tempering\cite{ParallelTempering1986} simulates many identical systems at different
         temperatures and periodically swaps the spin configurations
         between two neighboring temperatures with probability \(P\) from
         eq. \eqref{eq:partemp} \cite[S. ??]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}.
@@ -116,7 +117,7 @@ Otherwise the samples might not be representative for the whole system.\\
         comparison with those that would be needed to generate a new
         uncorrelated state without \emph{parallel tempering}.
 
-    \paragraph{Implementation Details}
+    \subsubsection{Implementation Details}
         Here a mixture of the above three algorithms is used.
         Each sweep \(N\) Metropolis spin flips, one Wolff cluster flip
         and one parallel tempering swap are performed. Where \(N\) is the

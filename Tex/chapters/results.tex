@@ -13,8 +13,8 @@ per site \(E=\frac{1}{N}\hat H\) are calculated and saved for every
 are listed in tab. \ref{tab:tauAndTeq} in numbers of sweeps. Note that
 the \(t_{eq}\) values are generously rounded up to be on the safe side
 and the \(\tau\) values are determined as the maximum \(\tau\) over all
-simulated temperatures.
-\[\tau = \max_T \tau_T\]
+simulated temperatures \(\tau = \max_T \tau_T\) and rounded to the next
+integer.
 \begin{table}[htbp]
     \center
     \begin{tabular}{l r r r r r}
@@ -22,7 +22,7 @@ simulated temperatures.
         \(L\)    & 16 &  32 &  64 & 128 & 256\\
         \midrule
         \(\tau\) &  3 &   5 &   7 &  12 &  16\\
-        \(t_eq\) & 40 & 100 & 100 & 200 & 600\\
+        \(t_{eq}\) & 40 & 100 & 100 & 200 & 600\\
         \bottomrule
     \end{tabular}
     \caption{Autocorrelation Times $\tau$ and Equilibration Times $t_{eq}$}
@@ -108,8 +108,9 @@ bootstrap samples.
         \label{fig:smeared_out}
     \end{figure}\\
     But in the shown plots there occurs no real jump, but a continuous
-    decline. The jump is only present in infinite systems, hence every
-    computer simulation will show some \emph{finte size effects}.
+    decline. The jump is only present in infinite systems, hence no
+    computer simulation will show the exact behaivior in the
+    thermodynamic limit. It will always show some \emph{finte size effects}.
     These finite size effects cause a "smearing out" of the phase
     trasition. This is stronger for smaller system sizes, as is visible
     in fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}. Clearly
