@@ -25,12 +25,30 @@ these values are generously rounded up to be on the safe side.
     \caption{Autocorrelation Times $\tau$ and Equilibration Times $t_{eq}$}
     \label{tab:tauAndTeq}
 \end{table}\\
+Obiviously the autocorrelation time \(\tau\) increases with the system
+size. In fact it obeys a power law as clearly visible in fig.
+\ref{fig:autocorrPowerLaw}.
+% sagen, dass das bekanntes verhalten ist
+% als cross check behandeln
+% [citation needed]
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{plots/autocorr}
+    \caption
+    {
+        Dependece of the autocorrelation time $\tau$ on the system size $L$
+    }
+    \label{fig:autocorrPowerLaw}
+\end{figure}\\
 For every observable \(O\) the expected value \(\avg{O}\) is determined
-as the mean of \(10000\) measurements for \(L=16,32\) or \(5000\) for
-\(L=64,128\). The expected values \(\avg{O}\) for \(100\) different
-random proximity graphs with the same disorder paramter \(\sigma\)
-are then averaged to \(\overline{\avg{O}}\). The errors are estimated
-by bootstrapping \cite{Bootstrap}.
+as the mean of \(N_{\mathrm{measure}}=10000\) measurements for \(L=16,32\)
+or \(N_{\mathrm{measure}}=5000\) for \(L=64,128\). The number of
+calculated sweeps totals to
+\[N_{\mathrm{sweeps}}=t_{eq}+2\tau N_{\mathrm{measure}}\]
+The expected values \(\avg{O}\) for \(100\) different random proximity
+graphs with the same disorder paramter \(\sigma\) are then averaged to
+\(\overline{\avg{O}}\).
+The errors are estimated by bootstrapping \cite{Bootstrap}.
 
 \subsection{Finite Size Effects}
 \label{ssec:finitesize}

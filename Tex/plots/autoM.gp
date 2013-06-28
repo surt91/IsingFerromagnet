@@ -14,4 +14,4 @@ f(x)=exp(-x/a)
 fit f(x) "data/autoM.dat" via a
 
 plot "data/autoM.dat" u 1:2 w l title "autocorrelation" lt 1, \
-     f(x) w l lc 1 lt 3 notitle
+     f(x) w l lc 1 lt 3 t "e^{/Italic -t/{/Symbol t}}"
