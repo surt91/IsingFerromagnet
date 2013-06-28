@@ -4,6 +4,7 @@
 *.blg
 *.toc
 *.lof
+*.lot
 
 Ferromagnet.pdf
 !images/*.pdf
