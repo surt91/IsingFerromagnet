@@ -1,4 +1,4 @@
-set terminal postscript eps enhanced color blacktext lw 2 26
+set terminal postscript eps enhanced color blacktext lw 2 solid 26
 set output 'autocorrT.eps'
 
 set xlabel '{/Italic T}'
@@ -7,7 +7,7 @@ set ylabel '{/Italic {/Symbol t}}'
 set xr [0.1:3.3]
 
 set size square
-set key left Left
+set key samplen 1. left Left
 
 plot 'data/Autokorrelationszeit_0.0.dat' using 1:2:3 w yerrorbar pt 4 title 'L = 16',\
      'data/Autokorrelationszeit_0.0.dat' using 1:4:5 w yerrorbar pt 6 title 'L = 32',\

@@ -99,13 +99,13 @@
         \label{fig:lunes}
     \end{figure}\\
     To construct these graphs the simple way is to test for each
-    pair of nodes one has to check for every other node if it lies in
+    pair of nodes if any other node lies in
     the lune of the pair. That is of complexity \(O (N^3)\), because
     there are \(N(N-1)\) pairs and for each \(N-2\) nodes to test. So
     the product is of order \(O(N^3)\)\\
     To reduce the complexity one can first create a Delaunay
     Triangulation in complexity \(O (N \log N)\)
-    \cite{Leach1992} and test the criterion for each edge, because
+    \cite{RNGCell} and test the criterion for each edge, because
     the Delaunay triangulation is a supergraph of both. But the
     implementation of a Delaunay triangulation algorithm is not trivial
     and the generation of the graphs is not time critical in the scope
