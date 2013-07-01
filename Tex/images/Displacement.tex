@@ -1,0 +1,35 @@
+\begin{tikzpicture}[scale=1.5, declare function={
+        normal(\x,\m,\y) = 1/2/exp((\x-\m)*(\x-\m)/2/(\s^2))-\y;
+      }]
+    \def\s{0.5}
+
+    \draw[dotted] (-2,0) -- (4,0);
+    \draw[dotted] (0,-2) -- (0,2);
+    \draw[dotted] (2,-2) -- (2,2);
+
+    % Draw and label normal distribution function
+    \def\dxa{0.4}
+    \def\dya{-0.8}
+
+    \draw (0+\dxa,0+\dya) -- node [right] {$\Delta x$} (0+\dxa, {normal(\dxa,0,0)});
+    \draw (0+\dxa,0+\dya) -- node [below] {$\Delta y$} ({-normal(\dya,0,0)}, 0+\dya);
+    \draw[->] (0,0) -- (0+\dxa*0.9,0+\dya*0.9);
+
+    \draw[color=black,domain=-1.5:1.5] plot [smooth] (\x,{normal(\x,0,0)}) node[right] {};
+    \fill (0, 0) circle(0.08);
+    \draw[color=black] (0+\dxa, 0+\dya) circle(0.08);
+    \draw[color=black,domain=-1.5:1.5,rotate=90] plot [smooth] (\x,{normal(\x,0,0)}) node[right] {};
+
+
+    \def\dxb{0.5}
+    \def\dyb{0.2}
+
+    \draw[color=red] (2+\dxb,0+\dyb) -- node [right] {$\Delta x_{2}$} (2+\dxb, {normal(\dxb,0,0)});
+    \draw[color=red] (2+\dxb,0+\dyb) -- node [below] {$\Delta y_{2}$} ({2-normal(\dyb,0,0)}, 0+\dyb);
+    \draw[color=red,->] (2,0) -- (2+\dxb*0.9,0+\dyb*0.9);
+
+    \draw[color=red,domain=0.5:3.5] plot [smooth] (\x,{normal(\x,2,0)}) node[right] {};
+    \fill[color=red] (2, 0) circle(0.08);
+    \draw[color=red] (2+\dxb, 0+\dyb) circle(0.08);
+    \draw[color=red,domain=-1.5:1.5,rotate=90] plot [smooth] (\x,{normal(\x,0,2)}) node[right] {};
+\end{tikzpicture}

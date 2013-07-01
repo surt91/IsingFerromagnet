@@ -19,10 +19,25 @@
     displacement is randomly Gauß distributed with the standard
     deviation \(\sigma\). That is, the \(x\) and \(y\) coordinates of the
     sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
-    from a Gauß distribution
-    \[f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}\]
+    from a Gauß distribution eq. \eqref{eq:gauss}.
+    This is sketched in fig. \ref{fig:displacement}.
+    \begin{equation}
+        f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}
+        \label{eq:gauss}
+    \end{equation}
     \[x \to x + \Delta x\]
     \[y \to y + \Delta y\]
+    \begin{figure}[htbp]
+        \centering
+        \input{images/Displacement}
+        \caption[Sketch how the displacement works]
+        {
+            Sketch how the displacement of the nodes works. Two nodes
+            get displaced by \(\Delta x\) and \(\Delta y\) drawn from the
+            distributions displayed next to the points.
+        }
+        \label{fig:displacement}
+    \end{figure}\\
     This \(\sigma\) is also called \emph{disorder parameter} in the following.
     Because most sites will only have one nearest neighbor after the
     displacement, the lattice would collapse to many very small clusters.
