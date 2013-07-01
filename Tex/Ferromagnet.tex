@@ -1,16 +1,25 @@
-\documentclass[a4paper,headsepline,bibtotocnumbered,12pt,titlepage,twoside]{scrartcl} % scrartcl
+\documentclass[a4paper,headsepline,bibtotocnumbered,12pt,titlepage,twoside]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
 \usepackage[english,ngerman]{babel}
+
 \usepackage{graphicx}
-\usepackage[FIGTOPCAP,tight,raggedright,nooneline]{subfigure}
 \usepackage{upgreek}
 \usepackage{float}
 \usepackage{units}
 \usepackage{url}
-\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsfonts}
+
 \usepackage{longtable}
-%~ \usepackage{here}
+
+\usepackage[FIGTOPCAP,tight,raggedright,nooneline]{subfigure}
+\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
+
 \usepackage[automark]{scrpage2}
 \pagestyle{scrheadings}
 \clearscrheadfoot
@@ -22,58 +31,20 @@
 %~ \geometry{a4paper, top=21mm, left=30mm, right=30mm, bottom=21mm,
           %~ headsep=10mm, footskip=12mm}
 \geometry{a4paper, top=21mm, bottom=21mm, headsep=10mm, footskip=12mm}
-\usepackage[utf8]{inputenc}
+
 \addtokomafont{sectioning}{\rmfamily}
-%\renewcommand{\figurename}{Abb.}
 \usepackage[bf]{caption}
 \captionsetup{format=plain}
-%\renewcommand*{\captionfont}{\itshape}
 \setlength{\parindent}{0pt}
-%\renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
-%\makeatletter \@addtoreset{figure}{section} \makeatother
-%\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
-%\makeatletter \@addtoreset{equation}{section} \makeatother
-%\sloppy
 \fussy
 
-\usepackage{amsfonts}
 \newcommand{\change}[1]{{#1}}
-%\usepackage[ngerman,num]{isodate}
 
-%\usepackage{natbib}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%~ \documentclass[a4paper,12pt,titlepage,twoside]{scrartcl}
-\usepackage[T1]{fontenc}
-%~ \usepackage{lmodern}
-%~ \usepackage[utf8]{inputenc}
-%~ \usepackage[ngerman]{babel}
 \usepackage{ae}
-%~ \usepackage{amsmath}
-%~ \usepackage{amssymb}
-%~ \usepackage{graphicx}
-%~ \usepackage{enumitem}
-%~ \usepackage{caption}
-%~ \usepackage{subcaption}
-%~ \usepackage{float}
-%~ \usepackage{wrapfig}
-%~ \usepackage{url}
+\usepackage{booktabs}
 
 \usepackage{tikz}
 \usetikzlibrary{patterns}
-
-\usepackage{booktabs}
-
-%~ \captionsetup{figurename=Abb. ,tablename=Tab. ,format=hang}
-%~ \captionsetup{figurename=Abb. ,tablename=Tab., format=plain}
-
-%für Anführungszeichen unten und oben
-\newcommand{\emphgqq}[1]%
-{\emph{{\glqq}#1{\grqq}}}
-\newcommand{\gqq}[1]%
-{{\glqq}#1{\grqq}}
-\newcommand{\eqq}[1]%
-{{\textquotedblleft}#1{\textquotedblright}}
 
 %\abs{Ausdruck} %Betragsstriche, die skalieren - abgekürzt
 \newcommand{\abs}[1]{\ensuremath{\left\vert#1\right\vert}}
@@ -95,10 +66,6 @@
 \hyphenation{}
 \setcounter{lofdepth}{2}
 
-%~ \title{Ferromagnet auf ad-hoc Netzwerk}
-%~ \author{Hendrik Schawe}
-%~ \date{}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
     \selectlanguage{ngerman}
     \input{chapters/title.tex}
