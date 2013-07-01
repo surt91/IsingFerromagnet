@@ -5,7 +5,7 @@
     The Ising model is a square lattice with edge length \(L\) and
     \(N=L^2\) sites. Each site has a magnetic moment, the spin. Each
     spin can take a value \(s \in \{-1,+1\}\) and interacts with it's
-    nearest neighbors described by the hamiltonian from eq. \eqref{eq:hamiltonian}
+    nearest neighbors described by the Hamiltonian from eq. \eqref{eq:hamiltonian}
     \begin{equation}
         \hat{H} = \sum_{\avg{i,j}}J_{ij}s_{i}s_{j} - H \sum_i s_i
         \label{eq:hamiltonian}
@@ -16,14 +16,14 @@
     \(H\) denotes the outer magnetic field.\\
     In this thesis \(H=0\). The most important modification is, that
     the sites of the square lattice are displaced. The
-    displacement is randomly gauss distributed with the standard
+    displacement is randomly Gauß distributed with the standard
     deviation \(\sigma\). That is, the \(x\) and \(y\) coordinates of the
     sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
     from a Gauß distribution
     \[f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}\]
     \[x \to x + \Delta x\]
     \[y \to y + \Delta y\]
-    This \(\sigma\) is also called \emph{disorder paramter} in the following.
+    This \(\sigma\) is also called \emph{disorder parameter} in the following.
     Because most sites will only have one nearest neighbor after the
     displacement, the lattice would collapse to many very small clusters.
     To avoid this, the new "nearest" neighbors are those sites connected
@@ -33,7 +33,7 @@
     of a proximity graph do not cross each other, hence the 2D character
     of the lattice is preserved. The coupling constant \(J\) gets
     identified with edge weights. The weight of an edge \(E_{ij}\) is
-    \(J_{ij} = \exp (\alpha (1-d_{ij}))\) where \(d_{ij}\) is the Euclidian
+    \(J_{ij} = \exp (\alpha (1-d_{ij}))\) where \(d_{ij}\) is the Euclidean
     distance between the nodes \(i\) and \(j\). The free parameter
     \(\alpha\) is set to \(\alpha = 0.5\) inspired by \cite{Lima2000}.
     The boundary is periodic i.e. nodes near the right edge can be
@@ -41,7 +41,7 @@
     top and bottom edges are connected. One can imagine that the model
     lives on the surface of a torus.\\
     For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
-    for which exists an analytical solution \cite{Onsager1944}. And for
+    for which exists an analytic solution \cite{Onsager1944}. And for
     \(\sigma \gtrsim 1\) the nodes are distributed randomly. This case
     is studied for constant \(J\) on the Delaunay triangulation\cite{Janke1994}.\\
 
@@ -53,14 +53,14 @@
     Hence they are suited to generalize problems defined on regular
     lattices with nearest neighbor relationships, like the Ising model
     from the section \ref{ssec:isingmodel}.
-    In this thesis the distance is always determined by the Euclidian
+    In this thesis the distance is always determined by the Euclidean
     metric in two dimensions, though in principle every metric in any
     dimension can be used.\\
 
     The Gabriel graph \cite{Gabriel1969} is a subgraph of the
     Delaunay triangulation. Two nodes \(i\) and \(j\) with distance
     \(d_{ij}\) are connected with an edge, if a circle with it's
-    center on the middlepoint between \(i\) and \(j\) and radius
+    center on half way between \(i\) and \(j\) and radius
     \(r = \frac d 2\) contains no other nodes. This area will be
     called \emph{lune} in the following. See also Figure
     \ref{fig:lunes}\subref{sfig:lunes:def}.\\
@@ -110,13 +110,13 @@
     implementation of a Delaunay triangulation algorithm is not trivial
     and the generation of the graphs is not time critical in the scope
     of this bachelor thesis.\\
-    So a tradeoff is to use basicly the simple method but only test
+    So a trade off is to use basically the simple method but only test
     the criterion for nodes which are near to the lune and abort if
     one node inside the lune is found. To determine which nodes are
     near the lune one can subdivide the area in \emph{cells} and save
     for each cell a list with nodes lying inside it like presented in
     \cite{RNGCell}.
-    Now it is just neccessary to test the nodes in the cells which
+    Now it is just necessary to test the nodes in the cells which
     resemble a rectangular bounding box of the lune. Most pairs will be
     far away from each other and the cells in the middle of the bounding
     box are completely inside the lune so that only one node has to be
@@ -124,6 +124,6 @@
     each other so that only very few cells have to be tested.\\
     Indeed this method reduced the time needed to construct a Relative
     Neighborhood graph with \(N=32^2\) and \(N=64^2\) by a factor of
-    over \(15\) respectivly \(40\). Though the complexity is still of
+    over \(15\) respectively \(40\). Though the complexity is still of
     order \(O(N^2)\) in the best case, because for every pair at least
     one check has to be performed.

@@ -4,15 +4,15 @@
 The idea behind Monte Carlo simulations is to take random samples of
 the observable, which should be measured, and estimate the observable from
 this samples. In example the Monte Carlo integration chooses random
-points within the bounding box of the fuction and estimates the integral
-as the fraction of points below the function and points above muliplied
+points within the bounding box of the function and estimates the integral
+as the fraction of points below the function and points above multiplied
 by the area of the bounding box.
 Of course one wants to sample more points, where the area below the
 function is big, because points in areas, where the function does
 contribute little to the integral, contribute little to the integral.
 This can be achieved by \emph{Importance Sampling}. One
-generates random numbers according to some probabilty distribution, which
-yields more numbers in the range where the function to ingegrate has high
+generates random numbers according to some probability distribution, which
+yields more numbers in the range where the function to integrate has high
 values and weights the result accordingly.\\
 %~ To improve this method: \emph{Importance Sampling}
 %~ means that one takes more samples where the contribution of the
@@ -38,7 +38,7 @@ Otherwise the samples might not be representative for the whole system.\\
         A Metropolis Monte Carlo\cite{Metropolis1953} simulation of an
         Ising model will choose a random spin, calculate the energy change
         \(\Delta \hat H\) defined in eq. \eqref{eq:dH} that would result
-        from a flip of that spin and excute the flip with the probability \(A\)
+        from a flip of that spin and execute the flip with the probability \(A\)
         eq. \eqref{eq:metropolis} \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
         \begin{equation}
             \Delta \hat H = \hat H(\nu) - \hat H(\mu)\\
@@ -82,7 +82,7 @@ Otherwise the samples might not be representative for the whole system.\\
         the cluster will consist of almost all sites such that all but
         very few spins will be flipped. At high temperatures the cluster
         will only contain very few sites.
-        Both situaitions have no advantage against the Metropolis algorithm.\\
+        Both situations have no advantage against the Metropolis algorithm.\\
         So one would activate this algorithm near the critical temperature
         but use a simple Metropolis algorithm at high and low temperatures.
 
@@ -114,7 +114,7 @@ Otherwise the samples might not be representative for the whole system.\\
         decreases significantly. In the scope of this thesis this comes
         for no cost, because one has to simulate for many temperatures
         to determine the critical temperature. The additional calculations
-        to determine wheather to swap configurations or not are small in
+        to determine weather to swap configurations or not are small in
         comparison with those that would be needed to generate a new
         uncorrelated state without \emph{parallel tempering}.
 

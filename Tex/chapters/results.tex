@@ -6,7 +6,7 @@ All source code is available at \url{https://github.com/surt91/IsingFerromagnet}
 
 For evaluation the Monte Carlo simulation is run until the system
 is equilibrated after \(t_{eq}\) sweeps. Then the simulation continues
-and the magnetisation per site \(m=\frac{1}{N}\sum_i s_i\) and energy
+and the magnetization per site \(m=\frac{1}{N}\sum_i s_i\) and energy
 per site \(E=\frac{1}{N}\hat H\) are calculated and saved for every
 \(2\tau\) sweeps. Where \(\tau\) denotes the \emph{autocorrelation time}
 (see also \ref{ssec:eqtime}). The used values for different system sizes
@@ -39,7 +39,7 @@ with possibly different signs, thus having the same effect.
 Also note that the maximum of \(\tau\) is not at \(T_c\) but at a higher
 temperature. The cause is probably the effectiveness of the Wolff cluster
 algorithm at \(T_c\).
-Obiviously the autocorrelation time \(\tau\) increases with the system
+Obviously the autocorrelation time \(\tau\) increases with the system
 size. In fact it obeys a power law, which is the expected behaivior of
 a dynamical critical exponent \(z\) as mentioned in section \ref{ssec:eqtime}.
 In fig. \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} \(\tau\) is plotted
@@ -79,16 +79,16 @@ or \(N_{\mathrm{measure}}=5000\) for \(L=64,128\). The number of
 calculated sweeps totals to
 \[N_{\mathrm{sweeps}}=t_{eq}+2\tau N_{\mathrm{measure}}\]
 The expected values \(\avg{O}\) for \(100\) different random proximity
-graphs with the same disorder paramter \(\sigma\) are then averaged to
+graphs with the same disorder parameter \(\sigma\) are then averaged to
 \(\overline{\avg{O}}\).
-All errorbars are estimated by bootstrapping\cite{Bootstrap} with 200
+All error bars are estimated by bootstrapping\cite{Bootstrap} with 200
 bootstrap samples if not noted otherwise.
 
 \subsection{Finite Size Effects}
 \label{ssec:finitesize}
     The aim of this thesis is to find the critical temperature \(T_c\)
     of the disordered Ising model in dependence of the disorder parameter
-    \(\sigma\). At \(T_c\) the mean absolute magnetisation \(\avg{|m|}\) of
+    \(\sigma\). At \(T_c\) the mean absolute magnetization \(\avg{|m|}\) of
     the system will jump and the susceptibility
     \(\chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}\)
     will diverge. In fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}\footnote{See the appendix \ref{appendix:finiteSizeEffects} for a similar figure for the specific heat.}
@@ -119,20 +119,20 @@ bootstrap samples if not noted otherwise.
     \end{figure}\\
     But in the shown plots there occurs no real jump, but a continuous
     decline. The jump is only present in infinite systems, hence no
-    computer simulation will show the exact behaivior in the
+    computer simulation will show the exact behavior in the
     thermodynamic limit. It will always show some \emph{finte size effects}.
     These finite size effects cause a "smearing out" of the phase
-    trasition. This is stronger for smaller system sizes, as is visible
+    transition. This is stronger for smaller system sizes, as is visible
     in fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}. Clearly
     the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{NewmanBarkema1999} which also yield the critical
     exponents.
     Studies on random lattices with\cite{Lima2000} and without\cite{Janke1994}
-    variing coupling constants \(J\) suggest, that the
-    critical exponents should not be influenced by the disorder paramter
+    varying coupling constants \(J\) suggest, that the
+    critical exponents should not be influenced by the disorder parameter
     \(\sigma\). So they will be used for consistency cross checking and
-    comparision with the known exact values \cite[S. 59]{Pelissetto2002}.\\
+    comparison with the known exact values \cite[S. 59]{Pelissetto2002}.\\
     % Ausfuehrlichere Herleitung der Skalentheorie, Skalenanalyse
     For a more in depth look at finite size scaling, \cite{Norrenbrock2011}
     offers a explanation.
@@ -149,7 +149,7 @@ bootstrap samples if not noted otherwise.
     \end{align}
     Where \(g\) from eq. \eqref{eq:fsscaling:g} is a normalized
     Binder cumulant \cite{Binder1981} and \(\tilde{M}, \tilde{C}\) and \(\tilde{G}\)
-    are unkown scaling functions. To find the exponents
+    are unknown scaling functions. To find the exponents
     \(\beta, \gamma, \nu\) and the critical temperature \(T_c\), one
     varies them until the measured values of the observables collapse on
     one curve. Like the obersables from fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}
@@ -158,7 +158,7 @@ bootstrap samples if not noted otherwise.
     rather small value such that eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
     do not apply very good.\\
     To accomplish the collapse in an semi-automatic and reproduceable
-    way with an error estimate, the programm
+    way with an error estimate, the program
     \texttt{autoscale.py} \cite{autoscale2009} is used.
     \begin{figure}[htbp]
         \centering
@@ -187,14 +187,14 @@ bootstrap samples if not noted otherwise.
     easier approach is to find the intersections of the Binder cumulants
     \(g\) of different system sizes \(L\) because they are intersecting
     at \(T_c\) \cite{Binder1981}.
-    Because  the magnetisation \(m\) is only measured for discrete values
+    Because  the magnetization \(m\) is only measured for discrete values
     of \(T\), \(g\) is also only known for these discrete values and has
     to be interpolated to find a intersection. Therefore a cubic spline
     interpolation\footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
     is calculated for the measured points.
-    Cubic spline interpolation is a piecewise fitting of polynoms of
+    Cubic spline interpolation is a piece wise fitting of polynoms of
     degree three which are joined under the condition to be at least two
-    timescontinuously differentiable.
+    times continuously differentiable.
     As an example take fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}.
     Here such interpolations are plotted for \(\sigma=0\) and are
     intersecting at \(\approx 2.27\).
@@ -241,7 +241,7 @@ bootstrap samples if not noted otherwise.
     generally a lower critical temperature than the Gabriel. Also \(T_c\)
     of the Relative Neighborhood graph decreases
     monotonically while \(T_c\) of the Gabriel rises at first.
-    For big \(\sigma\) the displaced nodes approache the limit of randomly
+    For big \(\sigma\) the displaced nodes approach the limit of randomly
     distributed nodes, hence \(T_c\) is independent of \(\sigma\) for
     \(\sigma >> 1\).\\
     A strange property is the jump from \(\sigma = 0\) to \(\sigma > 0\)
@@ -295,24 +295,24 @@ bootstrap samples if not noted otherwise.
         \label{fig:Tc_deg}
     \end{figure}\\
     \(T_c\) and \(K\) are evidently correlated. This is not
-    unexpected. For example the Honeycomb lattice, for which exsists an
-    anlytical solution \cite{Wannier1945} and has a degree of 3, has a
-    critical temperature of
+    unexpected. For example the Honeycomb lattice is of degree \(K=3\)
+    and for which exists an analytic solution \cite{Wannier1945}.
+    It has a critical temperature of
     \begin{equation}
         \cosh\brac{\frac{J}{T_c}}=2 \overset{J=1}{\Longrightarrow} T_c \approx 1.52
         \label{eq:exactHCTc}
     \end{equation}
     This is lower than for the square lattice with degree 4.\\
-    It seems resonable to normalize \(T_c\) by the degree of the underlying
+    It seems reasonable to normalize \(T_c\) by the degree of the underlying
     graph. This is done in fig \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
-    Indeed the normalisation eliminates the jump and reduces the
+    Indeed the normalization eliminates the jump and reduces the
     slope of the rising on the Gabriel graph. Hence it reduces differences
     between the Relative Neighborhood graph and the Gabriel graph.\\
     % Zitat, dass Janke das auch gemacht hat .. nochmal nachlesen
     The jump of \(K\) and therefore the jump of \(T_c\) on the Gabriel graph is easily explained
     by the definition of the Gabriel graph and it's aftereffects for
     the transition from \(\sigma = 0\). Visible in fig. \ref{fig:GG_sigma}
-    a small change of sigma causes many new egdes to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
+    a small change of sigma causes many new edges to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
     To fully understand this, take four nodes forming a square. The edge
     across does not exist, because the other two nodes are on the edge
     of the lune. Moving one node slightly into the square, causes the lune
@@ -400,7 +400,7 @@ bootstrap samples if not noted otherwise.
     Both graph types have a plateau at \(0 < \sigma < 0.1\). So small
     disorder has little influence on this normalized critical temperature.
     Also both graph types have a steep decline after the plateau before
-    they approache an asymptotic limit for \(\sigma >> 1\)\\\\
+    they approach an asymptotic limit for \(\sigma >> 1\)\\\\
 
 
     %~ But once the degree of
@@ -429,7 +429,7 @@ bootstrap samples if not noted otherwise.
     by the fact that small systems (\(L=32,64\)) were used for the
     analysis.
     Anyway, two critical exponents are sufficient to determine the universality
-    class. Therefore this disordered Ising modell is in the same universality
+    class. Therefore this disordered Ising model is in the same universality
     class as the standard Ising ferromagnet \cite[p. 145]{Katzgraber2011}.
     \begin{table}[htbp]
         \center
@@ -466,7 +466,7 @@ bootstrap samples if not noted otherwise.
             to match it's definition in this thesis.}.
     Because the analysis of section \ref{ssec:binderIntersections}
     yields \(g_c\) anyway, it is easy to check the consistency and
-    behaivior of \(g_c\) in the disordered Ising modell.\\
+    behavior of \(g_c\) in the disordered Ising model.\\
     \begin{figure}[htbp]
         \centering
         \subfigure[for a Relative Neighborhood graph][]
@@ -494,11 +494,11 @@ bootstrap samples if not noted otherwise.
     Considering both plots in fig. \ref{fig:TcG}, \(g_c\) is for low
     \(\sigma\) obviously always bigger than the known value. Though the
     deviation is less than \(1\%\). Perhaps this is some inherent flaw
-    of the cubic spline interpolation used to aquire these \(g_c\) values.
+    of the cubic spline interpolation used to acquire these \(g_c\) values.
     For bigger \(\sigma\) the uncertainty gets greater, but the values
     do only differ by a few percent, hence even the big disorder and
     definition of nearest neighbors via a proximity graph does not change
-    \(g_c\) much. This is the expected behaivior.
+    \(g_c\) much. This is the expected behavior.
 
 
 %~ Darstellung von Suszeptibilität \(\chi\), spezifischer Wärme \(c\), mittlerer Magnetisierung \(<m>\) über Unordnungsparamter \(\sigma\)\\
