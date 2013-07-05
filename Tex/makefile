@@ -5,6 +5,7 @@ CHAPTERS = chapters/title.tex \
            chapters/model.tex \
            chapters/results.tex\
            chapters/conclusion.tex\
+           chapters/appendix.tex \
            chapters/erklarung.tex
 
 BIBFILE = lit.bib
@@ -24,6 +25,7 @@ PLOTS = plots/binder_fit_s_0.pdf \
         plots/autoM.pdf \
         plots/meanM.pdf \
         plots/Mean_M_L_128.pdf \
+        plots/Specific_Heat_0.pdf \
         $(GG_LST) \
         $(RNG_LST)
 

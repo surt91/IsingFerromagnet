@@ -24,8 +24,9 @@ by bootstrapping \cite{Bootstrap}.
     \(\sigma\). At \(T_c\) the mean absolute magnetisation \(\avg{|m|}\) of
     the system will jump and the susceptibility
     \(\chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}\)
-    will diverge. In fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}
-    it is easy to see that the jump occurs at lower temperatures \(T\) for higher
+    will diverge. In fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}\footnote{See the appendix for a similar figure for the specific heat.}
+    it is easy to see that the jump of \(\avg{|m|}\)
+    occurs at lower temperatures \(T\) for higher
     disorder parameters \(\sigma\) (here with a Relative Neighborhood graph).
     \begin{figure}[htbp]
         \centering
@@ -76,11 +77,9 @@ by bootstrapping \cite{Bootstrap}.
         \label{eq:fsscaling:chi}
         \chi_L    &= L^\frac{\gamma}{\nu} \tilde{C}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
         \label{eq:fsscaling:g}
-        g         &\propto \tilde{G}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
-        \label{eq:binderCumulant}
-        g &= \frac{3}{2}\brac{1-\frac{\avg{m^4}}{3\avg{m^2}^2}}
+        g          &= \frac{3}{2}\brac{1-\frac{\avg{m^4}}{3\avg{m^2}^2}} \propto \tilde{G}\brac{L^\frac{1}{\nu}\brac{T-T_c}}
     \end{align}
-    Where \(g\) from eq. \eqref{eq:binderCumulant} is a normalized
+    Where \(g\) from eq. \eqref{eq:fsscaling:g} is a normalized
     Binder cumulant \cite{Binder1981} and \(\tilde{M}, \tilde{C}\) and \(\tilde{G}\)
     are unkown scaling functions. To find the exponents
     \(\beta, \gamma, \nu\) and the critical temperature \(T_c\), one
