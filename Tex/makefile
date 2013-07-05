@@ -5,19 +5,34 @@ CHAPTERS = chapters/title.tex \
            chapters/monte_carlo.tex\
            chapters/Auswertung.tex
 
+GG_LST = plots/GG_Tc.pdf \
+         plots/GG_deg.pdf \
+         plots/GG_sumJ.pdf \
+         plots/GG_meanJ.pdf
+RNG_LST = $(subst GG,RNG,$(GG_LST))
+PLOTS = plots/binder_fit_s_0.pdf \
+        plots/equiE.pdf \
+        plots/autoM.pdf \
+        $(GG_LST) \
+        $(RNG_LST)
+
 all: $(DOKUMENT).pdf
 
-.PHONY : plots clean
+.PHONY : clean
 
-$(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) plots
-	pdflatex $(DOKUMENT)
+$(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS)
+	pdflatex -interaction=batchmode $(DOKUMENT)
 	bibtex $(DOKUMENT)
-	pdflatex $(DOKUMENT)
-	pdflatex $(DOKUMENT)
+	pdflatex -interaction=batchmode $(DOKUMENT)
+	pdflatex -interaction=batchmode $(DOKUMENT)
 
-plots:
-	$(MAKE) -C plots
+%.eps: %.gp
+	cd $(<D) && gnuplot $(<F)
+
+%.pdf: %.eps
+	cd $(<D) && epstopdf $(<F)
 
 clean:
-	rm -rf *.log *.aux *.bbl *.blg *.toc *.out *.lof $(DOKUMENT).pdf
-	$(MAKE) clean -C plots
+	rm -f $(PLOTS)
+	rm -rf $(dir $(DATA))
+	rm -f *.log *.aux *.bbl *.blg *.toc *.out *.lof $(DOKUMENT).pdf
