@@ -5,6 +5,8 @@ CHAPTERS = chapters/title.tex \
            chapters/monte_carlo.tex\
            chapters/Auswertung.tex
 
+IMAGES = images/GG_RNG_def.tex
+
 GG_LST = plots/GG_Tc.pdf \
          plots/GG_deg.pdf \
          plots/GG_sumJ.pdf \
@@ -21,7 +23,7 @@ all: $(DOKUMENT).pdf
 
 .PHONY : clean
 
-$(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS)
+$(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS) $(IMAGES)
 	pdflatex -interaction=batchmode $(DOKUMENT)
 	bibtex $(DOKUMENT)
 	pdflatex -interaction=batchmode $(DOKUMENT)
