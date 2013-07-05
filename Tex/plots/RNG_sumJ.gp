@@ -1,4 +1,4 @@
-set terminal postscript eps enhanced color lw 2 20
+set terminal postscript eps enhanced color lw 2 30
 set output 'RNG_sumJ.eps'
 
 set xlabel '{/Italic {/Symbol s}}'

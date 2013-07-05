@@ -1,7 +1,9 @@
-set terminal postscript eps enhanced color lw 2 20
+set terminal postscript eps enhanced color lw 2 30
 set output "binder_fit_s_0.eps"
 
 set key left bottom Left
+
+set xtics 0.01
 
 plot "data/binderFit16_s_0.000.dat" u 1:2 w l lt 1 lc rgb "red" title "Fit: L = 16",\
      "data/binderFit32_s_0.000.dat" u 1:2 w l lt 1 lc rgb "green" title "Fit: L = 32",\
