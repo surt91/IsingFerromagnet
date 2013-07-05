@@ -108,7 +108,7 @@ the \(\Delta \overline{\avg{O}}\) small.
     \(\sigma\). At \(T_c\) the mean absolute magnetization \(\avg{|m|}\) of
     the system will jump and the susceptibility
     \(\chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}\)
-    will diverge. In fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}\footnote{See the appendix \ref{appendix:finiteSizeEffects} for a similar figure for the specific heat.}
+    will diverge. In fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM_L}
     it is easy to see that the jump of \(\avg{|m|}\)
     occurs at lower temperatures \(T\) for higher
     disorder parameters \(\sigma\) (here with a Relative Neighborhood graph).
@@ -140,8 +140,8 @@ the \(\Delta \overline{\avg{O}}\) small.
     thermodynamic limit. It will always show some \emph{finte size effects}.
     These finite size effects cause a "smearing out" of the phase
     transition. This is stronger for smaller system sizes, as is visible
-    in fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}. Clearly
-    the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
+    in fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}\footnote{See the appendix \ref{appendix:finiteSizeEffects} for a similar figure for the specific heat.}.
+    Clearly the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{NewmanBarkema1999} which also yield the critical
     exponents.
@@ -265,15 +265,30 @@ the \(\Delta \overline{\avg{O}}\) small.
     of \(T_c\) on the Gabriel graph. To understand that, one has to
     consider the influence of the graph properties on the critical
     temperature.\\
-    A characteristic property of a graph is it's degree \(K\).
-    The degree \(K\) of a graph -- sometimes called \emph{coordination number} --
-    is defined as the mean count of neighbors per node
+    One basic property of a graph is it's degree \(K\) -- sometimes
+    called \emph{coordination number} -- is defined as the mean count of
+    neighbors per node
     \begin{equation}
         K = \frac{\sum_{\avg{i,j}} 1}{\sum_{i} 1}
         \label{eq:degree}
     \end{equation}
-    Therefore the degree of the graphs at different \(\sigma\) is
-    plotted in fig. \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}.
+    It is known, that the degree has an impact on the critical Temperature.
+    For example the Honeycomb lattice is of degree \(K=3\)
+    and there exists an analytic solution \cite{Wannier1945}.
+    It's a critical temperature is determined by eq. \eqref{eq:exactHCTc}.
+    \begin{equation}
+        \cosh\brac{\frac{J}{T_c}}=2 \overset{J=1}{\Longrightarrow} T_c \approx 1.52
+        \label{eq:exactHCTc}
+    \end{equation}
+    This is lower than for the square lattice with degree 4.\\
+    If one plots the degree of the graphs at different \(\sigma\) like
+    in fig. \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG},
+    one recognizes, that \(T_c\) and \(K\) are evidently correlated.
+    It seems reasonable to normalize \(T_c\) by the degree of the underlying
+    graph. This is done in fig \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
+    Indeed the normalization eliminates the jump and reduces the
+    slope of the rising on the Gabriel graph. Hence it reduces differences
+    between the Relative Neighborhood graph and the Gabriel graph.
     \begin{figure}[htbp]
         \centering
         \subfigure[][]
@@ -311,25 +326,11 @@ the \(\Delta \overline{\avg{O}}\) small.
         }
         \label{fig:Tc_deg}
     \end{figure}\\
-    \(T_c\) and \(K\) are evidently correlated. This is not
-    unexpected. For example the Honeycomb lattice is of degree \(K=3\)
-    and for which exists an analytic solution \cite{Wannier1945}.
-    It has a critical temperature of
-    \begin{equation}
-        \cosh\brac{\frac{J}{T_c}}=2 \overset{J=1}{\Longrightarrow} T_c \approx 1.52
-        \label{eq:exactHCTc}
-    \end{equation}
-    This is lower than for the square lattice with degree 4.\\
-    It seems reasonable to normalize \(T_c\) by the degree of the underlying
-    graph. This is done in fig \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
-    Indeed the normalization eliminates the jump and reduces the
-    slope of the rising on the Gabriel graph. Hence it reduces differences
-    between the Relative Neighborhood graph and the Gabriel graph.\\
-    % Zitat, dass Janke das auch gemacht hat .. nochmal nachlesen
-    The jump of \(K\) and therefore the jump of \(T_c\) on the Gabriel graph is easily explained
+    To understand the jump of \(T_c\), it seems to be sufficient to
+    understand the jump of \(K\), which is easily explained
     by the definition of the Gabriel graph and it's aftereffects for
     the transition from \(\sigma = 0\). Visible in fig. \ref{fig:GG_sigma}
-    a small change of sigma causes many new edges to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
+    a small change of \(\sigma\) causes many new edges to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
     To fully understand this, take four nodes forming a square. The edge
     across does not exist, because the other two nodes are on the edge
     of the lune. Moving one node slightly into the square, causes the lune
@@ -356,13 +357,14 @@ the \(\Delta \overline{\avg{O}}\) small.
         \label{fig:GG_sigma}
     \end{figure}\\
     But the degree does not alone influence the behavior of \(T_c\).
-    Further \(T_c\) depends on the coupling
-    constant \(J\), which is obvious in eq. \eqref{eq:exactTc} and
-    \eqref{eq:exactHCTc}. Therefore  in fig. \ref{fig:TcJ}\subref{sfig:sumJ:RNG}\subref{sfig:sumJ:GG}
+    Further \(T_c\) depends on the coupling constant \(J\), which is
+    obvious in eq. \eqref{eq:exactTc} and \eqref{eq:exactHCTc}. The
+    coupling constant in turn is depending on the length of the edges,
+    which changes with \(\sigma\).
+    Therefore  in fig. \ref{fig:TcJ}\subref{sfig:sumJ:RNG}\subref{sfig:sumJ:GG}
     the mean sum of the coupling constants to all neighbors \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
     is plotted. This is a number which should combine the dependence on
-    the degree and the coupling constant, which is not equal for
-    every edge in this case.
+    the degree and the coupling constant.
     The plots fig \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}
     show that \(\avg{\sum_{\avg{i,j}} J_{ij}}\) is also correlated with \(T_c\).
     \begin{figure}[htbp]
@@ -403,7 +405,6 @@ the \(\Delta \overline{\avg{O}}\) small.
         }
         \label{fig:TcJ}
     \end{figure}\\
-    % I don't know what all that means...
     If one normalizes \(T_c\) with \(\avg{\sum_{\avg{i,j}} J_{ij}}\) as in
     \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}, the
     jump on the Gabriel graph arises again, but \(T_c\) is now monotonically
@@ -412,42 +413,24 @@ the \(\Delta \overline{\avg{O}}\) small.
     one for the Relative Neighborhood graph \ref{fig:TcJ}\subref{sfig:Tc_norm:RNG}
     is generally lower and spans over a bigger temperature range than
     the curve of the Gabriel graph \ref{fig:TcJ}\subref{sfig:Tc_norm:GG}.
-    % Warum??? Die eigenschaften des Graphen sollten mit der Normalisierung erledigt sein.
-    % RNG: laengere Kanten -> weniger lokale effekte?
     Both graph types have a plateau at \(0 < \sigma < 0.1\). So small
     disorder has little influence on this normalized critical temperature.
     Also both graph types have a steep decline after the plateau before
     they approach an asymptotic limit for \(\sigma >> 1\)\\\\
 
-
-    %~ But once the degree of
-    %~ the graph and hence the mean sum of the coupling constants decreases,
-    %~ the normalized critical temperature decreases, too.\\
-    %~ In conclusion the critical temperature depends on the averaged sum
-    %~ of the coupling constant \(\avg{\sum_{\avg{i,j}} J_{ij}}\). But after
-    %~ normalizing it with this, the plots for both proximity graphs look
-    %~ similar.
-    % The author is not sure what it means.
-
 \subsection{Critical Exponents}
-    For \(\sigma \in \{0,0.1,0.2,0.3,0.5,1.0\}\) a finite size scaling analysis was
+    A finite size scaling analysis was
     performed to determine the critical exponents \(\beta, \gamma, \nu\)
     using \texttt{autoscale.py} \cite{autoscale2009}. The values for
     \(\sigma = 0\) are analytically known \cite{Pelissetto2002}. The
-    values for all other \(\sigma\) should be the same as for \(\sigma = 0\)
-    like mentioned before in section \ref{ssec:finitesize}.
-    The values for \(\sigma\) are chosen to represent every interesting
-    region from fig. \ref{fig:Tc}\subref{sfig:Tc_norm:RNG}\subref{sfig:Tc_norm:GG}:
-    the plateau at small \(\sigma\), the steep decline and the plateau at
-    big \(\sigma\).\\
-    Like in tab. \ref{tab:critExp} to see, most values
-    are matching the expectations. Most \(\beta\) seem to be a bit too
-    big, but they are close enough to the expectations to be explained
-    by the fact that small systems (\(L=32,64\)) were used for the
-    analysis.
-    Anyway, two critical exponents are sufficient to determine the universality
-    class. Therefore this disordered Ising model is in the same universality
-    class as the standard Ising ferromagnet \cite[p. 145]{Katzgraber2011}.
+    values for all other \(\sigma\) are expected be the same as for
+    \(\sigma = 0\) like mentioned before in section \ref{ssec:finitesize}.
+    Therefore it is sufficient to take a few samples to test if the
+    expectations are met. Hence 5 values of \(\sigma\) are analyzed,
+    which are chosen to represent every interesting region from fig. \ref{fig:Tc}\subref{sfig:Tc:RNG}\subref{sfig:Tc:GG}:
+    the analytically known value for \(\sigma = 0\), the in \cite{Janke1994}
+    examined limit for \(\sigma \gtrsim 1\), the plateau at small
+    \(\sigma\), the steep decline and the shallow decline at \(\sigma = 0.5\).\\
     \begin{table}[htbp]
         \center
         \begin{tabular}{l l l l l}
@@ -510,12 +493,15 @@ the \(\Delta \overline{\avg{O}}\) small.
     \end{figure}\\
     Considering both plots in fig. \ref{fig:TcG}, \(g_c\) is for low
     \(\sigma\) obviously always bigger than the known value. Though the
-    deviation is less than \(1\%\). Perhaps this is some inherent flaw
-    of the cubic spline interpolation used to acquire these \(g_c\) values.
+    deviations are only very small. Perhaps this overestimation is caused
+    by the cubic spline interpolation used to acquire these \(g_c\) values.
     For bigger \(\sigma\) the uncertainty gets greater, but the values
     do only differ by a few percent, hence even the big disorder and
     definition of nearest neighbors via a proximity graph does not change
-    \(g_c\) much. This is the expected behavior.
-
-
-%~ Darstellung von Suszeptibilität \(\chi\), spezifischer Wärme \(c\), mittlerer Magnetisierung \(<m>\) über Unordnungsparamter \(\sigma\)\\
+    \(g_c\) much. Though it is mentioned in \cite{BinderValue} that the
+    lattice structure has a minor effect on \(g_c\), the uncertainty of
+    \(g_c\) is too big, to show it. For a more in depth analysis, new
+    Monte Carlo simulations at \(T_c\) would be needed. But this is
+    beyond the scope of this thesis. Anyway the results are the expected
+    behaivior, because no major deviations from the value of \(g_c\) at
+    \(\sigma = 0\) occur at larger \(\sigma\).
