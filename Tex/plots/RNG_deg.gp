@@ -2,7 +2,10 @@ set terminal postscript eps enhanced color blacktext lw 2 solid 26
 set output 'RNG_deg.eps'
 
 set xlabel '{/Italic {/Symbol s}}'
-set ylabel 'Degree'
+set ylabel '{/Italic K}'
+
+set xr [-0.1:1.3]
+set yr [2.5:4.1]
 
 set size square
 
