@@ -26,7 +26,8 @@ PLOTS = plots/binder_fit_s_0.pdf \
         plots/meanM.pdf \
         plots/Mean_M_L_128.pdf \
         plots/Specific_Heat_0.pdf \
-        plots/autocorr.pdf \
+        plots/autocorrL.pdf \
+        plots/autocorrT.pdf \
         $(GG_LST) \
         $(RNG_LST)
 
