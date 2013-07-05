@@ -122,6 +122,23 @@
     %~ [Erklärung autoscale]
     %~ [Am besten hier direkt die ganze Auswertung rein]
     %~ [weiter ausarbeiten] [sagen, dass man für zwei/drei sigma die exponenten reproduziert hat].\\
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[Example of a datacollapse to determine critical exponents][]{
+                \label{sfig:collapse_s_0}
+                \includegraphics[width=0.47\textwidth]{plots/collapse_s_0}
+        }
+        \subfigure[Example of a Binder cumulant to determine the critical temperature][]{
+                \label{sfig:binder_fit_s_0}
+                \includegraphics[width=0.47\textwidth]{plots/binder_fit_s_0}
+        }
+        \caption[Examples of determining critical temperature and exponents]
+                {\subref{sfig:collapse_s_0}
+                 \subref{sfig:binder_fit_s_0} Binder cumulant fitted with
+                    polynom of degree 4 in vincinity of \(T_c\)
+                    (the errorbars are too small to see)}
+        \label{fig:binder_fit_s_0}
+    \end{figure}
     Though if one is just interested in the critical Temperature, an
     easier approach is to find the intersections of the Binder cumulants
     \(g = 3-\frac{\avg{m^4}}{2\avg{m^2}^2}\) \cite{Binder1981} of different
@@ -134,17 +151,7 @@
     error is calculated. In this case one gets \(T_c = 2.269(1)\), which
     is in very good agreement with the exact solution
     \(T_c = 2.2691...\) \cite{Onsager1944}.\\
-    \begin{figure}[htbp]
-        \centering
-        \subfigure{
-                \label{sfig:binder_fit_s_0}
-                \includegraphics[width=0.45\textwidth]{plots/binder_fit_s_0}
-        }
-        \caption[Binder cumulant fitted with polynom of degree 4]
-                {Binder cumulant fitted with polynom of degree 4
-                (the errorbars are too small to see)}
-        \label{fig:binder_fit_s_0}
-    \end{figure}%[vgl. Grafik (villeicht)]
+
     % The arithmetic average of the intersections are plotted [hier schon?]
     %~ [Und den rest der Auswertung]
 

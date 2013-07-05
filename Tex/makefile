@@ -11,6 +11,7 @@ GG_LST = plots/GG_Tc.pdf \
          plots/GG_meanJ.pdf
 RNG_LST = $(subst GG,RNG,$(GG_LST))
 PLOTS = plots/binder_fit_s_0.pdf \
+        plots/collapse_s_0.pdf \
         plots/equiE.pdf \
         plots/autoM.pdf \
         $(GG_LST) \
@@ -28,6 +29,7 @@ $(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS)
 
 %.eps: %.gp
 	cd $(<D) && gnuplot $(<F)
+	cd $(@D) && ps2epsi $(@F) $(@F)_tmp && mv $(@F)_tmp $(@F)
 
 %.pdf: %.eps
 	cd $(<D) && epstopdf $(<F)
