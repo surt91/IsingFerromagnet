@@ -74,10 +74,12 @@ by bootstrapping \cite{Bootstrap}.
         \label{eq:fsscaling:chi}
         \chi_L    &= L^\frac{\gamma}{\nu} \tilde{C}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
         \label{eq:fsscaling:g}
-        g         &\propto \tilde{G}\brac{L^\frac{1}{\nu}\brac{T-T_c}}
+        g         &\propto \tilde{G}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
+        \label{eq:binderCumulant}
+        g &= \frac{3}{2}\brac{1-\frac{\avg{m^4}}{3\avg{m^2}^2}}
     \end{align}
-    Where \(g = 3-\frac{\avg{m^4}}{2\avg{m^2}^2}\) \cite{Binder1981} is
-    the Binder cumulant and \(\tilde{M}, \tilde{C}\) and \(\tilde{G}\)
+    Where \(g\) from eq. \eqref{eq:binderCumulant} is a normalized
+    Binder cumulant \cite{Binder1981} and \(\tilde{M}, \tilde{C}\) and \(\tilde{G}\)
     are unkown scaling functions. To find the exponents
     \(\beta, \gamma, \nu\) and the critical temperature \(T_c\), one
     varies them until the measured values of the observables collapse on
@@ -129,6 +131,7 @@ by bootstrapping \cite{Bootstrap}.
     \end{equation}
 
 \subsection{Critical Temperature}
+\label{ssec:binderIntersections}
     The evaluation of the Binder cumulant's intersections, yields the
     critical temperatures \(T_c\), which are plotted in
     fig. \ref{fig:Tc}\subref{sfig:Tc:RNG}\subref{sfig:Tc:GG}.
@@ -285,11 +288,43 @@ by bootstrapping \cite{Bootstrap}.
         \label{tab:critExp}
     \end{table}
 
-    %~ <J>\(\sigma\), Anmerkung zur Anomalie des GG und der Ähnlichkeit von <J> zu \(T_c\)\\
-%~
-    %~ Erklärung zu Autokorreltationszeit \(\tau\) und Equilibrierungszeit \(t_eq\)\\
-    %~ Darstellung von Suszeptibilität \(\chi\), spezifischer Wärme \(c\), mittlerer Magnetisierung \(<m>\) über Unordnungsparamter \(\sigma\)\\
-    %~ Bestimmung der kritischen Punkte\\
-        %~ Polyfit 4ten Grades durch Binder Kumulante \cite{Binder1981}\\
-        %~ Finite Size Scaling Vergleich der Exponenten (AutoScale \cite{Melchert2009}, Vergleich \cite[S. 59]{Pelissetto2002})\\
+\subsection{Critical Value of the Binder Cumulant}
+    The value of the Binder cumulant at the critical point \(g^*\) is
+    depends strongly on boundary conditions but only weakly on the lattice
+    structure \cite{BinderValue}. For periodic boundary conditions on a
+    square lattice it is \(g^* \approx 0.916\) according to \cite{BinderValue}
+        \footnote{Note that \cite{BinderValue} uses an other definition of
+            the Binder cumulant, and has to be normalized by \(\frac{2}{3}\)
+            to match it's definition in this thesis.}.
+    Because the analysis of section \ref{ssec:binderIntersections}
+    yields \(g^*\) anyway, it is easy to check the consistency and
+    behaivior of \(g^*\) in the disordered Ising modell.\\
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[for a Relative Neighborhood graph][]
+        {
+            \label{sfig:TcG:RNG}
+            \includegraphics[width=0.45\textwidth]{plots/RNG_TcG}
+        }
+        \subfigure[for a Gabriel graph][]
+        {
+            \label{sfig:TcG:GG}
+            \includegraphics[width=0.45\textwidth]{plots/GG_TcG}
+        }
+        \caption[Values of the Binder cumulant at the critical point $g^*$]
+        {
+            Values of the Binder cumulant at the critical point \(g^*\)
+            for\\
+            \subref{sfig:TcG:RNG} a Relative Neighborhood graph and\\
+            \subref{sfig:TcG:GG} a Gabriel graph for different \(\sigma\).
+            The dotted line is the reference value for square lattices
+            with periodic boundary conditions \cite{BinderValue}, which
+            corresponds to \(\sigma = 0\).
+        }
+        \label{fig:TcG}
+    \end{figure}\\
 
+
+
+
+%~ Darstellung von Suszeptibilität \(\chi\), spezifischer Wärme \(c\), mittlerer Magnetisierung \(<m>\) über Unordnungsparamter \(\sigma\)\\

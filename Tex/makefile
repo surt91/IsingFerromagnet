@@ -15,7 +15,8 @@ GG_LST = plots/GG_Tc_norm.pdf \
          plots/GG_Tc.pdf \
          plots/GG_deg.pdf \
          plots/GG_sumJ.pdf \
-         plots/GG_meanJ.pdf
+         plots/GG_meanJ.pdf \
+         plots/GG_TcG.pdf
 RNG_LST = $(subst GG,RNG,$(GG_LST))
 PLOTS = plots/binder_fit_s_0.pdf \
         plots/collapse_s_0.pdf \
