@@ -82,7 +82,7 @@
     order \(O(N^2)\) in the best case, because for every pair at least
     one check has to be performed.
 
-\subsection{The Disorderd Ising Model}
+\subsection{The Disordered Ising Model}
 \label{ssec:isingmodel}
     The used model is a modified 2D Ising model where the \(N=L^2\) sites
     are displaced nodes of a square lattice of edge length \(L\) with
@@ -115,10 +115,33 @@
 
 \subsection{Critical Temperature $T_c$ and Critical Exponents}
 \label{ssec:finitesize}
-    The searched for property -- the critical temperature \(T_c\)
-    -- is only defined for infinite systems, hence every computer
-    simulation will show some \emph{finte size effects}.
-    %[vielleicht Bild von intensiver Größe?]
+    The aim of this thesis is to find the critical  temperature \(T_c\)
+    of the disordered Ising model in dependece of the disorder parameter
+    \(\sigma\). At \(T_c\) the magnetisation \(|m|\) of the system will
+    jump and the susceptibility \(\chi_m = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}\)
+    will diverge. But this behaivior is only present in infinite systems,
+    hence every computer simulation will show some \emph{finte size effects}.
+    Because of this all through computer simulations observed phase
+    transitions will be "smeared out".
+    [todo: Bezug zum Bild]
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[todo][]
+        {
+            \label{sfig:smeared_out:meanM}
+            \includegraphics[width=0.45\textwidth]{plots/meanM}
+        }
+        \subfigure[todo][]
+        {
+            \label{sfig:smeared_out:meanM_L}
+            \includegraphics[width=0.45\textwidth]{plots/Mean_M_L_128}
+        }
+        \caption[]
+        {
+            todo
+        }
+        \label{fig:smeared_out}
+    \end{figure}\\
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{NewmanBarkema1999} which also yield the critical
     exponents. The critical exponents should not be influenced by the

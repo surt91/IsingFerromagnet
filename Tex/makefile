@@ -19,6 +19,8 @@ PLOTS = plots/binder_fit_s_0.pdf \
         plots/collapse_s_0.pdf \
         plots/equiE.pdf \
         plots/autoM.pdf \
+        plots/meanM.pdf \
+        plots/Mean_M_L_128.pdf \
         $(GG_LST) \
         $(RNG_LST)
 
