@@ -6,4 +6,10 @@
 *.lof
 
 Ferromagnet.pdf
-! images/*
+!images/*.pdf
+!images/*.tex
+!plots/data
+!plots/data/*.dat
+!plots/*.gp
+plots/*.pdf
+plots/*.eps
