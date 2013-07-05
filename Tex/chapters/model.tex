@@ -140,21 +140,21 @@
         }
         \caption[Examples of determining critical temperature and exponents]
                 {\subref{sfig:collapse_s_0}
-                 \subref{sfig:binder_fit_s_0} Binder cumulant fitted with
-                    polynom of degree 4 in vincinity of \(T_c\)
-                    (the errorbars are too small to see)}
+                 \subref{sfig:binder_fit_s_0} Binder cumulant interpolated
+                    with cubic splines (the errorbars are too small to see)}
         \label{fig:binder_fit_s_0}
     \end{figure}
     Though if one is just interested in the critical Temperature, an
     easier approach is to find the intersections of the Binder cumulants
     \(g = 3-\frac{\avg{m^4}}{2\avg{m^2}^2}\) \cite{Binder1981} of different
     system sizes \(L=\sqrt N\).
-    Therefore a polynom of degree 4 is fitted to \(g\) in vicinity of
-    the intersection.
-    In fig. \ref{fig:binder_fit_s_0} such a fit is plotted for
+    Therefore a cubic spline interpolation is calculated\footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
+    for the measured points.
+    In fig. \ref{fig:binder_fit_s_0} such an interpolation is plotted for
     \(\sigma=0\). The cumulants intersect at \(\approx 2.27\).
-    To determine \(T_c\) the intersections are averaged and the standard
-    error is calculated. In this case one gets \(T_c = 2.269(1)\), which
+    To determine \(T_c\) the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
+    are averaged and the standard
+    error is calculated. In this case one gets \(T_c = 2.2689\pm0.0002\), which
     is in very good agreement with the exact solution
     \(T_c = 2.2691...\) \cite{Onsager1944}.\\
 

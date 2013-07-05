@@ -5,7 +5,8 @@ set key left bottom Left
 
 set xlabel "{/Italic T}"
 set ylabel "{/Italic g}"
-set xtics 0.01
+set xtics 0.05
+set xr [2.2:2.35]
 
 set size square
 
