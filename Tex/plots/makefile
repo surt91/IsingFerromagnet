@@ -4,6 +4,8 @@ GG_LST = GG_Tc.pdf \
          GG_meanJ.pdf
 RNG_LST = $(subst GG,RNG,$(GG_LST))
 PLOTS = binder_fit_s_0.pdf \
+        equiE.pdf \
+        autoM.pdf \
         $(GG_LST) \
         $(RNG_LST)
 
