@@ -2,7 +2,7 @@ set terminal postscript eps enhanced color blacktext lw 2 solid 26
 set output 'RNG_Tc_norm.eps'
 
 set xlabel '{/Italic {/Symbol s}}'
-set ylabel '{/Italic T / <{/Symbol S}_{<i,j>} J_{ij}}>'
+set ylabel '{/Italic T / <{/Symbol S}_{<i,j>} J_{ij}>}'
 
 set xr [-0.1:1.3]
 set yr [0.4:0.6]
