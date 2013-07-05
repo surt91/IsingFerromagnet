@@ -152,12 +152,17 @@
     Therefore a cubic spline interpolation is calculated\footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
     for the measured points.
     In fig. \ref{fig:binder_fit_s_0} such an interpolation is plotted for
-    \(\sigma=0\). The cumulants intersect at \(\approx 2.27\).
+    \(\sigma=0\). The cumulants intersect at \(\approx 2.27 k_{B}\). For
+    the sake of simplicity let the Boltzmann constant \(k_{B}=1\) in the
+    following.
     To determine \(T_c\) the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
     are averaged and the standard
-    error is calculated. In this case one gets \(T_c = 2.2689\pm0.0002\), which
-    is in good agreement with the exact solution
+    error is calculated. In this case one gets \(T_c = 2.2689\pm0.0002\),
+    which is in good agreement with the exact solution
     \(T_c = 2.2691...\) \cite{Onsager1944}.\\
+    Because \(T_{c}\) is dependend on \(J\) and hence also on the count
+    of bounds, the values of \(T_{c}\) will be normalized by the mean
+    sum of the coupling constants to all neighbors \(\avg{\sum_{\avg{i,j}} J_{ij}}\).
 
     % The arithmetic average of the intersections are plotted [hier schon?]
     %~ [Und den rest der Auswertung]

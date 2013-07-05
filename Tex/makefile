@@ -7,7 +7,7 @@ CHAPTERS = chapters/title.tex \
 
 IMAGES = images/GG_RNG_def.tex
 
-GG_LST = plots/GG_Tc.pdf \
+GG_LST = plots/GG_Tc_norm.pdf \
          plots/GG_deg.pdf \
          plots/GG_sumJ.pdf \
          plots/GG_meanJ.pdf
