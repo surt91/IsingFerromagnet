@@ -13,8 +13,16 @@ per site \(E=\frac{1}{N}\hat H\) are calculated and saved for every
 are listed in tab. \ref{tab:tauAndTeq} in numbers of sweeps. Note that
 the \(t_{eq}\) values are generously rounded up to be on the safe side
 and the \(\tau\) values are determined as the maximum \(\tau\) over all
-simulated temperatures \(\tau = \max_T \tau_T\) and rounded to the next
-integer.
+simulated temperatures and disorder parameters \(\tau = \max_{T,\sigma} \tau_{T,\sigma}\)
+and rounded up to the next integer. In \ref{fig:autocorr}\subref{fig:autocorr:temperatures}
+the autocorrelation time for \(\sigma=0\) is plotted.
+%The \emph{critical slowing down} is visible as a peak.
+The plateau at low temperatures is easy to understand considering the
+effects of the wolff algorithm. At low temperatures it flips nearly every
+spin in every step, thus the correlation drops to zero after one sweep.
+Also note that the maximum of \(\tau\) is not at \(T_c\) but at a higher
+temperature. The cause is probably the effectiveness of the Wolff cluster
+algorithm at \(T_c\).
 \begin{table}[htbp]
     \center
     \begin{tabular}{l r r r r r}
@@ -29,37 +37,36 @@ integer.
     \label{tab:tauAndTeq}
 \end{table}\\
 Obiviously the autocorrelation time \(\tau\) increases with the system
-size. In fact it obeys a power law, which is the expected bahaivior as
-mentioned in section \ref{ssec:eqtime}. In fig. \ref{fig:autocorr}\subref{fig:autocorr:powerLaw}
-the dynamical critical exponent \(z\) is determined as \(z=0.57(4)\).
-This exponent is much higher than the expectation. For the Wolff cluster
-algorithm at criticality, one would expect \(z=0.25\)\cite{NewmanBarkema1999}.
-This suggests that \emph{critical slowing down} is not an issue in this
-case and the autocorrelation time is limited by the slow decorrelation
-at low temperatures. A direct proof is given by fig. \ref{fig:autocorr}\subref{fig:autocorr:temperatures}
-Apparently even parallel tempering can not compensate that. Probably
-because only one configuration swap between neighboring temperatures is
-performed each sweep. Those neighboring configurations at low temperatures
-have a magnetisation per site of \(m \approx \pm 1\), so there is a good
-chance, that the exchange does not change \(m\) (in case of same sign)
-and thus does not lower the autocorrelation function.
+size. In fact it obeys a power law, which is the expected behaivior of
+a dynamical critical exponent \(z\) as mentioned in section \ref{ssec:eqtime}.
+In fig. \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} \(\tau\) is plotted
+over \(L\) and the dynamical exponent \(z'\) is determined as \(z'=0.64(2)\).
+This exponent is much higher than the one of Wolff cluster
+algorithm at criticality, which is \(z=0.25\)\cite{NewmanBarkema1999}.
+So it represents the dynamical exponent for parallel tempering with
+Metropolis above criticality and thus is not exactly a critical exponent.
+Nevertheless it is interesting, that it obeys a power law just the same.
+Anyhow it is a proof for the effectiveness of the Wolff cluster algorithm
+at criticality.
 \begin{figure}[htbp]
     \centering
-    \subfigure[in dependence on the system size $L$][]
-    {
-        \label{fig:autocorr:powerLaw}
-        \includegraphics[width=0.45\textwidth]{plots/autocorrL}
-    }
     \subfigure[in dependence on the temperature $T$][]
     {
         \label{fig:autocorr:temperatures}
         \includegraphics[width=0.45\textwidth]{plots/autocorrT}
     }
+    \subfigure[in dependence on the system size $L$][]
+    {
+        \label{fig:autocorr:powerLaw}
+        \includegraphics[width=0.45\textwidth]{plots/autocorrL}
+    }
     \caption[The autocorrelation time $\tau$]
     {
-        Dependece of the autocorrelation time $\tau$ on\\
-        \subref{fig:autocorr:powerLaw} the system size $L$\\
-        \subref{fig:autocorr:temperatures} the temperature $T$
+        Dependece of the autocorrelation time $\tau$ on
+        \subref{fig:autocorr:temperatures} the temperature $T$ for
+            $\sigma=0$ and
+        \subref{fig:autocorr:powerLaw} the system size $L$ (errorbars
+            are the standard error determined by bootstrapping)
     }
     \label{fig:autocorr}
 \end{figure}\\
@@ -71,8 +78,8 @@ calculated sweeps totals to
 The expected values \(\avg{O}\) for \(100\) different random proximity
 graphs with the same disorder paramter \(\sigma\) are then averaged to
 \(\overline{\avg{O}}\).
-The errors are estimated by bootstrapping \cite{Bootstrap} with 200
-bootstrap samples.
+All errorbars are estimated by bootstrapping\cite{Bootstrap} with 200
+bootstrap samples if not noted otherwise.
 
 \subsection{Finite Size Effects}
 \label{ssec:finitesize}

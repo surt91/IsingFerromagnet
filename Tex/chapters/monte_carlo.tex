@@ -58,6 +58,7 @@ Otherwise the samples might not be representative for the whole system.\\
         the state.
 
     \subsubsection{Wolff}
+    \label{sssec:wolff}
         Close to the critical temperature \(T_c\) the Metropolis
         gets slower. This is called \emph{critical slowing} down and the
         cause is beyond the scope of this thesis.\\
@@ -165,7 +166,7 @@ Otherwise the samples might not be representative for the whole system.\\
     \end{figure}\\
     Because every state is generated from the state before, measurements
     of subsequent states are correlated. To determine when two states
-    are independet, one calculates the normalized autocorrelation function
+    are independent, one calculates the normalized autocorrelation function
     \(\frac{\chi(t)}{\chi(0)}\), which should decay exponentially
     \(\chi(t) \propto \exp(t/\tau)\). This is visible in the half
     logarithmic plot \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
@@ -177,7 +178,8 @@ Otherwise the samples might not be representative for the whole system.\\
     To make sure that the error is not underestimated one should wait
     \(2\tau\) sweeps between two measurements.
     The autocorrelation time is of course dependent on the temperature.
-    At high temperatures the fluctuations are strong and subsequent
+    For example for the standard Metropolis algorithm the fluctuations
+    are strong at high temperatures and subsequent
     states are more dissimilar and therefore less correlated than at low
     temperatures, where less spins are flipping. But the longest
     autocorrelation times are encountered at the critical temperature.
@@ -185,3 +187,7 @@ Otherwise the samples might not be representative for the whole system.\\
     characterized by the \emph{dynamical critical exponent} \(z\)
     \cite{SwendsenWang1987}. The dependence of the autocorrelation time
     \(\tau\) on the system size \(L\) is then given by \(\tau \propto L^z\).
+    As mentioned in section \ref{sssec:wolff}, the Wolff cluster algorithm
+    decreases \(z\) dramatically. This causes the course of the autocorrelation
+    time in dependence on temperature to change significantly as shown in
+    section \ref{sec:results}.
