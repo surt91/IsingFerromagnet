@@ -454,7 +454,46 @@ the \(\Delta \overline{\avg{O}}\) small.
         \end{tabular}
         \caption{Critical exponents for different $\sigma$}
         \label{tab:critExp}
-    \end{table}
+    \end{table}\\
+    Like in tab. \ref{tab:critExp} to see, most values
+    are matching the expectations. Especially \(\nu\) and \(gamma\)
+    are always in very good agreement with their exact values. Because
+    there can never be to much cross and consistency checks, the ratio
+    \(\frac{\gamma}{\nu}\) is also determined, by fitting the maxima of
+    the susceptibility \(\chi_{\mathrm{max}}\) by the power law \(aL^\frac{\gamma}{\nu}\).
+    The results are displayed in fig. \ref{fig:susCrossCheck}. The by this
+    method determined ratios confirm the by collapse obtained values.
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[][]
+        {
+            \label{sfig:susCrossCheck:RNG}
+            \includegraphics[width=0.45\textwidth]{plots/RNGgammaBySus}
+        }
+        \subfigure[][]
+        {
+            \label{sfig:susCrossCheck:GG}
+            \includegraphics[width=0.45\textwidth]{plots/GGgammaBySus}
+        }
+        \caption[Alternative Way Determining $\gamma$]
+        {
+            Cross checking the critical exponent $\gamma$ for
+                \subref{sfig:susCrossCheck:RNG} the Relative Neighborhood graph and
+                \subref{sfig:susCrossCheck:GG} the Gabriel graph.
+            Dotted lines are power law fits.
+        }
+        \label{fig:susCrossCheck}
+    \end{figure}\\
+    Despite the very good results for \(\nu\) and \(\gamma\), most of the
+    \(\beta\) seem to be a bit too big, but they are close enough to the
+    expectations to be consistent.
+    Maybe their deviations can be explained by the fact that small
+    systems (\(L=32,64\)) were used for the analysis, which introduce
+    some deviations, because the collapse works best for big system sizes.
+    Anyway, two critical exponents are sufficient to determine the
+    universality class \cite[p. 145]{Katzgraber2011}. Therefore this
+    disordered Ising model is in the same universality class as the
+    standard Ising ferromagnet.
 
 \subsection{Critical Value of the Binder Cumulant}
     The value of the Binder cumulant at the critical point \(g_c\) is

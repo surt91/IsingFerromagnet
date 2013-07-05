@@ -153,7 +153,7 @@ class Database():
             Summation genau genug sein) der Autokorrelationsfunktion.
             vgl. \cite newman1999monte S. 62 (3.20)
         """
-        auto = numpy.correlate(m, m, mode='full')[len(m)-1:]
+        auto = numpy.correlate(m, m, mode='same')[len(m)-1:]
         x0 = auto[0]
         tau = sum(auto)/x0
         return tau
@@ -162,6 +162,39 @@ class Database():
     def bootstrap_stderr(x, n_resample, f):
         h = [f([choice(x) for _ in x]) for _ in range(n_resample)]
         return std(h)
+
+    def writeMax(self, name, val, valErr):
+        """! Sucht die T an den Maxima der Observalbe "val" """
+        directory = os.path.join(self.dataPath,"out")
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        c = self.conn.cursor()
+        Ts = sorted(self.getDifferent("T"))
+        Ls = sorted(self.getDifferent("L"))
+        Ss = sorted(self.getDifferent("sigma"))
+        numT = len(Ts)
+
+        for s in Ss:
+            with open(os.path.join(directory,name+"_s_"+str(s)+".dat"), "w") as f:
+                f.write("# L chi_max dChi_max\n")
+                for l in Ls:
+                    if valErr:
+                        c.execute('SELECT {0},{1} FROM calculated_data WHERE sigma = ? AND L = ? ORDER BY T ASC'.format(val, valErr), (s,l))
+                    else:
+                        c.execute('SELECT {0} FROM calculated_data WHERE sigma = ? AND L = ? ORDER BY T ASC'.format(val), (s,l))
+                    x = c.fetchall()
+                    if valErr:
+                        dx = [i[1] for i in x]
+                    else:
+                        dx = [0 for i in x]
+                    x = [i[0] for i in x]
+
+                    dx = [dx[j] for j in range(numT) if x[j]]
+                    x = [x[j] for j in range(numT) if x[j]]
+                    x_max = max(x)
+                    dx_max = dx[x.index(x_max)]
+                    f.write("{0} {1} {2}\n".format(l, x_max, dx_max))
 
     def writeForScalana(self, name, val, valErr):
         """! Sammelt die Werte die für Scalana und gibt sie
@@ -235,6 +268,7 @@ class Database():
 
     def writeVarForGnuplot(self):
         self.writeForGnuplot("Susceptibility", "varM", "varMErr")
+        self.writeMax("Susceptibility_Max", "varM", "varMErr")
         self.writeForGnuplot("Specific_Heat", "varE", "varEErr")
         self.writeForGnuplot2("Susceptibility", "varM", "varMErr")
         self.writeForGnuplot2("Specific_Heat", "varE", "varEErr")
@@ -400,7 +434,6 @@ class Database():
             for L in Ls:
                 logging.info("L: %d" % L)
                 for T in Ts:
-                    # Ist es korrekt hier einfach den Standardfehler des Mittelwerts zu nehmen?
                     binder, binderErr = self.getAverageM(self.getBinder, s, L, T)
                     mM, mMErr = self.getAverageM(self.getMean, s, L, T)
                     mE, mEErr = self.getAverageE(self.getMean, s, L, T)
