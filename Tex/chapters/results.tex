@@ -111,7 +111,7 @@ the \(\Delta \overline{\avg{O}}\) small.
     will diverge. In fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM_L}
     it is easy to see that the jump of \(\avg{|m|}\)
     occurs at lower temperatures \(T\) for higher
-    disorder parameters \(\sigma\) (here with a Relative Neighborhood graph).
+    disorder parameters \(\sigma\) (here with a RNG).
     \begin{figure}[htbp]
         \centering
         \subfigure[Dependence of the phase transition on $\sigma$][]
@@ -128,7 +128,7 @@ the \(\Delta \overline{\avg{O}}\) small.
         {
             \subref{sfig:smeared_out:meanM_L}: Effects of the disorder
             parameter $\sigma$ on the phase transition
-            for an underlying Relative Neighborhood graph with $L=128$.\\
+            for an underlying RNG with $L=128$.\\
             \subref{sfig:smeared_out:meanM}: Effects of different system
             sizes at \(\sigma = 0\). Dotted lines are guides to the eye.
         }
@@ -228,10 +228,9 @@ the \(\Delta \overline{\avg{O}}\) small.
 \label{ssec:binderIntersections}
     The evaluation of the Binder cumulant's intersections, yields the
     critical temperatures \(T_c\).
-    In this section these \(T_c\) on either the Relative Neighborhood
-    graph or the Gabriel graph are compared. In the following figures,
-    the Relative Neighborhood graph will always be on the left side
-    and the Gabriel graph on the right side.
+    In this section these \(T_c\) on either the RNG or the GG are
+    compared. In the following figures, the RNG will always be on the
+    left side and the GG on the right side.
     In fig. \ref{fig:Tc} \(T_c\) is plotted over \(\sigma\).
     \begin{figure}[htbp]
         \centering
@@ -249,20 +248,20 @@ the \(\Delta \overline{\avg{O}}\) small.
         {
             Critical temperatures \(T_c\) over different
             disorder parameters \(\sigma\) for
-            \subref{sfig:Tc:RNG} the Relative Neighborhood Graph and
-            \subref{sfig:Tc:GG} the Gabriel Graph.\\
+            \subref{sfig:Tc:RNG} the RNG and
+            \subref{sfig:Tc:GG} the GG.\\
         }
         \label{fig:Tc}
     \end{figure}\\
-    One sees that the Relative Neighborhood graph on the left has
-    generally a lower critical temperature than the Gabriel. Also \(T_c\)
-    of the Relative Neighborhood graph decreases
-    monotonically while \(T_c\) of the Gabriel rises at first.
+    One sees that the RNG on the left has
+    generally a lower critical temperature than the GG. Also \(T_c\)
+    of the RNG decreases
+    monotonically while \(T_c\) of the GG rises at first.
     For big \(\sigma\) the displaced nodes approach the limit of randomly
     distributed nodes, hence \(T_c\) is independent of \(\sigma\) for
     \(\sigma >> 1\).\\
     A strange property is the jump from \(\sigma = 0\) to \(\sigma > 0\)
-    of \(T_c\) on the Gabriel graph. To understand that, one has to
+    of \(T_c\) on the GG. To understand that, one has to
     consider the influence of the graph properties on the critical
     temperature.\\
     One basic property of a graph is it's degree \(K\) -- sometimes
@@ -287,8 +286,8 @@ the \(\Delta \overline{\avg{O}}\) small.
     It seems reasonable to normalize \(T_c\) by the degree of the underlying
     graph. This is done in fig \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
     Indeed the normalization eliminates the jump and reduces the
-    slope of the rising on the Gabriel graph. Hence it reduces differences
-    between the Relative Neighborhood graph and the Gabriel graph.
+    slope of the rising on the GG. Hence it reduces differences
+    between the RNG and the GG.
     \begin{figure}[htbp]
         \centering
         \subfigure[][]
@@ -317,18 +316,18 @@ the \(\Delta \overline{\avg{O}}\) small.
         {
             Top: Degree \(K\) of graph over different
             disorder parameters \(\sigma\) for
-            \subref{sfig:deg:RNG} the Relative Neighborhood Graph and
-            \subref{sfig:deg:GG} the Gabriel Graph.\\
+            \subref{sfig:deg:RNG} the RNG and
+            \subref{sfig:deg:GG} the GG.\\
             Bottom: Critical temperatures normalized by degree over different
             disorder parameters for
-            \subref{sfig:Tc_norm_deg:RNG} the Relative Neighborhood Graph and
-            \subref{sfig:Tc_norm_deg:GG} the Gabriel Graph.
+            \subref{sfig:Tc_norm_deg:RNG} the RNG and
+            \subref{sfig:Tc_norm_deg:GG} the GG.
         }
         \label{fig:Tc_deg}
     \end{figure}\\
     To understand the jump of \(T_c\), it seems to be sufficient to
     understand the jump of \(K\), which is easily explained
-    by the definition of the Gabriel graph and it's aftereffects for
+    by the definition of the GG and it's aftereffects for
     the transition from \(\sigma = 0\). Visible in fig. \ref{fig:GG_sigma}
     a small change of \(\sigma\) causes many new edges to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
     To fully understand this, take four nodes forming a square. The edge
@@ -348,9 +347,9 @@ the \(\Delta \overline{\avg{O}}\) small.
             \label{sfig:GG_sigma:notzero}
             \includegraphics[width=0.40\textwidth]{images/GG/sigma_g0}
         }
-        \caption[Anomaly of the Gabriel graph for small $\sigma$]
+        \caption[Anomaly of the GG for small $\sigma$]
         {
-            Gabriel graph with periodic boundary conditions for
+            GG with periodic boundary conditions for
                 \subref{sfig:GG_sigma:zero} \(\sigma = 0\)
                 \subref{sfig:GG_sigma:notzero} \(\sigma = 0.01\)
         }
@@ -395,24 +394,24 @@ the \(\Delta \overline{\avg{O}}\) small.
         {
             Top: Mean sum of the coupling constants to all
             neighbors over different disorder parameters for
-            \subref{sfig:sumJ:RNG} the Relative Neighborhood Graph and
-            \subref{sfig:sumJ:GG} the Gabriel Graph.\\
+            \subref{sfig:sumJ:RNG} the RNG and
+            \subref{sfig:sumJ:GG} the GG.\\
             Bottom: Critical temperatures normalized by mean sum of the
             coupling constants \(\avg{\sum_{\avg{i,j}} J_{ij}}\) over different
             disorder parameters for
-            \subref{sfig:Tc_normJ:RNG} the Relative Neighborhood Graph and
-            \subref{sfig:Tc_normJ:GG} the Gabriel Graph.
+            \subref{sfig:Tc_normJ:RNG} the RNG and
+            \subref{sfig:Tc_normJ:GG} the GG.
         }
         \label{fig:TcJ}
     \end{figure}\\
     If one normalizes \(T_c\) with \(\avg{\sum_{\avg{i,j}} J_{ij}}\) as in
     \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}, the
-    jump on the Gabriel graph arises again, but \(T_c\) is now monotonically
+    jump on the GG arises again, but \(T_c\) is now monotonically
     decreasing with increasing disorder parameter \(\sigma\). Moreover
     the forms of both curves are quite similar, but the
-    one for the Relative Neighborhood graph \ref{fig:TcJ}\subref{sfig:Tc_norm:RNG}
+    one for the RNG \ref{fig:TcJ}\subref{sfig:Tc_norm:RNG}
     is generally lower and spans over a bigger temperature range than
-    the curve of the Gabriel graph \ref{fig:TcJ}\subref{sfig:Tc_norm:GG}.
+    the curve of the GG \ref{fig:TcJ}\subref{sfig:Tc_norm:GG}.
     Both graph types have a plateau at \(0 < \sigma < 0.1\). So small
     disorder has little influence on this normalized critical temperature.
     Also both graph types have a steep decline after the plateau before
@@ -482,13 +481,13 @@ the \(\Delta \overline{\avg{O}}\) small.
             \midrule
             exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(-\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
             \midrule
-            Gabriel      & 0.0 & 0.998(8) & -1.735(2) & 0.1262(4)\\
+            GG           & 0.0 & 0.998(8) & -1.735(2) & 0.1262(4)\\
                          & 0.1 & 0.999(19)& -1.744(5) & 0.133(6) \\
                          & 0.3 & 1.029(30)& -1.724(16)& 0.129(12)\\
                          & 0.5 & 1.006(5) & -1.750(12)& 0.125(13)\\
                          & 1.0 & 1.038(32)& -1.743(17)& 0.123(16)\\
             \midrule
-            Relative N.  & 0.0 & 0.992(11)& -1.740(2) & 0.130(1) \\
+            RNG          & 0.0 & 0.992(11)& -1.740(2) & 0.130(1) \\
                          & 0.1 & 0.987(12)& -1.746(5) & 0.133(4) \\
                          & 0.2 & 1.010(9) & -1.756(14)& 0.123(10)\\
                          & 0.5 & 1.010(16)& -1.750(16)& 0.143(13)\\
@@ -521,15 +520,15 @@ the \(\Delta \overline{\avg{O}}\) small.
         \caption[Alternative Way Determining $\gamma$]
         {
             Cross checking the critical exponent $\gamma$ for
-                \subref{sfig:susCrossCheck:RNG} the Relative Neighborhood graph and
-                \subref{sfig:susCrossCheck:GG} the Gabriel graph.
+                \subref{sfig:susCrossCheck:RNG} the RNG and
+                \subref{sfig:susCrossCheck:GG} the GG.
             Dotted lines are power law fits.
         }
         \label{fig:susCrossCheck}
     \end{figure}\\
     Despite the very good results for \(\nu\) and \(\gamma\), most of the
-    \(\beta\) seem to be a bit too big -- especially for the Relative
-    Neighborhood grap -- but they are close enough to the expectations
+    \(\beta\) seem to be a bit too big -- especially for the RNG -- but
+    they are close enough to the expectations
     to be consistent. At least the expectations are always within two
     times the uncertainty.
     Maybe their deviations can be explained by the fact that small
@@ -553,12 +552,12 @@ the \(\Delta \overline{\avg{O}}\) small.
     behavior of \(g_c\) in the disordered Ising model.\\
     \begin{figure}[htbp]
         \centering
-        \subfigure[for a Relative Neighborhood graph][]
+        \subfigure[for a RNG][]
         {
             \label{sfig:TcG:RNG}
             \includegraphics[width=0.45\textwidth]{plots/RNG_TcG}
         }
-        \subfigure[for a Gabriel graph][]
+        \subfigure[for a GG][]
         {
             \label{sfig:TcG:GG}
             \includegraphics[width=0.45\textwidth]{plots/GG_TcG}
@@ -567,8 +566,8 @@ the \(\Delta \overline{\avg{O}}\) small.
         {
             Values of the Binder cumulant at the critical point \(g_c\)
             for\\
-            \subref{sfig:TcG:RNG} a Relative Neighborhood graph and\\
-            \subref{sfig:TcG:GG} a Gabriel graph for different \(\sigma\).
+            \subref{sfig:TcG:RNG} a RNG and\\
+            \subref{sfig:TcG:GG} a GG for different \(\sigma\).
             The dotted line is the reference value for square lattices
             with periodic boundary conditions \cite{BinderValue}, which
             corresponds to \(\sigma = 0\).

@@ -73,15 +73,15 @@
     metric in two dimensions, though in principle every metric in any
     dimension can be used.\\
 
-    The Gabriel graph \cite{Gabriel1969} is a subgraph of the
+    The Gabriel graph (GG) \cite{Gabriel1969} is a subgraph of the
     Delaunay triangulation. Two nodes \(i\) and \(j\) with distance
     \(d_{ij}\) are connected with an edge, if a circle with it's
     center on half way between \(i\) and \(j\) and radius
     \(r = \frac d 2\) contains no other nodes. This area will be
     called \emph{lune} in the following. See also Figure
     \ref{fig:lunes}\subref{sfig:lunes:def}.\\
-    The Relative Neighborhood graph \cite{Toussaint1980} is a
-    subgraph of the Gabriel graph. Two nodes \(i\) and \(j\) with
+    The Relative Neighborhood graph (RNG) \cite{Toussaint1980} is a
+    subgraph of the GG. Two nodes \(i\) and \(j\) with
     distance \(d_{ij}\) are connected, if no other node is in the
     \emph{lune}. The lune is defined as the intersection of two
     circles with radius \(r = d\) and centers on \(i\) and \(j\).
@@ -92,25 +92,22 @@
             \label{sfig:lunes:def}
             \input{images/GG_RNG_def}
         }
-        \subfigure[Relative Neighborhood graph example][]{
+        \subfigure[RNG example][]{
             \label{sfig:lunes:rng}
             \includegraphics[width=0.3\textwidth]{images/RNG/L12S03.pdf}
         }
-        \subfigure[Gabriel graph example][]{
+        \subfigure[GG example][]{
             \label{sfig:lunes:gg}
             \includegraphics[width=0.3\textwidth]{images/GG/L12S03.pdf}
         }
         \caption[Gabriel - and Relative Neighborhood Graph]
         {
-            \subref{sfig:lunes:def} Lunes of Relative Neighborhood
-                Graph (hatched region) and
-                Gabriel Graph (cross hatched region)
-            \subref{sfig:lunes:rng} Example of a Relative
-                Neighborhood Graph on periodic boundary conditions.
-                Periodic nodes are dashed.
-            \subref{sfig:lunes:gg} Example of a Gabriel Graph on
-                periodic boundary conditions. Periodic nodes are
-                dashed.
+            \subref{sfig:lunes:def} Lunes of RNG (hatched region) and
+                GG (cross hatched region)
+            \subref{sfig:lunes:rng} Example of a RNG on periodic
+                boundary conditions. Periodic nodes are dashed.
+            \subref{sfig:lunes:gg} Example of a GG on
+                periodic boundary conditions. Periodic nodes are dashed.
         }
         \label{fig:lunes}
     \end{figure}\\
@@ -138,8 +135,8 @@
     box are completely inside the lune so that only one node has to be
     tested to discard an edge between them. Connected nodes are near to
     each other so that only very few cells have to be tested.\\
-    Indeed this method reduced the time needed to construct a Relative
-    Neighborhood graph with \(N=32^2\) and \(N=64^2\) by a factor of
+    Indeed this method reduced the time needed to construct a RNG with
+    \(N=32^2\) and \(N=64^2\) by a factor of
     over \(15\) respectively \(40\). Though the complexity is still of
     order \(O(N^2)\) in the best case, because for every pair at least
     one check has to be performed.
