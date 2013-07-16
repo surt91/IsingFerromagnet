@@ -170,7 +170,7 @@ the \(\Delta \overline{\avg{O}}\) small.
     \(\beta, \gamma, \nu\) and the critical temperature \(T_c\), one
     varies them until the measured values of the observables collapse on
     one curve. Like the obersables from fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}
-    collapse in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}\footnote{Examples for a collapse to determine the other critical exponents are in appendix \ref{appendix:finiteSizeScaling}}.
+    collapse in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}%\footnote{Examples for a collapse to determine the other critical exponents are in appendix \ref{appendix:finiteSizeScaling}}.
     Note that \(L=16\) is not used for the collapse, because it is a
     rather small value such that eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
     do not apply very good.\\
@@ -421,7 +421,47 @@ the \(\Delta \overline{\avg{O}}\) small.
 \subsection{Critical Exponents}
     A finite size scaling analysis was
     performed to determine the critical exponents \(\beta, \gamma, \nu\)
-    using \texttt{autoscale.py} \cite{autoscale2009}. The values for
+    using \texttt{autoscale.py} \cite{autoscale2009} and eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}.
+    The values for \(\nu\) are yielded by every collapse and are therefore
+    averaged over all determined values. Fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_0_sus}\subref{sfig:gettingCrit:collapse_s_0_sus}
+    show an example collapse for \(\sigma=0\) of the magnetic susceptibility
+    \[\chi = \frac{1}{TN}\avg{\avg{m^2} - \avg{m}^2}\]
+    This way the exponents \(\gamma\) and \(\nu\) are determined.
+    Analogical fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_0_meanM}\subref{sfig:gettingCrit:collapse_s_0_meanM}
+    shows the collapse for the mean absolute magnetisation per site \(\avg{\abs{m}}\) for \(\sigma=0\),
+    to determine the exponents \(\beta\) and \(\nu\).
+    Also the collapse of the binder cumulant as mentioned before and shown
+    in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}
+    is used to get a further value of \(\nu\).
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[Susceptibility $\chi$][]
+        {
+            \label{sfig:gettingCrit:s_0_sus}
+            \includegraphics[width=0.47\textwidth]{plots/s_0_sus}
+        }
+        \subfigure[Finite Size Scaling of the Susceptibility $\chi$][]
+        {
+            \label{sfig:gettingCrit:collapse_s_0_sus}
+            \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_sus}
+        }
+        \subfigure[Magnetisation $\avg{\abs{m}}$][]
+        {
+            \label{sfig:gettingCrit:s_0_meanM}
+            \includegraphics[width=0.47\textwidth]{plots/s_0_meanM}
+        }
+        \subfigure[Finite Size Scaling of the Magnetisation $\avg{\abs{m}}$][]
+        {
+            \label{sfig:gettingCrit:collapse_s_0_meanM}
+            \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_meanM}
+        }
+        \caption[Examples of determining critical temperature and exponents]
+        {
+            Examples for finite size scaling.
+        }
+        \label{fig:gettingCrit2}
+    \end{figure}\\
+    The values for
     \(\sigma = 0\) are analytically known \cite{Pelissetto2002}. The
     values for all other \(\sigma\) are expected be the same as for
     \(\sigma = 0\) like mentioned before in section \ref{ssec:finitesize}.
@@ -430,7 +470,10 @@ the \(\Delta \overline{\avg{O}}\) small.
     which are chosen to represent every interesting region from fig. \ref{fig:Tc}\subref{sfig:Tc:RNG}\subref{sfig:Tc:GG}:
     the analytically known value for \(\sigma = 0\), the in \cite{Janke1994}
     examined limit for \(\sigma \gtrsim 1\), the plateau at small
-    \(\sigma\), the steep decline and the shallow decline at \(\sigma = 0.5\).\\
+    \(\sigma\), the steep decline and the shallow decline at \(\sigma = 0.5\).
+    The given errors for \(\beta, \gamma\) are estimates from \texttt{autoscale.py}
+    and the error of \(\nu\) is the standard deviation of the three obtained
+    values of \(\nu\).\\
     \begin{table}[htbp]
         \center
         \begin{tabular}{l l l l l}
@@ -439,17 +482,17 @@ the \(\Delta \overline{\avg{O}}\) small.
             \midrule
             exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(-\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
             \midrule
-            Gabriel      & 0.0 & 1.008(4) & -1.735(2) & 0.1262(4)\\
-                         & 0.1 & 1.02(1)  & -1.744(5) & 0.133(6) \\
-                         & 0.3 & 1.000(5) & -1.724(16)& 0.129(12)\\
-                         & 0.5 & 1.009(8) & -1.750(12)& 0.125(13)\\
-                         & 1.0 & 1.015(22)& -1.743(17)& 0.123(16)\\
+            Gabriel      & 0.0 & 0.998(8) & -1.735(2) & 0.1262(4)\\
+                         & 0.1 & 0.999(19)& -1.744(5) & 0.133(6) \\
+                         & 0.3 & 1.029(30)& -1.724(16)& 0.129(12)\\
+                         & 0.5 & 1.006(5) & -1.750(12)& 0.125(13)\\
+                         & 1.0 & 1.038(32)& -1.743(17)& 0.123(16)\\
             \midrule
-            Relative N.  & 0.0 & 1.007(2) & -1.740(2) & 0.130(1) \\
-                         & 0.1 & 0.99(1)  & -1.746(5) & 0.133(4) \\
-                         & 0.2 & 1.022(17)& -1.756(14)& 0.123(10)\\
-                         & 0.5 & 1.002(17)& -1.750(16)& 0.143(13)\\
-                         & 1.0 & 1.011(20)& -1.758(16)& 0.138(13)\\
+            Relative N.  & 0.0 & 0.992(11)& -1.740(2) & 0.130(1) \\
+                         & 0.1 & 0.987(12)& -1.746(5) & 0.133(4) \\
+                         & 0.2 & 1.010(9) & -1.756(14)& 0.123(10)\\
+                         & 0.5 & 1.010(16)& -1.750(16)& 0.143(13)\\
+                         & 1.0 & 1.013(6) & -1.758(16)& 0.138(13)\\
             \bottomrule
         \end{tabular}
         \caption{Critical exponents for different $\sigma$}
