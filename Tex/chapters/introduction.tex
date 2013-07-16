@@ -1,7 +1,14 @@
 The computing capabilities of modern computers enable researchers to
-collect and analyze vast amounts of data.
-Further statistical systems, for which exist no analytic solutions
-or only for very simplified or special cases, can be simulated.
+collect and analyze vast amounts of data. The prime example for is fact
+is the LHC, where petabytes of particle collision data is collected and
+processed. But computers are not only able to process measured data, but
+also to generate data by simulations of e.g. statistical systems, where
+the rules for each subsystem are well defined but the behavior of the
+whole system is not easy to predict, beacause of the interactions of the
+subsystems. For those systems there often exist no analytic solutions
+or only for very simplified or special cases. But one can simulate all
+the interactions of the subsystems and observe the behavior of the whole
+system.
 For example to examine phase transitions, which are defined by the abrupt
 change of an observable e.g. the change of the density of water near
 boiling or the change of the magnetization of a ferromagnet near the
@@ -10,14 +17,17 @@ phase transition is the Ising model \cite{Ising1925} which is a simple
 model of a ferromagnet and will be explained in more detail in section
 \ref{ssec:isingmodel}. It is analytically solved for two dimensions on
 some regular lattices \cite{Onsager1944} \cite{Wannier1945}.
-In this thesis it's behavior near the Curie temperature -- also called
-critical temperature -- on some irregular lattices corresponding to
-proximity graphs (see section \ref{ssec:graphtypes}) will be examined
-using the Monte Carlo simulations described in section \ref{sec:montecarlo}.
+In this thesis its behavior near the Curie temperature -- also called
+critical temperature -- and the behavior of the Curie temperature itself
+on some irregular lattices corresponding to proximity graphs
+(see section \ref{ssec:graphtypes}) will be examined using the Monte
+Carlo simulations described in section \ref{sec:montecarlo}.
 
 Unfortunately the memory of any computer is small in comparison with the
-thermodynamic limit. This leads to deviations from the real behavior of
-the system in the thermodynamic limit. These deviations are called
+thermodynamic limit. So there can only be a very small number of
+subsystems simulated in comparison to the actual number of subsystems
+of the system in nature. This leads to deviations from the real behavior
+of the system in the thermodynamic limit. These deviations are called
 \emph{finite size effects} and in section \ref{ssec:finitesize} will be
 discussed how to manage them.\\
 
