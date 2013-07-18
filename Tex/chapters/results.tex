@@ -145,6 +145,8 @@ the \(\Delta \overline{\avg{O}}\) small.
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{NewmanBarkema1999} which also yield the critical
     exponents.
+
+\subsection{Critical Exponents}
     Studies on random lattices with\cite{Lima2000} and without\cite{Janke1994}
     varying coupling constants \(J\) suggest, that the
     critical exponents should not be influenced by the disorder parameter
@@ -169,8 +171,9 @@ the \(\Delta \overline{\avg{O}}\) small.
     are unknown scaling functions. To find the exponents
     \(\beta, \gamma, \nu\) and the critical temperature \(T_c\), one
     varies them until the measured values of the observables collapse on
-    one curve. Like the obersables from fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}
-    collapse in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}%\footnote{Examples for a collapse to determine the other critical exponents are in appendix \ref{appendix:finiteSizeScaling}}.
+    one curve. Like the obersables from fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_s_0}
+    collapse in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}.
+    %\footnote{Examples for a collapse to determine the other critical exponents are in appendix \ref{appendix:finiteSizeScaling}}.
     Note that \(L=16\) is not used for the collapse, because it is a
     rather small value. Eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
     are approximations for big \(L\). For small \(L\) one needs some
@@ -180,27 +183,152 @@ the \(\Delta \overline{\avg{O}}\) small.
     \texttt{autoscale.py} \cite{autoscale2009} is used.
     \begin{figure}[htbp]
         \centering
-        \subfigure[Example of a Binder cumulant to determine the critical temperature][]
+        \subfigure[Binder Cumulant $g$][]
         {
-            \label{sfig:gettingCrit:binder_fit_s_0}
-            \includegraphics[width=0.47\textwidth]{plots/binder_fit_s_0}
+            \label{sfig:gettingCrit:binder_s_0}
+            \includegraphics[width=0.47\textwidth]{plots/binder_s_0}
         }
-        \subfigure[Example of a datacollapse to determine critical exponents][]
+        \subfigure[Finite Size Scaling of the Binder Cumulant $g$][]
         {
             \label{sfig:gettingCrit:collapse_s_0}
             \includegraphics[width=0.47\textwidth]{plots/collapse_s_0}
         }
         \caption[Examples of determining critical temperature and exponents]
         {
-            The Binder cumulant \(g\) of an square lattice Ising model
-            (\(\sigma=0\))\\
-            \subref{sfig:gettingCrit:binder_fit_s_0} interpolated
-                with cubic splines (the errorbars are too small to see)\\
+            \subref{sfig:gettingCrit:binder_s_0} The Binder cumulant \(g\)
+                of an square lattice Ising model (\(\sigma=0\))\\
             \subref{sfig:gettingCrit:collapse_s_0} collapsed by finite
                 size scaling
         }
         \label{fig:gettingCrit}
     \end{figure}\\
+
+    A finite size scaling analysis was
+    performed to determine the critical exponents \(\beta, \gamma, \nu\)
+    using \texttt{autoscale.py} \cite{autoscale2009} and eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}.
+    The values for \(\nu\) are yielded by every collapse and are therefore
+    averaged over all determined values. Fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_0_sus}\subref{sfig:gettingCrit:collapse_s_0_sus}
+    show an example collapse for \(\sigma=0\) of the magnetic susceptibility
+    \[\chi = \frac{1}{TN}\avg{\avg{m^2} - \avg{m}^2}\]
+    This way the exponents \(\gamma\) and \(\nu\) are determined.
+    Analogical fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_0_meanM}\subref{sfig:gettingCrit:collapse_s_0_meanM}
+    shows the collapse for the mean absolute magnetisation per site \(\avg{\abs{m}}\) for \(\sigma=0\),
+    to determine the exponents \(\beta\) and \(\nu\).
+    Also the collapse of the binder cumulant as mentioned before and shown
+    in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}
+    is used to get a further value of \(\nu\).
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[Susceptibility $\chi$][]
+        {
+            \label{sfig:gettingCrit:s_0_sus}
+            \includegraphics[width=0.47\textwidth]{plots/s_0_sus}
+        }
+        \subfigure[Finite Size Scaling of the Susceptibility $\chi$][]
+        {
+            \label{sfig:gettingCrit:collapse_s_0_sus}
+            \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_sus}
+        }
+        \subfigure[Magnetisation $\avg{\abs{m}}$][]
+        {
+            \label{sfig:gettingCrit:s_0_meanM}
+            \includegraphics[width=0.47\textwidth]{plots/s_0_meanM}
+        }
+        \subfigure[Finite Size Scaling of the Magnetisation $\avg{\abs{m}}$][]
+        {
+            \label{sfig:gettingCrit:collapse_s_0_meanM}
+            \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_meanM}
+        }
+        \caption[Examples of determining critical temperature and exponents]
+        {
+            Examples for finite size scaling.
+        }
+        \label{fig:gettingCrit2}
+    \end{figure}\\
+    The values for
+    \(\sigma = 0\) are analytically known \cite{Pelissetto2002}. The
+    values for all other \(\sigma\) are expected be the same as for
+    \(\sigma = 0\) like mentioned before in section \ref{ssec:finitesize}.
+    Therefore it is sufficient to take a few samples to test if the
+    expectations are met. Hence 5 values of \(\sigma\) are analyzed.
+    The analytically known values for \(\sigma = 0\) and the in \cite{Janke1994}
+    examined limit of an random lattice \(\sigma \gtrsim 1\) are natural
+    choices.
+    The other \(\sigma\) are chosen to represent regions, where the behavior of
+    \(T_c\) shows some characteristics. (Namely there is a plateau at small
+    \(\sigma\), a steep decline at medium \(\sigma\) and a shallow
+    decline at \(\sigma = 0.5\). This will be shown in the next
+    chapter in fig. \ref{fig:Tc}\subref{sfig:Tc:RNG}\subref{sfig:Tc:GG}.)
+    The given errors for \(\beta, \gamma\) are estimates from \texttt{autoscale.py}
+    and the error of \(\nu\) is the standard deviation of the three obtained
+    values of \(\nu\).\\
+    \begin{table}[htbp]
+        \center
+        \begin{tabular}{l l l l l}
+            \toprule
+             & \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(\nu\)} & \multicolumn{1}{c}{\(\gamma\)} & \multicolumn{1}{c}{\(\beta\)}\\
+            \midrule
+            exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(-\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
+            \midrule
+            GG           & 0.0 & 0.998(8) & -1.735(2) & 0.1262(4)\\
+                         & 0.1 & 0.999(19)& -1.744(5) & 0.133(6) \\
+                         & 0.3 & 1.029(30)& -1.724(16)& 0.129(12)\\
+                         & 0.5 & 1.006(5) & -1.750(12)& 0.125(13)\\
+                         & 1.0 & 1.038(32)& -1.743(17)& 0.123(16)\\
+            \midrule
+            RNG          & 0.0 & 0.992(11)& -1.740(2) & 0.130(1) \\
+                         & 0.1 & 0.987(12)& -1.746(5) & 0.133(4) \\
+                         & 0.2 & 1.010(9) & -1.756(14)& 0.123(10)\\
+                         & 0.5 & 1.010(16)& -1.750(16)& 0.143(13)\\
+                         & 1.0 & 1.013(6) & -1.758(16)& 0.138(13)\\
+            \bottomrule
+        \end{tabular}
+        \caption{Critical exponents for different $\sigma$}
+        \label{tab:critExp}
+    \end{table}\\
+    Like in tab. \ref{tab:critExp} to see, most values
+    are matching the expectations. Especially \(\nu\) and \(\gamma\)
+    are always in very good agreement with their exact values. Because
+    there can never be to much cross and consistency checks, the ratio
+    \(\frac{\gamma}{\nu}\) is also determined, by fitting the maxima of
+    the susceptibility \(\chi_{\mathrm{max}}\) by the power law \(aL^\frac{\gamma}{\nu}\).
+    The results are displayed in fig. \ref{fig:susCrossCheck}. The ratios
+    determined by this method confirm the values obtained by collapse.
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[][]
+        {
+            \label{sfig:susCrossCheck:RNG}
+            \includegraphics[width=0.45\textwidth]{plots/RNGgammaBySus}
+        }
+        \subfigure[][]
+        {
+            \label{sfig:susCrossCheck:GG}
+            \includegraphics[width=0.45\textwidth]{plots/GGgammaBySus}
+        }
+        \caption[Alternative Way Determining $\gamma$]
+        {
+            Cross checking the critical exponent $\gamma$ for
+                \subref{sfig:susCrossCheck:RNG} the RNG and
+                \subref{sfig:susCrossCheck:GG} the GG.
+            Dotted lines are power law fits.
+        }
+        \label{fig:susCrossCheck}
+    \end{figure}\\
+    Despite the very good results for \(\nu\) and \(\gamma\), most of the
+    \(\beta\) seem to be a bit too big -- especially for the RNG -- but
+    they are close enough to the expectations to be consistent. At least
+    the expectations are always within two times the uncertainty.
+    Maybe their deviations can be explained by the fact that small
+    systems (\(L=32,64\)) were used for the analysis, and no corrections
+    to scaling terms were considered.
+    Anyway, two critical exponents are sufficient to determine the
+    universality class \cite[p. 145]{Katzgraber2011}. Therefore this
+    disordered Ising model is for every \(\sigma\) in the same universality
+    class as the standard Ising ferromagnet.
+
+\subsection{Critical Temperature}
+\label{ssec:binderIntersections}
     Though if one is just interested in the critical Temperature, an
     easier approach is to find the intersections of the Binder cumulants
     \(g\) of different system sizes \(L\) which are intersecting at
@@ -219,7 +347,18 @@ the \(\Delta \overline{\avg{O}}\) small.
     the vicinity of \(T_c\) -- in contrast to e.g. an polynom fit of
     degree 4, which has to be restricted to the vincinity of \(T_c\) to
     yield meaningful results.
-    As an example take fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}.
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.47\textwidth]{plots/binder_fit_s_0}
+        \caption[Example of a Binder cumulant to determine the critical temperature]
+        {
+            The Binder cumulant \(g\) of an square lattice Ising model
+            (\(\sigma=0\)) interpolated with cubic splines
+            (the errorbars are too small to see)\\
+        }
+        \label{fig:gettingCrit:binder_fit_s_0}
+    \end{figure}\\
+    As an example take fig. \ref{fig:gettingCrit:binder_fit_s_0}.
     Here such interpolations are plotted for \(\sigma=0\) and are
     intersecting at \(\approx 2.27\).
     To determine \(T_c\), the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
@@ -232,12 +371,7 @@ the \(\Delta \overline{\avg{O}}\) small.
     \end{equation}
     This test suggests, that measuring \(T_c\) this way is yields
     adequat results and the interpolation does not lead to major
-    deviations.
-
-\subsection{Critical Temperature}
-\label{ssec:binderIntersections}
-    The evaluation of the Binder cumulant's intersections, yields the
-    critical temperatures \(T_c\).
+    deviations.\\
     In this section these \(T_c\) on either the RNG or the GG are
     compared. In the following figures, the RNG will always be on the
     left side and the GG on the right side.
@@ -458,127 +592,6 @@ the \(\Delta \overline{\avg{O}}\) small.
     disorder has little influence on this normalized critical temperature.
     Also both graph types have a steep decline after the plateau before
     they approach an asymptotic limit for \(\sigma \gg 1\)\\\\
-
-\subsection{Critical Exponents}
-    A finite size scaling analysis was
-    performed to determine the critical exponents \(\beta, \gamma, \nu\)
-    using \texttt{autoscale.py} \cite{autoscale2009} and eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}.
-    The values for \(\nu\) are yielded by every collapse and are therefore
-    averaged over all determined values. Fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_0_sus}\subref{sfig:gettingCrit:collapse_s_0_sus}
-    show an example collapse for \(\sigma=0\) of the magnetic susceptibility
-    \[\chi = \frac{1}{TN}\avg{\avg{m^2} - \avg{m}^2}\]
-    This way the exponents \(\gamma\) and \(\nu\) are determined.
-    Analogical fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_0_meanM}\subref{sfig:gettingCrit:collapse_s_0_meanM}
-    shows the collapse for the mean absolute magnetisation per site \(\avg{\abs{m}}\) for \(\sigma=0\),
-    to determine the exponents \(\beta\) and \(\nu\).
-    Also the collapse of the binder cumulant as mentioned before and shown
-    in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}
-    is used to get a further value of \(\nu\).
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[Susceptibility $\chi$][]
-        {
-            \label{sfig:gettingCrit:s_0_sus}
-            \includegraphics[width=0.47\textwidth]{plots/s_0_sus}
-        }
-        \subfigure[Finite Size Scaling of the Susceptibility $\chi$][]
-        {
-            \label{sfig:gettingCrit:collapse_s_0_sus}
-            \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_sus}
-        }
-        \subfigure[Magnetisation $\avg{\abs{m}}$][]
-        {
-            \label{sfig:gettingCrit:s_0_meanM}
-            \includegraphics[width=0.47\textwidth]{plots/s_0_meanM}
-        }
-        \subfigure[Finite Size Scaling of the Magnetisation $\avg{\abs{m}}$][]
-        {
-            \label{sfig:gettingCrit:collapse_s_0_meanM}
-            \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_meanM}
-        }
-        \caption[Examples of determining critical temperature and exponents]
-        {
-            Examples for finite size scaling.
-        }
-        \label{fig:gettingCrit2}
-    \end{figure}\\
-    The values for
-    \(\sigma = 0\) are analytically known \cite{Pelissetto2002}. The
-    values for all other \(\sigma\) are expected be the same as for
-    \(\sigma = 0\) like mentioned before in section \ref{ssec:finitesize}.
-    Therefore it is sufficient to take a few samples to test if the
-    expectations are met. Hence 5 values of \(\sigma\) are analyzed,
-    which are chosen to represent every interesting region from fig. \ref{fig:Tc}\subref{sfig:Tc:RNG}\subref{sfig:Tc:GG}:
-    the analytically known value for \(\sigma = 0\), the in \cite{Janke1994}
-    examined limit for \(\sigma \gtrsim 1\), the plateau at small
-    \(\sigma\), the steep decline and the shallow decline at \(\sigma = 0.5\).
-    The given errors for \(\beta, \gamma\) are estimates from \texttt{autoscale.py}
-    and the error of \(\nu\) is the standard deviation of the three obtained
-    values of \(\nu\).\\
-    \begin{table}[htbp]
-        \center
-        \begin{tabular}{l l l l l}
-            \toprule
-             & \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(\nu\)} & \multicolumn{1}{c}{\(\gamma\)} & \multicolumn{1}{c}{\(\beta\)}\\
-            \midrule
-            exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(-\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
-            \midrule
-            GG           & 0.0 & 0.998(8) & -1.735(2) & 0.1262(4)\\
-                         & 0.1 & 0.999(19)& -1.744(5) & 0.133(6) \\
-                         & 0.3 & 1.029(30)& -1.724(16)& 0.129(12)\\
-                         & 0.5 & 1.006(5) & -1.750(12)& 0.125(13)\\
-                         & 1.0 & 1.038(32)& -1.743(17)& 0.123(16)\\
-            \midrule
-            RNG          & 0.0 & 0.992(11)& -1.740(2) & 0.130(1) \\
-                         & 0.1 & 0.987(12)& -1.746(5) & 0.133(4) \\
-                         & 0.2 & 1.010(9) & -1.756(14)& 0.123(10)\\
-                         & 0.5 & 1.010(16)& -1.750(16)& 0.143(13)\\
-                         & 1.0 & 1.013(6) & -1.758(16)& 0.138(13)\\
-            \bottomrule
-        \end{tabular}
-        \caption{Critical exponents for different $\sigma$}
-        \label{tab:critExp}
-    \end{table}\\
-    Like in tab. \ref{tab:critExp} to see, most values
-    are matching the expectations. Especially \(\nu\) and \(gamma\)
-    are always in very good agreement with their exact values. Because
-    there can never be to much cross and consistency checks, the ratio
-    \(\frac{\gamma}{\nu}\) is also determined, by fitting the maxima of
-    the susceptibility \(\chi_{\mathrm{max}}\) by the power law \(aL^\frac{\gamma}{\nu}\).
-    The results are displayed in fig. \ref{fig:susCrossCheck}. The by this
-    method determined ratios confirm the by collapse obtained values.
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[][]
-        {
-            \label{sfig:susCrossCheck:RNG}
-            \includegraphics[width=0.45\textwidth]{plots/RNGgammaBySus}
-        }
-        \subfigure[][]
-        {
-            \label{sfig:susCrossCheck:GG}
-            \includegraphics[width=0.45\textwidth]{plots/GGgammaBySus}
-        }
-        \caption[Alternative Way Determining $\gamma$]
-        {
-            Cross checking the critical exponent $\gamma$ for
-                \subref{sfig:susCrossCheck:RNG} the RNG and
-                \subref{sfig:susCrossCheck:GG} the GG.
-            Dotted lines are power law fits.
-        }
-        \label{fig:susCrossCheck}
-    \end{figure}\\
-    Despite the very good results for \(\nu\) and \(\gamma\), most of the
-    \(\beta\) seem to be a bit too big -- especially for the RNG -- but
-    they are close enough to the expectations to be consistent. At least
-    the expectations are always within two times the uncertainty.
-    Maybe their deviations can be explained by the fact that small
-    systems (\(L=32,64\)) were used for the analysis, and no corrections
-    to scaling terms were considered.
-    Anyway, two critical exponents are sufficient to determine the
-    universality class \cite[p. 145]{Katzgraber2011}. Therefore this
-    disordered Ising model is for every \(\sigma\)in the same universality
-    class as the standard Ising ferromagnet.
 
 \subsection{Critical Value of the Binder Cumulant}
     The value of the Binder cumulant at the critical point \(g_c\) is
