@@ -1,0 +1,217 @@
+\subsection{Thermodynamic Theory}
+\label{ssec:theory}
+    To examine the disordered Ising model in Equilibrium,
+    Its temperature \(T\),
+    volume and number of particles \(N\) are constant, so that it is a canonical
+    ensemble. In a canonical ensemble the probability \(p_i\) of a state
+    \(i\) is distributed according to a Boltzman distribution
+    \[p_i \propto e^{-\frac{\hat{H}}{k_B T}}\]
+    Further the free energy \(F\) of an canonical
+    ensemble is minimized and all observables can be derived from \(F\)
+    in a straight forward way, as stated in every textbook about
+    statistical physics (e.g. \cite{nolting2005}).
+    To determine \(F\), one has to know the partition function
+    \[Z=\sum_i e^{-\frac{\hat{H}_i}{kT}}\]
+    where the sum goes over all possible states \(i\) of the system.
+    For small \(N\) the partition function is computable, but the system
+    may show very different properties than in the thermodynamic limit.
+    To minimize these finite size effects, it is desirable to examine
+    systems with large \(N\). But then there are of course next to
+    infinity many different states, such that it is unfeasible to
+    calculate the energy for each state, except for cases, where it is
+    possible to solve it analytically.\\
+    If not, one can get estimates of the observables for big \(N\) using
+    Monte Carlo simulations.\\
+
+\subsection{Monte Carlo Simulations}
+\label{ssec:montecarlo}
+    The idea behind Monte Carlo simulations is to take random samples of
+    the observable, which should be measured, and estimate the observable from
+    this samples. In example the Monte Carlo integration chooses random
+    points within the bounding box of the function and estimates the integral
+    as the fraction of points below the function and points above multiplied
+    by the area of the bounding box.
+    Of course one wants to sample more points, where the area below the
+    function is big, because points in areas, where the function does
+    contribute little to the integral, contribute little to the integral.
+    This can be achieved by \emph{Importance Sampling}. One
+    generates random numbers according to some probability distribution, which
+    yields more numbers in the range where the function to integrate has high
+    values and weights the result accordingly.\\
+    The same principle is used to sample properties of statistical
+    systems by generating random states.
+    As noted before the system under scrutiny is canonical and therefore
+    the states are distributed according to the Boltzman distribution.
+    Hence importance sampling can be utilized.\\
+    But it is difficult to create a random state of a physical system e.g. the
+    Ising system in equilibrium, hence one uses \emph{Markov Chains} to
+    generate new states \(\nu\) from old ones \(\mu\).
+    It is important that the transition probabilities \(A(\mu \to \nu)\)
+    obey \emph{Detailed Balance} and \emph{Ergodicity}.
+    \emph{Detailed Balance} means that the probability to leave a state is
+    the same as the probability to enter the state in equilibrium
+    \(p_\mu A(\mu \to \nu) = p_\nu A(\nu \to \mu)\) with \(p_\mu\) the
+    probability to be in state \(\mu\).
+    And \emph{Ergodicity} requires that every possible state is reachable
+    from every other state in finite time. \cite{NewmanBarkema1999} \cite{Katzgraber2011}
+    Otherwise the samples might not be representative for the whole system.\\
+    In this thesis three algorithms, which fulfill all requirements,
+    were used. They will be shortly described in the following subsections.
+
+    \subsubsection{Metropolis}
+        A Metropolis Monte Carlo\cite{Metropolis1953} simulation of an
+        Ising model will choose a random spin, calculate the energy change
+        \(\Delta \hat H\) defined in eq. \eqref{eq:dH} that would result
+        from a flip of that spin and execute the flip with the probability \(A\)
+        eq. \eqref{eq:metropolis} \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
+        \begin{equation}
+            \Delta \hat H = \hat H(\nu) - \hat H(\mu)\\
+            \label{eq:dH}
+        \end{equation}
+        \begin{equation}
+            A(\mu \to \nu)
+            \begin{cases}
+                1                                 & \Delta \hat H \le 0 \\
+                \exp{\brac{-\beta \Delta \hat H}} & \Delta \hat H > 0
+            \end{cases}
+            \label{eq:metropolis}
+        \end{equation}
+        So if a transition lowers the energy it is always done. This
+        results in a high ratio between chosen spins and flipped spins.
+        Therefore it minimizes the calculations needed for a change of
+        the state.
+
+    \subsubsection{Wolff}
+    \label{sssec:wolff}
+        Close to the critical temperature \(T_c\) the Metropolis
+        gets slower. This is called \emph{critical slowing} down and the
+        cause is beyond the scope of this thesis.\\
+        Using a cluster algorithm like the Wolff
+        algorithm \cite{Wolff1989} speeds things up.
+        For an Ising model the Wolff algorithm builds a cluster of sites
+        starting with a random site and adding neighboring sites of the
+        same spin with probability \(P_{\mathrm{add}}\) from eq. \eqref{eq:wolffAdd}
+        \begin{equation}
+            P_{\mathrm{add}} = 1-\exp\brac{-2\beta J}
+            \label{eq:wolffAdd}
+        \end{equation}
+        Where \(J\) is the coupling constant (explained in section
+        \ref{ssec:isingmodel}). The neighboring sites of the added sites
+        are also considered and so forth. When there are no more sites
+        to add, the spin of every site in the cluster is flipped
+        \cite[S. ??]{NewmanBarkema1999} \cite[S. 151f]{Katzgraber2011}.
+        This leads fast to new uncorrelated states at the critical
+        temperature because big clusters are flipped. But there are not
+        much advantages at high or low temperatures. At low temperatures
+        the cluster will consist of almost all sites such that all but
+        very few spins will be flipped. At high temperatures the cluster
+        will only contain very few sites.
+        Both situations have no advantage against the Metropolis algorithm.\\
+        So one would activate this algorithm near the critical temperature
+        but use a simple Metropolis algorithm at high and low temperatures.
+
+    \subsubsection{Parallel Tempering}
+        %~ The main aim is to obtain the critical temperatures
+        %~ \(T_c\) for different disorder paramters \(\sigma\).
+        %~ Therefore it is necessary to simulate for many temperatures,
+        %~ so that \emph{Parallel Tempering}\footnote{Before R. H.
+            %~ Swendsen published this paper, a algorithm \(MC^3\) was
+            %~ already published with the same idea. [citation needed]}
+        %~ \cite{ParallelTempering1986} is a suited algorithm.
+        Parallel Tempering\cite{ParallelTempering1986} simulates many identical systems at different
+        temperatures and periodically swaps the spin configurations
+        between two neighboring temperatures with probability \(P\) from
+        eq. \eqref{eq:partemp} \cite[S. ??]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}.
+        \begin{equation}
+            P((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,\exp\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}}
+            \label{eq:partemp}
+        \end{equation}
+        This has the advantages that correlation times of single
+        temperatures are far smaller because their spin configuration
+        gets often replaced by an other uncorrelated configuration. In
+        many cases the more important advantage is, that a system which
+        is trapped in a local minimum at a given temperature, can travel
+        to higher temperatures, leave its local minimum and cool down
+        again in a lower minimum.\\
+        In the case of a ferromagnetic Ising model the risk to get trapped
+        in an local energy minimum is very low. Though the autocorrelation
+        decreases significantly. In the scope of this thesis this comes
+        for no cost, because one has to simulate for many temperatures
+        to determine the critical temperature. The additional calculations
+        to determine weather to swap configurations or not are small in
+        comparison with those that would be needed to generate a new
+        uncorrelated state without \emph{parallel tempering}.
+
+    \subsubsection{Implementation Details}
+        Here a mixture of the above three algorithms is used.
+        Each sweep \(N\) Metropolis spin flips, one Wolff cluster flip
+        and one parallel tempering swap are performed. Where \(N\) is the
+        count of sites.\\
+        Because it is not known before, where the critical temperatures
+        \(T_c\) are located, the Wolff cluster algorithm is used for
+        every temperature. The speed up at criticality is worth the
+        moderate slow down at other temperatures.
+
+    \subsubsection{Equilibration- and Autocorrelation Time}
+    \label{sssec:eqtime}
+        To generate an equilibrium state one starts with an arbitrary state
+        and waits until it is equilibrated. The count of sweeps till
+        equilibrium is called \emph{equilibration time} \(t_{eq}\).
+        All measurement should start after this time.\\
+        To determine when the system is in equilibrium, one can watch the
+        development of some observables and take the point at which there
+        are no big changes anymore as equilibrium. In fig.
+        \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}
+        the equilibrium is reached after approximately \(N=50\) sweeps for
+        either an initial condition of all spins up and all spins random. It
+        does not harm to double that value to be save.
+        \begin{figure}[htbp]
+            \centering
+            \subfigure[Example of an equilibrating Ising system][]{
+                    \label{sfig:equiandauto:equiE}
+                    \includegraphics[width=0.47\textwidth]{plots/equiE}
+            }
+            \subfigure[Example of the autocorrelation of an Ising system][]{
+                    \label{sfig:equiandauto:autoM}
+                    \includegraphics[width=0.47\textwidth]{plots/autoM}
+            }
+            \caption[Examples for equilibration and autocorrelation]
+            {
+                \subref{sfig:equiandauto:equiE} Example of a Ising system
+                    \(L=64\) reaching equilibrium at \(T=2.36\) and
+                \subref{sfig:equiandauto:autoM} the autocorrelation of an
+                    Ising system \(L=64\) at \(T=2.40\) (only Metropolis
+                    sweeps -- otherwise the decline is too steep to show)
+                    on half logarithmic axis.
+                    The straight line is an exponential fit \(\exp(-t/\tau)\)
+                    with \(\tau = 342(1)\).
+            }
+            \label{fig:equiandauto}
+        \end{figure}\\
+        Because every state is generated from the state before, measurements
+        of subsequent states are correlated. To determine when two states
+        are independent, one calculates the normalized autocorrelation function
+        \(\frac{\chi(t)}{\chi(0)}\), which should decay exponentially
+        \(\chi(t) \propto \exp(t/\tau)\). This is visible in the half
+        logarithmic plot \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
+        To get the autocorrelation time one can either fit a exponential
+        function \(\exp(-t/\tau)\) like in fig \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}
+        or integrate \(\tau = \int \frac{\chi(t)}{\chi(0)} \de t\).
+        \(\tau\) is an estimate after which time two samples are not
+        correlated anymore. \cite[S. ??]{NewmanBarkema1999} \cite[S. 150f]{Katzgraber2011}.
+        To make sure that the error is not underestimated one should wait
+        \(2\tau\) sweeps between two measurements.
+        The autocorrelation time is of course dependent on the temperature.
+        For example for the standard Metropolis algorithm the fluctuations
+        are strong at high temperatures and subsequent
+        states are more dissimilar and therefore less correlated than at low
+        temperatures, where less spins are flipping. But the longest
+        autocorrelation times are encountered at the critical temperature.
+        This effect is called \emph{critical slowing down} and is
+        characterized by the \emph{dynamical critical exponent} \(z\)
+        \cite{SwendsenWang1987}. The dependence of the autocorrelation time
+        \(\tau\) on the system size \(L\) is then given by \(\tau \propto L^z\).
+        As mentioned in section \ref{sssec:wolff}, the Wolff cluster algorithm
+        decreases \(z\) dramatically. This causes the course of the autocorrelation
+        time in dependence on temperature to change significantly as shown in
+        section \ref{sec:results}.

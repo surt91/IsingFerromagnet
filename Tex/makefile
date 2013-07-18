@@ -1,7 +1,7 @@
 DOKUMENT = Ferromagnet
 CHAPTERS = chapters/title.tex \
            chapters/introduction.tex \
-           chapters/monte_carlo.tex\
+           chapters/methods.tex\
            chapters/model.tex \
            chapters/results.tex\
            chapters/conclusion.tex\
