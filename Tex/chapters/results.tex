@@ -205,14 +205,20 @@ the \(\Delta \overline{\avg{O}}\) small.
     easier approach is to find the intersections of the Binder cumulants
     \(g\) of different system sizes \(L\) because they are intersecting
     at \(T_c\) \cite{Binder1981}.
-    Because  the magnetization \(m\) is only measured for discrete values
-    of \(T\), \(g\) is also only known for these discrete values and has
-    to be interpolated to find a intersection. Therefore a cubic spline
+    Because the magnetization \(m\) is only measured for discrete values
+    of \(T\), \(g\) is also only known for these discrete values and the
+    analytical course of the curve is not known, and hence has
+    to be interpolated to find the intersection. Therefore a \emph{cubic spline}
     interpolation\footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
     is calculated for the measured points.
     Cubic spline interpolation is a piece wise fitting of polynoms of
     degree three which are joined under the condition to be at least two
-    times continuously differentiable.
+    times continuously differentiable. This interpolation type has the
+    advantage, that it is only influenced by local points so that the
+    plateaus at low and high \(T\) do not influence the interpolation in
+    the vicinity of \(T_c\) -- in contrast to e.g. an polynom fit of
+    degree 4, which has to be restricted to the vincinity of \(T_c\) to
+    yield meaningful results.
     As an example take fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}.
     Here such interpolations are plotted for \(\sigma=0\) and are
     intersecting at \(\approx 2.27\).
@@ -224,6 +230,9 @@ the \(\Delta \overline{\avg{O}}\) small.
         T_c = 2J/\ln(1+\sqrt 2) = 2.2691...
         \label{eq:exactTc}
     \end{equation}
+    This test suggests, that measuring \(T_c\) this way is yields
+    adequat results and the interpolation does not lead to major
+    deviations.
 
 \subsection{Critical Temperature}
 \label{ssec:binderIntersections}
