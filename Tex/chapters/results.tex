@@ -172,8 +172,9 @@ the \(\Delta \overline{\avg{O}}\) small.
     one curve. Like the obersables from fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_fit_s_0}
     collapse in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}%\footnote{Examples for a collapse to determine the other critical exponents are in appendix \ref{appendix:finiteSizeScaling}}.
     Note that \(L=16\) is not used for the collapse, because it is a
-    rather small value such that eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
-    do not apply very good.\\
+    rather small value. Eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
+    are approximations for big \(L\). For small \(L\) one needs some
+    \emph{corrections to scaling} terms, which are not considered here.\\
     To accomplish the collapse in an semi-automatic and reproduceable
     way with an error estimate, the program
     \texttt{autoscale.py} \cite{autoscale2009} is used.
@@ -560,12 +561,11 @@ the \(\Delta \overline{\avg{O}}\) small.
     \end{figure}\\
     Despite the very good results for \(\nu\) and \(\gamma\), most of the
     \(\beta\) seem to be a bit too big -- especially for the RNG -- but
-    they are close enough to the expectations
-    to be consistent. At least the expectations are always within two
-    times the uncertainty.
+    they are close enough to the expectations to be consistent. At least
+    the expectations are always within two times the uncertainty.
     Maybe their deviations can be explained by the fact that small
-    systems (\(L=32,64\)) were used for the analysis, which introduce
-    some deviations, because the collapse works best for big system sizes.
+    systems (\(L=32,64\)) were used for the analysis, and no corrections
+    to scaling terms were considered.
     Anyway, two critical exponents are sufficient to determine the
     universality class \cite[p. 145]{Katzgraber2011}. Therefore this
     disordered Ising model is for every \(\sigma\)in the same universality
