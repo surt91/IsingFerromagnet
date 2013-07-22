@@ -1,17 +1,29 @@
 \subsection{Thermodynamic Theory}
 \label{ssec:theory}
-    To examine the disordered Ising model in Equilibrium,
-    Its temperature \(T\),
-    volume and number of particles \(N\) are constant, so that it is a canonical
-    ensemble. In a canonical ensemble the probability \(p_i\) of a state
+    %~ To examine the disordered Ising model in Equilibrium,
+    %~ Its temperature \(T\),
+    %~ volume and number of particles \(N\) are constant, so that it is a canonical
+    %~ ensemble.
+    In a canonical ensemble the probability \(p_i\) of a state
     \(i\) is distributed according to a Boltzman distribution
     \[p_i \propto e^{-\frac{\hat{H}}{k_B T}}\]
     Further the free energy \(F\) of an canonical
     ensemble is minimized and all observables can be derived from \(F\)
     in a straight forward way, as stated in every textbook about
-    statistical physics (e.g. \cite{nolting2005}).
-    To determine \(F\), one has to know the partition function
-    \[Z=\sum_i e^{-\frac{\hat{H}_i}{kT}}\]
+    statistical physics (e.g. \cite{nolting2005}).\\
+    Because of \(F=U-TS\) where \(U=\avg{H}\) is the internal energy and
+    \(S\) entropy, one can guess, that for low \(T\) the internal energy
+    will be low, and for big \(T\) the entropy will be high, to minimize
+    \(F\). The Hamiltonian of the Ising model creates an conflict between
+    \(U\) and \(S\) by assigning low energies to states with high order.
+    So \(U\) is low if all spins are aligned, where \(S\) as a measure of
+    disorder is low. This preliminary considerations make a phase
+    transition at some \(T\), where a high entropy lowers \(F\) more than
+    a low internal energy, very plausible.\\\
+    To determine
+    \[F=-k_{B}T \ln{Z}\]
+    one has to know the partition function
+    \[Z=\sum_i e^{-\frac{\hat{H}_i}{k_{B}T}}\]
     where the sum goes over all possible states \(i\) of the system.
     For small \(N\) the partition function is computable, but the system
     may show very different properties than in the thermodynamic limit.
