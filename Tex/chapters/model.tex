@@ -1,8 +1,8 @@
 \subsection{The Disordered Ising Model}
 \label{ssec:isingmodel}
     The examined model is a modified 2D Ising model.
-    First, let us define the Ising model and then explain the modifications.
-    The Ising model is a square lattice with edge length \(L\) and
+    The most common definition of the Ising model, to which will be referred
+    as the \emph{standard Ising model}, is a square lattice with edge length \(L\) and
     \(N=L^2\) sites. Each site has a magnetic moment, the spin. Each
     spin can take a value \(s \in \{-1,+1\}\) and interacts with its
     nearest neighbors described by the Hamiltonian from eq. \eqref{eq:hamiltonian}
@@ -56,7 +56,19 @@
     The boundary is periodic e.g. nodes near the right edge can be
     connected to nodes near the left edge and vice versa. Analogous the
     top and bottom edges are connected. One can imagine that the model
-    lives on the surface of a torus.\\
+    lives on the surface of a torus like in fig. \ref{fig:torusRNG}.
+    In subsequent graphics, the graphs will be unrolled and shown as a
+    planar projection. Connections which cross a periodic boundary are
+    indicated by edges which connect to an dashed node.
+    \begin{figure}[htbp]
+        \centering
+        %~ \includegraphics[width=0.3\textwidth]{images/torusRNG.pdf}
+        \caption[A Graph on a Torus to Visualise Periodic Boundary Conditions]
+        {
+            A graph on a torus to visualise periodic boundary conditions.
+        }
+        \label{fig:torusRNG}
+    \end{figure}\\
     For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
     for which exists an analytic solution \cite{Onsager1944}. And for
     \(\sigma \gtrsim 1\) the nodes are distributed randomly. This case
