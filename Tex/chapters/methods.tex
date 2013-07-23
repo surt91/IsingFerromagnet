@@ -6,7 +6,7 @@
     %~ ensemble.
     In a canonical ensemble the probability \(p_i\) of a state
     \(i\) is distributed according to a Boltzman distribution
-    \[p_i \propto e^{-\frac{\hat{H}}{k_B T}}\]
+    \[p_i \propto e^{-\frac{H_i}{k_B T}}\]
     Further the free energy \(F\) of an canonical
     ensemble is minimized and all observables can be derived from \(F\)
     in a straight forward way, as stated in every textbook about
@@ -23,7 +23,7 @@
     To determine
     \[F=-k_{B}T \ln{Z}\]
     one has to know the partition function
-    \[Z=\sum_i e^{-\frac{\hat{H}_i}{k_{B}T}}\]
+    \[Z=\sum_i e^{-\frac{H_i}{k_{B}T}}\]
     where the sum goes over all possible states \(i\) of the system.
     For small \(N\) the partition function is computable, but the system
     may show very different properties than in the thermodynamic limit.
@@ -73,18 +73,18 @@
     \subsubsection{Metropolis}
         A Metropolis Monte Carlo\cite{Metropolis1953} simulation of an
         Ising model will choose a random spin, calculate the energy change
-        \(\Delta \hat H\) defined in eq. \eqref{eq:dH} that would result
+        \(\Delta H\) defined in eq. \eqref{eq:dH} that would result
         from a flip of that spin and execute the flip with the probability \(A\)
         eq. \eqref{eq:metropolis} \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
         \begin{equation}
-            \Delta \hat H = \hat H(\nu) - \hat H(\mu)\\
+            \Delta H = H(\nu) - H(\mu)\\
             \label{eq:dH}
         \end{equation}
         \begin{equation}
             A(\mu \to \nu)
             \begin{cases}
-                1                                 & \Delta \hat H \le 0 \\
-                \exp{\brac{-\beta \Delta \hat H}} & \Delta \hat H > 0
+                1                            & \Delta H \le 0 \\
+                \exp{\brac{-\beta \Delta H}} & \Delta H > 0
             \end{cases}
             \label{eq:metropolis}
         \end{equation}
