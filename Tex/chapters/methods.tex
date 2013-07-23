@@ -1,12 +1,16 @@
 \subsection{Thermodynamic Theory}
 \label{ssec:theory}
-    %~ To examine the disordered Ising model in Equilibrium,
-    %~ Its temperature \(T\),
-    %~ volume and number of particles \(N\) are constant, so that it is a canonical
-    %~ ensemble.
+    To examine the disordered Ising model in Equilibrium, one can use
+    methods of statistical physics. It is a canonical ensemble i.e. the
+    temperature \(T\) is kept constant e.g. by a heat bath.
     In a canonical ensemble the probability \(p_i\) of a state
     \(i\) is distributed according to a Boltzman distribution
-    \[p_i \propto e^{-\frac{H_i}{k_B T}}\]
+    \begin{equation}
+        p_i \propto e^{-\beta H_i}
+    \end{equation}
+    \begin{equation}
+        \beta = \frac{1}{k_B T}
+    \end{equation}
     Further the free energy \(F\) of an canonical
     ensemble is minimized and all observables can be derived from \(F\)
     in a straight forward way, as stated in every textbook about
@@ -21,49 +25,70 @@
     transition at some \(T\), where a high entropy lowers \(F\) more than
     a low internal energy, very plausible.\\\
     To determine
-    \[F=-k_{B}T \ln{Z}\]
+    \begin{equation}
+        F=-k_{B}T \ln{Z}
+    \end{equation}
     one has to know the partition function
-    \[Z=\sum_i e^{-\frac{H_i}{k_{B}T}}\]
+    \begin{equation}
+        Z = \sum_i p_i = \sum_i e^{-\beta H_i}
+    \end{equation}
     where the sum goes over all possible states \(i\) of the system.
-    For small \(N\) the partition function is computable, but the system
+    Because every site can have two states, there are \(2^N\) different
+    states of the system, which have to be summed up to gain \(Z\).
+    Hence for small \(N\) the partition function is computable, but the system
     may show very different properties than in the thermodynamic limit.
     To minimize these finite size effects, it is desirable to examine
-    systems with large \(N\). But then there are of course next to
-    infinity many different states, such that it is unfeasible to
-    calculate the energy for each state, except for cases, where it is
-    possible to solve it analytically.\\
+    systems with large \(N\). But \(2^N\) is a very rapidly increasing
+    number, so there are next to infinity many different states, such
+    that it is unfeasible to calculate the energy for each state, except
+    for cases, where it is possible to solve it analytically.\\
     If not, one can get estimates of the observables for big \(N\) using
     Monte Carlo simulations.\\
 
 \subsection{Monte Carlo Simulations}
 \label{ssec:montecarlo}
     The idea behind Monte Carlo simulations is to take random samples of
-    the observable, which should be measured, and estimate the observable from
+    the observable, which should be measured, and estimate the mean of the observable from
     this samples. In example the Monte Carlo integration chooses random
     points within the bounding box of the function and estimates the integral
     as the fraction of points below the function and points above multiplied
-    by the area of the bounding box.
-    Of course one wants to sample more points, where the area below the
-    function is big, because points in areas, where the function does
-    contribute little to the integral, contribute little to the integral.
-    This can be achieved by \emph{Importance Sampling}. One
-    generates random numbers according to some probability distribution, which
-    yields more numbers in the range where the function to integrate has high
-    values and weights the result accordingly.\\
-    The same principle is used to sample properties of statistical
-    systems by generating random states.
+    by the area of the bounding box \cite{Katzgraber2011}.\\
+    Analogical the technique can be applied to statistical ensembles,
+    but instead of sampling points on an area, one samples states of the
+    system.\\
+    In statistical physics the expected value of an observable \(O\)
+    is calculated by
+    \begin{equation}
+        \avg{O} = \frac{1}{Z} \sum_i p_i O_i
+    \end{equation}
+    It is however possible, that there are few states that contribute
+    massively more than others. Think of a canonical system at low \(T\),
+    where \(p_i\) with low \(H_i\) contribute much more than high \(H_i\).
+    But if one samples the \(2^N\) states evenly, it is probable to miss
+    them, which possibly introduces big errors to the estimate of \(\avg{O}\).
+    It is therefore desirable to sample only the states with high
+    contributions to the sum.
     As noted before the system under scrutiny is canonical and therefore
-    the states are distributed according to the Boltzman distribution.
-    Hence importance sampling can be utilized.\\
+    \(p_i\) is known. The states are distributed according to the Boltzman
+    distribution. Hence \emph{Importance Sampling} can be utilized.\\
+    Instead of sampling uniformly distributed random states, one samples
+    states, which energies are distributed according to a Boltzman distribution.
+    In fact this reduces the estimator to
+    \begin{equation}
+        O_M = \frac{1}{M} \sum_{i=0}^M O_i
+    \end{equation}
+    as shown in \cite{NewmanBarkema1999}. This is a very convenient form.\\
     But it is difficult to create a random state of a physical system e.g. the
-    Ising system in equilibrium, hence one uses \emph{Markov Chains} to
-    generate new states \(\nu\) from old ones \(\mu\).
-    It is important that the transition probabilities \(A(\mu \to \nu)\)
-    obey \emph{Detailed Balance} and \emph{Ergodicity}.
+    Ising system in equilibrium, according to a given distribution.
+    Hence one uses \emph{Markov Chains} to generate new states \(\nu\)
+    from old ones \(\mu\). It is important that the transition probabilities
+    \(A(\mu \to \nu)\) obey \emph{Detailed Balance} and \emph{Ergodicity}.
     \emph{Detailed Balance} means that the probability to leave a state is
     the same as the probability to enter the state in equilibrium
     \(p_\mu A(\mu \to \nu) = p_\nu A(\nu \to \mu)\) with \(p_\mu\) the
-    probability to be in state \(\mu\).
+    probability to be in state \(\mu\). This ensures that the system can
+    equilibrate and that the states are distributed according to the
+    desired distribution in equilibrium \cite{NewmanBarkema1999}.
     And \emph{Ergodicity} requires that every possible state is reachable
     from every other state in finite time. \cite{NewmanBarkema1999} \cite{Katzgraber2011}
     Otherwise the samples might not be representative for the whole system.\\
@@ -123,13 +148,6 @@
         but use a simple Metropolis algorithm at high and low temperatures.
 
     \subsubsection{Parallel Tempering}
-        %~ The main aim is to obtain the critical temperatures
-        %~ \(T_c\) for different disorder paramters \(\sigma\).
-        %~ Therefore it is necessary to simulate for many temperatures,
-        %~ so that \emph{Parallel Tempering}\footnote{Before R. H.
-            %~ Swendsen published this paper, a algorithm \(MC^3\) was
-            %~ already published with the same idea. [citation needed]}
-        %~ \cite{ParallelTempering1986} is a suited algorithm.
         Parallel Tempering\cite{ParallelTempering1986} simulates many identical systems at different
         temperatures and periodically swaps the spin configurations
         between two neighboring temperatures with probability \(P\) from
