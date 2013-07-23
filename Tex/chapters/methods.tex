@@ -23,7 +23,7 @@
     So \(U\) is low if all spins are aligned, where \(S\) as a measure of
     disorder is low. This preliminary considerations make a phase
     transition at some \(T\), where a high entropy lowers \(F\) more than
-    a low internal energy, very plausible.\\\
+    a low internal energy, very plausible.\\
     To determine
     \begin{equation}
         F=-k_{B}T \ln{Z}
@@ -43,7 +43,13 @@
     that it is unfeasible to calculate the energy for each state, except
     for cases, where it is possible to solve it analytically.\\
     If not, one can get estimates of the observables for big \(N\) using
-    Monte Carlo simulations.\\
+    Monte Carlo simulations, which are introduced in the next chapter.\\
+    %~ Once one has obtained values for e.g. the magnetization \(m\), one
+    %~ can easily calculate the susceptibility
+    %~ \begin{equation}
+        %~ \chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}
+    %~ \end{equation}
+    % Bisschen erklæren, dass man aus m auch chi machen kann und auf literatur verweisen
 
 \subsection{Monte Carlo Simulations}
 \label{ssec:montecarlo}
@@ -79,7 +85,7 @@
     \end{equation}
     as shown in \cite{NewmanBarkema1999}. This is a very convenient form.\\
     But it is difficult to create a random state of a physical system e.g. the
-    Ising system in equilibrium, according to a given distribution.
+    Ising system in equilibrium according to a given distribution.
     Hence one uses \emph{Markov Chains} to generate new states \(\nu\)
     from old ones \(\mu\). It is important that the transition probabilities
     \(A(\mu \to \nu)\) obey \emph{Detailed Balance} and \emph{Ergodicity}.
