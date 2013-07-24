@@ -11,7 +11,7 @@
     \begin{equation}
         \beta = \frac{1}{k_B T}
     \end{equation}
-    Further the free energy \(F\) of an canonical
+    Further the free energy \(F\) of a canonical
     ensemble is minimized and all observables can be derived from \(F\)
     in a straight forward way, as stated in every textbook about
     statistical physics (e.g. \cite{nolting2005}).\\
@@ -20,7 +20,7 @@
     will be low, and for big \(T\) the entropy will be high, to minimize
     \(F\). The Hamiltonian of the Ising model creates an conflict between
     \(U\) and \(S\) by assigning low energies to states with high order.
-    So \(U\) is low if all spins are aligned, where \(S\) as a measure of
+    So \(U\) is low if all spins are aligned, while \(S\) as a measure of
     disorder is low. This preliminary considerations make a phase
     transition at some \(T\), where a high entropy lowers \(F\) more than
     a low internal energy, very plausible.\\
@@ -84,8 +84,13 @@
         O_M = \frac{1}{M} \sum_{i=0}^M O_i
     \end{equation}
     as shown in \cite{NewmanBarkema1999}. This is a very convenient form.\\
-    But it is difficult to create a random state of a physical system e.g. the
-    Ising system in equilibrium according to a given distribution.
+    But it is difficult to create a random state of a physical system
+    e.g. the Ising system according to a given distribution. The simple
+    method of creating uniformly distributed random states and reject
+    them with probability \(p_i^{-1}\) depending on their energy is not
+    efficient, because many generated states will be discarded and the
+    computing time to generate them and caluculating their energy will
+    be wasted.
     Hence one uses \emph{Markov Chains} to generate new states \(\nu\)
     from old ones \(\mu\). It is important that the transition probabilities
     \(A(\mu \to \nu)\) obey \emph{Detailed Balance} and \emph{Ergodicity}.
@@ -122,13 +127,14 @@
         So if a transition lowers the energy it is always done. This
         results in a high ratio between chosen spins and flipped spins.
         Therefore it minimizes the calculations needed for a change of
-        the state.
+        the state. Also note that \(\Delta H\) is easy to calculate,
+        because it is only affected by the spin of the neighbors of the
+        chosen site.
 
     \subsubsection{Wolff}
     \label{sssec:wolff}
         Close to the critical temperature \(T_c\) the Metropolis
-        gets slower. This is called \emph{critical slowing} down and the
-        cause is beyond the scope of this thesis.\\
+        gets slower. This is called \emph{critical slowing} down.\\
         Using a cluster algorithm like the Wolff
         algorithm \cite{Wolff1989} speeds things up.
         For an Ising model the Wolff algorithm builds a cluster of sites
@@ -190,17 +196,22 @@
 
     \subsubsection{Equilibration- and Autocorrelation Time}
     \label{sssec:eqtime}
-        To generate an equilibrium state one starts with an arbitrary state
-        and waits until it is equilibrated. The count of sweeps till
+        To generate states acoording to the Boltzman distribution at a
+        given temperature \(T\), one starts with an arbitrary state
+        and waits until it reaches thermal \emph{equilibrium}. Thermal
+        equilibrium denotes the condition, that the system under scrutiny
+        has reached the temperature of the heat bath. This is the case,
+        once no energy is exchanged between them, such that the energy
+        of the simulated system reaches a steady state as pictured in
+        fig. \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
+        The count of sweeps till
         equilibrium is called \emph{equilibration time} \(t_{eq}\).
-        All measurement should start after this time.\\
-        To determine when the system is in equilibrium, one can watch the
-        development of some observables and take the point at which there
-        are no big changes anymore as equilibrium. In fig.
-        \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}
+        All measurements should start after this time.\\
+        In fig. \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}
         the equilibrium is reached after approximately \(N=50\) sweeps for
         either an initial condition of all spins up and all spins random. It
-        does not harm to double that value to be save.
+        does not harm to double that value to be save. Particularly because
+        it is a random process, so that there can not be an exact value.
         \begin{figure}[htbp]
             \centering
             \subfigure[Example of an Equilibrating Ising System][]{

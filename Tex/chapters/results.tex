@@ -320,7 +320,7 @@ the \(\Delta \overline{\avg{O}}\) small.
             Cross checking the critical exponent $\gamma$ for
                 \subref{sfig:susCrossCheck:RNG} the RNG at $\sigma \in \{0.0, 1.0\}$ and
                 \subref{sfig:susCrossCheck:GG} the GG at $\sigma \in \{0.0, 0.3\}$.
-            Dotted lines are power law fits.
+            Dotted lines are power law fits \(aL^\frac{\gamma}{\nu}\).
         }
         \label{fig:susCrossCheck}
     \end{figure}\\
@@ -369,7 +369,7 @@ the \(\Delta \overline{\avg{O}}\) small.
     \end{figure}\\
     As an example take fig. \ref{fig:gettingCrit:binder_fit_s_0}.
     Here such interpolations are plotted for \(\sigma=0\) and are
-    intersecting at \(\approx 2.27\).
+    intersecting at \(T \approx 2.27\).
     To determine \(T_c\), the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
     are averaged and the standard error is calculated. In this case one
     gets \(T_c = 2.2689(2)\), which is in good agreement with the
@@ -410,18 +410,19 @@ the \(\Delta \overline{\avg{O}}\) small.
     temperature than the GG. Also \(T_c\) of the RNG decreases
     monotonically while \(T_c\) of the GG rises at first. Naively one would
     expect, that while changing the displacement of the nodes monotonically,
-    the properties of the system will also change monotonically. The
+    the properties of the system will also change monotonically, which is
+    indeed the case on a RNG but not on a GG. The
     maximum at \(\sigma \approx 0.15\) on the GG will be discussed later.
     For big \(\sigma\) the displaced nodes approach the limit of randomly
     distributed nodes, hence \(T_c\) is independent of \(\sigma\) for
-    \(\sigma \gg 1\).\\
+    \(\sigma \gg 1\). Regarding this both meet the expectations.\\
     Another strange property is the jump from \(\sigma = 0\) to \(\sigma > 0\)
     of \(T_c\) on the GG. To understand that, one has to
     consider the influence of the graph properties on the critical
     temperature.\\
     One basic property of a graph is its degree \(K\) -- sometimes
-    called \emph{coordination number} -- is defined as the mean count of
-    neighbors per node
+    called \emph{coordination number}. \(K\) is defined as the mean count
+    of neighbors per node.
     \begin{equation}
         K = \frac{\sum_{\avg{i,j}} 1}{\sum_{i} 1}
         \label{eq:degree}
@@ -582,7 +583,7 @@ the \(\Delta \overline{\avg{O}}\) small.
         }
         \label{fig:TcJ}
     \end{figure}\\
-    Though the eq. \eqref{eq:exactHCTc} shows, that there does not have
+    Though eq. \eqref{eq:exactHCTc} shows, that there does not have
     to be a linear connection between \(J\) and \(T_c\), the best guess
     is a linear connection, because this model is derived from the
     square lattice, where the connection is linear. Therefore, one

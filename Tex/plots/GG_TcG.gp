@@ -5,6 +5,7 @@ set xlabel '{/Symbol s}'
 set ylabel '{/Italic g}'
 
 set xr [-0.1:1.3]
+set yr [0.905:0.935]
 set size square
 
 f(x)=0.9160
