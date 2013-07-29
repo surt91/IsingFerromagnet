@@ -58,6 +58,5 @@ $(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS) $(IMAGES) $(BIBFILE)
 	cd $(<D) && epstopdf $(<F)
 
 clean:
-	rm -f $(PLOTS)
-	rm -rf $(dir $(DATA))
-	rm -f *.log *.aux *.bbl *.blg *.toc *.out *.lof $(DOKUMENT).pdf
+	rm -f $(PLOTS) plots/fit.log
+	rm -f *.log *.aux *.bbl *.blg *.toc *.out *.lof *.lot $(DOKUMENT).pdf
