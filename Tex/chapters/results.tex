@@ -532,8 +532,37 @@ the \(\Delta \overline{\avg{O}}\) small.
         }
         \label{fig:GG_sigma}
     \end{figure}\\
-    The explanation for the plateau of the RNG at low \(\sigma\) is similar.
-    On the RNG no new edges arise at small displacements of the nodes\footnote{See appendix \ref{appendix:RNGDisplacement} for a graphic.}\footnote{See also \url{http://www.youtube.com/watch?v=rltzi15mTM4} for an animation.}.
+    The evolution of the RNG with increasing \(\sigma\) can be made plausible
+    with the same arguments. Fig. \ref{fig:RNG_sigma}
+    shows, that for \(\sigma \lesssim 0.1\) the square lattice character is
+    preserved -- no new edges arise neither many existing edges vanish, which
+    explains the plateau in the \(T_{c}\) diagram. With
+    increasing \(\sigma\), more and more edges vanish\footnote{See also \url{http://www.youtube.com/watch?v=rltzi15mTM4} for an animation.},
+    thus reducing the degree and \(T_{c}\).
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[][$\sigma = 0.09$]
+        {
+            \label{sfig:RNG_sigma:0.09}
+            \includegraphics[width=0.30\textwidth]{images/RNG/out009}
+        }
+        \subfigure[][$\sigma = 0.15$]
+        {
+            \label{sfig:RNG_sigma:0.15}
+            \includegraphics[width=0.30\textwidth]{images/RNG/out015}
+        }
+        \subfigure[][$\sigma = 0.21$]
+        {
+            \label{sfig:RNG_sigma:0.21}
+            \includegraphics[width=0.30\textwidth]{images/RNG/out021}
+        }
+
+        \caption[Anomaly of the RNG for Small $\sigma$]
+        {
+            RNG with periodic boundary conditions for different \(\sigma = 0\)
+        }
+        \label{fig:RNG_sigma}
+    \end{figure}\\
     But the degree does not alone influence the behavior of \(T_c\).
     Further \(T_c\) depends on the coupling constant \(J\), which is
     obvious in eq. \eqref{eq:exactTc} and \eqref{eq:exactHCTc}. The
