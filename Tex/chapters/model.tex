@@ -73,10 +73,20 @@
         \label{fig:torusRNG}
     \end{figure}\\
     For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
-    for which exists an analytic solution \cite{Onsager1944}. And for
-    \(\sigma \gtrsim 1\) the nodes are distributed randomly. This case
-    is already studied for constant \(J\) on the Delaunay triangulation
-    in \cite{Janke1994}.\\
+    for which exists an analytic solution \cite{Onsager1944} for the
+    critical temperature
+    \begin{equation}
+        T_c = 2J/\ln(1+\sqrt 2) = 2.2691...
+        \label{eq:exactTc}
+    \end{equation}
+    and the critical exponents \(\alpha = 0\), \(\beta = \frac{1}{8}\)
+    and \(\gamma = -\frac{7}{4}\).\\
+    The case for randomly distributed sites \(\sigma \gtrsim 1\) is
+    already studied on a Delaunay triangulation. \cite{Janke1994} examines
+    this for constant \(J\) and \cite{Lima2000} for \(J_{ij} = e^{-\alpha d_{ij}}\).
+    Both articles conclude, that this model lies within the universality
+    class of the standard Ising model, i.e.\ has the same critical
+    exponents.
 
 \subsection{Gabriel- and Relative Neighborhood Graph}
 \label{ssec:graphtypes}
