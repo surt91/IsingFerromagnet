@@ -1,8 +1,16 @@
 \subsection{Thermodynamic Theory}
 \label{ssec:theory}
-    To examine the disordered Ising model in Equilibrium, one can use
-    methods of statistical physics. It is a canonical ensemble i.e.\ the
-    temperature \(T\) is kept constant e.g.\ by a heat bath.
+    The disordered Ising model will be examined as a \emph{canonical system} in
+    \emph{equilibrium}. A canonical system can exchange energy with a
+    heat bath, thus has a constant temperature -- the temperature of the
+    heat bath.
+    Equilibrium is defined as a steady state, where
+    the observables are only fluctuating but not changing in any
+    particular direction. For example thermal equilibrium denotes the
+    condition, that the system under scrutiny has reached the temperature
+    of the heat bath. This is the case, once no energy is exchanged
+    between them, thus the energy of the simulated system reaches a
+    steady state.
     In a canonical ensemble the probability \(p_i\) of a state
     \(i\) is distributed according to a Boltzman distribution
     \begin{equation}
@@ -11,19 +19,22 @@
     \begin{equation}
         \beta = \frac{1}{k_B T}
     \end{equation}
-    Further the free energy \(F\) of a canonical
-    ensemble is minimized and all observables can be derived from \(F\)
+    Further the free energy \(F\) of a canonical ensemble is minimized
+    in equilibrium and all observables can be derived from \(F\)
     in a straight forward way, as stated in every textbook about
     statistical physics (e.g.\ \cite{nolting2005}).\\
     Because of \(F=U-TS\) where \(U=\avg{H}\) is the internal energy and
     \(S\) entropy, one can guess, that for low \(T\) the internal energy
     will be low, and for big \(T\) the entropy will be high, to minimize
-    \(F\). The Hamiltonian of the Ising model creates an conflict between
-    \(U\) and \(S\) by assigning low energies to states with high order.
-    So \(U\) is low if all spins are aligned, while \(S\) as a measure of
-    disorder is low. This preliminary considerations make a phase
-    transition at some \(T\), where a high entropy lowers \(F\) more than
-    a low internal energy, very plausible.\\
+    \(F\). The Hamiltonian of the Ising model connects \(U\) and \(S\)
+    by assigning low energies to states with high order. So \(U\) is low
+    if all spins are aligned. In this case \(S\) as a measure of
+    disorder is also low. Analogical the state of maximum \(U\) is also
+    the state of maximum \(S\).
+    This preliminary considerations make a phase transition at some
+    \(T\), where the influence of the entropy on \(F\) becomes the same
+    order of magnitude as the influence of the internal energy on \(F\),
+    very plausible.\\
     To determine
     \begin{equation}
         F=-k_{B}T \ln{Z}
@@ -198,12 +209,10 @@
     \label{sssec:eqtime}
         To generate states acoording to the Boltzman distribution at a
         given temperature \(T\), one starts with an arbitrary state
-        and waits until it reaches thermal \emph{equilibrium}. Thermal
-        equilibrium denotes the condition, that the system under scrutiny
-        has reached the temperature of the heat bath. This is the case,
-        once no energy is exchanged between them, such that the energy
-        of the simulated system reaches a steady state as pictured in
-        fig. \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
+        and waits until it reaches thermal \emph{equilibrium}. Because
+        equilibrium is defined as a steady state, one can determine if it
+        is reached, by observing the change of the observables over the
+        progressing simulation, as pictured in fig. \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
         The count of sweeps till
         equilibrium is called \emph{equilibration time} \(t_{eq}\).
         All measurements should start after this time.\\
