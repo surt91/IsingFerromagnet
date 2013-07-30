@@ -247,7 +247,11 @@
         Because every state is generated from the state before, measurements
         of subsequent states are correlated. To determine when two states
         are independent, one calculates the normalized autocorrelation function
-        \(\frac{\chi(t)}{\chi(0)}\), which should decay exponentially
+        \(\frac{\chi(t)}{\chi(0)}\) with
+        \begin{equation}
+            \chi(t) = \int \de t' [m(t') -\avg{m}][m(t'+t)-\avg{m}]
+        \end{equation}
+        which should decay exponentially
         \(\chi(t) \propto \exp(t/\tau)\). This is visible in the half
         logarithmic plot \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
         To get the autocorrelation time one can either fit a exponential
@@ -266,8 +270,14 @@
         This effect is called \emph{critical slowing down} and is
         characterized by the \emph{dynamical critical exponent} \(z\)
         \cite{SwendsenWang1987}. The dependence of the autocorrelation time
-        \(\tau\) on the system size \(L\) is then given by \(\tau \propto L^z\).
+        \(\tau\) on the system size \(L\) is at \(T_{c}\) given by \(\tau \propto L^z\).
+        More general the power law \(\tau \propto \xi^z\) holds true, where
+        \(\xi\) is the \emph{correlation length}, which diverges at
+        \(T_{c}\) and is then limited by the size of the simulated lattice.
         As mentioned in section \ref{sssec:wolff}, the Wolff cluster algorithm
         decreases \(z\) dramatically. This causes the course of the autocorrelation
         time in dependence on temperature to change significantly as shown in
-        section \ref{sec:results}.
+        section \ref{ssec:results:autocorr}. Also according to \cite{NewmanBarkema1999}
+        \(z\) is independent of the lattice structure, which ensures that
+        the simulation will benefit from the Wolff cluster algorithm at
+        any \(\sigma\).

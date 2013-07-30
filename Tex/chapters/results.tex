@@ -52,6 +52,7 @@ to simulate enough uncorrelated states for each realization, to keep
 the \(\Delta \overline{\avg{O}}\) small.
 
 \subsection{Short Analysis of the Autocorrelation Time  $\tau$}
+\label{ssec:results:autocorr}
     % Sollte das hier rein?
     Before the results are presented, a short analysis of the
     autocorrelation time \(\tau\) is given, to illustrate the benefits
@@ -87,19 +88,31 @@ the \(\Delta \overline{\avg{O}}\) small.
     with possibly different signs, thus having the same effect.
     Also note that the maximum of \(\tau\) is not at \(T_c\) but at a higher
     temperature. The cause is probably the effectiveness of the Wolff cluster
-    algorithm at \(T_c\).
+    algorithm at \(T_c\), hence \(\tau \approx 1\) at \(T_{c}\).
     Obviously the autocorrelation time \(\tau\) increases with the system
-    size. In fact it obeys a power law, which is the expected behaivior of
-    a dynamical critical exponent \(z\) as mentioned in section \ref{sssec:eqtime}.
+    size. In fact it obeys a power law \(\tau \propto \L^z\), which is
+    the expected behavior of a dynamical exponent \(z\) as mentioned in
+    section \ref{sssec:eqtime}.
     In fig. \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} \(\tau\) is plotted
-    over \(L\) and the dynamical exponent \(z'\) is determined as \(z'=0.64(2)\).
-    This exponent is much higher than the one of Wolff cluster
-    algorithm at criticality, which is \(z=0.25\)\cite{NewmanBarkema1999}.
-    So it represents the dynamical exponent for parallel tempering with
-    Metropolis above criticality and thus is not exactly a critical exponent.
-    Nevertheless it is interesting, that it obeys a power law just the same.
-    Anyhow it is a proof for the effectiveness of the Wolff cluster algorithm
-    at criticality.
+    over \(L\). Note that the exponent \(z'=0.64(2)\) determined by this plot is
+    not comparable to the known critical exponent \(z=0.25\) \cite{NewmanBarkema1999}
+    for the Wolff cluster algorithm. On the one hand the number of sweeps
+    in which \(\tau\) is measured in this thesis are more than a standard
+    Metropolis sweep to which \(z\) normally corresponds, thus \(z'\) would
+    need to be normalized by some factor \(>1\), because each sweep
+    alongside the \(N\) Metropolis flips also a cluster of \(\ge 1\) spin is
+    flipped. On the other hand the \(\tau\) used for the fit are not the
+    \(\tau\) at \(T_{c}\) but the maximum \(\tau\) of all \(T\).
+    Nevertheless it is interesting, that it obeys a power law
+    \(\tau \propto L^{z'}\) just the same. This suggests, that \(\xi \gtrsim L\)
+    is satisfied at the temperature of maximum \(\tau\) and that \(z'\) is a
+    valid upper bound of \(z\).
+    This proofs the effectiveness of the Wolff cluster algorithm at
+    criticality.\\
+    This is of course only a rough analysis of existing data which was
+    generated for another purpose. For a more in depth inspection, one
+    would perform the simulation at the critical point, which will be
+    determined in the next sections.
 
 \subsection{Finite Size Effects}
 \label{ssec:finitesize}
