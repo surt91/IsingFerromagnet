@@ -6,6 +6,7 @@ CHAPTERS = chapters/title.tex \
            chapters/results.tex\
            chapters/conclusion.tex\
            chapters/appendix.tex \
+           chapters/acknowledgements.tex \
            chapters/erklarung.tex
 
 BIBFILE = lit.bib
