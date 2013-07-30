@@ -1,7 +1,7 @@
 set terminal postscript eps enhanced color blacktext lw 2 solid 26
 set output 'equiE.eps'
 
-set xlabel 'Number of sweeps {/Italic N}'
+set xlabel 'Number of sweeps {/Italic N_s}'
 set ylabel 'Energy per site {/Italic E}'
 
 set xtics 50
