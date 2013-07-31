@@ -6,9 +6,9 @@ set xl "{/Italic (T-T_c) L^{1/{/Symbol n}}}"
 set yl "{/Italic {/Symbol c}} L^{-{/Symbol g}/{/Symbol n}}"  # set x,y labels
 xc=2.268896
 a=1/0.986224
-b=-1.739717/a                                         # set scaling parameters
+b=1.739717/a                                         # set scaling parameters
 set label 1 sprintf("{/Italic T_c}= %.3f\n{/Italic {/Symbol n}} = %.3f\n{/Italic {/Symbol g}} = %.3f", xc, 1/a, b*a) at graph 0.95,0.8 right # list scaling parameters
-sx(x,L)=(x-xc)*L**a; sy(y,L)=y*L**b                 # def scaling assumption
+sx(x,L)=(x-xc)*L**a; sy(y,L)=y*L**-b                 # def scaling assumption
 set xr [-5:15]
 
 set size square
