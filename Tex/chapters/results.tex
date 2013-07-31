@@ -156,22 +156,44 @@ the \(\Delta \overline{\avg{O}}\) small.
     in fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}\footnote{See the appendix \ref{appendix:finiteSizeEffects} for a similar figure for the specific heat.}.
     Clearly the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
     Despite of this one can obtain \(T_c\) by finite size scaling
-    methods \cite[S. ??]{NewmanBarkema1999} which also yield the critical
-    exponents, which is performed in the next section. Also in \ref{ssec:binderIntersections}
-    an easier approach, which yields better values for \(T_{c}\), is presented.
+    methods \cite[S. ??]{NewmanBarkema1999}, which also yield the critical
+    exponents. This will be performed in the next section.
+    Though there is an easier approach, which yields even more
+    precise values for \(T_{c}\), which is presented in \ref{ssec:binderIntersections}.
 
 \subsection{Critical Exponents}
+    The critical exponents define the course of an observable near its
+    divergence. For instance the vicinity of the divergence of the susceptibility
+    can be approximated by
+    \begin{equation}
+        \chi \propto \abs{T-T_{c}}^{-\beta}
+        \label{eq:critExp:beta}
+    \end{equation}
+    As the name critical \emph{exponent} suggests, this will often
+    be a power law. But not obligatory e.g.\ the critical "exponent" \(\alpha\)
+    corresponding to the divergence of the specific heat \(c\) for the two dimensional
+    Ising model diverges logarithmic and is nominally \(\alpha = 0\).
+    Because of this, \(\alpha\) will not be considered in this section.\\
+    The important property of the critical exponents is, that they are
+    universal for a model i.e.\ they are independent of the size, the structure
+    or the coupling constant \(J\) \cite{NewmanBarkema1999} of the lattice,
+    therefore they should also be independent of \(\sigma\).
     Studies on random lattices with\cite{Lima2000} and without\cite{Janke1994}
-    varying coupling constants \(J\) suggest, that the
-    critical exponents should not be influenced by the disorder parameter
-    \(\sigma\). So they will be used for consistency cross checking and
-    comparison with the known exact values \cite[S. 59]{Pelissetto2002}.\\
+    varying coupling constants \(J\) confirm, that the
+    critical exponents are not influenced by an random lattice.
+    So they will be used for consistency cross checking and
+    comparison with the known exact values \cite[S. 59]{Pelissetto2002}.
+    If the critical exponents can be reproduced, the determined critical
+    temperatures are probably correct too.\\
     % Ausfuehrlichere Herleitung der Skalentheorie, Skalenanalyse
-    For a more in depth look at finite size scaling, \cite{Norrenbrock2011}
-    offers an explanation.
-    It is known, that for large \(L\) near the critical temperature the
-    equations \eqref{eq:fsscaling:m}, \eqref{eq:fsscaling:chi} and
-    \eqref{eq:fsscaling:g} apply.
+    To determine the critical exponents, the finite size scaling method
+    will be used. The here given explanation will give a rough idea, how
+    the method works, for a more in depth explanation look at \cite{Norrenbrock2011} or \cite{NewmanBarkema1999}.
+    The crucial element is that there exists a \emph{scaling function},
+    which is valid for sufficiently large \(L\) near the critical
+    temperature \(T_{c}\) and has only an explicit \(L\) dependence.
+    One can then express some observables like in eq. \eqref{eq:fsscaling:m}, \eqref{eq:fsscaling:chi} and
+    \eqref{eq:fsscaling:g}.
     \begin{align}
         \label{eq:fsscaling:m}
         \avg{m_L} &= L^{-\frac{\beta}{\nu}} \tilde{M}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
@@ -182,12 +204,16 @@ the \(\Delta \overline{\avg{O}}\) small.
     \end{align}
     Where \(g\) from eq. \eqref{eq:fsscaling:g} is a normalized
     Binder cumulant \cite{Binder1981} and \(\tilde{M}, \tilde{C}\) and \(\tilde{G}\)
-    are unknown scaling functions. To find the exponents
-    \(\beta, \gamma, \nu\) and the critical temperature \(T_c\), one
-    varies them until the measured values of the observables collapse on
-    one curve. Like the obersables from fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_s_0}
+    are the scaling functions.
+    To find the exponent e.g. \(\nu\), one takes \eqref{eq:fsscaling:g},
+    solves for \(\tilde{G}\), adjusts the axis to represent \(y=\tilde{G}(x)\),
+    and plots the measured observables for all \(L\).
+    Then one varies \(\nu\) and \(T_{c}\) until the plotted observables
+    collapse on one curve -- the scaling function.
+    Like the obersables from fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_s_0}
     collapse in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}.
     %\footnote{Examples for a collapse to determine the other critical exponents are in appendix \ref{appendix:finiteSizeScaling}}.
+    The same principle can be used to determine the other two exponents.
     Note that \(L=16\) is not used for the collapse, because it is a
     rather small value. Eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
     are approximations for big \(L\). For small \(L\) one needs some
@@ -216,7 +242,6 @@ the \(\Delta \overline{\avg{O}}\) small.
         }
         \label{fig:gettingCrit}
     \end{figure}\\
-
     A finite size scaling analysis was
     performed to determine the critical exponents \(\beta, \gamma, \nu\)
     using \texttt{autoscale.py} \cite{autoscale2009} and eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}.
