@@ -158,8 +158,9 @@ the \(\Delta \overline{\avg{O}}\) small.
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{NewmanBarkema1999}, which also yield the critical
     exponents. This will be performed in the next section.
-    Though there is an easier approach, which yields even more
-    precise values for \(T_{c}\), which is presented in \ref{ssec:binderIntersections}.
+    Though there is an easier approach, which yields comparable precise
+    values for \(T_{c}\) in a much faster and more robust way, which is
+    presented in \ref{ssec:binderIntersections}.
 
 \subsection{Critical Exponents}
     The critical exponents define the course of an observable near its
@@ -338,9 +339,9 @@ the \(\Delta \overline{\avg{O}}\) small.
     Like in tab. \ref{tab:critExp} to see, most values
     are matching the expectations. \(T_c\) for \(\sigma = 0\) is in good
     agreement with the known value. Especially \(\nu\) and \(\gamma\)
-    are always in very good agreement with their exact values. Because
-    there can never be to much cross- and consistency checks, the ratio
-    \(\frac{\gamma}{\nu}\) is also determined, by fitting the maxima of
+    are always in very good agreement with their exact values. Besides the
+    good agreement of the by data collapse obtained values of \(\nu\) and \(\gamma\),
+    the ratio \(\frac{\gamma}{\nu}\) is also determined, by fitting the maxima of
     the susceptibility \(\chi_{\mathrm{max}}\) by the power law \(aL^\frac{\gamma}{\nu}\).
     The results are displayed in fig. \ref{fig:susCrossCheck}. The ratios
     determined by this method confirm the values obtained by collapse.
@@ -421,7 +422,44 @@ the \(\Delta \overline{\avg{O}}\) small.
     In this section these \(T_c\) on either the RNG or the GG are
     compared. In the following figures, the RNG will always be on the
     left side and the GG on the right side.
-    In fig. \ref{fig:Tc} \(T_c\) is plotted over \(\sigma\).
+    And in tab. \ref{tab:critTemp} the values are displayed together with the
+    values obtained by the data collapse from the section before.
+    \begin{table}[htbp]
+        \center
+        \begin{tabular}{l @{\quad} l l @{\quad} l l}
+            \toprule
+             & \multicolumn{2}{c}{GG} & \multicolumn{2}{c}{RNG}\\
+            \midrule
+            \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(T_c\)} & \multicolumn{1}{c}{\(T_c^{\mathrm{collapse}}\)} & \multicolumn{1}{c}{\(T_c\)} & \multicolumn{1}{c}{\(T_c^{\mathrm{collapse}}\)}\\
+            \midrule
+            0.00 & 2.2689(2)& 2.2687(5) & 2.2690(2)& 2.2689(7)\\
+            0.03 & 2.851(1) &           & 2.2679(4)&          \\
+            0.05 & 2.863(1) &           & 2.2662(5)&          \\
+            0.08 & 2.882(2) &           & 2.2548(6)&          \\
+            0.10 & 2.893(2) & 2.895(4)  & 2.205(1) & 2.2058(8)\\
+            0.12 & 2.903(3) &           & 2.1010(5)&          \\
+            0.15 & 2.903(3) &           & 1.898(2) &          \\
+            0.20 & 2.8274(6)&           & 1.624(1) & 1.627(2) \\
+            0.25 & 2.676(2) &           & 1.4812(5)&          \\
+            0.30 & 2.526(4) & 2.527(1)  & 1.407(2) &          \\
+            0.40 & 2.332(4) &           & 1.327(4) &          \\
+            0.50 & 2.233(7) & 2.238(1)  & 1.2818(2)& 1.2825(7)\\
+            0.60 & 2.183(3) &           & 1.252(2) &          \\
+            0.70 & 2.154(8) &           & 1.234(1) &          \\
+            0.80 & 2.140(3) &           & 1.223(1) &          \\
+            0.90 & 2.132(1) &           & 1.214(4) &          \\
+            1.00 & 2.121(8) & 2.128(2)  & 1.208(5) & 1.2123(3)\\
+            1.10 & 2.116(11)&           & 1.206(1) &          \\
+            1.20 & 2.113(4) &           & 1.204(2) &          \\
+            \bottomrule
+        \end{tabular}
+        \caption{Critical temperatures for different $\sigma$}
+        \label{tab:critTemp}
+    \end{table}\\
+    The values obtained through the data collapse and the values obtained
+    through the intersection of the binder cumulant are always in good
+    agreement and of comparable precision.\\
+    These values of \(T_c\) are plotted over \(\sigma\) in fig. \ref{fig:Tc}.
     \begin{figure}[htbp]
         \centering
         \subfigure[][]
