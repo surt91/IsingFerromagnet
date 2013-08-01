@@ -90,7 +90,10 @@
 
 \subsection{Gabriel- and Relative Neighborhood Graph}
 \label{ssec:graphtypes}
-    A graph \(G(V,E)\) is a set of nodes \(V\) and edges \(E\).\\
+    A graph \(G(V,E)\) is a set of nodes \(V\) and edges \(E\). In the
+    scope of this model, the nodes get identified with the sites of the
+    lattice and the edges signal the neighbor status of two sites. If the
+    corresponding nodes are connected, the sites are neighbors.\\
     All here mentioned graph types are \emph{proximity graphs}. They are
     connecting nodes which are by some metric near to each other.
     Hence they are suited to generalize problems defined on regular
@@ -158,10 +161,12 @@
     \cite{RNGCell}.
     Now it is just necessary to test the nodes in the cells which
     resemble a rectangular bounding box of the lune. Most pairs will be
-    far away from each other and the cells in the middle of the bounding
-    box are completely inside the lune so that only one node has to be
-    tested to discard an edge between them. Connected nodes are near to
-    each other so that only very few cells have to be tested.\\
+    far away from each other and there will be one or more cells in the
+    middle of the bounding box, which are completely inside the lune so.
+    Then only one node has to be tested from such a cell to discard an
+    edge between the nodes. On the other hand nodes, that will be connected,
+    are near to each other so that only very few cells intersect the bounding
+    box of their lune and consequently only very few nodes have to be tested.\\
     Indeed this method reduced the time needed to construct a RNG with
     \(N=32^2\) and \(N=64^2\) by a factor of
     over \(15\) respectively \(40\). Though the complexity is still of
