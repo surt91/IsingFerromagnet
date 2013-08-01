@@ -506,7 +506,7 @@ the \(\Delta \overline{\avg{O}}\) small.
     called \emph{coordination number}. \(K\) is defined as the mean count
     of neighbors per node.
     \begin{equation}
-        K = \frac{\sum_{\avg{i,j}} 1}{\sum_{i} 1}
+        K = \frac{1}{N} \sum_{\avg{i,j}} 1
         \label{eq:degree}
     \end{equation}
     It is known, that the degree has an impact on the critical Temperature.
@@ -521,8 +521,13 @@ the \(\Delta \overline{\avg{O}}\) small.
     If one plots the degree of the graphs at different \(\sigma\) like
     in fig. \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG},
     one recognizes, that \(T_c\) and \(K\) are evidently correlated.
+    The values for \(K\) are obtained as an average over \(100\)
+    realizations of each graph type for \(L=16\) and \(L=32\) lattices.
+    In fig. \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
+    one can see, that these curves are almost identical and the small
+    errorbars suggest, that they are sufficiently precise for this purpose.
     It seems reasonable to normalize \(T_c\) by the degree of the underlying
-    graph. This is done in fig \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
+    graph. This is done in fig. \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
     Indeed the normalization eliminates the jump and reduces the
     slope of the rising on the GG. Hence it reduces differences
     between the RNG and the GG.
