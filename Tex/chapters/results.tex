@@ -167,14 +167,21 @@ the \(\Delta \overline{\avg{O}}\) small.
     divergence. For instance the vicinity of the divergence of the susceptibility
     can be approximated by
     \begin{equation}
-        \chi \propto \abs{T-T_{c}}^{-\beta}
+        \chi \propto \abs{T-T_{c}}^{-\gamma}
+        \label{eq:critExp:gamma}
+    \end{equation}
+    And the infinite slope of the magnetization can be approximated in
+    the direction of lower \(T\) by
+    \begin{equation}
+        m \propto \abs{T-T_{c}}^{-\beta}
         \label{eq:critExp:beta}
     \end{equation}
     As the name critical \emph{exponent} suggests, this will often
-    be a power law. But not obligatory e.g.\ the critical "exponent" \(\alpha\)
-    corresponding to the divergence of the specific heat \(c\) for the two dimensional
-    Ising model diverges logarithmic and is nominally \(\alpha = 0\).
-    Because of this, \(\alpha\) will not be considered in this section.\\
+    be a power law, as in the both examples above. But not obligatory e.g.\
+    the critical "exponent" \(\alpha\) corresponding to the divergence of
+    the specific heat \(c\) diverges logarithmic for the two dimensional
+    Ising model and is nominally \(\alpha = 0\).
+    For that reason, \(\alpha\) will not be considered in this section.\\
     The important property of the critical exponents is, that they are
     universal for a model i.e.\ they are independent of the size, the structure
     or the coupling constant \(J\) \cite{NewmanBarkema1999} of the lattice,
@@ -254,7 +261,7 @@ the \(\Delta \overline{\avg{O}}\) small.
     \end{equation}
     This way the exponents \(\gamma\) and \(\nu\) are determined.
     Analogical fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_0_meanM}\subref{sfig:gettingCrit:collapse_s_0_meanM}
-    shows the collapse for the mean absolute magnetisation per site \(\avg{\abs{m}}\) for \(\sigma=0\),
+    shows the collapse for the mean absolute magnetization per site \(\avg{\abs{m}}\) for \(\sigma=0\),
     to determine the exponents \(\beta\) and \(\nu\).
     Also the collapse of the binder cumulant as mentioned before and shown
     in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}
@@ -271,12 +278,12 @@ the \(\Delta \overline{\avg{O}}\) small.
             \label{sfig:gettingCrit:collapse_s_0_sus}
             \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_sus}
         }
-        \subfigure[Magnetisation $\avg{\abs{m}}$][]
+        \subfigure[Magnetization $\avg{\abs{m}}$][]
         {
             \label{sfig:gettingCrit:s_0_meanM}
             \includegraphics[width=0.47\textwidth]{plots/s_0_meanM}
         }
-        \subfigure[Finite Size Scaling of the Magnetisation $\avg{\abs{m}}$][]
+        \subfigure[Finite Size Scaling of the Magnetization $\avg{\abs{m}}$][]
         {
             \label{sfig:gettingCrit:collapse_s_0_meanM}
             \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_meanM}
@@ -333,7 +340,7 @@ the \(\Delta \overline{\avg{O}}\) small.
                          & 1.0 & 1.2123(3)& 1.013(6) & 1.758(16)& 0.138(13)\\
             \bottomrule
         \end{tabular}
-        \caption{Critical exponents for different $\sigma$}
+        \caption[Critical Exponents for Different $\sigma$]{Critical exponents for different $\sigma$}
         \label{tab:critExp}
     \end{table}\\
     Like in tab. \ref{tab:critExp} to see, most values
@@ -453,7 +460,7 @@ the \(\Delta \overline{\avg{O}}\) small.
             1.20 & 2.113(4) &           & 1.204(2) &          \\
             \bottomrule
         \end{tabular}
-        \caption{Critical temperatures for different $\sigma$}
+        \caption[Critical Temperatures for Different $\sigma$]{Critical temperatures for different $\sigma$}
         \label{tab:critTemp}
     \end{table}\\
     The values obtained through the data collapse and the values obtained
