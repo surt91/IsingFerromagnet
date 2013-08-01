@@ -39,6 +39,10 @@
     \begin{equation}
         F=-k_{B}T \ln{Z}
     \end{equation}
+    or any expected value of an observable
+    \begin{equation}
+        \avg{O} = \frac{1}{Z} \sum_i O_i e^{-\beta H_i}
+    \end{equation}
     one has to know the partition function
     \begin{equation}
         Z = \sum_i p_i = \sum_i e^{-\beta H_i}
@@ -55,18 +59,54 @@
     for cases, where it is possible to solve it analytically.\\
     If not, one can get estimates of the observables for big \(N\) using
     Monte Carlo simulations, which are introduced in the next chapter.\\
-    %~ Once one has obtained values for e.g.\ the magnetization \(m\), one
-    %~ can easily calculate the susceptibility
-    %~ \begin{equation}
-        %~ \chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}
-    %~ \end{equation}
-    % Bisschen erklæren, dass man aus m auch chi machen kann und auf literatur verweisen
+
+    The observables which are measured in this thesis, are the mean
+    magnetization per spin
+    \begin{equation}
+        m = \frac{1}{N} \sum_i s_i
+    \end{equation}
+    and the mean energy per spin
+    \begin{equation}
+        E = \frac{1}{N} \avg{H}
+    \end{equation}
+    As mentioned before, properties near the phase transition and the
+    critical temperature \(T_c\), where the phase transition occurs, will
+    be examined. The Ising system in two dimensions shows a second order
+    phase transition, hence \(m\) and \(E\) are continous, but show at
+    \(T_c\) an infinitly sharp slope i.e.\ the first derivative diverges.
+    From statistical physics (compare \cite{nolting2005}) is known, that
+    these derivatives can be expressed by fluctuations e.g.\ the specific
+    heat can be expressed as
+    \begin{equation}
+        c = \frac{\partial \avg{H}}{\partial T} = k_B \beta^2 \avg{\brac{H-\avg{H}}^2}
+    \end{equation}
+    The specific heat is a measure for how much energy is needed to change
+    the temperature of the system.
+    Analogical the susceptibility
+    \begin{equation}
+        \chi = N \beta \avg{\brac{m-\avg{m}}^2}
+    \end{equation}
+    is a measure for how strong an outer magnetic field changes the
+    magnetization of the system.
+    Beside these observables from classical physics, a fifth observable
+    the binder cumulant \cite{Binder1981}
+    \begin{equation}
+        g = \frac{3}{2}\brac{1-\frac{\avg{m^4}}{3\avg{m^2}^2}}
+        \label{eq:binder}
+    \end{equation}
+    is considered.
+    This is a dimensionless value, which can be used to determine the
+    critical point. These five observables will be sufficient to analyse
+    the phase transition in the scope of this bachelor thesis. All of them
+    can be easily computed when \(m\) and \(E\) are measured. The next
+    chapter will show, how to get estimates for them through Monte Carlo
+    simulations.
 
 \subsection{Monte Carlo Simulations}
 \label{ssec:montecarlo}
     The idea behind Monte Carlo simulations is to take random samples of
     the observable, which should be measured, and estimate the mean of the observable from
-    this samples. In example the Monte Carlo integration chooses random
+    this samples. As an example the Monte Carlo integration chooses random
     points within the bounding box of the function and estimates the integral
     as the fraction of points below the function and points above multiplied
     by the area of the bounding box \cite{Katzgraber2011}.\\
@@ -74,7 +114,7 @@
     but instead of sampling points on an area, one samples states of the
     system.\\
     In statistical physics the expected value of an observable \(O\)
-    is calculated by
+    is -- as also noted above -- calculated by
     \begin{equation}
         \avg{O} = \frac{1}{Z} \sum_i p_i O_i
     \end{equation}
