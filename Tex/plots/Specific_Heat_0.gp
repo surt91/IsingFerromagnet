@@ -2,7 +2,7 @@ set terminal postscript eps enhanced color blacktext lw 2 26
 set output 'Specific_Heat_0.eps'
 
 set xlabel '{/Italic T}'
-set ylabel '{/Italic C}'
+set ylabel '{/Italic c}'
 set xrange [2.1:2.4]
 set size square
 
