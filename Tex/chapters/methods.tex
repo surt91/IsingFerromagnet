@@ -46,10 +46,12 @@
     one has to know the partition function
     \begin{equation}
         Z = \sum_i p_i = \sum_i e^{-\beta H_i}
+        \label{eq:partitionFunction}
     \end{equation}
     where the sum goes over all possible states \(i\) of the system.
     Because every site can have two states, there are \(2^N\) different
-    states of the system, which have to be summed up to gain \(Z\).
+    states of the system. For each the energy \(H_i\) has to be calculated
+    to solve the sum from eq. \eqref{eq:partitionFunction} to gain \(Z\).
     Hence for small \(N\) the partition function is computable, but the system
     may show very different properties than in the thermodynamic limit.
     To minimize these finite size effects, it is desirable to examine
