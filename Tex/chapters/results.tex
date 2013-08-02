@@ -49,7 +49,10 @@ Because every error mentioned in this thesis is of this type, it is not
 necessary to determine \(\tau\) for each observable. Therefore a good
 error estimate can be achieved by simple bootstrapping. Though one has
 to simulate enough uncorrelated states for each realization, to keep
-the \(\Delta \overline{\avg{O}}\) small.
+the \(\Delta \overline{\avg{O}}\) small. For every determined value an
+error is calculated and given in the form \texttt{value(error of last digit)}.
+The error given for fits are the asymptotic standard errors as calculated
+by gnuplot\footnote{An open source plotting program, used for all plots and fits in this thesis. \url{http://gnuplot.info/}.}.
 
 \subsection{Short Analysis of the Autocorrelation Time  $\tau$}
 \label{ssec:results:autocorr}
@@ -246,7 +249,7 @@ the \(\Delta \overline{\avg{O}}\) small.
             \subref{sfig:gettingCrit:binder_s_0} The Binder cumulant \(g\)
                 of an square lattice Ising model (\(\sigma=0\))\\
             \subref{sfig:gettingCrit:collapse_s_0} collapsed by finite
-                size scaling
+                size scaling (errors are for clarity not given, see \ref{tab:critExp})
         }
         \label{fig:gettingCrit}
     \end{figure}\\
