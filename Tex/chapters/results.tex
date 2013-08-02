@@ -257,13 +257,13 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     performed to determine the critical exponents \(\beta, \gamma, \nu\)
     using \texttt{autoscale.py} \cite{autoscale2009} and eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}.
     The values for \(\nu\) are yielded by every collapse and are therefore
-    averaged over all determined values. Fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_0_sus}\subref{sfig:gettingCrit:collapse_s_0_sus}
+    averaged over all determined values. Fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_sus}\subref{sfig:gettingCrit:collapse_s_1_sus}
     show an example collapse for \(\sigma=0\) of the magnetic susceptibility
     \begin{equation}
         \chi = \frac{1}{TN}\avg{\avg{m^2} - \avg{m}^2}
     \end{equation}
     This way the exponents \(\gamma\) and \(\nu\) are determined.
-    Analogical fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_0_meanM}\subref{sfig:gettingCrit:collapse_s_0_meanM}
+    Analogical fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_meanM}\subref{sfig:gettingCrit:collapse_s_1_meanM}
     shows the collapse for the mean absolute magnetization per site \(\avg{\abs{m}}\) for \(\sigma=0\),
     to determine the exponents \(\beta\) and \(\nu\).
     Also the collapse of the binder cumulant as mentioned before and shown
@@ -273,34 +273,34 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
         \centering
         \subfigure[Susceptibility $\chi$][]
         {
-            \label{sfig:gettingCrit:s_0_sus}
-            \includegraphics[width=0.47\textwidth]{plots/s_0_sus}
+            \label{sfig:gettingCrit:s_1_sus}
+            \includegraphics[width=0.47\textwidth]{plots/s_1_sus}
         }
         \subfigure[Finite Size Scaling of the Susceptibility $\chi$][]
         {
-            \label{sfig:gettingCrit:collapse_s_0_sus}
-            \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_sus}
+            \label{sfig:gettingCrit:collapse_s_1_sus}
+            \includegraphics[width=0.47\textwidth]{plots/collapse_s_1_sus}
         }
         \subfigure[Magnetization $\avg{\abs{m}}$][]
         {
-            \label{sfig:gettingCrit:s_0_meanM}
-            \includegraphics[width=0.47\textwidth]{plots/s_0_meanM}
+            \label{sfig:gettingCrit:s_1_meanM}
+            \includegraphics[width=0.47\textwidth]{plots/s_1_meanM}
         }
         \subfigure[Finite Size Scaling of the Magnetization $\avg{\abs{m}}$][]
         {
-            \label{sfig:gettingCrit:collapse_s_0_meanM}
-            \includegraphics[width=0.47\textwidth]{plots/collapse_s_0_meanM}
+            \label{sfig:gettingCrit:collapse_s_1_meanM}
+            \includegraphics[width=0.47\textwidth]{plots/collapse_s_1_meanM}
         }
         \caption[Examples of Determining Critical Temperature and Exponents]
         {
-            \subref{sfig:gettingCrit:s_0_sus} The susceptibility \(\chi\)
-                of an square lattice Ising model (\(\sigma=0\))\\
-            \subref{sfig:gettingCrit:collapse_s_0_sus} collapsed by finite
-                size scaling\\
-            \subref{sfig:gettingCrit:s_0_meanM} The mean absolute magnetization \(\avg{\abs{m}}\)
-                of an square lattice Ising model (\(\sigma=0\))\\
-            \subref{sfig:gettingCrit:collapse_s_0_meanM} collapsed by finite
-                size scaling
+            \subref{sfig:gettingCrit:s_1_sus} The susceptibility \(\chi\)
+                of an Ising model on an RNG \(\sigma=1\)\\
+            \subref{sfig:gettingCrit:collapse_s_1_sus} collapsed by finite
+                size scaling (for error estimates see \ref{tab:critExp})\\
+            \subref{sfig:gettingCrit:s_1_meanM} The mean absolute magnetization \(\avg{\abs{m}}\)
+                of an Ising model on an GG \(\sigma=1\)\\
+            \subref{sfig:gettingCrit:collapse_s_1_meanM} collapsed by finite
+                size scaling (for error estimates see \ref{tab:critExp})
         }
         \label{fig:gettingCrit2}
     \end{figure}\\

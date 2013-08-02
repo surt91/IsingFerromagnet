@@ -28,9 +28,13 @@ PLOTS = plots/binder_fit_s_0.pdf \
         plots/binder_s_0.pdf \
         plots/collapse_s_0.pdf \
         plots/collapse_s_0_sus.pdf \
+        plots/collapse_s_1_sus.pdf \
         plots/collapse_s_0_meanM.pdf \
+        plots/collapse_s_1_meanM.pdf \
         plots/s_0_sus.pdf \
+        plots/s_1_sus.pdf \
         plots/s_0_meanM.pdf \
+        plots/s_1_meanM.pdf \
         plots/equiE.pdf \
         plots/autoM.pdf \
         plots/meanM.pdf \
