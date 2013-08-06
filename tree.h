@@ -4,12 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* Datenstruktur für einen Konten in einem binären Suchbaum */
+
+/*! \struct node_struct;
+    \brief Datenstruktur für einen Konten in einem binären Suchbaum
+*/
 struct node_struct
 {
-    int                   key;    /*Der Inhalt*/
-    struct node_struct  *left;    /*Pointer zum linken  Nachfolger */
-    struct node_struct *right;    /*Pointer zum rechten Nachfolger */
+    int                   key;    //!< Der Inhalt
+    struct node_struct  *left;    //!< Pointer zum linken  Nachfolger
+    struct node_struct *right;    //!< Pointer zum rechten Nachfolger
 };
 
 typedef struct node_struct node_t;

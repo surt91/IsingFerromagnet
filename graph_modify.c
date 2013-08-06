@@ -78,7 +78,7 @@ void move_graph_nodes(gs_graph_t *g, double (*f)(const gsl_rng *, double), gsl_r
     }
 }
 
-/*! \fn void create_edges(gs_graph_t *g, void (*graph_cell_border_fkt)(gs_node_t, gs_node_t, double, int, int*, int*, int*, int*), int (*graph_fkt)(double, gs_node_t, gs_node_t, gs_node_t), double (*weighting_fkt)(double, double))
+/*! \fn void create_edges(gs_graph_t *g, const options_t o)
     \brief Fügt Kanten zu einem Graphen hinzu, wodurch ein
             Relative Neighborhood Graph erzeugt werden soll.
 
@@ -292,12 +292,13 @@ inline int check_relative_neighborhood(double dist12, gs_node_t node1, gs_node_t
     else
         return(1);
 }
-/*! \fn inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1)
+/*! \fn inline void get_cell_border_relative_neighborhood(gs_node_t node1, gs_node_t node2, double dist12, int L, int *x0, int *x1, int *y0, int *y1)
     \brief Gibt die "Bounding Box" der zu überprüfenden Knoten an
 
     \param [in]    node1    Erster  Knoten
     \param [in]    node2    Zweiter Knoten
     \param [in]    dist12   euklidischer Abstand von node1 und node2
+    \param [in]    L        Kantenlänge des Graphen
     \param [out]   x0       untere x-Grenze
     \param [out]   x1       obere  x-Grenze
     \param [out]   y0       untere y-Grenze
@@ -341,12 +342,13 @@ inline int check_gabriel(double dist12, gs_node_t node1, gs_node_t node2, gs_nod
         return(1);
 }
 
-/*! \fn inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dist12, int *x0, int *x1, int *y0, int *y1)
+/*! \fn inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dist12, int L, int *x0, int *x1, int *y0, int *y1)
     \brief Gibt die "Bounding Box" der zu überprüfenden Knoten an
 
     \param [in]    node1    Erster  Knoten
     \param [in]    node2    Zweiter Knoten
     \param [in]    dist12   euklidischer Abstand von node1 und node2
+    \param [in]    L        Kantenlänge des Graphen
     \param [out]   x0       untere x-Grenze
     \param [out]   x1       obere  x-Grenze
     \param [out]   y0       untere y-Grenze
@@ -372,7 +374,8 @@ inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dis
 /*! \fn void delete_random_edges_till_percolation(gs_graph_t *g, gsl_rng *rng)
     \brief Diese Funktion löscht eine zufällige Kante aus dem Graphen g
 
-    \param [in] g Graph aus dem eine Kante gelöscht werden soll
+    \param [in] g   Graph aus dem eine Kante gelöscht werden soll
+    \param [in] rng pointer auf GSL Random Number Generator
 */
 void delete_random_edges_till_percolation(gs_graph_t *g, gsl_rng *rng)
 {
@@ -430,9 +433,11 @@ int test_connectivity_between_nodes(gs_graph_t *g, int node1, int node2)
     \brief Diese Funktion soll per "Depth First Search" http://en.wikipedia.org/wiki/Depth-first_search
     den Graphen rekursiv durchsuchen.
 
-    \param [in] g      Graph
-    \param [in] node   Momentaner Knoten
-    \param [in] target Zielknoten
+    \param [in] g                    Graph
+    \param [in] node                 Momentaner Knoten
+    \param [in] target               Zielknoten
+    \param [in] tree_of_tested_nodes Welche Knoten wurden schon geprüft
+    \param [in] status               Ist der yielknoten gefunden worden?
 */
 node_t * gs_depth_first_search(gs_graph_t *g, int node, int target, node_t *tree_of_tested_nodes, int *status)
 {

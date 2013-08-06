@@ -11,7 +11,7 @@
     Enthält ein Array zum Speichern der Einträge und ein Integer, der
     sich den Index des obersten Elements des Stapels merkt
 */
-typedef struct stack_struct
+typedef struct
 {
     int    *value;                 //!< Array zum Speichern der Einträge
     int     index;                      //!< Index des obersten Elements

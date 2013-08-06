@@ -1,6 +1,6 @@
 #include "tree.h"
 
-/*! \fn node_t *remove_node(node_t *tree, int key_rem, node_t **node_p)
+/*! \fn node_t *tr_remove_node(node_t *tree, int key_rem, node_t **node_p)
     \brief entfernt einen Knoten ohne die Ordnung zu stören
 
     \param [in]  tree    erstes Element des Baums
@@ -82,7 +82,7 @@ node_t *tr_remove_node(node_t *tree, int key_rem, node_t **node_p)
     return(tree);
 }
 
-/*! \fn node_t *find_parent(node_t *tree, node_t *node)
+/*! \fn node_t *tr_find_parent(node_t *tree, node_t *node)
     \brief Suche nach dem Elternteil des Knotens node
     \param tree  erstes Element des Baums
     \param node  Knoten, dessen Elternteil gefunden werden soll
@@ -110,7 +110,7 @@ node_t *tr_find_parent(node_t *tree, node_t *node)
     }
 }
 
-/*! \fn node_t *find_node(node_t *tree, int key)
+/*! \fn node_t *tr_find_node(node_t *tree, int key)
     \brief Suche nach einem Knoten mit dem Key key und liefert einen Pointer auf ihn
 
     \param tree  erstes Element des Baums
@@ -158,7 +158,7 @@ void clear_tree(node_t *tree)
     }
 }
 
-/*! \fn node_t *create_node(int key)
+/*! \fn node_t *tr_create_node(int key)
     \brief Erstellt einen neuen Knoten im Baum. Aus Kapitel 'Trees'
 */
 node_t *tr_create_node(int key)
@@ -173,7 +173,7 @@ node_t *tr_create_node(int key)
     return(node);
 }
 
-/*! \fn int delete_node(node_t *node)
+/*! \fn int tr_delete_node(node_t *node)
     \brief Löscht ein node aus dem Baum. Aus Kapitel 'Trees'
 */
 int tr_delete_node(node_t *node)
@@ -192,7 +192,7 @@ int tr_delete_node(node_t *node)
     return(0);
 }
 
-/*! \fn node_t *insert_node(node_t *root, node_t *node, int *in_p)
+/*! \fn node_t *tr_insert_node(node_t *root, node_t *node, int *in_p)
     \brief Fügt ein node in einen binären Suchbaum root ein. Aus Kapitel 'Trees'
 
     \param root  Wurzel des binären Suchbaums

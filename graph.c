@@ -142,7 +142,7 @@ int gs_edge_exists(gs_graph_t *g, int from, int to)
     return(0);
 }
 
-/*! \fn void gs_remove_edge(gs_graph_t *g)
+/*! \fn void gs_remove_edge(gs_graph_t *g, int from, int to)
     \brief Löscht eine Kante im Graphen g.
 
     \param [in,out] g    Graph, der gelöscht werden soll
@@ -204,7 +204,7 @@ void gs_clear_shallow_graph(gs_graph_t *g)
     free(g);
 }
 
-/*! \fn void svg_circle(double x, double y, int filled, double scale FILE *file)
+/*! \fn void svg_circle(double x, double y, int filled, double scale, FILE *file)
     \brief Schreibt einen Kreis in die gegebene Datei im SVG Format
 
     \param x       x-Koordinate des Kreis Mittelpunkts

@@ -1,6 +1,6 @@
 #include "list.h"
 
-/*! \fn remove_node()
+/*! \fn elem_t *remove_node(elem_t *head, elem_t *elem)
     \brief löscht einen Eintrag aus der Liste
 
     \param [in] head erstes Element der Liste (Pointer auf Liste)
@@ -36,7 +36,7 @@ elem_t *remove_node(elem_t *head, elem_t *elem)
     return(head);
 }
 
-/*! \fn clear_list()
+/*! \fn void clear_list(elem_t *head)
     \brief Löscht eine ganze Liste (zB. Um am Ende den Speicher frei zu geben)
 
     \param [in] head erstes Element der Liste (Pointer auf Liste)
@@ -47,7 +47,7 @@ void clear_list(elem_t *head)
         head = remove_node(head, head);
 }
 
-/*! \fn create_element()
+/*! \fn elem_t *create_element(int value, int kachel)
     \brief Erstellt ein neues Element der Liste. Aus Kapitel 'Listen'
 
     \param [in] value  Inhalt
@@ -65,7 +65,7 @@ elem_t *create_element(int value, int kachel)
     return(elem);
 }
 
-/*! \fn delete_element()
+/*! \fn int delete_element(elem_t *elem)
     \brief Löscht ein Element der Liste. Aus Kapitel 'Listen'
 
     \param [in] elem zu löschendes Element
@@ -87,7 +87,7 @@ int delete_element(elem_t *elem)
     return(0);
 }
 
-/*! \fn insert_element()
+/*! \fn elem_t *insert_element(elem_t *head, elem_t *elem, elem_t *ort)
     \brief Fügt ein Element in eine Liste "head" ein, hinter dem Element ort.
     Aus Kapitel 'Listen'
 
@@ -111,7 +111,7 @@ elem_t *insert_element(elem_t *head, elem_t *elem, elem_t *ort)
     return(head);
 }
 
-/*! \fn print_list()
+/*! \fn void print_list(elem_t *list)
     \brief Gibt die Liste aus. Aus Kapitel 'Listen'
 
     \param [in] list Liste, die Gedruckt werden soll

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*! \struct edge_t;
+/*! \struct gs_edge_t;
     \brief Kante in einem Graphen
 */
 typedef struct
