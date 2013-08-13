@@ -10,7 +10,7 @@ and the magnetization per site \(m=\frac{1}{N}\sum_i s_i\) and energy
 per site \(E=\frac{1}{N} H\) are calculated and saved for every
 \(2\tau\) sweeps. Where \(\tau\) denotes the \emph{autocorrelation time}
 (see also \ref{sssec:eqtime}). The used values for different system sizes
-are listed in tab. \ref{tab:tauAndTeq} in numbers of sweeps. Note that
+are listed in tab.\ \ref{tab:tauAndTeq} in numbers of sweeps. Note that
 the \(t_{eq}\) values are generously rounded up to be on the safe side
 and the \(\tau\) values are determined as the maximum \(\tau\) over all
 simulated temperatures and disorder parameters \(\tau = \underset{T,\sigma}{\max} \{\tau_{T,\sigma}\}\)
@@ -63,7 +63,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     In \ref{fig:autocorr}\subref{fig:autocorr:temperatures}
     the autocorrelation time for the magnetization per site \(m\) at
     \(\sigma=0\) is plotted. Note, that these are the unrounded values
-    of tab. \ref{tab:tauAndTeq}
+    of tab.\ \ref{tab:tauAndTeq}
     \begin{figure}[htbp]
         \centering
         \subfigure[in Dependence on the Temperature $T$][]
@@ -98,7 +98,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     size. In fact it obeys a power law \(\tau \propto L^z\), which is
     the expected behavior of a dynamical exponent \(z\) as mentioned in
     section \ref{sssec:eqtime}.
-    In fig. \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} \(\tau\) is plotted
+    In fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} \(\tau\) is plotted
     over \(L\). Note that the exponent \(z'=0.64(2)\) determined by this plot is
     not comparable to the known critical exponent \(z=0.25\) \cite{NewmanBarkema1999}
     for the Wolff cluster algorithm. On the one hand the number of sweeps
@@ -110,9 +110,9 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     Nevertheless it is interesting, that it obeys a power law
     \(\tau \propto L^{z'}\) just the same. This suggests, that \(\xi \gtrsim L\)
     is satisfied at the temperature of maximum \(\tau\), which is plausible,
-    because the peak in fig. \ref{fig:autocorr}\subref{fig:autocorr:powerLaw}
+    because the peak in fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw}
     is near \(T_{c}\).\\
-    Anyhow, fig. \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} alone
+    Anyhow, fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} alone
     proofs the effectiveness of the Wolff cluster algorithm at criticality.\\
     This is of course only a rough analysis of existing data which was
     generated for another purpose. For a more in depth inspection, one
@@ -126,7 +126,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     \(\sigma\). At \(T_c\) the mean absolute magnetization \(\avg{|m|}\) of
     the system will show a steep decline to zero and the susceptibility
     \(\chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}\)
-    will diverge. In fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM_L}
+    will diverge. In fig.\ \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM_L}
     it is easy to see that the steep decline of \(\avg{|m|}\)
     occurs at lower temperatures \(T\) for higher
     disorder parameters \(\sigma\) (here with a RNG).
@@ -158,7 +158,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     thermodynamic limit. It will always show some \emph{finte size effects}.
     These finite size effects cause a "smearing out" of the phase
     transition. This is stronger for smaller system sizes, as is visible
-    in fig. \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}\footnote{See the appendix \ref{appendix:finiteSizeEffects} for a similar figure for the specific heat.}.
+    in fig.\ \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}\footnote{See the appendix \ref{appendix:finiteSizeEffects} for a similar figure for the specific heat.}.
     Clearly the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
     Despite of this one can obtain \(T_c\) by finite size scaling
     methods \cite[S. ??]{NewmanBarkema1999}, which also yield the critical
@@ -223,8 +223,8 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     and plots the measured observables for all \(L\).
     Then one varies \(\nu\) and \(T_{c}\) until the plotted observables
     collapse on one curve -- the scaling function.
-    Like the obersables from fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_s_0}
-    collapse in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}.
+    Like the obersables from fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_s_0}
+    collapse in fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}.
     %\footnote{Examples for a collapse to determine the other critical exponents are in appendix \ref{appendix:finiteSizeScaling}}.
     The same principle can be used to determine the other two exponents.
     Note that \(L=16\) is not used for the collapse, because it is a
@@ -251,7 +251,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
             \subref{sfig:gettingCrit:binder_s_0} The Binder cumulant \(g\)
                 of an square lattice Ising model (\(\sigma=0\))\\
             \subref{sfig:gettingCrit:collapse_s_0} collapsed by finite
-                size scaling (errors are for clarity not given, see tab. \ref{tab:critExp})
+                size scaling (errors are for clarity not given, see tab.\ \ref{tab:critExp})
         }
         \label{fig:gettingCrit}
     \end{figure}\\
@@ -265,11 +265,11 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
         \chi = \frac{1}{TN}\avg{\avg{m^2} - \avg{m}^2}
     \end{equation}
     This way the exponents \(\gamma\) and \(\nu\) are determined.
-    Analogical fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_meanM}\subref{sfig:gettingCrit:collapse_s_1_meanM}
+    Analogical fig.\ \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_meanM}\subref{sfig:gettingCrit:collapse_s_1_meanM}
     shows the collapse for the mean absolute magnetization per site \(\avg{\abs{m}}\) for \(\sigma=0\),
     to determine the exponents \(\beta\) and \(\nu\).
     Also the collapse of the binder cumulant as mentioned before and shown
-    in fig. \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}
+    in fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}
     is used to get a further value of \(\nu\).
     \begin{figure}[htbp]
         \centering
@@ -298,11 +298,11 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
             \subref{sfig:gettingCrit:s_1_sus} The susceptibility \(\chi\)
                 of an Ising model on an RNG \(\sigma=1\)\\
             \subref{sfig:gettingCrit:collapse_s_1_sus} collapsed by finite
-                size scaling (for error estimates see tab. \ref{tab:critExp})\\
+                size scaling (for error estimates see tab.\ \ref{tab:critExp})\\
             \subref{sfig:gettingCrit:s_1_meanM} The mean absolute magnetization \(\avg{\abs{m}}\)
                 of an Ising model on an GG \(\sigma=1\)\\
             \subref{sfig:gettingCrit:collapse_s_1_meanM} collapsed by finite
-                size scaling (for error estimates see tab. \ref{tab:critExp})
+                size scaling (for error estimates see tab.\ \ref{tab:critExp})
         }
         \label{fig:gettingCrit2}
     \end{figure}\\
@@ -319,8 +319,8 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     \(T_c\) shows some characteristics. (Namely there is a plateau at small
     \(\sigma\), a steep decline at medium \(\sigma\) and a shallow
     decline at \(\sigma = 0.5\). This will be shown in the next
-    chapter in fig. \ref{fig:Tc}\subref{sfig:Tc:RNG}\subref{sfig:Tc:GG}.)
-    The determined values are displayed in tab. \ref{tab:critExp}.
+    chapter in fig.\ \ref{fig:Tc}\subref{sfig:Tc:RNG}\subref{sfig:Tc:GG}.)
+    The determined values are displayed in tab.\ \ref{tab:critExp}.
     The given errors for \(\beta, \gamma\) are estimates from \texttt{autoscale.py}
     and the error of \(T_c\) and \(\nu\) is the standard deviation of the
     three obtained values.\\
@@ -348,7 +348,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
         \caption[Critical Exponents for Different $\sigma$]{Critical exponents for different $\sigma$}
         \label{tab:critExp}
     \end{table}\\
-    Like in tab. \ref{tab:critExp} to see, most values
+    Like in tab.\ \ref{tab:critExp} to see, most values
     are matching the expectations. \(T_c\) for \(\sigma = 0\) is in good
     agreement with the known value. Especially \(\nu\) and \(\gamma\)
     are always in very good agreement with their exact values. Besides the
@@ -356,10 +356,10 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     the ratio \(\frac{\gamma}{\nu}\) is also determined, by fitting the maxima of
     the susceptibility \(\chi_{\mathrm{max}}\) by the power law \(aL^\frac{\gamma}{\nu}\).
     Note that the maximum of the measured \(\chi\). Because there were
-    many measurements in the vicinity of \(T_c\) (compare fig. \ref{sfig:gettingCrit:s_1_sus}),
+    many measurements in the vicinity of \(T_c\) (compare fig.\ \ref{sfig:gettingCrit:s_1_sus}),
     this should give a reasonable estimate, without the need to
     interpolate a maximum.
-    The results are displayed in fig. \ref{fig:susCrossCheck}. The ratios
+    The results are displayed in fig.\ \ref{fig:susCrossCheck}. The ratios
     determined by this method confirm the values obtained by collapse.
     \begin{figure}[htbp]
         \centering
@@ -425,7 +425,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
         }
         \label{fig:gettingCrit:binder_fit_s_0}
     \end{figure}\\
-    As an example take fig. \ref{fig:gettingCrit:binder_fit_s_0}.
+    As an example take fig.\ \ref{fig:gettingCrit:binder_fit_s_0}.
     Here such interpolations are plotted for \(\sigma=0\) and are
     intersecting at \(T \approx 2.27\).
     To determine \(T_c\), the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
@@ -438,7 +438,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     In this section these \(T_c\) on either the RNG or the GG are
     compared. In the following figures, the RNG will always be on the
     left side and the GG on the right side.
-    And in tab. \ref{tab:critTemp} the values are displayed together with the
+    And in tab.\ \ref{tab:critTemp} the values are displayed together with the
     values obtained by the data collapse from the section before.
     \begin{table}[htbp]
         \center
@@ -475,7 +475,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     The values obtained through the data collapse and the values obtained
     through the intersection of the binder cumulant are always in good
     agreement and of comparable precision.\\
-    These values of \(T_c\) are plotted over \(\sigma\) in fig. \ref{fig:Tc}.
+    These values of \(T_c\) are plotted over \(\sigma\) in fig.\ \ref{fig:Tc}.
     \begin{figure}[htbp]
         \centering
         \subfigure[][]
@@ -528,16 +528,16 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     \end{equation}
     This is lower than for the square lattice with degree 4.\\
     If one plots the degree of the graphs at different \(\sigma\) like
-    in fig. \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG},
+    in fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG},
     one recognizes, that \(T_c\) and \(K\) are evidently correlated.
     The values for \(K\) are obtained as an average over \(100\)
     realizations of each graph type for \(L=16\) and \(L=32\) lattices.
     Note that \(K\) is independent of \(L\) because of the periodic boundary.
-    In fig. \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
+    In fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
     one can see, that these curves are almost identical and the small
     errorbars suggest, that they are sufficiently precise for this purpose.
     It seems reasonable to normalize \(T_c\) by the degree of the underlying
-    graph. This is done in fig. \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
+    graph. This is done in fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
     Indeed the normalization eliminates the jump and reduces the
     slope of the rising on the GG. Hence it reduces differences
     between the RNG and the GG. But the elimination of the jump is
@@ -587,7 +587,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     To understand the jump of \(T_c\), it seems to be sufficient to
     understand the jump of \(K\), which is easily explained
     by the definition of the GG and its aftereffects for
-    the transition from \(\sigma = 0\). Visible in fig. \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.00}\subref{sfig:GG_sigma:0.01}
+    the transition from \(\sigma = 0\). Visible in fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.00}\subref{sfig:GG_sigma:0.01}
     a small change of \(\sigma\) causes many new edges to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
     To fully understand this, take four nodes forming a square. The edge
     across does not exist, because the other two nodes are on the edge
@@ -600,7 +600,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     of \(T_c\). So while displacing the nodes, there arise more edges
     than edges are vanishing until \(\sigma \approx 0.15\) is reached.
     Then more edges disappear, than appear at further displacement. This
-    is not an obvious effect, but can be seen in fig. \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.09}\subref{sfig:GG_sigma:0.15}\subref{sfig:GG_sigma:0.21}
+    is not an obvious effect, but can be seen in fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.09}\subref{sfig:GG_sigma:0.15}\subref{sfig:GG_sigma:0.21}
     \begin{figure}[htbp]
         \subfigure[][$\sigma = 0.00$]
         {
@@ -671,7 +671,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     obvious in eq. \eqref{eq:exactTc} and \eqref{eq:exactHCTc}. The
     coupling constant in turn is depending on the length of the edges,
     which changes with \(\sigma\).
-    Therefore  in fig. \ref{fig:TcJ}\subref{sfig:sumJ:RNG}\subref{sfig:sumJ:GG}
+    Therefore  in fig.\ \ref{fig:TcJ}\subref{sfig:sumJ:RNG}\subref{sfig:sumJ:GG}
     the mean sum of the coupling constants to all neighbors \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
     is plotted. This is a number which should combine the dependence on
     the degree and the coupling constant. It is determined by summing
@@ -773,7 +773,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
         }
         \label{fig:TcG}
     \end{figure}\\
-    Considering both plots in fig. \ref{fig:TcG}, \(g_c\) is for low
+    Considering both plots in fig.\ \ref{fig:TcG}, \(g_c\) is for low
     \(\sigma\) obviously always bigger than the known value. Though the
     deviations are only very small. Perhaps this overestimation is caused
     by the cubic spline interpolation used to acquire these \(g_c\) values.
