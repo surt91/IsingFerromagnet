@@ -35,7 +35,9 @@ calculated sweeps totals to
 \[N_{\mathrm{sweeps}}=t_{eq}+2\tau N_{\mathrm{measure}}\]
 The expected values \(\avg{O}\) for \(100\) different random proximity
 graphs with the same disorder parameter \(\sigma\) are then averaged to
-\(\overline{\avg{O}}\). Not only the seed to generate the new random
+\(\overline{\avg{O}}\). Note that the signs \(\overline{\avg{\cdot}}\)
+are omitted in the following for the sake of simplicity.\\
+Not only the seed to generate the new random
 realization of the proximity graph gets changed, but also the seed for
 the random numbers used in the Monte Carlo simulation and during the
 generation of the random start configuration of the spins.\\
@@ -52,7 +54,8 @@ to simulate enough uncorrelated states for each realization, to keep
 the \(\Delta \overline{\avg{O}}\) small. For every determined value an
 error is calculated and given in the form \texttt{value(error of last digit)}.
 The error given for fits are the asymptotic standard errors as calculated
-by gnuplot\footnote{An open source plotting program, used for all plots and fits in this thesis. \url{http://gnuplot.info/}.}.
+by gnuplot. Gnuplot is an open source plotting program, used for all plots
+and fits in this thesis \footnote{\url{http://gnuplot.info/}.}.
 
 \subsection{Short Analysis of the Autocorrelation Time  $\tau$}
 \label{ssec:results:autocorr}
@@ -723,16 +726,16 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     is a linear connection, because this model is derived from the
     square lattice, where the connection is linear. Therefore, one
     normalizes \(T_c\) with \(\avg{\sum_{\avg{i,j}} J_{ij}}\) as in
-    \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}, the
+    fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}, the
     jump on the GG arises again, but \(T_c\) is now monotonically
     decreasing with increasing disorder parameter \(\sigma\).
     %~ This is a strong hint, that the change of the \(T_c\) with changing
     %~ \(\sigma\) is in some way connected to \(J\) and \(K\) which is an
     %~ expected conclusion.\\
     Moreover the forms of both curves are quite similar, but the
-    one for the RNG \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}
+    one for the RNG in fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}
     is generally lower and spans over a bigger temperature range than
-    the curve of the GG \ref{fig:TcJ}\subref{sfig:Tc_normJ:GG}.
+    the curve of the GG in fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:GG}.
     Both graph types have a plateau at \(0 < \sigma < 0.1\). So small
     disorder has little influence on this normalized critical temperature.
     Also both graph types have a steep decline after the plateau before
