@@ -49,8 +49,8 @@
     so that the lattice represents a proximity graph. Note that edges
     of a proximity graph do not cross each other, hence the 2D character
     of the lattice is preserved. The coupling constant \(J\) gets
-    identified with edge weights. The weight of an edge \(E_{ij}\) is
-    \(J_{ij} = \exp (\alpha (1-d_{ij}))\) where \(d_{ij}\) is the Euclidean
+    identified with edge weights. The weight of an edge \(E_{ij} =
+    J_{ij} = \exp (\alpha (1-d_{ij}))\) where \(d_{ij}\) is the Euclidean
     distance between the nodes \(i\) and \(j\). The free parameter
     \(\alpha\) is set to \(\alpha = 0.5\) inspired by \cite{Lima2000}.
     The boundary is periodic e.g.\ nodes near the right edge can be
@@ -74,8 +74,9 @@
         }
         \label{fig:torusRNG}
     \end{figure}\\
-    For \(\sigma = 0\) this is the standard Ising model with \(J = 1\),
-    for which exists an analytic solution \cite{Onsager1944} for the
+    Note that for \(\sigma = 0\) all \(d_{ij} = 1\) and therefore all
+    \(J_{ij} = 1\), so that the disordered Ising model is reduced to the
+    standard Ising model. For this exists an analytic solution \cite{Onsager1944} for the
     critical temperature
     \begin{equation}
         T_c = 2J/\ln(1+\sqrt 2) = 2.2691...
