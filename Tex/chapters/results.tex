@@ -172,7 +172,7 @@
     exponents. This will be performed in the next section.
     Though there is an easier approach, which yields comparable precise
     values for \(T_{c}\) in a much faster and more robust way, which is
-    presented in \ref{ssec:binderIntersections}.
+    presented in section \ref{ssec:binderIntersections}.
 
 \subsection{Critical Exponents}
     The critical exponents define the course of an observable near its
@@ -189,7 +189,7 @@
         \label{eq:critExp:beta}
     \end{equation}
     As the name critical \emph{exponent} suggests, this will often
-    be a power law, as in the both examples above. But not obligatory e.g.\
+    be a power law, as in both examples above. But not obligatory e.g.\
     the critical "exponent" \(\alpha\) corresponding to the divergence of
     the specific heat \(c\) diverges logarithmic for the two dimensional
     Ising model and is nominally \(\alpha = 0\).
@@ -267,13 +267,13 @@
     using \texttt{autoscale.py} \cite{autoscale2009} and eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}.
     The values for \(\nu\) are yielded by every collapse and are therefore
     averaged over all determined values. Fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_sus}\subref{sfig:gettingCrit:collapse_s_1_sus}
-    show an example collapse for \(\sigma=0\) of the magnetic susceptibility
+    show an example collapse for \(\sigma=1\) of the magnetic susceptibility
     \begin{equation}
         \chi = \frac{1}{TN}\avg{\avg{m^2} - \avg{m}^2}
     \end{equation}
     This way the exponents \(\gamma\) and \(\nu\) are determined.
     Analogical fig.\ \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_meanM}\subref{sfig:gettingCrit:collapse_s_1_meanM}
-    shows the collapse for the mean absolute magnetization per site \(\avg{\abs{m}}\) for \(\sigma=0\),
+    shows the collapse for the mean absolute magnetization per site \(\avg{\abs{m}}\) for \(\sigma=1\),
     to determine the exponents \(\beta\) and \(\nu\).
     Also the collapse of the binder cumulant as mentioned before and shown
     in fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}
@@ -339,17 +339,18 @@
             \midrule
             exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & 2.2691... & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
             \midrule
-            GG           & 0.0 & 2.2687(5)& 0.998(8) & 1.735(2) & 0.1262(4)\\
-                         & 0.1 & 2.895(4) & 0.999(19)& 1.744(5) & 0.133(6) \\
-                         & 0.3 & 2.527(1) & 1.029(30)& 1.724(16)& 0.129(12)\\
-                         & 0.5 & 2.238(1) & 1.006(5) & 1.750(12)& 0.125(13)\\
-                         & 1.0 & 2.128(2) & 1.038(32)& 1.743(17)& 0.123(16)\\
-            \midrule
             RNG          & 0.0 & 2.2689(7)& 0.992(11)& 1.740(2) & 0.130(1) \\
                          & 0.1 & 2.2058(8)& 0.987(12)& 1.746(5) & 0.133(4) \\
                          & 0.2 & 1.627(2) & 1.010(9) & 1.756(14)& 0.123(10)\\
                          & 0.5 & 1.2825(7)& 1.010(16)& 1.750(16)& 0.143(13)\\
                          & 1.0 & 1.2123(3)& 1.013(6) & 1.758(16)& 0.138(13)\\
+            \midrule
+            GG           & 0.0 & 2.2687(5)& 0.998(8) & 1.735(2) & 0.1262(4)\\
+                         & 0.1 & 2.895(4) & 0.999(19)& 1.744(5) & 0.133(6) \\
+                         & 0.3 & 2.527(1) & 1.029(30)& 1.724(16)& 0.129(12)\\
+                         & 0.5 & 2.238(1) & 1.006(5) & 1.750(12)& 0.125(13)\\
+                         & 1.0 & 2.128(2) & 1.038(32)& 1.743(17)& 0.123(16)\\
+
             \bottomrule
         \end{tabular}
         \caption[Critical Exponents for Different $\sigma$]{Critical exponents for different $\sigma$}
@@ -362,7 +363,8 @@
     good agreement of the by data collapse obtained values of \(\nu\) and \(\gamma\),
     the ratio \(\frac{\gamma}{\nu}\) is also determined, by fitting the maxima of
     the susceptibility \(\chi_{\mathrm{max}}\) by the power law \(aL^\frac{\gamma}{\nu}\).
-    Note that the maximum of the measured \(\chi\). Because there were
+    %~ Note that the maximum of the measured \(\chi\).
+    Because there were
     many measurements in the vicinity of \(T_c\) (compare fig.\ \ref{sfig:gettingCrit:s_1_sus}),
     this should give a reasonable estimate, without the need to
     interpolate a maximum.
@@ -451,29 +453,29 @@
         \center
         \begin{tabular}{l l l l l}
             \toprule
-             & \multicolumn{2}{c}{GG} & \multicolumn{2}{c}{RNG}\\
+             & \multicolumn{2}{c}{RNG} & \multicolumn{2}{c}{GG}\\
             \cmidrule(rl){2-3} \cmidrule(rl){4-5}
             \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(T_c\)} & \multicolumn{1}{c}{\(T_c^{\mathrm{collapse}}\)} & \multicolumn{1}{c}{\(T_c\)} & \multicolumn{1}{c}{\(T_c^{\mathrm{collapse}}\)}\\
             \midrule
-            0.00 & 2.2689(2)& 2.2687(5) & 2.2690(2)& 2.2689(7)\\
-            0.03 & 2.851(1) &           & 2.2679(4)&          \\
-            0.05 & 2.863(1) &           & 2.2662(5)&          \\
-            0.08 & 2.882(2) &           & 2.2548(6)&          \\
-            0.10 & 2.893(2) & 2.895(4)  & 2.205(1) & 2.2058(8)\\
-            0.12 & 2.903(3) &           & 2.1010(5)&          \\
-            0.15 & 2.903(3) &           & 1.898(2) &          \\
-            0.20 & 2.8274(6)&           & 1.624(1) & 1.627(2) \\
-            0.25 & 2.676(2) &           & 1.4812(5)&          \\
-            0.30 & 2.526(4) & 2.527(1)  & 1.407(2) &          \\
-            0.40 & 2.332(4) &           & 1.327(4) &          \\
-            0.50 & 2.233(7) & 2.238(1)  & 1.2818(2)& 1.2825(7)\\
-            0.60 & 2.183(3) &           & 1.252(2) &          \\
-            0.70 & 2.154(8) &           & 1.234(1) &          \\
-            0.80 & 2.140(3) &           & 1.223(1) &          \\
-            0.90 & 2.132(1) &           & 1.214(4) &          \\
-            1.00 & 2.121(8) & 2.128(2)  & 1.208(5) & 1.2123(3)\\
-            1.10 & 2.116(11)&           & 1.206(1) &          \\
-            1.20 & 2.113(4) &           & 1.204(2) &          \\
+            0.00 & 2.2690(2)& 2.2689(7)& 2.2689(2)& 2.2687(5\\
+            0.03 & 2.2679(4)&          & 2.851(1) &         \\
+            0.05 & 2.2662(5)&          & 2.863(1) &         \\
+            0.08 & 2.2548(6)&          & 2.882(2) &         \\
+            0.10 & 2.205(1) & 2.2058(8)& 2.893(2) & 2.895(4)\\
+            0.12 & 2.1010(5)&          & 2.903(3) &         \\
+            0.15 & 1.898(2) &          & 2.903(3) &         \\
+            0.20 & 1.624(1) & 1.627(2) & 2.8274(6)&         \\
+            0.25 & 1.4812(5)&          & 2.676(2) &         \\
+            0.30 & 1.407(2) &          & 2.526(4) & 2.527(1)\\
+            0.40 & 1.327(4) &          & 2.332(4) &         \\
+            0.50 & 1.2818(2)& 1.2825(7)& 2.233(7) & 2.238(1)\\
+            0.60 & 1.252(2) &          & 2.183(3) &         \\
+            0.70 & 1.234(1) &          & 2.154(8) &         \\
+            0.80 & 1.223(1) &          & 2.140(3) &         \\
+            0.90 & 1.214(4) &          & 2.132(1) &         \\
+            1.00 & 1.208(5) & 1.2123(3)& 2.121(8) & 2.128(2)\\
+            1.10 & 1.206(1) &          & 2.116(11)&         \\
+            1.20 & 1.204(2) &          & 2.113(4) &         \\
             \bottomrule
         \end{tabular}
         \caption[Critical Temperatures for Different $\sigma$]{Critical temperatures for different $\sigma$}
@@ -591,7 +593,7 @@
         }
         \label{fig:Tc_deg}
     \end{figure}\\
-    To understand the jump of \(T_c\), it seems to be sufficient to
+    To understand the jump of \(T_c\), it seems to be necessary to
     understand the jump of \(K\), which is easily explained
     by the definition of the GG and its aftereffects for
     the transition from \(\sigma = 0\). Visible in fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.00}\subref{sfig:GG_sigma:0.01}
