@@ -532,6 +532,7 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     one recognizes, that \(T_c\) and \(K\) are evidently correlated.
     The values for \(K\) are obtained as an average over \(100\)
     realizations of each graph type for \(L=16\) and \(L=32\) lattices.
+    Note that \(K\) is independent of \(L\) because of the periodic boundary.
     In fig. \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
     one can see, that these curves are almost identical and the small
     errorbars suggest, that they are sufficiently precise for this purpose.
@@ -539,7 +540,13 @@ by gnuplot\footnote{An open source plotting program, used for all plots and fits
     graph. This is done in fig. \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
     Indeed the normalization eliminates the jump and reduces the
     slope of the rising on the GG. Hence it reduces differences
-    between the RNG and the GG.
+    between the RNG and the GG. But the elimination of the jump is
+    unfortunately random and probably caused by a lucky choice of the
+    function, which determines the coupling constants \(J\). As proof for
+    this claim in appendix \ref{appendix:fixedCoupling} the same analysis
+    is performed for a model with fixed \(J\). There the jump gets narrower
+    but is still existent. Anyway, the degree seems to have an impact on
+    the critical temperature \(T_c\) but it is not a trivial one.
     \begin{figure}[htbp]
         \centering
         \subfigure[][]

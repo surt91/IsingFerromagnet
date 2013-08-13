@@ -1,4 +1,5 @@
-\section{Finite Size Effects at the Example of the Specific Heat}
+\section{Appendix}
+\subsection{Finite Size Effects at the Example of the Specific Heat}
 \label{appendix:finiteSizeEffects}
     In fig. \ref{fig:smeared_out_appendix} the specific heat
     \begin{equation}
@@ -17,3 +18,54 @@
         }
         \label{fig:smeared_out_appendix}
     \end{figure}
+
+\subsection{Course of the Critical Temperature $T_c$ with Fixed Coupling Constants $J$}
+\label{appendix:fixedCoupling}
+    A quick analysis of this model with fixed coupling constants \(J = 1\)
+    (i.e.\ \(\alpha=0\)) is performed. The results are displayed in fig. \ref{fig:Tc_deg_A0}.
+    The jump from \(\sigma=0\) to \(\sigma>0\) does not disappear as in fig. \ref{fig:Tc_deg}
+    for variable \(J\) (i.e.\ \(\alpha=0.5\)). This suggests, that the
+    disappearance of the jump is a random special case for the function
+    \(J_{ij}=e^{\alpha(1-d)}\).\\
+    The simulations were carried out on \(L \in \{16,32,64\}\) lattices
+    for a subset of the \(\sigma\) and \(T\) used in the previous simulation.
+    Every other parameter was kept. Also note that the degree \(K\) is
+    the same used in \ref{fig:Tc}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
+    because it is obviously independent of \(J\).
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[][]
+        {
+            \label{sfig:Tc:RNG_A0}
+            \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_A0}
+        }
+        \subfigure[][]
+        {
+            \label{sfig:Tc:GG_A0}
+            \includegraphics[width=0.45\textwidth]{plots/GG_Tc_A0}
+        }
+
+        \subfigure[][]
+        {
+            \label{sfig:Tc_norm_deg:RNG_A0}
+            \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_norm_deg_A0}
+        }
+        \subfigure[][]
+        {
+            \label{sfig:Tc_norm_deg:GG_A0}
+            \includegraphics[width=0.45\textwidth]{plots/GG_Tc_norm_deg_A0}
+        }
+
+        \caption[Critical Temperature and Critical Temperature Normalized by Degree of the Graph for Fixed Coupling Constants $J=1$]
+        {
+            Top: Critical Temperature \(T_c\) of the graph over different
+            disorder parameters \(\sigma\) with fixed coupling constants \(J=1\) for
+            \subref{sfig:deg:RNG} the RNG and
+            \subref{sfig:deg:GG} the GG.\\
+            Bottom: Critical temperatures normalized by degree \(K\) over
+            different disorder parameters \(\sigma\) with fixed coupling constants \(J=1\) for
+            \subref{sfig:Tc_norm_deg:RNG} the RNG and
+            \subref{sfig:Tc_norm_deg:GG} the GG.
+        }
+        \label{fig:Tc_deg_A0}
+    \end{figure}\\

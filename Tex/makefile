@@ -16,7 +16,9 @@ IMAGES = images/GG_RNG_def.tex \
 
 GG_LST = plots/GG_Tc_normJ.pdf \
          plots/GG_Tc_norm_deg.pdf \
+         plots/GG_Tc_norm_deg_A0.pdf \
          plots/GG_Tc.pdf \
+         plots/GG_Tc_A0.pdf \
          plots/GG_deg.pdf \
          plots/GG_sumJ.pdf \
          plots/GG_meanJ.pdf \
