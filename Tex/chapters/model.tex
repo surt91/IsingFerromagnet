@@ -5,7 +5,7 @@
     as the \emph{standard Ising model}, is a square lattice with edge length \(L\) and
     \(N=L^2\) sites. Each site has a magnetic moment, the spin. Each
     spin can take a value \(s \in \{-1,+1\}\) and interacts with its
-    nearest neighbors described by the Hamiltonian from eq. \eqref{eq:hamiltonian}
+    nearest neighbors described by the Hamiltonian from Eq.\ \eqref{eq:hamiltonian}
     \begin{equation}
         H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j} - \sum_i \tilde{H}_i s_i
         \label{eq:hamiltonian}
@@ -22,8 +22,8 @@
     The displacement is randomly Gauß distributed with the standard
     deviation \(\sigma\), i.e.\ the \(x\) and \(y\) coordinates of the
     sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
-    from a Gauß distribution eq. \eqref{eq:gauss}.
-    This is sketched in fig.\ \ref{fig:displacement}.
+    from a Gauß distribution Eq.\ \eqref{eq:gauss}.
+    This is sketched in Fig.\ \ref{fig:displacement}.
     \begin{equation}
         f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}
         \label{eq:gauss}
@@ -45,7 +45,7 @@
     displacement, the lattice would collapse to many very small clusters.
     To avoid this, the new "nearest" neighbors are those sites connected
     by an edge. The edges are constructed according to
-    one of the two in section \ref{ssec:graphtypes} defined rules,
+    one of the two in Sec.\ \ref{ssec:graphtypes} defined rules,
     so that the lattice represents a proximity graph. Note that edges
     of a proximity graph do not cross each other, hence the 2D character
     of the lattice is preserved. The coupling constant \(J\) gets
@@ -56,7 +56,7 @@
     The boundary is periodic e.g.\ nodes near the right edge can be
     connected to nodes near the left edge and vice versa. Analogous the
     top and bottom edges are connected. One can imagine that the model
-    lives on the surface of a torus as pictured in fig.\ \ref{fig:torusRNG}.
+    lives on the surface of a torus as pictured in Fig.\ \ref{fig:torusRNG}.
     In subsequent graphics, the graphs will be unwrapped to rectangular
     shapes. Connections which cross a periodic boundary are indicated
     by edges which connect to an dashed node.
@@ -101,7 +101,7 @@
     connecting nodes which are by some metric near to each other.
     Hence they are suited to generalize problems defined on regular
     lattices with nearest neighbor relationships, like the Ising model
-    from the section \ref{ssec:isingmodel}.
+    from the Sec.\ \ref{ssec:isingmodel}.
     In this thesis the distance is always determined by the Euclidean
     metric in two dimensions, though in principle every metric in any
     dimension can be used.\\
@@ -112,13 +112,13 @@
     center on half way between \(i\) and \(j\) and radius
     \(r = \frac d 2\) contains no other nodes. This area will be
     called \emph{lune} in the following. See also the cross hatched region
-    from fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.\\
+    from Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.\\
     The Relative Neighborhood graph (RNG) \cite{Toussaint1980} is a
     subgraph of the GG. Two nodes \(i\) and \(j\) with
     distance \(d_{ij}\) are connected, if no other node is in the
-    \emph{lune}. The lune is defined as the intersection of two
+    \emph{lune}. The lune is defined as the interSec.\ of two
     circles with radius \(r = d\) and centers on \(i\) and \(j\).
-    See also the hatched region in fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.
+    See also the hatched region in Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.
     \begin{figure}[htbp]
         \centering
         \subfigure[Definition of the Lunes][]{

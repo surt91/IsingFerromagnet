@@ -51,7 +51,7 @@
     where the sum goes over all possible states \(i\) of the system.
     Because every site can have two states, there are \(2^N\) different
     states of the system. For each the energy \(H_i\) has to be calculated
-    to solve the sum from eq. \eqref{eq:partitionFunction} to gain \(Z\).
+    to solve the sum from Eq.\ \eqref{eq:partitionFunction} to gain \(Z\).
     Hence for small \(N\) the partition function is computable, but the system
     may show very different properties than in the thermodynamic limit.
     To minimize these finite size effects, it is desirable to examine
@@ -162,9 +162,9 @@
     \subsubsection{Metropolis}
         A Metropolis Monte Carlo\cite{Metropolis1953} simulation of an
         Ising model will choose a random spin, calculate the energy change
-        \(\Delta H\) defined in eq. \eqref{eq:dH} that would result
+        \(\Delta H\) defined in Eq.\ \eqref{eq:dH} that would result
         from a flip of that spin and execute the flip with the probability \(A\)
-        eq. \eqref{eq:metropolis} \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
+        Eq.\ \eqref{eq:metropolis} \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
         \begin{equation}
             \Delta H = H(\nu) - H(\mu)\\
             \label{eq:dH}
@@ -192,7 +192,7 @@
         algorithm \cite{Wolff1989} speeds things up.
         For an Ising model the Wolff algorithm builds a cluster of sites
         starting with a random site and adding neighboring sites of the
-        same spin with probability \(P_{\mathrm{add}}\) from eq. \eqref{eq:wolffAdd}
+        same spin with probability \(P_{\mathrm{add}}\) from Eq.\ \eqref{eq:wolffAdd}
         \begin{equation}
             P_{\mathrm{add}} = 1-\exp\brac{-2\beta J}
             \label{eq:wolffAdd}
@@ -216,7 +216,7 @@
         Parallel Tempering\cite{ParallelTempering1986} simulates many identical systems at different
         temperatures and periodically swaps the spin configurations
         between two neighboring temperatures with probability \(P\) from
-        eq. \eqref{eq:partemp} \cite[p. 169ff]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}.
+        Eq.\ \eqref{eq:partemp} \cite[p. 169ff]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}.
         \begin{equation}
             P((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,\exp\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}}
             \label{eq:partemp}
@@ -254,11 +254,11 @@
         and waits until it reaches thermal \emph{equilibrium}. Because
         equilibrium is defined as a steady state, one can determine if it
         is reached, by observing the change of the observables over the
-        progressing simulation, as pictured in fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}.
+        progressing simulation, as pictured in Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}.
         The count of sweeps till
         equilibrium is called \emph{equilibration time} \(t_{eq}\).
         All measurements should start after this time.\\
-        In fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}
+        In Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}
         the equilibrium is reached after approximately \(N_{s} \approx 50\) sweeps for
         either an initial condition of all spins up and all spins random. It
         does not harm to double that value to be save. Particularly because
@@ -297,7 +297,7 @@
         \(\chi(t) \propto \exp(t/\tau)\). This is visible in the half
         logarithmic plot \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
         To get the autocorrelation time one can either fit a exponential
-        function \(\exp(-t/\tau)\) like in fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}
+        function \(\exp(-t/\tau)\) like in Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}
         or integrate \(\tau = \int \frac{\chi(t)}{\chi(0)} \de t\).
         \(\tau\) is an estimate after which time two samples are not
         correlated anymore. \cite[p. 59ff]{NewmanBarkema1999} \cite[p. 150f]{Katzgraber2011}.
@@ -316,10 +316,10 @@
         More general the power law \(\tau \propto \xi^z\) holds true, where
         \(\xi\) is the \emph{correlation length}, which diverges at
         \(T_{c}\) and is then limited by the size of the simulated lattice.
-        As mentioned in section \ref{sssec:wolff}, the Wolff cluster algorithm
+        As mentioned in Sec.\ \ref{sssec:wolff}, the Wolff cluster algorithm
         decreases \(z\) dramatically. This causes the course of the autocorrelation
         time in dependence on temperature to change significantly as shown in
-        section \ref{ssec:results:autocorr}. Also according to \cite{NewmanBarkema1999}
+        Sec.\ \ref{ssec:results:autocorr}. Also according to \cite{NewmanBarkema1999}
         \(z\) is independent of the lattice structure, which ensures that
         the simulation will benefit from the Wolff cluster algorithm at
         any \(\sigma\).
