@@ -8,9 +8,9 @@
     the observables are only fluctuating but not changing in any
     particular direction. For example thermal equilibrium denotes the
     condition, that the system under scrutiny has reached the temperature
-    of the heat bath. This is the case, once no energy is exchanged
-    between them, thus the energy of the simulated system reaches a
-    steady state.
+    of the heat bath. This is the case, once there is no directed energy
+    exchange between them, thus the energy of the simulated system reaches
+    a steady state, where only fluctuations occur.
     In a canonical ensemble the probability \(p_i\) of a state
     \(i\) is distributed according to a Boltzman distribution
     \begin{equation}
@@ -23,15 +23,21 @@
     in equilibrium and all observables can be derived from \(F\)
     in a straight forward way, as stated in every textbook about
     statistical physics (e.g.\ \cite{nolting2005}).\\
-    Because of \(F=U-TS\) where \(U=\avg{H}\) is the internal energy and
-    \(S\) entropy, one can guess, that for low \(T\) the internal energy
-    will be low, and for big \(T\) the entropy will be high, to minimize
-    \(F\). The Hamiltonian of the Ising model connects \(U\) and \(S\)
-    by assigning low energies to states with high order. So \(U\) is low
-    if all spins are aligned. In this case \(S\) as a measure of
-    disorder is also low. Analogical a state of high \(U\) is also
-    a state of high \(S\).
-    This preliminary considerations make a phase transition at some
+    Because of
+    \begin{equation}
+        F = U - TS
+    \end{equation}
+    where \(S\) is the entropy, \(U=\avg{H}\) the internal energy and
+    \(\avg{\cdot}\) declares the expected value of an observable.
+    One can guess that for low \(T\) the internal energy
+    will be low, and for high \(T\) the entropy will be high, to minimize
+    \(F\).
+    Considering the Hamiltonian of the Ising model, a spin configuration
+    of high order, where most spins are aligned with their neighbors,
+    leads to a low \(H\) and therefore a low \(U\). Simultaneously, this
+    state of high order corresponds to a low entropy \(S\).
+    Analogically a state of high \(U\) is also a state of high \(S\).
+    These preliminary considerations make a phase transition at some
     \(T\), where the influence of the entropy on \(F\) becomes the same
     order of magnitude as the influence of the internal energy on \(F\),
     very plausible.\\
@@ -41,11 +47,11 @@
     \end{equation}
     or any expected value of an observable
     \begin{equation}
-        \avg{O} = \frac{1}{Z} \sum_i O_i e^{-\beta H_i}
+        \avg{O} = \frac{1}{Z} \sum_i O_i e^{-\beta H_i},
     \end{equation}
     one has to know the partition function
     \begin{equation}
-        Z = \sum_i p_i = \sum_i e^{-\beta H_i}
+        Z = \sum_i p_i = \sum_i e^{-\beta H_i},
         \label{eq:partitionFunction}
     \end{equation}
     where the sum goes over all possible states \(i\) of the system.
@@ -56,27 +62,27 @@
     may show very different properties than in the thermodynamic limit.
     To minimize these finite size effects, it is desirable to examine
     systems with large \(N\). But \(2^N\) is a very rapidly increasing
-    number, so there are next to infinity many different states, such
-    that it is unfeasible to calculate the energy for each state, except
+    number, so for large \(N\) it is unfeasible to calculate the energy for each state, except
     for cases, where it is possible to solve it analytically.\\
     If not, one can get estimates of the observables for big \(N\) using
     Monte Carlo simulations, which are introduced in the next chapter.\\
 
-    The observables which are measured in this thesis, are the mean
+    The observables which are measured in this thesis are the mean
     magnetization per spin
     \begin{equation}
         m = \frac{1}{N} \sum_i s_i
     \end{equation}
     and the mean energy per spin
     \begin{equation}
-        E = \frac{1}{N} \avg{H}
+        E = \frac{1}{N} \avg{H}.
     \end{equation}
     As mentioned before, properties near the phase transition and the
     critical temperature \(T_c\), where the phase transition occurs, will
     be examined. The Ising system in two dimensions shows a second order
     phase transition, hence \(m\) and \(E\) are continous, but show at
-    \(T_c\) an infinitly sharp slope i.e.\ the first derivative diverges.
-    From statistical physics (compare \cite{nolting2005}) is known, that
+    \(T_c\) an infinitly sharp slope in the thermodynamic limit i.e.\
+    the first derivative diverges.
+    From statistical physics (compare \cite{nolting2005}) is known that
     these derivatives can be expressed by fluctuations e.g.\ the specific
     heat can be expressed as
     \begin{equation}
@@ -84,7 +90,7 @@
     \end{equation}
     The specific heat is a measure for how much energy is needed to change
     the temperature of the system.
-    Analogical the susceptibility
+    Analogically the susceptibility
     \begin{equation}
         \chi = N \beta \avg{\brac{m-\avg{m}}^2}
     \end{equation}
@@ -107,39 +113,38 @@
 \subsection{Monte Carlo Simulations}
 \label{ssec:montecarlo}
     The idea behind Monte Carlo simulations is to take random samples of
-    the observable, which should be measured, and estimate the mean of the observable from
-    this samples. As an example the Monte Carlo integration chooses random
-    points within the bounding box of the function and estimates the integral
-    as the fraction of points below the function and points above multiplied
-    by the area of the bounding box \cite{Katzgraber2011}.\\
-    Analogical the technique can be applied to statistical ensembles,
-    but instead of sampling points on an area, one samples states of the
-    system.\\
+    the observable, which should be measured, and estimate the mean of
+    the observable from this samples. To apply this technique to statistical
+    ensembles, one creates sample states of the system, measures the
+    observables calculates the expected value through averaging.\\
     In statistical physics the expected value of an observable \(O\)
     is -- as also noted above -- calculated by
     \begin{equation}
         \avg{O} = \frac{1}{Z} \sum_i p_i O_i
     \end{equation}
     It is however possible, that there are few states that contribute
-    massively more than others. Think of a canonical system at low \(T\),
-    where \(p_i\) with low \(H_i\) contribute much more than high \(H_i\).
+    massively more than others. In canonical systems at low \(T\),
+    states with low values of \(H\) contribute much more than states with
+    high values of \(H\).
     But if one samples the \(2^N\) states evenly, it is probable to miss
-    them, which possibly introduces big errors to the estimate of \(\avg{O}\).
+    them. this is called \emph{simple sampling} and results in large
+    errorbars for any observable.
     It is therefore desirable to sample only the states with high
     contributions to the sum.
     As noted before the system under scrutiny is canonical and therefore
-    \(p_i\) is known. The states are distributed according to the Boltzman
+    \(p_i\) is known. The states are distributed according to the Boltzmann
     distribution. Hence \emph{Importance Sampling} can be utilized.\\
-    Instead of sampling uniformly distributed random states, one samples
-    states, which energies are distributed according to a Boltzman distribution.
-    In fact this reduces the estimator to
+    Instead of sampling uniformly distributed random states, one should sample
+    states, according to their occurence probability given by the Boltzmann
+    distribution. In fact this reduces the estimator to
     \begin{equation}
-        O_M = \frac{1}{M} \sum_{i=0}^M O_i
+        O_M = \frac{1}{M} \sum_{i=0}^M O_i,
     \end{equation}
-    as shown in \cite{NewmanBarkema1999}. This is a very convenient form.\\
-    But it is difficult to create a random state of a physical system
-    e.g.\ the Ising system according to a given distribution. The simple
-    method of creating uniformly distributed random states and reject
+    where \(M\) is the number of samples, as shown in \cite{NewmanBarkema1999}.
+    This is a very convenient form.\\
+    But it is difficult to create a random state of a physical system,
+    e.g.\ the Ising system, according to a given distribution. The simple
+    approach of creating uniformly distributed random states and reject
     them with probability \(p_i^{-1}\) depending on their energy is not
     efficient, because many generated states will be discarded and the
     computing time to generate them and caluculating their energy will
@@ -154,30 +159,29 @@
     equilibrate and that the states are distributed according to the
     desired distribution in equilibrium \cite{NewmanBarkema1999}.
     And \emph{Ergodicity} requires that every possible state is reachable
-    from every other state in finite time. \cite{NewmanBarkema1999} \cite{Katzgraber2011}
+    from every other state in finite time \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
     Otherwise the samples might not be representative for the whole system.\\
     In this thesis three algorithms, which fulfill all requirements,
     were used. They will be shortly described in the following subsections.
 
     \subsubsection{Metropolis}
-        A Metropolis Monte Carlo\cite{Metropolis1953} simulation of an
+        A Metropolis Monte Carlo \cite{Metropolis1953} simulation of an
         Ising model will choose a random spin, calculate the energy change
-        \(\Delta H\) defined in Eq.\ \eqref{eq:dH} that would result
-        from a flip of that spin and execute the flip with the probability \(A\)
-        Eq.\ \eqref{eq:metropolis} \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
         \begin{equation}
             \Delta H = H(\nu) - H(\mu)\\
             \label{eq:dH}
         \end{equation}
+        that would result from a flip of that spin and execute the flip
+        with the probability \cite{NewmanBarkema1999} \cite{Katzgraber2011}
         \begin{equation}
             A(\mu \to \nu) =
             \begin{cases}
                 1                            & \Delta H \le 0 \\
                 \exp{\brac{-\beta \Delta H}} & \Delta H > 0
-            \end{cases}
+            \end{cases}.
             \label{eq:metropolis}
         \end{equation}
-        So if a transition lowers the energy it is always done. This
+        So if a transition lowers the energy it will be always done. This
         results in a high ratio between chosen spins and flipped spins.
         Therefore it minimizes the calculations needed for a change of
         the state. Also note that \(\Delta H\) is easy to calculate,
@@ -188,17 +192,17 @@
     \label{sssec:wolff}
         Close to the critical temperature \(T_c\) the Metropolis
         gets slower. This is called \emph{critical slowing} down.\\
-        Using a cluster algorithm like the Wolff
-        algorithm \cite{Wolff1989} speeds things up.
+        In order to circumvent this a cluster algorithm like the Wolff
+        algorithm \cite{Wolff1989} can be used.
         For an Ising model the Wolff algorithm builds a cluster of sites
         starting with a random site and adding neighboring sites of the
-        same spin with probability \(P_{\mathrm{add}}\) from Eq.\ \eqref{eq:wolffAdd}
+        same spin with probability
         \begin{equation}
-            P_{\mathrm{add}} = 1-\exp\brac{-2\beta J}
+            P_{\mathrm{add}} = 1-\exp\brac{-2\beta J},
             \label{eq:wolffAdd}
         \end{equation}
-        Where \(J\) is the coupling constant (explained in section
-        \ref{ssec:isingmodel}). The neighboring sites of the added sites
+        where \(J\) is the coupling constant (c.f.\ Sec.\ \ref{ssec:isingmodel}).
+        The neighboring sites of the added sites
         are also considered and so forth. When there are no more sites
         to add, the spin of every site in the cluster is flipped
         \cite[p. 91ff]{NewmanBarkema1999} \cite[p. 151f]{Katzgraber2011}.
@@ -210,26 +214,27 @@
         will only contain very few sites.
         Both situations have no advantage against the Metropolis algorithm.\\
         So one would activate this algorithm near the critical temperature
-        but use a simple Metropolis algorithm at high and low temperatures.
+        but would use a simple Metropolis algorithm at high and low temperatures.
 
     \subsubsection{Parallel Tempering}
-        Parallel Tempering\cite{ParallelTempering1986} simulates many identical systems at different
-        temperatures and periodically swaps the spin configurations
-        between two neighboring temperatures with probability \(P\) from
-        Eq.\ \eqref{eq:partemp} \cite[p. 169ff]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}.
+        In simulations using \emph{parallel tempering} \cite{ParallelTempering1986}
+        many identical systems at different temperatures are simulated and
+        the spin configurations between two neighboring temperatures are
+        swapped periodically with probability \cite[p. 169ff]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}
         \begin{equation}
-            P((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,\exp\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}}
+            P((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,\exp\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}}.
             \label{eq:partemp}
         \end{equation}
-        This has the advantages that correlation times of single
-        temperatures are far smaller because their spin configuration
+        This has the advantage that correlation times of single
+        temperatures are far smaller, because their spin configuration
         gets often replaced by another uncorrelated configuration. In
-        many cases the more important advantage is, that a system which
-        is trapped in a local minimum at a given temperature, can travel
+        many cases the more important advantage is that a system which
+        is trapped in a local minimum at a given temperature can travel
         to higher temperatures, leave its local minimum and cool down
         again in a lower minimum.\\
+        % Bild !! Schematisch und Energielandschaft
         In the case of a ferromagnetic Ising model the risk to get trapped
-        in an local energy minimum is very low. Though the autocorrelation
+        in an local energy minimum is very low. Consequently the autocorrelation
         decreases significantly. In the scope of this thesis this comes
         for no cost, because one has to simulate for many temperatures
         to determine the critical temperature. The additional calculations
@@ -239,29 +244,29 @@
 
     \subsubsection{Implementation Details}
         Here a mixture of the above three algorithms is used.
-        Each sweep \(N\) Metropolis spin flips, one Wolff cluster flip
+        For each sweep \(N\) Metropolis spin flips, one Wolff cluster flip
         and one parallel tempering swap are performed. Where \(N\) is the
-        count of sites.\\
+        number of sites.\\
         Because it is not known before, where the critical temperatures
         \(T_c\) are located, the Wolff cluster algorithm is used for
-        every temperature. The speed up at criticality is worth the
+        every temperature. The speed up near criticality is worth the
         moderate slow down at other temperatures.
 
     \subsubsection{Equilibration- and Autocorrelation Time}
     \label{sssec:eqtime}
-        To generate states acoording to the Boltzman distribution at a
+        To generate states acoording to the Boltzmann distribution at a
         given temperature \(T\), one starts with an arbitrary state
         and waits until it reaches thermal \emph{equilibrium}. Because
-        equilibrium is defined as a steady state, one can determine if it
-        is reached, by observing the change of the observables over the
-        progressing simulation, as pictured in Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}.
+        equilibrium is defined as a steady state, one can determine it by
+        observing the change of the observables over the progressing
+        simulation, as pictured in Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}.
         The count of sweeps till
         equilibrium is called \emph{equilibration time} \(t_{eq}\).
         All measurements should start after this time.\\
         In Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}
         the equilibrium is reached after approximately \(N_{s} \approx 50\) sweeps for
-        either an initial condition of all spins up and all spins random. It
-        does not harm to double that value to be save. Particularly because
+        both an initial condition of all spins up and all spins random. It
+        does not harm to double that value to be save. Particularly, because
         it is a random process, so that there can not be an exact value.
         \begin{figure}[htbp]
             \centering
@@ -291,19 +296,19 @@
         are independent, one calculates the normalized autocorrelation function
         \(\frac{\chi(t)}{\chi(0)}\) with
         \begin{equation}
-            \chi(t) = \int \mathrm{d} t' \, [m(t') -\avg{m}][m(t'+t)-\avg{m}]
+            \chi(t) = \int \mathrm{d} t' \, [m(t') -\avg{m}][m(t'+t)-\avg{m}],
         \end{equation}
-        which should decay exponentially
+        which decays exponentially
         \(\chi(t) \propto \exp(t/\tau)\). This is visible in the half
         logarithmic plot \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
         To get the autocorrelation time one can either fit a exponential
         function \(\exp(-t/\tau)\) like in Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}
         or integrate \(\tau = \int \frac{\chi(t)}{\chi(0)} \de t\).
-        \(\tau\) is an estimate after which time two samples are not
-        correlated anymore. \cite[p. 59ff]{NewmanBarkema1999} \cite[p. 150f]{Katzgraber2011}.
-        To make sure that the error is not underestimated one should wait
+        \(\tau\) is an estimate that specifies the time after which two
+        samples are not correlated anymore \cite[p. 59ff]{NewmanBarkema1999} \cite[p. 150f]{Katzgraber2011}.
+        To ensure that the error is not underestimated one should wait
         \(2\tau\) sweeps between two measurements.
-        The autocorrelation time is of course dependent on the temperature.
+        The autocorrelation time is dependent on the temperature.
         For example for the standard Metropolis algorithm the fluctuations
         are strong at high temperatures and subsequent
         states are more dissimilar and therefore less correlated than at low

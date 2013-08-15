@@ -1,33 +1,34 @@
 \subsection{The Disordered Ising Model}
 \label{ssec:isingmodel}
-    The examined model is a modified 2D Ising model.
+    The examined model is a 2D Ising model.
     The most common definition of the Ising model, to which will be referred
-    as the \emph{standard Ising model}, is a square lattice with edge length \(L\) and
+    as the \emph{square lattice Ising model}, is a square lattice with edge length \(L\) and
     \(N=L^2\) sites. Each site has a magnetic moment, the spin. Each
     spin can take a value \(s \in \{-1,+1\}\) and interacts with its
-    nearest neighbors described by the Hamiltonian from Eq.\ \eqref{eq:hamiltonian}
+    nearest neighbors described by the Hamiltonian
     \begin{equation}
-        H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j} - \sum_i \tilde{H}_i s_i
+        H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j} - \sum_i h_i s_i.
         \label{eq:hamiltonian}
     \end{equation}
     \(\avg{i,j}\) refers to nodes \(i\) and \(j\) which are nearest
-    neighbors. And \(J_{ij}\) is the coupling constant between \(i\) and
-    \(j\). If \(J_{ij} > 0 \ \forall i,j\) the model resembles a ferromagnet.
-    For the standard Ising model \(J_{ij}=1 \forall i,j\) applies.
-    \(\tilde{H}_i\) denotes the outer magnetic field at the position of
-    site \(i\). For the standard Ising model \(\tilde{H}_i=0 \ \forall i\)
+    neighbors, so that they are directly coupled to each other. The
+    coupling between \(i\) and \(j\) is characterized by \(J_{ij}\),
+    the coupling constant. If \(J_{ij} > 0 \ \forall i,j\) the model resembles a ferromagnet.
+    For the square lattice Ising model \(J_{ij}=1 \forall i,j\) applies.
+    \(h_i\) denotes the outer magnetic field at the position of
+    site \(i\). For the square lattice Ising model \(h_i=0 \ \forall i\)
     applies.\\
-    The most important modification of the standard Ising modell in this
+    The most important modification of the square lattice Ising modell in this
     thesis is, that the sites of the square lattice are displaced.
-    The displacement is randomly Gauß distributed with the standard
+    The displacement is randomly Gaussian distributed with the standard
     deviation \(\sigma\), i.e.\ the \(x\) and \(y\) coordinates of the
     sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
-    from a Gauß distribution Eq.\ \eqref{eq:gauss}.
-    This is sketched in Fig.\ \ref{fig:displacement}.
+    from a Gaussian distribution
     \begin{equation}
-        f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}
+        f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}.
         \label{eq:gauss}
     \end{equation}
+    This is sketched in Fig.\ \ref{fig:displacement}.
     \begin{figure}[htbp]
         \centering
         \input{images/Displacement}
@@ -40,26 +41,32 @@
         }
         \label{fig:displacement}
     \end{figure}\\
-    This \(\sigma\) is also called \emph{disorder parameter} in the following.
-    Because most sites will only have one nearest neighbor after the
-    displacement, the lattice would collapse to many very small clusters.
-    To avoid this, the new "nearest" neighbors are those sites connected
-    by an edge. The edges are constructed according to
+    \(\sigma\) is also called \emph{disorder parameter} in the following.
+    Most sites will only have one nearest neighbor after the
+    displacement. If only the edges between these neighbors remain,
+    the lattice would collapse to many very small clusters. But if one
+    leaves the edges as the were before the displacement, the edges would
+    cross -- at least for big displacements. The crossing of edges then
+    would destroy the two dimensional character of the model and the results
+    would not be compareable with known results for the two dimensional
+    Ising model.
+    To avoid this, a new edge set will be etablished after the displacement.
+    The edges are constructed according to
     one of the two in Sec.\ \ref{ssec:graphtypes} defined rules,
-    so that the lattice represents a proximity graph. Note that edges
-    of a proximity graph do not cross each other, hence the 2D character
-    of the lattice is preserved. The coupling constant \(J\) gets
+    so that the lattice represents a proximity graph. Edges
+    of the used proximity graph do not cross each other, hence the 2D
+    character of the lattice is preserved. The coupling constant \(J\) gets
     identified with edge weights. The weight of an edge \(E_{ij} =
     J_{ij} = \exp (\alpha (1-d_{ij}))\) where \(d_{ij}\) is the Euclidean
     distance between the nodes \(i\) and \(j\). The free parameter
     \(\alpha\) is set to \(\alpha = 0.5\) inspired by \cite{Lima2000}.
-    The boundary is periodic e.g.\ nodes near the right edge can be
+    The boundary is periodic, i.e.\ nodes near the right edge can be
     connected to nodes near the left edge and vice versa. Analogous the
     top and bottom edges are connected. One can imagine that the model
     lives on the surface of a torus as pictured in Fig.\ \ref{fig:torusRNG}.
     In subsequent graphics, the graphs will be unwrapped to rectangular
     shapes. Connections which cross a periodic boundary are indicated
-    by edges which connect to an dashed node.
+    by edges which connect a solid node to a dashed node.
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=0.45\textwidth]{images/torus}
@@ -76,19 +83,20 @@
     \end{figure}\\
     Note that for \(\sigma = 0\) all \(d_{ij} = 1\) and therefore all
     \(J_{ij} = 1\), so that the disordered Ising model is reduced to the
-    standard Ising model. For this exists an analytic solution \cite{Onsager1944} for the
-    critical temperature
+    square lattice Ising model. For this exists an analytic solution \cite{Onsager1944}.
+    The critical temperature is
     \begin{equation}
         T_c = 2J/\ln(1+\sqrt 2) = 2.2691...
         \label{eq:exactTc}
     \end{equation}
     and the critical exponents \(\alpha = 0\), \(\beta = \frac{1}{8}\)
-    and \(\gamma = \frac{7}{4}\).\\
+    and \(\gamma = \frac{7}{4}\). These values are universal for the Ising
+    model. Their meaning will be explained in Sec.\ \ref{ssec:critExp} in more detail.\\
     The case for randomly distributed sites \(\sigma \gtrsim 1\) is
     already studied on a Delaunay triangulation. \cite{Janke1994} examines
     this for constant \(J\) and \cite{Lima2000} for \(J_{ij} = e^{-\alpha d_{ij}}\).
     Both articles conclude, that this model lies within the universality
-    class of the standard Ising model, i.e.\ has the same critical
+    class of the square lattice Ising model, i.e.\ has the same critical
     exponents.
 
 \subsection{Gabriel- and Relative Neighborhood Graph}
@@ -97,11 +105,11 @@
     scope of this model, the nodes get identified with the sites of the
     lattice and the edges signal the neighbor status of two sites. If the
     corresponding nodes are connected, the sites are neighbors.\\
-    All here mentioned graph types are \emph{proximity graphs}. They are
-    connecting nodes which are by some metric near to each other.
+    All here mentioned graph types are \emph{proximity graphs}.
+    The edges of these graphs connect nodes which are by some metric near
+    to each other.
     Hence they are suited to generalize problems defined on regular
-    lattices with nearest neighbor relationships, like the Ising model
-    from the Sec.\ \ref{ssec:isingmodel}.
+    lattices with nearest neighbor relationships.
     In this thesis the distance is always determined by the Euclidean
     metric in two dimensions, though in principle every metric in any
     dimension can be used.\\
@@ -148,7 +156,8 @@
     pair of nodes if any other node lies in
     the lune of the pair. That is of complexity \(O (N^3)\), because
     there are \(N(N-1)\) pairs and for each \(N-2\) nodes to test. So
-    the product is of order \(O(N^3)\)\\
+    the running time of a straight forward implementation would be of
+    order \(O(N^3)\).\\
     To reduce the complexity one can first create a Delaunay
     Triangulation in complexity \(O (N \log N)\)
     \cite{RNGCell} and test the criterion for each edge, because
@@ -160,7 +169,7 @@
     the criterion for nodes which are near to the lune and abort if
     one node inside the lune is found. To determine which nodes are
     near the lune one can subdivide the area in \emph{cells} and save
-    for each cell a list with nodes lying inside it like presented in
+    for each cell a list with nodes lying inside like presented in
     \cite{RNGCell}.\\
     \begin{figure}[htbp]
         \centering
@@ -192,7 +201,7 @@
     far away from each other and there will be one or more cells in the
     middle of the bounding box, which are completely inside the lune so.
     Then only one node has to be tested from such a cell to discard an
-    edge between the nodes. On the other hand nodes, that will be connected,
+    edge between the nodes. On the other hand, nodes that will be connected
     are near to each other so that only very few cells intersect the bounding
     box of their lune and consequently only very few nodes have to be tested.\\
     Indeed this method reduced the time needed to construct a RNG with
