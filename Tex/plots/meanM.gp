@@ -2,7 +2,7 @@ set terminal postscript eps enhanced color blacktext lw 2 26
 set output 'meanM.eps'
 
 set xlabel '{/Italic T}'
-set ylabel '{/Italic <|m|>}'
+set ylabel '{/Italic {/Symbol \341}|m|{/Symbol \361}}'
 set xrange [1.5:3.2]
 
 set size square

@@ -3,7 +3,7 @@ set output 'collapse_s_1_meanM.eps'
 
 set key samplen 1. left bottom Left                 # customize key
 set xl "{/Italic (T-T_c) L^{1/{/Symbol n}}}"
-set yl "{/Italic <|m|>} L^{{/Symbol b}/{/Symbol n}}"  # set x,y labels
+set yl "{/Italic {/Symbol \341}|m|{/Symbol \361}} L^{{/Symbol b}/{/Symbol n}}"  # set x,y labels
 xc=2.128
 a=1/1.038
 b=0.123/a                                                 # set scaling parameters

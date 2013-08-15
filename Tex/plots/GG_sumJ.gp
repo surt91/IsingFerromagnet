@@ -2,7 +2,7 @@ set terminal postscript eps enhanced color blacktext lw 2 solid 26
 set output 'GG_sumJ.eps'
 
 set xlabel '{/Italic {/Symbol s}}'
-set ylabel '{/Italic < {/Symbol S}_{<i,j>} J_{ij} >}'
+set ylabel '{/Italic {/Symbol \341} {/Symbol S}_{{/Symbol \341}i,j{/Symbol \361}} J_{ij} {/Symbol \361}}'
 set xr [-0.1:1.3]
 set yr [3.9:5.0]
 

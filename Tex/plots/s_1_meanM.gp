@@ -3,7 +3,7 @@ set output 's_1_meanM.eps'
 
 set key samplen 1. left bottom Left                 # customize key
 set xl "{/Italic (T-T_c) L^{1/{/Symbol n}}}"
-set yl "{/Italic <|m|>}"  # set x,y labels
+set yl "{/Italic {/Symbol \341}|m|{/Symbol \361}}"  # set x,y labels
 
 set xr [1.5:2.8]
 
