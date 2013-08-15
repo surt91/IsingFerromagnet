@@ -14,7 +14,9 @@ BIBFILE = lit.bib
 IMAGES = images/GG_RNG_def.tex \
          images/Displacement.tex \
          images/CellSmall.tex \
-         images/CellBig.tex
+         images/CellBig.tex \
+         images/GGEdgeBefore.tex \
+         images/GGEdgeAfter.tex
 
 GG_LST = plots/GG_Tc_normJ.pdf \
          plots/GG_Tc_norm_deg.pdf \
