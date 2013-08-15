@@ -161,7 +161,32 @@
     one node inside the lune is found. To determine which nodes are
     near the lune one can subdivide the area in \emph{cells} and save
     for each cell a list with nodes lying inside it like presented in
-    \cite{RNGCell}.
+    \cite{RNGCell}.\\
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[Definition of the Lunes][]{
+            \label{sfig:cell:big}
+            \input{images/CellBig}
+        }
+        \subfigure[RNG example][]{
+            \label{sfig:cell:small}
+            \input{images/CellSmall}
+        }
+        \caption[Sketch how the Cell Method Works]
+        {
+            Sketch how the cell algorithm for the construction of the
+            RNG and GG works. Here with the lune definition of the GG.
+            The bounding box of the lune which determines which cells have
+            to be tested, is marked with thick colored lines.\\
+            \subref{sfig:cell:big} shows that it is sufficient to find a
+            single node in an inner cell of the bounding box to discard
+            the edge between two distant nodes.\\
+            \subref{sfig:cell:small} shows that only the nodes inside the
+            marked cell have to be tested, because there are no other nodes,
+            the edge can be drawn.
+        }
+        \label{fig:cell}
+    \end{figure}\\
     Now it is just necessary to test the nodes in the cells which
     resemble a rectangular bounding box of the lune. Most pairs will be
     far away from each other and there will be one or more cells in the
