@@ -28,7 +28,12 @@
             \(t_{eq}\) & 40 & 100 & 100 & 200 & 600\\
             \bottomrule
         \end{tabular}
-        \caption{Autocorrelation Times $\tau$ and Equilibration Times $t_{eq}$}
+        \caption[Autocorrelation Times $\tau$ and Equilibration Times
+            $t_{eq}$ for Different System Sizes $L$]{
+            Autocorrelation times $\tau$ and equilibration times
+            $t_{eq}$ for different system sizes $L$. All values are generously
+            rounded up and are determined as the maximum over all \(\sigma\).
+        }
         \label{tab:tauAndTeq}
     \end{table}\\
     For every observable \(O\) the expected value \(\avg{O}\) is determined
@@ -95,8 +100,10 @@
             Dependece of the autocorrelation time $\tau$ on
             \subref{fig:autocorr:temperatures} the temperature $T$ for
                 $\sigma=0$ and
-            \subref{fig:autocorr:powerLaw} the system size $L$ (errorbars
-                are the standard error determined by bootstrapping)
+            \subref{fig:autocorr:powerLaw} the system size $L$. Plotted on
+                double logarithmic axis with a power law fit \(\tau \propto L^z\)
+                to determine the dynamical exponent \(z'\).
+                (Errorbars are the standard error estimated by bootstrapping.)
         }
         \label{fig:autocorr}
     \end{figure}
@@ -159,11 +166,14 @@
         }
         \caption[Phase Transition and Finite Size Effects]
         {
-            \subref{sfig:smeared_out:meanM_L}: Effects of the disorder
+            \subref{sfig:smeared_out:meanM_L} Effects of the disorder
             parameter $\sigma$ on the phase transition
-            for an underlying RNG with $L=128$.\\
-            \subref{sfig:smeared_out:meanM}: Effects of different system
+            for an underlying RNG with $L=128$. The position of the slope,
+            and hence the critical temperature, moves to lower temperatures
+            with increasing \(\sigma\)\\
+            \subref{sfig:smeared_out:meanM} Effects of different system
             sizes at \(\sigma = 0\). Dotted lines are guides to the eye.
+            The \(L=16\) curve is much less steep than the \(L=128\) curve.
         }
         \label{fig:smeared_out}
     \end{figure}\\
@@ -267,9 +277,10 @@
         \caption[Examples of Determining Critical Temperature and Exponents]
         {
             \subref{sfig:gettingCrit:binder_s_0} The Binder cumulant \(g\)
-                of an square lattice Ising model (\(\sigma=0\))\\
-            \subref{sfig:gettingCrit:collapse_s_0} collapsed by finite
-                size scaling (errors are for clarity not given, see Tab.\ \ref{tab:critExp})
+                of an square lattice Ising model (\(\sigma=0\)).\\
+            \subref{sfig:gettingCrit:collapse_s_0} The curve from \subref{sfig:gettingCrit:binder_s_0}
+                collapsed by finite size scaling (errors are for clarity
+                not given, see Tab.\ \ref{tab:critExp})
         }
         \label{fig:gettingCrit}
     \end{figure}\\
@@ -313,14 +324,17 @@
         }
         \caption[Examples of Determining Critical Temperature and Exponents]
         {
+            Examples for the method of finite size scaling, which was used
+            to determine the critical exponents \(\nu, \gamma, \beta\) and
+            the critical temperature \(T_c\).\\
             \subref{sfig:gettingCrit:s_1_sus} The susceptibility \(\chi\)
                 of an Ising model on an RNG \(\sigma=1\)\\
             \subref{sfig:gettingCrit:collapse_s_1_sus} collapsed by finite
-                size scaling (for error estimates see Tab.\ \ref{tab:critExp})\\
-            \subref{sfig:gettingCrit:s_1_meanM} The mean absolute magnetization \(\avg{\abs{m}}\)
+                size scaling, to determine \(\gamma\) (for error estimates see Tab.\ \ref{tab:critExp}).\\
+            \subref{sfig:gettingCrit:s_1_meanM} The mean magnetization \(\avg{\abs{m}}\)
                 of an Ising model on an GG \(\sigma=1\)\\
             \subref{sfig:gettingCrit:collapse_s_1_meanM} collapsed by finite
-                size scaling (for error estimates see Tab.\ \ref{tab:critExp})
+                size scaling, to determine \(\beta\) (for error estimates see Tab.\ \ref{tab:critExp}).
         }
         \label{fig:gettingCrit2}
     \end{figure}\\
@@ -364,7 +378,15 @@
 
             \bottomrule
         \end{tabular}
-        \caption[Critical Exponents for Different $\sigma$]{Critical exponents for different $\sigma$}
+        \caption[Critical Exponents for Different $\sigma$]{
+            Critical exponents for different $\sigma$. A finite size
+            scaling analysis was performed to determine the critical
+            exponents \(\beta, \gamma, \nu\) and the critical temperature
+            \(T_c\). The errors for \(beta\) and \(\gamma\) are estimates
+            by \texttt{autoscale.py} \cite{autoscale2009}. The errors of
+            \(\nu\) and \(T_c\) are the standard deviation of three obtained
+            values through different collapses.
+        }
         \label{tab:critExp}
     \end{table}\\
     As can be seen in Tab.\ \ref{tab:critExp}, most values
@@ -392,11 +414,12 @@
             \label{sfig:susCrossCheck:GG}
             \includegraphics[width=0.45\textwidth]{plots/GGgammaBySus}
         }
-        \caption[Alternative Way Determining $\gamma$]
+        \caption[Alternative Way Determining $\gamma / \nu$]
         {
-            Cross checking the critical exponent $\gamma$ for
+            Cross checking the ratio critical exponents $\gamma$ and $\nu$ for
                 \subref{sfig:susCrossCheck:RNG} the RNG at $\sigma \in \{0.0, 1.0\}$ and
                 \subref{sfig:susCrossCheck:GG} the GG at $\sigma \in \{0.0, 0.3\}$.
+            The plotted values are the maxima of all measured \(\chi\).
             Dotted lines are power law fits \(aL^\frac{\gamma}{\nu}\).
         }
         \label{fig:susCrossCheck}
@@ -438,8 +461,9 @@
         \caption[Example of a Binder Cumulant to Determine the Critical Temperature]
         {
             The Binder cumulant \(g\) of an square lattice Ising model
-            (\(\sigma=0\)) interpolated with cubic splines
-            (the errorbars are too small to see)\\
+            (\(\sigma=0\)) interpolated with cubic splines, to determine
+            the intersection, which is at \(T_c\)
+            (the errorbars are too small to see).\\
         }
         \label{fig:gettingCrit:binder_fit_s_0}
     \end{figure}\\
@@ -487,7 +511,14 @@
             1.20 & 1.204(2) &          & 2.113(4) &         \\
             \bottomrule
         \end{tabular}
-        \caption[Critical Temperatures for Different $\sigma$]{Critical temperatures for different $\sigma$}
+        \caption[Critical Temperatures for Different $\sigma$]{
+            Critical temperatures for different $\sigma$. For both graph
+            types, GG and RNG. \(T_c^{\mathrm{collapse}}\) denotes the
+            values of \(T_c\) which were determined before via finte
+            size scaling analysis. The other values are determined by
+            the intersection of the binder cumulants \(g\) for different
+            system sizes. The values of both methods match.
+        }
         \label{tab:critTemp}
     \end{table}\\
     The values obtained through the data collapse and the values obtained
@@ -512,6 +543,8 @@
             disorder parameters \(\sigma\) for
             \subref{sfig:Tc:RNG} the RNG and
             \subref{sfig:Tc:GG} the GG.\\
+            Interesting points are the jump and rise of the GG at small
+            \(\sigma\). And the plateau on the RNG for small \(\sigma\).
         }
         \label{fig:Tc}
     \end{figure}\\
@@ -545,6 +578,12 @@
         \label{eq:exactHCTc}
     \end{equation}
     This is lower than for the square lattice with degree 4.\\
+    This is plausible, because more edges lead to more neighbors. The energy
+    which is necessary to flip a spins down which neighbors spins are up,
+    gets higher with the number of neighbors. So the more edges are in
+    the graph, the more stable the system becomes and \(T_c\) is higher.
+    This is also an explanation why the \(T_c\) of the RNG is always
+    lower than that of the GG: The degree of the \(T_c\) is lower.\\
     If one plots the degree of the graphs at different \(\sigma\) like
     in Fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG},
     one recognizes that \(T_c\) and \(K\) are evidently correlated.
@@ -671,7 +710,10 @@
 
         \caption[Examples of GG for different $\sigma$]
         {
-            GG with periodic boundary conditions for different \(\sigma = 0\)
+            GG with periodic boundary conditions for different \(\sigma = 0\).
+            The number of edges increases from \subref{sfig:GG_sigma:0.00}
+            to \subref{sfig:GG_sigma:0.01} significantly. Until \subref{sfig:GG_sigma:0.15}
+            it increases and after that the number of edges decreases.
         }
         \label{fig:GG_sigma}
     \end{figure}\\
@@ -702,7 +744,11 @@
 
         \caption[Examples of RNG for different $\sigma$]
         {
-            RNG with periodic boundary conditions for different \(\sigma = 0\)
+            RNG with periodic boundary conditions for different \(\sigma = 0\).
+            \subref{sfig:RNG_sigma:0.09} has still almost the square lattice
+            configuration of edges, which is why the plateau from Fig.\ \ref{sfig:Tc}\subref{sfig:Tc:RNG}
+            exsists. In the next two pictures one sees the fast disappearance
+            of edges.
         }
         \label{fig:RNG_sigma}
     \end{figure}\\
