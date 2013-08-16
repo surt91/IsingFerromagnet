@@ -222,17 +222,44 @@
         the spin configurations between two neighboring temperatures are
         swapped periodically with probability \cite[p. 169ff]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}
         \begin{equation}
-            P((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,\exp\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}}.
+            P((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,\exp\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}},
             \label{eq:partemp}
         \end{equation}
+        as schematically pictured in Fig.\ \ref{fig:parTemp}\subref{sfig:parTemp:schema}.
         This has the advantage that correlation times of single
         temperatures are far smaller, because their spin configuration
         gets often replaced by another uncorrelated configuration. In
         many cases the more important advantage is that a system which
         is trapped in a local minimum at a given temperature can travel
         to higher temperatures, leave its local minimum and cool down
-        again in a lower minimum.\\
-        % Bild !! Schematisch und Energielandschaft
+        again in a lower minimum. If a system is trapped in such a
+        metastable state, ergodicity is not guaranteed anymore.
+        This is schematically pictured in Fig.\ \ref{fig:parTemp}\subref{sfig:parTemp:E}.
+        \begin{figure}[htbp]
+            \centering
+            \subfigure[Schematic Diagramm of the Algorithm][]{
+                \label{sfig:parTemp:schema}
+                \input{images/parTempSchema}
+            }
+            \subfigure[Schematic Diagramm of the Energy Landscape][]{
+                \label{sfig:parTemp:E}
+                \input{images/parTempE}
+            }
+            \caption[Visualisation of the Parallel Tempering Algorithm]
+            {
+                \subref{sfig:parTemp:schema} schematic representation of
+                the swapping of spin configurations of different simulations \(S_i\)
+                between temperatures.\\
+                \subref{sfig:parTemp:E} sketch of an energy landscape, where
+                the state of the system (filled dot) is trapped in an local
+                minimum. At low temperatures it is very unlikley that it
+                overcomes the energy barrier \(\Delta E\) to the minimum.
+                After a swap to higher energies, the barrier can be overcome
+                and after a swap to lower energies again, the state in
+                the minimum can be reached (hollow dot).
+            }
+            \label{fig:parTemp}
+        \end{figure}\\
         In the case of a ferromagnetic Ising model the risk to get trapped
         in an local energy minimum is very low. Consequently the autocorrelation
         decreases significantly. In the scope of this thesis this comes

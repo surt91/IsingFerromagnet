@@ -1,0 +1,13 @@
+\begin{tikzpicture}
+    %~ \draw[thick,->] (0,0) -- node[below] {$T$} (6,0);
+    \draw[thick,->] (0,0) -- node[left] {$E$} (0,4);
+
+    \draw plot [smooth] coordinates {(0,1.6) (0.2,1) (1,3.5) (1.5,0.5) (2,1.5) (2.6,3.8) (3.2,2) (3.9,2.9)};
+
+    \fill (3.3,2.2) circle(0.1);
+    \draw (1.6,0.7) circle(0.1);
+
+    \draw[thick,|-|] (4.2,2) -- node[right] {$\Delta E$} (4.2,3.8);
+    \draw[dashed] (4.2,2) -- (3.2,2);
+    \draw[dashed] (4.2,3.8) -- (2.6,3.8);
+\end{tikzpicture}
