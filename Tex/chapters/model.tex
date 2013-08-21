@@ -189,7 +189,8 @@
             to be tested, is marked with thick colored lines.\\
             \subref{sfig:cell:big} shows that it is sufficient to find a
             single node in an inner cell of the bounding box to discard
-            the edge between two distant nodes.\\
+            the edge between two distant nodes. The nodes inside the
+            other 8 marked cells do not have to be tested anymore.\\
             \subref{sfig:cell:small} shows that only the nodes inside the
             marked cell have to be tested, because there are no other nodes,
             the edge can be drawn.
@@ -204,6 +205,7 @@
     edge between the nodes. On the other hand, nodes that will be connected
     are near to each other so that only very few cells intersect the bounding
     box of their lune and consequently only very few nodes have to be tested.\\
+    Here the number of cells equals the number of nodes.
     Indeed this method reduced the time needed to construct a RNG with
     \(N=32^2\) and \(N=64^2\) by a factor of
     over \(15\) respectively \(40\). Though the complexity is still of
