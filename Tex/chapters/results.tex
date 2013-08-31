@@ -32,7 +32,7 @@
             $t_{eq}$ for Different System Sizes $L$]{
             Autocorrelation times $\tau$ and equilibration times
             $t_{eq}$ for different system sizes $L$. All values are generously
-            rounded up and are determined as the maximum over all \(\sigma\).
+            rounded up and determined as the maximum over all \(\sigma\).
         }
         \label{tab:tauAndTeq}
     \end{table}\\
@@ -44,7 +44,7 @@
     The expected values \(\avg{O}\) for \(100\) different random proximity
     graphs with the same disorder parameter \(\sigma\) are then averaged to
     \(\overline{\avg{O}}\). Note that the signs \(\overline{\avg{\cdot}}\)
-    are omitted in the following for the sake of simplicity, so that the
+    are omitted in the following for the sake of simplicity so that the
     it will be just called \(O\).\\
     Not only the seed to generate the new random
     realization of the proximity graph is changed, but also the seed for
@@ -65,13 +65,13 @@
     surely uncorrelated.
     Because every error mentioned in this thesis is of this type, it is not
     necessary to determine \(\tau\) for each observable. Therefore a good
-    error estimate can be achieved by simple bootstrapping. Nevertheless one has
+    error estimate can be achieved by simple bootstrapping. Nevertheless, one has
     to simulate enough uncorrelated states for each realization to keep
     the \(\Delta \overline{\avg{O}}\) small. For every determined value an
     error is calculated and given in the form \texttt{value(error of last digit)}.
     The errors of fit parameters are the asymptotic standard errors as calculated
-    by gnuplot. Gnuplot is an open source plotting program, used for all plots
-    and fits in this thesis \footnote{\url{http://gnuplot.info/}.}.
+    by gnuplot. Gnuplot\footnote{\url{http://gnuplot.info/}.} is an open
+    source plotting program used for all plots and fits in this thesis.
 
 \subsection{Short Analysis of the Autocorrelation Time  $\tau$}
 \label{ssec:results:autocorr}
@@ -123,8 +123,8 @@
     In Fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} \(\tau\) is plotted
     over \(L\). Note that the exponent \(z'=0.64(2)\) determined by this plot is
     not comparable to the known critical exponent \(z=0.25\) \cite{NewmanBarkema1999}
-    for the Wolff cluster algorithm. On the one hand the number of sweeps
-    in which \(\tau\) is measured in this thesis are more than a standard
+    for the Wolff cluster algorithm. On the one hand the number of sweeps,
+    in which \(\tau\) is measured in this thesis, are more than a standard
     Metropolis sweep to which \(z\) normally corresponds, because each sweep
     alongside the \(N\) Metropolis flips also a cluster of \(\ge 1\) spin is
     flipped. On the other hand the \(\tau\) used for the fit are not the
@@ -137,7 +137,7 @@
     Anyhow, Fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} alone
     proofs the effectiveness of the Wolff cluster algorithm at criticality.\\
     This is of course only a rough analysis of existing data which was
-    generated for another purpose. For a more in depth inspection, one
+    generated for another purpose. For a more detailed inspection, one
     would perform the simulation at the critical point, which will be
     determined in the next sections.
 
@@ -178,11 +178,11 @@
         \label{fig:smeared_out}
     \end{figure}\\
     In the shown plots there occurs no steep decline to zero, but a
-    smooth decline. \(\avg{\abs{m}}(T_c) = 0\) is only present in infinite
+    smooth one. \(\avg{\abs{m}}(T_c) = 0\) is only present in infinite
     systems, hence no computer simulation will show the exact behavior in the
     thermodynamic limit. It will always show some \emph{finte size effects}.
     These finite size effects cause a "smearing out" of the phase
-    transition. This is stronger for smaller system sizes, as is visible
+    transition. This is stronger for smaller system sizes, as shown
     in Fig.\ \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}\footnote{See the appendix \ref{appendix:finiteSizeEffects} for a similar figure for the specific heat.}.
     Clearly the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
     Despite of this one can obtain \(T_c\) by finite size scaling
@@ -207,21 +207,21 @@
         m \propto \abs{T-T_{c}}^{-\beta}.
         \label{eq:critExp:beta}
     \end{equation}
-    As the name critical \emph{exponent} suggests, the curve progression
+    As the name "critical \emph{exponent}" suggests, the curve progression
     of respective observables will often be a power law close to the critical
-    point, as in both examples above. But this is not imperative.
+    point as in both examples above. But this is not imperative.
     E.g.\ the critical "exponent" \(\alpha\) corresponding to the divergence of
     the specific heat \(c\) diverges logarithmically for the two dimensional
     Ising model and is nominally \(\alpha = 0\).
     For that reason, \(\alpha\) will not be considered in this section.\\
     The important property of the critical exponents is that they are
     universal for a model, i.e.\ they are independent of the size, the structure
-    or the coupling constant \(J\) \cite{NewmanBarkema1999} of the lattice,
-    therefore they should also be independent of \(\sigma\). But they are
+    or the coupling constant \(J\) \cite{NewmanBarkema1999} of the lattice.
+    Therefore they should also be independent of \(\sigma\). But they are
     not universal regarding the dimension of the model.
     Studies on random lattices with \cite{Lima2000} and without \cite{Janke1994}
     varying coupling constants \(J\) confirm that the
-    critical exponents are not influenced by an random lattice.
+    critical exponents are not influenced by a random lattice.
     So they will be used for consistency cross checking and
     comparison with the known exact values \cite[p. 59]{Pelissetto2002}.
     If the critical exponents can be reproduced, the determined critical
@@ -229,7 +229,7 @@
     % Ausfuehrlichere Herleitung der Skalentheorie, Skalenanalyse
     To determine the critical exponents, the finite size scaling method
     will be used. The here given explanation will give a rough idea, how
-    the method works. For a more in depth explanation look at \cite{Norrenbrock2011} or \cite{NewmanBarkema1999}.
+    the method works. For a more detailed explanation look at \cite{Norrenbrock2011} or \cite{NewmanBarkema1999}.
     The crucial element is that there exists a \emph{scaling function},
     which is valid for sufficiently large \(L\) near the critical
     temperature \(T_{c}\) and has only an explicit \(L\) dependence.
@@ -295,10 +295,10 @@
     \end{equation}
     This way the exponents \(\gamma\) and \(\nu\) are determined.
     Analogically Fig.\ \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_meanM}\subref{sfig:gettingCrit:collapse_s_1_meanM}
-    shows the collapse for the mean magnetization per site \(\avg{\abs{m}}\) for \(\sigma=1\),
+    show the collapse for the mean magnetization per site \(\avg{\abs{m}}\) for \(\sigma=1\)
     to determine the exponents \(\beta\) and \(\nu\).
-    Also the collapse of the binder cumulant as mentioned before and shown
-    in Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}
+    Also the collapse of the binder cumulant, as mentioned before and shown
+    in Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0},
     is used to get a further value of \(\nu\).
     \begin{figure}[htbp]
         \centering
@@ -342,12 +342,12 @@
     \(\sigma = 0\) are analytically known \cite{Pelissetto2002}. The
     values for all other \(\sigma\) are expected be the same as for
     \(\sigma = 0\) like mentioned before in Sec.\ \ref{ssec:finitesize}.
-    Therefore it is sufficient to take a few samples to test if the
+    Therefore it is sufficient to take a few samples to test, if the
     expectations match. Hence 5 values of \(\sigma\) are analyzed.
     The analytically known values for \(\sigma = 0\) and the in \cite{Janke1994}
-    examined limit of an random lattice \(\sigma \gtrsim 1\) are natural
+    examined limit of a random lattice \(\sigma \gtrsim 1\) are natural
     choices.
-    The other \(\sigma\) are chosen to represent regions, where the behavior of
+    The other \(\sigma\) are chosen to represent regions where the behavior of
     \(T_c\) shows some characteristics. (Namely there is a plateau at small
     \(\sigma\), a steep decline at medium \(\sigma\) and a shallow
     decline at \(\sigma = 0.5\). This will be shown in the next
@@ -389,7 +389,7 @@
         }
         \label{tab:critExp}
     \end{table}\\
-    As can be seen in Tab.\ \ref{tab:critExp}, most values
+    According to Tab.\ \ref{tab:critExp}, most values
     are matching the expectations. \(T_c\) for \(\sigma = 0\) is in good
     agreement with the known value. Especially \(\nu\) and \(\gamma\)
     are always in very good agreement with their exact values. Besides the
@@ -429,21 +429,21 @@
     they are close enough to the expectations to be consistent. At least
     the expectations are always within two times the uncertainty.
     Maybe their deviations can be explained by the fact that small
-    systems (\(L=32,64\)) were used for the analysis, and no corrections
+    systems (\(L=32,64\)) were used for the analysis and no corrections
     to scaling terms were considered.
     Anyway, two critical exponents are sufficient to determine the
-    universality class \cite[p. 145]{Katzgraber2011}. Therefore
+    universality class \cite[p. 145]{Katzgraber2011}. Therefore,
     the Ising model on a proximity graph is for every \(\sigma\) in the
     same universality class as the square lattice Ising ferromagnet.
 
 \subsection{Critical Temperature}
 \label{ssec:binderIntersections}
-    Though if one is just interested in the critical temperature, an
+    Though, if one is just interested in the critical temperature, an
     easier approach is to find the intersections of the Binder cumulants
     \(g\) of different system sizes \(L\), which intersect at \(T_c\) \cite{Binder1981}.
     Because the magnetization \(m\) is only measured for discrete values
     of \(T\), \(g\) is also only known for these discrete values and the
-    analytical course of the curve is not known, and hence has
+    analytical course of the curve is not known and hence has
     to be interpolated to find the intersection. Therefore a \emph{cubic spline}
     interpolation\footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
     is calculated for the measured points.
@@ -467,18 +467,18 @@
         }
         \label{fig:gettingCrit:binder_fit_s_0}
     \end{figure}\\
-    As an example take Fig.\ \ref{fig:gettingCrit:binder_fit_s_0}.
+    Take Fig.\ \ref{fig:gettingCrit:binder_fit_s_0} as an example.
     Here such interpolations are plotted for \(\sigma=0\) and are
     intersecting at \(T \approx 2.27\).
     To determine \(T_c\), the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
-    are averaged and the standard error is calculated. In this case one
+    are averaged and the standard error is calculated. In this case, one
     gets \(T_c = 2.2689(2)\), which is in good agreement with the
     exact solution from Eq.\ \eqref{eq:exactTc}.
     This test suggests that measuring \(T_c\) this way yields
     adequat results and the interpolation does not lead to major
     deviations.\\
     In this section \(T_c\) for both the RNG or the GG are
-    compared. In the following figures, the RNG will always be on the
+    compared. In the following figures the RNG will always be on the
     left side and the GG on the right side.
     And in Tab.\ \ref{tab:critTemp} the values are displayed together with the
     values obtained by the data collapse from the Sec.\ before.
@@ -559,7 +559,7 @@
     distributed nodes, hence \(T_c\) is independent of \(\sigma\) for
     \(\sigma \gg 1\). Regarding this both meet the expectations.\\
     Another strange property is the jump from \(\sigma = 0\) to \(\sigma > 0\)
-    of \(T_c\) on the GG. To understand that, one has to
+    of \(T_c\) on the GG. To understand that one has to
     consider the influence of the graph properties on the critical
     temperature.\\
     One basic property of a graph is its degree \(K\) -- sometimes
@@ -579,7 +579,7 @@
     \end{equation}
     This is lower than for the square lattice with degree 4.\\
     This is plausible, because more edges lead to more neighbors. The energy
-    which is necessary to flip a spins down which neighbors spins are up,
+    which is necessary to flip a spins down whose neighbors spins are up,
     gets higher with the number of neighbors. So the more edges are in
     the graph, the more stable the system becomes and \(T_c\) is higher.
     This is also an explanation why the \(T_c\) of the RNG is always
@@ -603,7 +603,7 @@
     this claim in appendix \ref{appendix:fixedCoupling} the same analysis
     is performed for a model with fixed \(J\). There the jump gets narrower
     but is still existent. Anyway, the degree seems to have an impact on
-    the critical temperature \(T_c\) but it is not a trivial one.
+    the critical temperature \(T_c\), but it is not a trivial one.
     \begin{figure}[htbp]
         \centering
         \subfigure[][]
@@ -641,7 +641,7 @@
         }
         \label{fig:Tc_deg}
     \end{figure}\\
-    To understand the jump of \(T_c\), it seems to be necessary to
+    To understand the jump of \(T_c\) it seems to be necessary to
     understand the jump of \(K\), which is easily explained
     by the definition of the GG and its aftereffects for
     the transition from \(\sigma = 0\). Visible in Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.00}\subref{sfig:GG_sigma:0.01}
@@ -819,8 +819,9 @@
     one for the RNG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}
     is generally lower and spans over a bigger temperature range than
     the curve of the GG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:GG}.
-    Both graph types have a plateau at \(0 < \sigma < 0.1\). So small
-    disorder has little influence on this normalized critical temperature.
+    Both graph types have a plateau at \(0 < \sigma < 0.1\). The conclusion
+    is that small disorder has little influence on this normalized critical
+    temperature.
     Also both graph types have a steep decline after the plateau before
     they approach an asymptotic limit for \(\sigma \gg 1\).\\
 
@@ -868,8 +869,8 @@
     definition of nearest neighbors via a proximity graph does not change
     \(g_c\) much. Though it is mentioned in \cite{BinderValue} that the
     lattice structure has a minor effect on \(g_c\), the uncertainty of
-    \(g_c\) is too big, to show it. For a more in depth analysis, new
+    \(g_c\) is too big, to show it. For a more exact analysis, new
     Monte Carlo simulations at \(T_c\) would be needed. But this is
-    beyond the scope of this thesis. Anyway the results are the expected
+    beyond the scope of this thesis. Anyway, the results are the expected
     behavior, because no major deviations from the value of \(g_c\) at
     \(\sigma = 0\) occur at larger \(\sigma\).

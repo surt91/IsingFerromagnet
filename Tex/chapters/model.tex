@@ -3,7 +3,7 @@
     The examined model is a 2D Ising model.
     The most common definition of the Ising model, to which will be referred
     as the \emph{square lattice Ising model}, is a square lattice with edge length \(L\) and
-    \(N=L^2\) sites. Each site has a magnetic moment, the spin. Each
+    \(N=L^2\) sites. Each site has a magnetic moment, which is called the spin. Each
     spin can take a value \(s \in \{-1,+1\}\) and interacts with its
     nearest neighbors described by the Hamiltonian
     \begin{equation}
@@ -32,7 +32,7 @@
     \begin{figure}[htbp]
         \centering
         \input{images/Displacement}
-        \caption[Sketch how the Displacement Works]
+        \caption[Sketch how the Displacement works]
         {
             Sketch how the displacement of the nodes works. The nodes
             get displaced by \(\Delta x\) and \(\Delta y\) drawn from the
@@ -41,14 +41,14 @@
         }
         \label{fig:displacement}
     \end{figure}\\
-    \(\sigma\) is also called \emph{disorder parameter} in the following.
+    \(\sigma\) will also be called \emph{disorder parameter} in the following.
     Most sites will only have one nearest neighbor after the
     displacement. If only the edges between these neighbors remain,
     the lattice would collapse to many very small clusters. But if one
-    leaves the edges as the were before the displacement, the edges would
+    leaves the edges as they were before the displacement, the edges would
     cross -- at least for big displacements. The crossing of edges then
     would destroy the two dimensional character of the model and the results
-    would not be compareable with known results for the two dimensional
+    would not be compareable with known results of the two dimensional
     Ising model.
     To avoid this, a new edge set will be etablished after the displacement.
     The edges are constructed according to
@@ -61,10 +61,10 @@
     distance between the nodes \(i\) and \(j\). The free parameter
     \(\alpha\) is set to \(\alpha = 0.5\) inspired by \cite{Lima2000}.
     The boundary is periodic, i.e.\ nodes near the right edge can be
-    connected to nodes near the left edge and vice versa. Analogous the
+    connected to nodes near the left edge and vice versa. Analogously the
     top and bottom edges are connected. One can imagine that the model
     lives on the surface of a torus as pictured in Fig.\ \ref{fig:torusRNG}.
-    In subsequent graphics, the graphs will be unwrapped to rectangular
+    In subsequent graphics the graphs will be unwrapped to rectangular
     shapes. Connections which cross a periodic boundary are indicated
     by edges which connect a solid node to a dashed node.
     \begin{figure}[htbp]
@@ -95,7 +95,7 @@
     The case for randomly distributed sites \(\sigma \gtrsim 1\) is
     already studied on a Delaunay triangulation. \cite{Janke1994} examines
     this for constant \(J\) and \cite{Lima2000} for \(J_{ij} = e^{-\alpha d_{ij}}\).
-    Both articles conclude, that this model lies within the universality
+    Both articles conclude that this model lies within the universality
     class of the square lattice Ising model, i.e.\ has the same critical
     exponents.
 
@@ -152,7 +152,7 @@
         }
         \label{fig:lunes}
     \end{figure}\\
-    To construct these graphs the simple way is to test for each
+    To construct these graphs the most simple way is to test for each
     pair of nodes if any other node lies in
     the lune of the pair. That is of complexity \(O (N^3)\), because
     there are \(N(N-1)\) pairs and for each \(N-2\) nodes to test. So
@@ -181,7 +181,7 @@
             \label{sfig:cell:small}
             \input{images/CellSmall}
         }
-        \caption[Sketch how the Cell Method Works]
+        \caption[Sketch how the Cell Method works]
         {
             Sketch how the cell algorithm for the construction of the
             RNG and GG works. Here with the lune definition of the GG.
