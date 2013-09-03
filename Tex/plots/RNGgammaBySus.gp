@@ -9,7 +9,7 @@ set ylabel '{/Italic {/Symbol c}}_{max}'
 set logscale x 2
 
 set xr [11.3:170.0]
-set yr [3:700]
+set yr [3:1000]
 
 set size square
 
