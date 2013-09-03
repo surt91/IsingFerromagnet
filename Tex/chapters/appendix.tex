@@ -1,4 +1,24 @@
 \section{Appendix}
+\subsection{Example for a Small Delaunay Triangulation}
+\label{appendix:DT_def}
+    The Delaunay triangulation (DT) is an undirected graph. An edge
+    between two nodes \(i\) and \(j\) will be drawn, if there exists
+    a circle passing through \(i\) and \(j\), which does not contain
+    any other node in its interior
+    \begin{figure}[htbp]
+    \centering
+        \input{images/DT_def}
+        \label{sfig:def:DT}
+        \caption[Example for a Small Delaunay Triangulation]
+        {
+            Circles, which contain nodes are dashed.
+            Circles, which contain no nodes are not dashed.
+            Consequently nodes on the border of not dashed circles are
+            connected. Note that in contrast to the GG the circles do not
+            have to be centered on the middle point between the nodes.
+        }
+    \end{figure}
+
 \subsection{Finite Size Effects at the Example of the Specific Heat}
 \label{appendix:finiteSizeEffects}
     In Fig.\ \ref{fig:smeared_out_appendix} the specific heat
