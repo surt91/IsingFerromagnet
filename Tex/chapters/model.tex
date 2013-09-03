@@ -101,7 +101,7 @@
     be embedded in 2D. Hence, due to universality it should exhibit the same
     critical exponents as the basic square lattice Ising ferromagnet.
 
-\subsection{Gabriel- and Relative Neighborhood Graph}
+\subsection{Proximity Graphs}
 \label{ssec:graphtypes}
     A graph \(G(V,E)\) is a set of nodes \(V\) and edges \(E\). In the
     scope of this model, the nodes get identified with the sites of the
@@ -115,20 +115,34 @@
     In this thesis the distance is always determined by the Euclidean
     metric in two dimensions, though in principle every metric in any
     dimension can be used.\\
-    \paragraph{The Delaunay triangulation} (DT) TODO!!
-    \paragraph{The Gabriel graph} (GG) \cite{Gabriel1969} is a subgraph of the
-    DT. Two nodes \(i\) and \(j\) with distance
-    \(d_{ij}\) will be connected with an edge, if a circle with its
-    center on half way between \(i\) and \(j\) and radius
-    \(r = \frac d 2\) contains no other nodes. This area will be
-    called \emph{lune} in the following. See also the cross hatched region
-    from Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.\\
-    \paragraph{The Relative Neighborhood graph} (RNG) \cite{Toussaint1980} is a
-    subgraph of the GG. Two nodes \(i\) and \(j\) with
-    distance \(d_{ij}\) will be connected, if no other node is in the
-    \emph{lune}. The lune is defined as the intersection of two
-    circles with radius \(r = d\) and centers on \(i\) and \(j\).
-    See also the hatched region in Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.
+
+    \subsubsection{Delaunay Triangulation}
+        The Delaunay triangulation (DT) is an undirected graph. An edge
+        between two nodes \(i\) and \(j\) will be drawn, if there exists
+        a circle passing through \(i\) and \(j\), which does not contain
+        any other node in its interior, see Ref.\ \cite{Katajainen}.
+        To make this clear a the construction of a four node DT is sketched
+        in Fig.\ \ref{fig:def:DT} in the appendix Sec. \ref{appendix:DT_def}.
+
+    \subsubsection{Gabriel Graph}
+        The Gabriel graph (GG) \cite{Gabriel1969}
+        is a subgraph of the DT, i.e.\ for the same set of nodes
+        \(V\) the edge set of the DT is a superset of the edge set of the
+        GG \(E_{DT} \supseteq E_{GG}\). Two nodes \(i\) and \(j\) with distance
+        \(d_{ij}\) will be connected with an edge, if a circle with its
+        center on half way between \(i\) and \(j\) and radius
+        \(r = \frac d 2\) contains no other nodes. This area will be
+        called \emph{lune} in the following. See also the cross hatched region
+        from Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.
+
+    \subsubsection{Relative Neighborhood Graph}
+        The Relative Neighborhood
+        graph (RNG) \cite{Toussaint1980} is a subgraph of the GG. Two nodes \(i\) and \(j\) with
+        distance \(d_{ij}\) will be connected, if no other node is in the
+        \emph{lune}. The lune is defined as the intersection of two
+        circles with radius \(r = d\) and centers on \(i\) and \(j\).
+        See also the hatched region in Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.
+
     \begin{figure}[htbp]
         \centering
         \subfigure[Definition of the Lunes][]{
@@ -153,64 +167,66 @@
                 periodic boundary conditions. Periodic nodes are dashed.
         }
         \label{fig:lunes}
-    \end{figure}\\
-    The simplest way to construct these graphs is to test for each
-    pair of nodes if any other node lies in
-    the lune of the pair. That is of complexity \(O (N^3)\), because
-    there are \(N(N-1)\) pairs and for each \((N-2)\) nodes to test. So
-    the running time of a straight forward implementation would be of
-    order \(O(N^3)\).\\
-    To reduce the complexity one can first create a DT in complexity \(O (N \log N)\)
-    \cite{RNGCell} and test the connectedness for each edge contained
-    therein, because the DT is a supergraph of both.
-    For the construction of the DT for a given set of points one might
-    use existing software libraries, e.g.\ the qHull\footnote{http://www.qhull.org} library.
-    However, generation of the graphs is not time critical in the scope
-    of this bachelor thesis.\\
-    So a trade off is to use basically the simple method but only test
-    the connectedness for nodes which are near to the lune and abort if
-    one node inside the lune is found. To determine which nodes are
-    near the lune one can subdivide the area in \(M\) \emph{cells} of size
-    \(L_c \times L_c\) and save for each cell a list with nodes lying
-    inside like presented in Ref.\ \cite{RNGCell} and sketched in Fig.\ \ref{fig:cell}.
-    The implementation of this thesis uses \(M=N\).
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[not Connected Nodes][]{
-            \label{sfig:cell:big}
-            \input{images/CellBig}
-        }
-        \subfigure[Connected Nodes][]{
-            \label{sfig:cell:small}
-            \input{images/CellSmall}
-        }
-        \caption[Sketch how the Cell Method works]
-        {
-            Sketch how the cell algorithm for the construction of the
-            RNG and GG works. Here with the lune definition of the GG.
-            The bounding box of the lune which determines which cells have
-            to be tested, is marked with thick colored lines.\\
-            \subref{sfig:cell:big} shows that it is sufficient to find a
-            single node in an inner cell of the bounding box to discard
-            the edge between two distant nodes. The nodes inside the
-            other 8 marked cells do not have to be tested anymore.\\
-            \subref{sfig:cell:small} shows that only the nodes inside the
-            marked cell have to be tested, because there are no other nodes,
-            the edge can be drawn.
-        }
-        \label{fig:cell}
-    \end{figure}\\
-    Given the discretized cell structure it is just necessary to test the nodes in the cells which
-    resemble a rectangular bounding box of the lune. Most pairs will be
-    far away from each other and there will be one or more cells in the
-    middle of the bounding box, which are completely inside the lune so.
-    Then only one node has to be tested from such a cell to discard an
-    edge between the nodes. On the other hand, nodes that will be connected
-    are near to each other so that only very few cells intersect the bounding
-    box of their lune and consequently only very few nodes have to be tested.\\
-    Here the number of cells equals the number of nodes.
-    Indeed this method reduced the time needed to construct a RNG with
-    \(N=32^2\) and \(N=64^2\) by a factor of
-    over \(15\) respectively \(40\). Though the complexity is still of
-    order \(O(N^2)\) in the best case, because for every pair at least
-    one check has to be performed.
+    \end{figure}
+
+    \subsubsection{Construction}
+        The simplest way to construct these graphs is to test for each
+        pair of nodes if any other node lies in
+        the lune of the pair. That is of complexity \(O (N^3)\), because
+        there are \(N(N-1)\) pairs and for each \((N-2)\) nodes to test. So
+        the running time of a straight forward implementation would be of
+        order \(O(N^3)\).\\
+        To reduce the complexity one can first create a DT in complexity \(O (N \log N)\)
+        \cite{RNGCell} and test the connectedness for each edge contained
+        therein, because the DT is a supergraph of both.
+        For the construction of the DT for a given set of points one might
+        use existing software libraries, e.g.\ the \texttt{qHull}\footnote{\url{http://www.qhull.org}} library.
+        However, generation of the graphs is not time critical in the scope
+        of this bachelor thesis.\\
+        So a trade off is to use basically the simple method but only test
+        the connectedness for nodes which are near to the lune and abort if
+        one node inside the lune is found. To determine which nodes are
+        near the lune one can subdivide the area in \(M\) \emph{cells} of size
+        \(L_c \times L_c\) and save for each cell a list with nodes lying
+        inside like presented in Ref.\ \cite{RNGCell} and sketched in Fig.\ \ref{fig:cell}.
+        The implementation of this thesis uses \(M=N\).
+        \begin{figure}[htbp]
+            \centering
+            \subfigure[not Connected Nodes][]{
+                \label{sfig:cell:big}
+                \input{images/CellBig}
+            }
+            \subfigure[Connected Nodes][]{
+                \label{sfig:cell:small}
+                \input{images/CellSmall}
+            }
+            \caption[Sketch how the Cell Method works]
+            {
+                Sketch how the cell algorithm for the construction of the
+                RNG and GG works. Here with the lune definition of the GG.
+                The bounding box of the lune which determines which cells have
+                to be tested, is marked with thick colored lines.\\
+                \subref{sfig:cell:big} shows that it is sufficient to find a
+                single node in an inner cell of the bounding box to discard
+                the edge between two distant nodes. The nodes inside the
+                other 8 marked cells do not have to be tested anymore.\\
+                \subref{sfig:cell:small} shows that only the nodes inside the
+                marked cell have to be tested, because there are no other nodes,
+                the edge can be drawn.
+            }
+            \label{fig:cell}
+        \end{figure}\\
+        Given the discretized cell structure it is just necessary to test the nodes in the cells which
+        resemble a rectangular bounding box of the lune. Most pairs will be
+        far away from each other and there will be one or more cells in the
+        middle of the bounding box, which are completely inside the lune so.
+        Then only one node has to be tested from such a cell to discard an
+        edge between the nodes. On the other hand, nodes that will be connected
+        are near to each other so that only very few cells intersect the bounding
+        box of their lune and consequently only very few nodes have to be tested.\\
+        Here the number of cells equals the number of nodes.
+        Indeed this method reduced the time needed to construct a RNG with
+        \(N=32^2\) and \(N=64^2\) by a factor of
+        over \(15\) respectively \(40\). Though the complexity is still of
+        order \(O(N^2)\) in the best case, because for every pair at least
+        one check has to be performed.

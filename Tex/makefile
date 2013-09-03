@@ -12,6 +12,7 @@ CHAPTERS = chapters/title.tex \
 BIBFILE = lit.bib
 
 IMAGES = images/GG_RNG_def.tex \
+         images/DT_def.tex \
          images/Displacement.tex \
          images/CellSmall.tex \
          images/CellBig.tex \
