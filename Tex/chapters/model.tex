@@ -1,25 +1,25 @@
 \subsection{The Disordered Ising Model}
 \label{ssec:isingmodel}
     The examined model is a 2D Ising model.
-    The most common definition of the Ising model, to which will be referred
-    as the \emph{square lattice Ising model}, is a square lattice with edge length \(L\) and
-    \(N=L^2\) sites. Each site has a magnetic moment, which is called the spin. Each
+    The most common definition of the Ising model, to which will be referred to
+    as the \emph{square lattice Ising model}, is a square lattice with
+    edge length \(L\) and \(N=L^2\) sites with periodic boundary conditions.
+    Note that \(N\) always refers to the number of sites in this thesis.
+    Each site has a magnetic moment, which is called the spin. Each
     spin can take a value \(s \in \{-1,+1\}\) and interacts with its
     nearest neighbors described by the Hamiltonian
     \begin{equation}
-        H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j} - \sum_i h_i s_i.
+        H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}.
         \label{eq:hamiltonian}
     \end{equation}
     \(\avg{i,j}\) refers to nodes \(i\) and \(j\) which are nearest
     neighbors, so that they are directly coupled to each other. The
     coupling between \(i\) and \(j\) is characterized by \(J_{ij}\),
-    the coupling constant. If \(J_{ij} > 0 \ \forall i,j\) the model resembles a ferromagnet.
-    For the square lattice Ising model \(J_{ij} = 1 \ \forall i,j\) applies.
-    \(h_i\) denotes the outer magnetic field at the position of
-    site \(i\). For the square lattice Ising model \(h_i=0 \ \forall i\)
-    applies.\\
+    the coupling constant. If \(J_{ij} > 0 \ \forall \avg{i,j}\) the model resembles a ferromagnet.
+    For the square lattice Ising model \(J_{ij} = 1 \ \forall \avg{i,j}\) applies.\\
     The most important modification of the square lattice Ising model in this
-    thesis is that the sites of the square lattice are displaced.
+    thesis is that the sites of the square lattice are displaced introducing
+    geometric disorder resulting in a non regular graph structure.
     The displacement is randomly Gaussian distributed with standard
     deviation \(\sigma\), i.e.\ the \(x\) and \(y\) coordinates of the
     sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
@@ -41,25 +41,25 @@
         }
         \label{fig:displacement}
     \end{figure}\\
-    \(\sigma\) will also be called \emph{disorder parameter} in the following.
-    Most sites will only have one nearest neighbor after the
+    In the following \(\sigma\) will also be called \emph{disorder parameter}.
+    If we take "nearest neighbor" in the Euclidean meaning, most sites
+    will only have one nearest neighbor after the
     displacement. If only the edges between these neighbors remained,
     the lattice would collapse to many very small clusters. But if one
     left the edges as the were before the displacement, the edges would
     cross -- at least for big displacements. The crossing of edges then
-    would destroy the two dimensional character of the model and the results
-    would not be comparable with known results for the two dimensional
-    Ising model.
+    would destroy the planar character of the model.
     To avoid this, a new edge set will be etablished after the displacement.
     The edges are constructed according to
     one of the two in Sec.\ \ref{ssec:graphtypes} defined rules,
-    so that the lattice represents a proximity graph. Edges
-    of the used proximity graph do not cross each other, hence the 2D
-    character of the lattice is preserved. The coupling constant \(J\) gets
-    identified with edge weights. The weight of an edge \(E_{ij} =
-    J_{ij} = \exp (\alpha (1-d_{ij}))\) where \(d_{ij}\) is the Euclidean
-    distance between the nodes \(i\) and \(j\). The free parameter
-    \(\alpha\) is set to \(\alpha = 0.5\) inspired by \cite{Lima2000}.
+    so that for a given configuration of points the resulting graph is an
+    instance of a proximity graph. The coupling constant \(J\) gets
+    identified with edge weights. \(J\) will be changed to depend on the
+    geometric distance between the connected pair of sites. More precise,
+    the weight of an edge is \(E_{ij} = J_{ij} = \exp (\alpha (1-d_{ij}))\)
+    where \(d_{ij}\) is the Euclidean
+    distance between the nodes \(i\) and \(j\). Following Ref.\ \cite{Lima2000}
+    the free parameter \(\alpha\) is set to \(\alpha = 0.5\).
     The boundary is periodic, i.e.\ nodes near the right edge can be
     connected to nodes near the left edge and vice versa. Analogously the
     top and bottom edges are connected. One can imagine that the model
@@ -73,11 +73,11 @@
         \caption[A Graph on a Torus to Visualise Periodic Boundary Conditions]
         {
             A graph on a torus to visualize periodic boundary conditions.
-            Note that the lattice on this torus is not a square but has
-            a height to width ratio of 1:4. At 1:1 the torus would cut
+            On this torus, for a more clear presentation, the underlying
+            graph exhibits a height to width ratio of 1:4. At 1:1 the torus would cut
             itself. Hence, the torus represents the geometry of the model
             not perfectly, but gives very quick the right idea.
-            %Also the shades are of course only a guide to the eye.
+            Also the shades are of course only a guide to the eye.
         }
         \label{fig:torusRNG}
     \end{figure}\\
@@ -93,11 +93,13 @@
     and \(\gamma = \frac{7}{4}\). These values are universal for the Ising
     model. Their meaning will be explained in Sec.\ \ref{ssec:critExp} in more detail.\\
     The case for randomly distributed sites \(\sigma \gtrsim 1\) is
-    already studied on a Delaunay triangulation. \cite{Janke1994} examines
-    this for constant \(J\) and \cite{Lima2000} for \(J_{ij} = e^{-\alpha d_{ij}}\).
+    already studied on a Delaunay triangulation. Ref.\ \cite{Janke1994} examines
+    this for constant \(J\) and Ref.\ \cite{Lima2000} for \(J_{ij} = e^{-\alpha d_{ij}}\).
     Both articles conclude that this model lies within the universality
     class of the square lattice Ising model, i.e.\ has the same critical
-    exponents.
+    exponents, as can be expected since the underlying graph structure can
+    be embedded in 2D. Hence, due to universality it should exhibit the same
+    critical exponents as the basic square lattice Ising ferromagnet.
 
 \subsection{Gabriel- and Relative Neighborhood Graph}
 \label{ssec:graphtypes}
@@ -113,15 +115,15 @@
     In this thesis the distance is always determined by the Euclidean
     metric in two dimensions, though in principle every metric in any
     dimension can be used.\\
-
-    The Gabriel graph (GG) \cite{Gabriel1969} is a subgraph of the
-    Delaunay triangulation. Two nodes \(i\) and \(j\) with distance
+    \paragraph{The Delaunay triangulation} (DT) TODO!!
+    \paragraph{The Gabriel graph} (GG) \cite{Gabriel1969} is a subgraph of the
+    DT. Two nodes \(i\) and \(j\) with distance
     \(d_{ij}\) will be connected with an edge, if a circle with its
     center on half way between \(i\) and \(j\) and radius
     \(r = \frac d 2\) contains no other nodes. This area will be
     called \emph{lune} in the following. See also the cross hatched region
     from Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.\\
-    The Relative Neighborhood graph (RNG) \cite{Toussaint1980} is a
+    \paragraph{The Relative Neighborhood graph} (RNG) \cite{Toussaint1980} is a
     subgraph of the GG. Two nodes \(i\) and \(j\) with
     distance \(d_{ij}\) will be connected, if no other node is in the
     \emph{lune}. The lune is defined as the intersection of two
@@ -144,7 +146,7 @@
         \caption[Gabriel - and Relative Neighborhood Graph]
         {
             \subref{sfig:lunes:def} Lunes, which define where an edge
-                exsist, of RNG (hatched region) and GG (cross hatched region)
+                exist, of RNG (hatched region) and GG (cross hatched region)
             \subref{sfig:lunes:rng} Example of a RNG on periodic
                 boundary conditions. Periodic nodes are dashed.
             \subref{sfig:lunes:gg} Example of a GG on
@@ -155,22 +157,23 @@
     The simplest way to construct these graphs is to test for each
     pair of nodes if any other node lies in
     the lune of the pair. That is of complexity \(O (N^3)\), because
-    there are \(N(N-1)\) pairs and for each \(N-2\) nodes to test. So
+    there are \(N(N-1)\) pairs and for each \((N-2)\) nodes to test. So
     the running time of a straight forward implementation would be of
     order \(O(N^3)\).\\
-    To reduce the complexity one can first create a Delaunay
-    Triangulation in complexity \(O (N \log N)\)
-    \cite{RNGCell} and test the criterion for each edge, because
-    the Delaunay triangulation is a supergraph of both. But the
-    implementation of a Delaunay triangulation algorithm is not trivial
-    and the generation of the graphs is not time critical in the scope
+    To reduce the complexity one can first create a DT in complexity \(O (N \log N)\)
+    \cite{RNGCell} and test the connectedness for each edge contained
+    therein, because the DT is a supergraph of both.
+    For the construction of the DT for a given set of points one might
+    use existing software libraries, e.g.\ the qHull\footnote{http://www.qhull.org} library.
+    However, generation of the graphs is not time critical in the scope
     of this bachelor thesis.\\
     So a trade off is to use basically the simple method but only test
-    the criterion for nodes which are near to the lune and abort if
+    the connectedness for nodes which are near to the lune and abort if
     one node inside the lune is found. To determine which nodes are
-    near the lune one can subdivide the area in \emph{cells} and save
-    for each cell a list with nodes lying inside like presented in
-    \cite{RNGCell} and sketched in Fig.\ \ref{fig:cell}.
+    near the lune one can subdivide the area in \(M\) \emph{cells} of size
+    \(L_c \times L_c\) and save for each cell a list with nodes lying
+    inside like presented in Ref.\ \cite{RNGCell} and sketched in Fig.\ \ref{fig:cell}.
+    The implementation of this thesis uses \(M=N\).
     \begin{figure}[htbp]
         \centering
         \subfigure[not Connected Nodes][]{
@@ -197,7 +200,7 @@
         }
         \label{fig:cell}
     \end{figure}\\
-    Now it is just necessary to test the nodes in the cells which
+    Given the discretized cell structure it is just necessary to test the nodes in the cells which
     resemble a rectangular bounding box of the lune. Most pairs will be
     far away from each other and there will be one or more cells in the
     middle of the bounding box, which are completely inside the lune so.
