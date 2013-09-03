@@ -67,10 +67,9 @@ $(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS) $(IMAGES) $(BIBFILE)
 
 %.eps: %.gp
 	cd $(<D) && gnuplot $(<F)
-	cd $(@D) && ps2epsi $(@F) $(@F)_tmp && mv $(@F)_tmp $(@F)
 
 %.pdf: %.eps
-	cd $(<D) && epstopdf $(<F)
+	cd $(<D) && epspdf -b $(<F)
 
 clean:
 	rm -f $(PLOTS) plots/fit.log
