@@ -7,7 +7,7 @@
     Equilibrium is defined as a steady state, wherein
     the observables are only fluctuating but not changing in any
     particular direction. For example thermal equilibrium denotes the
-    condition, that the system under scrutiny has reached the temperature
+    condition that the system under scrutiny has reached the temperature
     of the heat bath. This is the case, once there is no directed energy
     exchange between them, thus the energy of the simulated system reaches
     a steady state, where only fluctuations occur.
@@ -28,14 +28,14 @@
         F = U - TS
     \end{equation}
     where \(S\) is the entropy, \(U=\avg{H}\) the internal energy and
-    \(\avg{\cdot}\) declares the expected value of an observable.
+    \(\avg{\cdot}\) declares the expectation value of an observable.
     One can guess that for low \(T\) the internal energy
-    will be low, and for high \(T\) the entropy will be high, to minimize
+    will be low, and for high \(T\) the entropy will be high to minimize
     \(F\).
     Considering the Hamiltonian of the Ising model, a spin configuration
     of high order, where most spins are aligned with their neighbors,
-    leads to a low \(H\) and therefore a low \(U\). Simultaneously, this
-    state of high order corresponds to a low entropy \(S\).
+    leads to a low value of \(H\) and therefore a low value of \(U\).
+    Simultaneously, this state of high order corresponds to a low entropy \(S\).
     Analogically a state of high \(U\) is also a state of high \(S\).
     These preliminary considerations make a phase transition at some
     \(T\) where the influence of the entropy on \(F\) becomes the same
@@ -80,13 +80,13 @@
     critical temperature \(T_c\), where the phase transition occurs, will
     be examined. The Ising system in two dimensions shows a second order
     phase transition, hence \(m\) and \(E\) are continous, but show at
-    \(T_c\) an infinitly sharp slope in the thermodynamic limit i.e.\
+    \(T_c\) an infinitly sharp slope in the thermodynamic limit, i.e.\
     the first derivative diverges.
-    From statistical physics (compare \cite{nolting2005}) is known that
-    these derivatives can be expressed by fluctuations e.g.\ the specific
+    From statistical physics (compare \cite{nolting2005}) it is known that
+    these derivatives can be expressed by fluctuations, e.g.\ the specific
     heat can be expressed as
     \begin{equation}
-        c = \frac{\partial \avg{H}}{\partial T} = k_B \beta^2 \avg{\brac{H-\avg{H}}^2}
+        c = \frac{\partial \avg{H}}{\partial T} = k_B \beta^2 \avg{\brac{H-\avg{H}}^2}.
     \end{equation}
     The specific heat is a measure for how much energy is needed to change
     the temperature of the system.
@@ -116,18 +116,18 @@
     the observable, which should be measured, and to estimate the mean of
     the observable from this samples. To apply this technique to statistical
     ensembles, one creates sample states of the system, measures the
-    observables calculates the expected value through averaging.\\
+    observables and calculates the expected value through averaging.\\
     In statistical physics the expected value of an observable \(O\)
     is -- as also noted above -- calculated by
     \begin{equation}
-        \avg{O} = \frac{1}{Z} \sum_i p_i O_i
+        \avg{O} = \frac{1}{Z} \sum_i p_i O_i.
     \end{equation}
     It is however possible that there are few states contributing
     massively more than others. In canonical systems at low \(T\),
     states with low values of \(H\) contribute much more than states with
     high values of \(H\).
     But if one samples the \(2^N\) states evenly, it is probable to miss
-    them. this is called \emph{simple sampling} and results in large
+    them. This is called \emph{simple sampling} and results in large
     errorbars for any observable.
     It is therefore desirable to sample only the states with high
     contributions to the sum.
@@ -290,7 +290,7 @@
         equilibrium is defined as a steady state, one can determine it by
         observing the change of the observables over the progressing
         simulation as pictured in Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}.
-        The count of sweeps till
+        The count of sweeps until
         equilibrium is called \emph{equilibration time} \(t_{eq}\).
         All measurements should start after this time.\\
         In Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}

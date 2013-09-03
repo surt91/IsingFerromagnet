@@ -44,7 +44,7 @@
     The expected values \(\avg{O}\) for \(100\) different random proximity
     graphs with the same disorder parameter \(\sigma\) are then averaged to
     \(\overline{\avg{O}}\). Note that the signs \(\overline{\avg{\cdot}}\)
-    are omitted in the following for the sake of simplicity so that the
+    are omitted in the following for the sake of simplicity so
     it will be just called \(O\).\\
     Not only the seed to generate the new random
     realization of the proximity graph is changed, but also the seed for
@@ -56,7 +56,7 @@
     by taking \(M\) random samples from the \(M\) measured values of \(O\),
     where the same value can be chosen more than once, calculating the
     estimator \(\avg{O_b}\) of this bootstrap sample and doing this \(k\)
-    times. Then the standard deviation of of the \(k\) calculated \(\avg{O_b}\)
+    times. Then the standard deviation of the \(k\) calculated \(\avg{O_b}\)
     is taken as an estimate for \(\Delta \overline{\avg{O}}\).
     In this thesis the number of bootstrap samples is \(k = 200\).\\
     Note that while the error of \(\avg{O}\), \(\Delta \avg{O}\) is dependend on \(\tau\) \cite[p. 151]{Katzgraber2011}
@@ -129,7 +129,7 @@
     alongside the \(N\) Metropolis flips also a cluster of \(\ge 1\) spin is
     flipped. On the other hand the \(\tau\) used for the fit are not the
     \(\tau\) at \(T_{c}\) but the maximum \(\tau\) of all \(T\).
-    Nevertheless it is interesting, that it obeys a power law
+    Nevertheless it is interesting that it obeys a power law
     \(\tau \propto L^{z'}\). This suggests that \(\xi \gtrsim L\)
     is satisfied at the temperature of maximum \(\tau\), which is plausible,
     because the peak in Fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw}
@@ -450,7 +450,7 @@
     Cubic spline interpolation is a piece wise fitting of polynoms of
     degree three which are joined under the condition to be at least two
     times continuously differentiable. This interpolation type has the
-    advantage, that it is only influenced by local points so that the
+    advantage that it is only influenced by local points so that the
     plateaus at low and high \(T\) do not influence the interpolation in
     the vicinity of \(T_c\) -- in contrast to, e.g.\ an polynom fit of
     degree 4, which has to be restricted to the vincinity of \(T_c\) to
@@ -481,7 +481,7 @@
     compared. In the following figures the RNG will always be on the
     left side and the GG on the right side.
     And in Tab.\ \ref{tab:critTemp} the values are displayed together with the
-    values obtained by the data collapse from the Sec.\ before.
+    values obtained by the data collapse from the section before.
     \begin{table}[htbp]
         \center
         \begin{tabular}{l l l l l}
@@ -522,7 +522,7 @@
         \label{tab:critTemp}
     \end{table}\\
     The values obtained through the data collapse and the values obtained
-    through the interSec.\ of the binder cumulant are always in good
+    through the intersection of the binder cumulant are always in good
     agreement and of comparable precision.\\
     These values of \(T_c\) are plotted over \(\sigma\) in Fig.\ \ref{fig:Tc}.
     \begin{figure}[htbp]
@@ -555,7 +555,7 @@
     the properties of the system will also change monotonically, which is
     indeed the case on a RNG but not on a GG. The
     maximum at \(\sigma \approx 0.15\) on the GG will be discussed later.
-    For big \(\sigma\) the displaced nodes approach the limit of randomly
+    For large values of \(\sigma\) the displaced nodes approach the limit of randomly
     distributed nodes, hence \(T_c\) is independent of \(\sigma\) for
     \(\sigma \gg 1\). Regarding this both meet the expectations.\\
     Another strange property is the jump from \(\sigma = 0\) to \(\sigma > 0\)
@@ -579,9 +579,9 @@
     \end{equation}
     This is lower than for the square lattice with degree 4.\\
     This is plausible, because more edges lead to more neighbors. The energy
-    which is necessary to flip a spins down whose neighbors spins are up,
+    which is necessary to flip a spin down while the spins of its neighbors are up,
     gets higher with the number of neighbors. So the more edges are in
-    the graph, the more stable the system becomes and \(T_c\) is higher.
+    the graph the more stable the system becomes and \(T_c\) is higher.
     This is also an explanation why the \(T_c\) of the RNG is always
     lower than that of the GG: The degree of the \(T_c\) is lower.\\
     If one plots the degree of the graphs at different \(\sigma\) like
@@ -647,18 +647,18 @@
     the transition from \(\sigma = 0\). Visible in Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.00}\subref{sfig:GG_sigma:0.01}
     a small change of \(\sigma\) causes many new edges to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
     To fully understand this, take four nodes forming a square. The edge
-    across does not exist, because the other two nodes are on the edge
+    across does not exist, because the other two nodes are on the border
     of the lune. Moving one node slightly into the square, causes the lune
-    to get smaller, hence no other nodes are inside or on the edge of
+    to get smaller, hence no other nodes are inside or on the border of
     the lune anymore and the edge appears. This process is sketched in
-    Fig.\ \ref{fig:GGEdge}
+    Fig.\ \ref{fig:GGEdge}.
     \begin{figure}[htbp]
         \centering
-        \subfigure[Definition of the Lunes][]{
+        \subfigure[][]{
             \label{sfig:GGEdge:before}
             \input{images/GGEdgeBefore}
         }
-        \subfigure[RNG example][]{
+        \subfigure[][]{
             \label{sfig:GGEdge:after}
             \input{images/GGEdgeAfter}
         }
@@ -679,7 +679,7 @@
     of \(T_c\). So while displacing the nodes, there arise more edges
     than edges are vanishing until \(\sigma \approx 0.15\) is reached.
     Then more edges disappear, than appear at further displacement. This
-    is not an obvious effect, but can be seen in Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.09}\subref{sfig:GG_sigma:0.15}\subref{sfig:GG_sigma:0.21}
+    is not an obvious effect, but can be seen in Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.09}\subref{sfig:GG_sigma:0.15}\subref{sfig:GG_sigma:0.21}.
     \begin{figure}[htbp]
         \subfigure[][$\sigma = 0.00$]
         {
@@ -746,8 +746,8 @@
         {
             RNG with periodic boundary conditions for different \(\sigma = 0\).
             \subref{sfig:RNG_sigma:0.09} has still almost the square lattice
-            configuration of edges, which is why the plateau from Fig.\ \ref{sfig:Tc}\subref{sfig:Tc:RNG}
-            exsists. In the next two pictures one sees the fast disappearance
+            configuration of edges, which is why the plateau from Fig.\ \ref{fig:Tc}\subref{sfig:Tc:RNG}
+            exists. In the next two pictures one sees the fast disappearance
             of edges.
         }
         \label{fig:RNG_sigma}

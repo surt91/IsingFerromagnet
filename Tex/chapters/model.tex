@@ -14,13 +14,13 @@
     neighbors, so that they are directly coupled to each other. The
     coupling between \(i\) and \(j\) is characterized by \(J_{ij}\),
     the coupling constant. If \(J_{ij} > 0 \ \forall i,j\) the model resembles a ferromagnet.
-    For the square lattice Ising model \(J_{ij}=1 \forall i,j\) applies.
+    For the square lattice Ising model \(J_{ij} = 1 \ \forall i,j\) applies.
     \(h_i\) denotes the outer magnetic field at the position of
     site \(i\). For the square lattice Ising model \(h_i=0 \ \forall i\)
     applies.\\
-    The most important modification of the square lattice Ising modell in this
-    thesis is, that the sites of the square lattice are displaced.
-    The displacement is randomly Gaussian distributed with the standard
+    The most important modification of the square lattice Ising model in this
+    thesis is that the sites of the square lattice are displaced.
+    The displacement is randomly Gaussian distributed with standard
     deviation \(\sigma\), i.e.\ the \(x\) and \(y\) coordinates of the
     sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
     from a Gaussian distribution
@@ -43,12 +43,12 @@
     \end{figure}\\
     \(\sigma\) will also be called \emph{disorder parameter} in the following.
     Most sites will only have one nearest neighbor after the
-    displacement. If only the edges between these neighbors remain,
+    displacement. If only the edges between these neighbors remained,
     the lattice would collapse to many very small clusters. But if one
-    leaves the edges as they were before the displacement, the edges would
+    left the edges as the were before the displacement, the edges would
     cross -- at least for big displacements. The crossing of edges then
     would destroy the two dimensional character of the model and the results
-    would not be compareable with known results of the two dimensional
+    would not be comparable with known results for the two dimensional
     Ising model.
     To avoid this, a new edge set will be etablished after the displacement.
     The edges are constructed according to
@@ -83,13 +83,13 @@
     \end{figure}\\
     Note that for \(\sigma = 0\) all \(d_{ij} = 1\) and therefore all
     \(J_{ij} = 1\), so that the disordered Ising model is reduced to the
-    square lattice Ising model. For this exists an analytic solution \cite{Onsager1944}.
+    square lattice Ising model. For this an analytic solution exists \cite{Onsager1944}.
     The critical temperature is
     \begin{equation}
         T_c = 2J/\ln(1+\sqrt 2) = 2.2691...
         \label{eq:exactTc}
     \end{equation}
-    and the critical exponents \(\alpha = 0\), \(\beta = \frac{1}{8}\)
+    and the critical exponents are \(\alpha = 0\), \(\beta = \frac{1}{8}\)
     and \(\gamma = \frac{7}{4}\). These values are universal for the Ising
     model. Their meaning will be explained in Sec.\ \ref{ssec:critExp} in more detail.\\
     The case for randomly distributed sites \(\sigma \gtrsim 1\) is
@@ -104,7 +104,7 @@
     A graph \(G(V,E)\) is a set of nodes \(V\) and edges \(E\). In the
     scope of this model, the nodes get identified with the sites of the
     lattice and the edges signal the neighbor status of two sites. If the
-    corresponding nodes are connected, the sites are neighbors.\\
+    corresponding nodes are connected, the sites will be neighbors.\\
     All here mentioned graph types are \emph{proximity graphs}.
     The edges of these graphs connect nodes which are by some metric near
     to each other.
@@ -116,15 +116,15 @@
 
     The Gabriel graph (GG) \cite{Gabriel1969} is a subgraph of the
     Delaunay triangulation. Two nodes \(i\) and \(j\) with distance
-    \(d_{ij}\) are connected with an edge, if a circle with its
+    \(d_{ij}\) will be connected with an edge, if a circle with its
     center on half way between \(i\) and \(j\) and radius
     \(r = \frac d 2\) contains no other nodes. This area will be
     called \emph{lune} in the following. See also the cross hatched region
     from Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.\\
     The Relative Neighborhood graph (RNG) \cite{Toussaint1980} is a
     subgraph of the GG. Two nodes \(i\) and \(j\) with
-    distance \(d_{ij}\) are connected, if no other node is in the
-    \emph{lune}. The lune is defined as the interSec.\ of two
+    distance \(d_{ij}\) will be connected, if no other node is in the
+    \emph{lune}. The lune is defined as the intersection of two
     circles with radius \(r = d\) and centers on \(i\) and \(j\).
     See also the hatched region in Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.
     \begin{figure}[htbp]
@@ -152,7 +152,7 @@
         }
         \label{fig:lunes}
     \end{figure}\\
-    To construct these graphs the most simple way is to test for each
+    The simplest way to construct these graphs is to test for each
     pair of nodes if any other node lies in
     the lune of the pair. That is of complexity \(O (N^3)\), because
     there are \(N(N-1)\) pairs and for each \(N-2\) nodes to test. So
