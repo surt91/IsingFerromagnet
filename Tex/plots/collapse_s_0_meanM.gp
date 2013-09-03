@@ -1,4 +1,4 @@
-set terminal postscript eps enhanced color blacktext lw 2 solid 26
+set terminal postscript eps enhanced color blacktext lw 2 26
 set output 'collapse_s_0_meanM.eps'
 
 set key samplen 1. left bottom Left                 # customize key
@@ -13,6 +13,9 @@ set xr [-5:15]
 
 set size square
 
-p "data/ScalanaMean_M_S_0.00_L_32.dat"  u (sx($1,32)):(sy($2,32)):(sy($3,32))  w ye lc 2 ps 2 pt 6 t "{/Italic L} = 32" \
-, "data/ScalanaMean_M_S_0.00_L_64.dat"  u (sx($1,64)):(sy($2,64)):(sy($3,64))  w ye lc 3 ps 2 pt 8 t "{/Italic L} = 64" \
-, "data/ScalanaMean_M_S_0.00_L_128.dat"  u (sx($1,128)):(sy($2,128)):(sy($3,128))  w ye lc 4 ps 2 pt 10 t "{/Italic L} = 128"
+p "data/ScalanaMean_M_S_0.00_L_32.dat"  u (sx($1,32)):(sy($2,32)):(sy($3,32))    w ye lt 1 lc 2 ps 2 pt  6 t "{/Italic L} = 32" \
+, "data/ScalanaMean_M_S_0.00_L_64.dat"  u (sx($1,64)):(sy($2,64)):(sy($3,64))    w ye lt 1 lc 3 ps 2 pt  8 t "{/Italic L} = 64" \
+, "data/ScalanaMean_M_S_0.00_L_128.dat" u (sx($1,128)):(sy($2,128)):(sy($3,128)) w ye lt 1 lc 4 ps 2 pt 10 t "{/Italic L} = 128"\
+, "data/ScalanaMean_M_S_0.00_L_32.dat"  u (sx($1,32)):(sy($2,32)):(sy($3,32))    w l lt 3 lc 2 notitle smooth csplines \
+, "data/ScalanaMean_M_S_0.00_L_64.dat"  u (sx($1,64)):(sy($2,64)):(sy($3,64))    w l lt 3 lc 3 notitle smooth csplines \
+, "data/ScalanaMean_M_S_0.00_L_128.dat" u (sx($1,128)):(sy($2,128)):(sy($3,128)) w l lt 3 lc 4 notitle smooth csplines
