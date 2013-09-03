@@ -17,7 +17,7 @@
     \draw[->] (0,0) -- (0+\dxa*0.9,0+\dya*0.9);
 
     \draw[color=black,domain=-1.5:1.5] plot [smooth] (\x,{normal(\x,0,0)+1.6}) node[right] {};
-    \fill (0, 0) circle(0.08);
+    \fill (0, 0) node [above left] {$(x,y)$} circle(0.08);
     \draw[color=black] (0+\dxa, 0+\dya) circle(0.08);
     \draw[color=black,domain=-1.5:1.5,rotate=90] plot [smooth] (\x,{normal(\x,0,0)+1.6}) node[right] {};
 
@@ -30,6 +30,6 @@
 
     \draw[color=gray] (2+\dxb,0+\dyb) -- node [above] {$\Delta x_{2}$} (2, \dyb);
     \draw[color=gray] (2+\dxb,0+\dyb) -- node [right] {$\Delta y_{2}$} (2+\dxb,0);
-    \fill[color=gray] (2, 0) circle(0.08);
+    \fill[color=gray] (2, 0) node [above left] {$(x_{2},y_{2})$} circle(0.08);
     \draw[color=gray] (2+\dxb, 0+\dyb) circle(0.08);
 \end{tikzpicture}
