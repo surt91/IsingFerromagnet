@@ -574,7 +574,8 @@
         \label{fig:Tc}
     \end{figure}\\
     One sees that the RNG on the left has generally a lower critical
-    temperature than the GG. Also \(T_c\) of the RNG decreases
+    temperature than the GG.
+    Also \(T_c\) of the RNG decreases
     monotonically while \(T_c\) of the GG rises at first. Naively one would
     expect that while changing the displacement of the nodes monotonically,
     the properties of the system will also change monotonically, which is
@@ -587,6 +588,7 @@
     of \(T_c\) on the GG. To understand that one has to
     consider the influence of the graph properties on the critical
     temperature.
+
     \subsubsection{Influence of the Average Degree on the Critical Temperature}
         One basic property of a graph is its average degree \(K\) -- sometimes
         called average \emph{coordination number}. \(K\) is defined as the mean count
@@ -938,7 +940,24 @@
                 from Sec.\ \ref{sssec:J}.
             }
             \label{fig:Tc_deg_A0}
-        \end{figure}
+        \end{figure}\\
+        Because Ref.\ \cite{Janke1994} gives for the DT with \(J=1\) a
+        critical temperature \(T_{c,DT} = 3.80\), the obtained \(T_{c,GG} = 2.19\)
+        and \(T_{c,RNG} = 1.13\) for \(\sigma = 1.2\), which should be very
+        similar to a Poisson distributed set of nodes, can be compared.
+        Note that while for the graph ensembles as mentioned in Sec. \ref{ssec:graphtypes}
+        the relation \(DT \supseteq GG \supseteq RNG\) holds, also the
+        relation \(T_{c,DT} \ge T_{c,GG} \ge T_{c,RNG}\) holds.
+        Also keep in mind that the relation \(T_{c,GG} \ge T_{c,RNG}\)
+        was true for \(\alpha = 0.5\) in the preceding sections.
+        This phenomenon is also known from percolation where the relation
+        \(p_{c,DT} \ge p_{c,GG} \ge p_{c,RNG}\) holds for the percolation
+        threshold \(p_c\) -- the critical point of the percolation problem.
+        That the subgraph hierachy can be translated to
+        the sequence of \(p_c\) for the subgraphs, is known as the containment
+        theorem \cite{fisher}.
+        Possibly the containment theorem is also applicable on this kind of
+        problem.
 
 \subsection{Critical Value of the Binder Cumulant}
     The value of the Binder cumulant at the critical point \(g_c\)
