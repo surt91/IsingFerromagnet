@@ -881,57 +881,57 @@
         the values from Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}
         are compared to \(T / K\) for \(\alpha = 0\).
 
-    \subsection{Critical Value of the Binder Cumulant}
-        The value of the Binder cumulant at the critical point \(g_c\)
-        depends strongly on boundary conditions but only weakly on the precise lattice
-        structure \cite{BinderValue}. For periodic boundary conditions on a
-        square lattice it is \(g_c \approx 0.916\) according to \cite{BinderValue}
-            \footnote{Note that \cite{BinderValue} uses another definition of
-                the Binder cumulant, and has to be normalized by \(\frac{2}{3}\)
-                to match the definition in this thesis.}.
-        Because the analysis of Sec.\ \ref{ssec:binderIntersections}
-        yields \(g_c\) anyway, it is easy to check the consistency and
-        behavior of \(g_c\) in the geometrically disordered Ising model.
-        The error bars are the standard error of the six values obtained
-        through the intersections.\\
-        \begin{figure}[htbp]
-            \centering
-            \subfigure[for a RNG][]
-            {
-                \label{sfig:TcG:RNG}
-                \includegraphics[width=0.45\textwidth]{plots/RNG_TcG}
-            }
-            \subfigure[for a GG][]
-            {
-                \label{sfig:TcG:GG}
-                \includegraphics[width=0.45\textwidth]{plots/GG_TcG}
-            }
-            \caption[Values of the Binder Cumulant at the Critical Point $g_c$]
-            {
-                Values of the Binder cumulant at the critical point \(g_c\)
-                for\\
-                \subref{sfig:TcG:RNG} a RNG and\\
-                \subref{sfig:TcG:GG} a GG for different \(\sigma\).
-                The dotted line is the reference value for square lattices
-                with periodic boundary conditions \cite{BinderValue}, which
-                corresponds to \(\sigma = 0\).
-            }
-            \label{fig:TcG}
-        \end{figure}\\
-        Considering both plots in Fig.\ \ref{fig:TcG}, \(g_c\) is for low
-        \(\sigma\) obviously always bigger than the known value. Though the
-        deviations are only very small. Perhaps this overestimation is caused
-        by the cubic spline interpolation used to acquire these \(g_c\) values.
-        Or this are again finite size effects which would disappear for
-        larger system sizes.
-        For bigger \(\sigma\) the uncertainty gets greater, but the values
-        do only differ by a few percent, hence even the big disorder and
-        definition of nearest neighbors via a proximity graph does not change
-        the value of \(g_c\) much. Though it is mentioned in \cite{BinderValue} that the
-        lattice structure has a minor effect on \(g_c\), the uncertainty of
-        \(g_c\) is too large to observe this. For a more exact analysis, new
-        Monte Carlo simulations at \(T_c\) would be needed. But this is
-        beyond the scope of this thesis. Anyway, the results are the expected
-        behavior, because no major deviations from the value of \(g_c\) at
-        \(\sigma = 0\) occur at larger \(\sigma\). Within error bars the
-        values are all in reasonable agreement with \(g_c\).
+\subsection{Critical Value of the Binder Cumulant}
+    The value of the Binder cumulant at the critical point \(g_c\)
+    depends strongly on boundary conditions but only weakly on the precise lattice
+    structure \cite{BinderValue}. For periodic boundary conditions on a
+    square lattice it is \(g_c \approx 0.916\) according to \cite{BinderValue}
+        \footnote{Note that \cite{BinderValue} uses another definition of
+            the Binder cumulant, and has to be normalized by \(\frac{2}{3}\)
+            to match the definition in this thesis.}.
+    Because the analysis of Sec.\ \ref{ssec:binderIntersections}
+    yields \(g_c\) anyway, it is easy to check the consistency and
+    behavior of \(g_c\) in the geometrically disordered Ising model.
+    The error bars are the standard error of the six values obtained
+    through the intersections.\\
+    \begin{figure}[htbp]
+        \centering
+        \subfigure[for a RNG][]
+        {
+            \label{sfig:TcG:RNG}
+            \includegraphics[width=0.45\textwidth]{plots/RNG_TcG}
+        }
+        \subfigure[for a GG][]
+        {
+            \label{sfig:TcG:GG}
+            \includegraphics[width=0.45\textwidth]{plots/GG_TcG}
+        }
+        \caption[Values of the Binder Cumulant at the Critical Point $g_c$]
+        {
+            Values of the Binder cumulant at the critical point \(g_c\)
+            for\\
+            \subref{sfig:TcG:RNG} a RNG and\\
+            \subref{sfig:TcG:GG} a GG for different \(\sigma\).
+            The dotted line is the reference value for square lattices
+            with periodic boundary conditions \cite{BinderValue}, which
+            corresponds to \(\sigma = 0\).
+        }
+        \label{fig:TcG}
+    \end{figure}\\
+    Considering both plots in Fig.\ \ref{fig:TcG}, \(g_c\) is for low
+    \(\sigma\) obviously always bigger than the known value. Though the
+    deviations are only very small. Perhaps this overestimation is caused
+    by the cubic spline interpolation used to acquire these \(g_c\) values.
+    Or this are again finite size effects which would disappear for
+    larger system sizes.
+    For bigger \(\sigma\) the uncertainty gets greater, but the values
+    do only differ by a few percent, hence even the big disorder and
+    definition of nearest neighbors via a proximity graph does not change
+    the value of \(g_c\) much. Though it is mentioned in \cite{BinderValue} that the
+    lattice structure has a minor effect on \(g_c\), the uncertainty of
+    \(g_c\) is too large to observe this. For a more exact analysis, new
+    Monte Carlo simulations at \(T_c\) would be needed. But this is
+    beyond the scope of this thesis. Anyway, the results are the expected
+    behavior, because no major deviations from the value of \(g_c\) at
+    \(\sigma = 0\) occur at larger \(\sigma\). Within error bars the
+    values are all in reasonable agreement with \(g_c\).
