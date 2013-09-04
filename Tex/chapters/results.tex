@@ -783,8 +783,10 @@
                 distributed points (i.e.\ Poisson process).
             }
             \label{fig:RNG_sigma}
-        \end{figure}\\
+        \end{figure}
+
     \subsubsection{Influence of the Coupling Constant on the Critical Temperature}
+    \label{sssec:J}
         However, note that the degree does not alone influence the behavior of \(T_c\).
         Further \(T_c\) depends on the coupling constant \(J\), which is
         obvious from Eqs.\ \eqref{eq:exactTc} and \eqref{eq:exactHCTc}. The
@@ -860,6 +862,24 @@
         temperature.
         Also both graph types exhibit a steep decline after the plateau before
         they approach an asymptotic limit for \(\sigma \gg 1\).\\
+        If one looks at the behavior of \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
+        for \(\sigma \ll 1\) and consequently \(d_{ij} \approx 1\) the
+        following approximation is valid.
+        \begin{equation}
+            \abs{1-d_{ij}} := \varepsilon \ll 1
+        \end{equation}
+        \begin{equation}
+            J_{ij} = e^{\pm \alpha \varepsilon} \approx 1 \pm \varepsilon \mp \dots
+        \end{equation}
+        \begin{align}
+            \avg{\sum_{\avg{i,j}} J_{ij}} &= \frac{\pm \varepsilon}{N} \avg{\sum_{\avg{i,j}} 1} \\
+                                          &= K(1 \pm \varepsilon) \approx K
+        \end{align}
+        Therefore this normalization is independent of the choice of \(\alpha\)
+        at small values of \(\sigma\). In Appendix \ref{appendix:fixedCoupling}
+        in Fig.\ \ref{fig:Tc_deg_A0}\subref{sfig:Tc_norm_deg:RNG_A0}\subref{sfig:Tc_norm_deg:GG_A0}
+        the values from Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}
+        are compared to \(T / K\) for \(\alpha = 0\).
 
     \subsection{Critical Value of the Binder Cumulant}
         The value of the Binder cumulant at the critical point \(g_c\)
