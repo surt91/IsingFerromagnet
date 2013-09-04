@@ -1,20 +1,26 @@
 In this thesis the properties of an Ising ferromagnet, which nodes are
-moved by a Gaussian distributed displacement, is studied with Monte Carlo
+moved by a Gaussian distributed displacement up to the limiting case of
+a Poisson process, is studied with Monte Carlo
 Simulations. The neighbor relationship is provided by two proximity graphs
 -- the RNG and the GG. These graphs conserve the two dimensional character
-of the lattice, because their edges do not cross. The coupling constants
-are distance dependend, they are getting exponential weaker at higher distances.\\
+of the lattice. The coupling constants
+are distance dependent, with increasing distance the coupling strength
+decreases exponentially.
 This model is within the universality of the square lattice Ising
 ferromagnet. Its critical temperature decreases with increasing disorder
-on a RNG. On a GG it first jumps, increases up to a maximum and decreases
+on a RNG. Since effectively, the decreasing avergae coordination number
+of the underlying graphs lowers the resistance to spin flips within
+strongly polarized configurations at low temperatures.
+ On a GG it first jumps, increases up to a maximum and decreases
 afterwards. At high disorder it approaches the limit of randomly generated
 graphs of the respective type. The course of the critical temperatures
-can be made plausible observing the degree of the underlying graph, but
-no explicit formular was found.
+can be made plausible observing the degree of the underlying graph, an
+approximate analytic statement as reason for the observed behavior was
+also presented.
 
 \subsection{Outlook}
     The behavior of the normalized critical temperatures in dependence
     on \(\sigma\) of the Relative Neighborhood graph and Gabriel graph
-    are qualitative similar to each other. One could study the behavior
+    are qualitatively similar to each other. One could study the behavior
     of other proximity graphs like the minimum spanning tree or the
     Delaunay triangulation to examine if it is also similar.\\

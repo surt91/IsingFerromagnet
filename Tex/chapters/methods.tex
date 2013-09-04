@@ -217,7 +217,11 @@
         plot shown in  Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}.
         To get the autocorrelation time one can either fit an exponential
         function \(\exp(-t/\tau)\) like in Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:autoM}
-        or integrate \(\tau = \int \frac{\chi(t)}{\chi(0)} \de t\).
+        or integrate
+        \begin{equation}
+            \tau = \int \frac{\chi(t)}{\chi(0)} \de t.
+            \label{eq:tau}
+        \end{equation}
         \(\tau\) is an estimate that specifies the time after which two
         samples are not correlated anymore, see Refs.\ \cite[p. 59ff]{NewmanBarkema1999} \cite[p. 150f]{Katzgraber2011}.
         To ensure that the error is not underestimated, one should wait

@@ -12,7 +12,7 @@
     and the magnetization per site \(m=\frac{1}{N}\sum_i s_i\) and energy
     per site \(E=\frac{1}{N} H\) are calculated and saved for every
     \(2\tau\) sweeps, where \(\tau\) denotes the \emph{autocorrelation time}
-    (see also \ref{sssec:eqtime}). The used values for different system sizes
+    (see also Sec.\ \ref{sssec:eqtime}). The used values for different system sizes
     are listed in Tab.\ \ref{tab:tauAndTeq} in numbers of sweeps. Note that
     the \(t_{eq}\) values are generously rounded up to be on the safe side
     and the \(\tau\) values are determined as the maximum \(\tau\) over all
@@ -32,7 +32,7 @@
             $t_{eq}$ for Different System Sizes $L$]{
             Autocorrelation times $\tau$ and equilibration times
             $t_{eq}$ for different system sizes $L$. All values are generously
-            rounded up and determined as the maximum over all \(\sigma\).
+            rounded up and determined as the maximum over all \(\sigma\) and \(T\).
         }
         \label{tab:tauAndTeq}
     \end{table}\\
@@ -50,9 +50,9 @@
     realization of the proximity graph is changed, but also the seed for
     the random numbers used in the Monte Carlo simulation and during the
     generation of the random start configuration of the spins.\\
-    The errors \(\Delta \overline{\avg{O}}\) are estimated by bootstrapping
-    \cite{Bootstrap}\\
-    The bootstrapping method estimates error \(\Delta \overline{\avg{O}}\)
+    The errors \(\Delta \overline{\avg{O}}\) are estimated by bootstrap resampling
+    \cite{Bootstrap}.\\
+    The bootstrapping method estimates the error \(\Delta \overline{\avg{O}}\)
     by taking \(M\) random samples from the \(M\) measured values of \(O\),
     where the same value can be chosen more than once, calculating the
     estimator \(\avg{O_b}\) of this bootstrap sample and doing this \(k\)
@@ -77,8 +77,8 @@
 \label{ssec:results:autocorr}
     % Sollte das hier rein?
     Before the results are presented, a short analysis of the
-    autocorrelation time \(\tau\) is given to illustrate the benefits
-    of the used Wolff cluster algorithm.\\
+    autocorrelation time \(\tau\) according to Eq.\ \ref{eq:tau} is given to
+    illustrate the benefits of the used Wolff cluster algorithm.\\
     In Fig.\ \ref{fig:autocorr}\subref{fig:autocorr:temperatures}
     the autocorrelation time for the magnetization per site \(m\) at
     \(\sigma=0\) is plotted. Note that these are the unrounded values
@@ -103,19 +103,20 @@
             \subref{fig:autocorr:powerLaw} the system size $L$. Plotted on
                 double logarithmic axis with a power law fit \(\tau \propto L^z\)
                 to determine the dynamical exponent \(z'\).
-                (Errorbars are the standard error estimated by bootstrapping.)
+                (Errorbars are the standard error estimated by bootstrap resampling.)
         }
         \label{fig:autocorr}
     \end{figure}
     The plateau at low temperatures is easy to understand considering the
-    effects of the Wolff algorithm. At low temperatures it flips nearly every
+    effects of the Wolff cluster algorithm. At low temperatures it flips nearly every
     spin in every step, thus the correlation drops to zero after one sweep.
-    (Note that this is not the only explanation for the course of \(\tau\).
+    (Note that this is not the only explanation for the small values of \(\tau\).
     The parallel tempering algorithm swaps spin configurations
     with possibly different signs, thus having the same effect.)
     Also note that the maximum of \(\tau\) is not at \(T_c\) but at a higher
     temperature. The cause is probably the effectiveness of the Wolff cluster
     algorithm at \(T_c\), hence \(\tau \approx 1\) at \(T_{c}\).
+    But it is also possible that these are again finite size effects.
     Obviously the autocorrelation time \(\tau\) increases with the system
     size. In fact it obeys a power law \(\tau \propto L^z\), which is
     the expected behavior of a dynamical exponent \(z\) as mentioned in
@@ -123,7 +124,7 @@
     In Fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} \(\tau\) is plotted
     over \(L\). Note that the exponent \(z'=0.64(2)\) determined by this plot is
     not comparable to the known critical exponent \(z=0.25\) \cite{NewmanBarkema1999}
-    for the Wolff cluster algorithm. On the one hand the number of sweeps,
+    expected for the Wolff cluster algorithm at \(T_c\). On the one hand the number of sweeps,
     in which \(\tau\) is measured in this thesis, are more than a standard
     Metropolis sweep to which \(z\) normally corresponds, because each sweep
     alongside the \(N\) Metropolis flips also a cluster of \(\ge 1\) spin is
@@ -139,7 +140,7 @@
     This is of course only a rough analysis of existing data which was
     generated for another purpose. For a more detailed inspection, one
     would perform the simulation at the critical point, which will be
-    determined in the next sections.
+    determined subsequently.
 
 \subsection{Finite Size Effects}
 \label{ssec:finitesize}
@@ -151,7 +152,7 @@
     will diverge. In Fig.\ \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM_L}
     it is easy to see that the steep decline of \(\avg{|m|}\)
     occurs at lower temperatures \(T\) for higher
-    disorder parameters \(\sigma\) (here with a RNG).
+    disorder parameters \(\sigma\).
     \begin{figure}[htbp]
         \centering
         \subfigure[Dependence of the Phase Transition on $\sigma$][]
@@ -170,24 +171,25 @@
             parameter $\sigma$ on the phase transition
             for an underlying RNG with $L=128$. The position of the slope,
             and hence the critical temperature, moves to lower temperatures
-            with increasing \(\sigma\)\\
+            with increasing \(\sigma\) (\(0.0 \le \sigma \le 1.2\))\\
             \subref{sfig:smeared_out:meanM} Effects of different system
-            sizes at \(\sigma = 0\). Dotted lines are guides to the eye.
+            sizes at \(\sigma = 0\), i.e.\ the square lattice Ising ferromagnet.
+            Dotted lines are guides to the eye.
             The \(L=16\) curve is much less steep than the \(L=128\) curve.
         }
         \label{fig:smeared_out}
     \end{figure}\\
-    In the shown plots there occurs no steep decline to zero, but a
+    As evident from the figure there occurs no steep decline to zero, but a
     smooth one. \(\avg{\abs{m}}(T_c) = 0\) is only present in infinite
     systems, hence no computer simulation will show the exact behavior in the
-    thermodynamic limit. It will always show some \emph{finte size effects}.
+    thermodynamic limit. It will always show some \emph{finite size effects}.
     These finite size effects cause a "smearing out" of the phase
     transition. This is stronger for smaller system sizes, as shown
     in Fig.\ \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM}\footnote{See the appendix \ref{appendix:finiteSizeEffects} for a similar figure for the specific heat.}.
-    Clearly the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
-    Despite of this one can obtain \(T_c\) by finite size scaling
+    Clearly, the \(L=16\) curve is much less steep than the \(L=128\) curve.\\
+    Despite of this one can obtain \(T_c\) by finite size scaling (FSS)
     methods \cite[p. 232ff]{NewmanBarkema1999}, which also yield the critical
-    exponents. This will be performed in the next section.
+    exponents. Such a FSS analysis will be performed in the next section.
     Though there is an easier approach, which yields comparable precise
     values for \(T_{c}\) in a much faster and more robust way, which is
     presented in Sec.\ \ref{ssec:binderIntersections}.
@@ -215,21 +217,21 @@
     Ising model and is nominally \(\alpha = 0\).
     For that reason, \(\alpha\) will not be considered in this section.\\
     The important property of the critical exponents is that they are
-    universal for a model, i.e.\ they are independent of the size, the structure
-    or the coupling constant \(J\) \cite{NewmanBarkema1999} of the lattice.
+    universal for a model with respect to certain model characteristics.
+    I.e.\ for a given dimension they are independent of the precise lattice
+    structure and the magnitude of the coupling constant \(J\).
     Therefore they should also be independent of \(\sigma\). But they are
     not universal regarding the dimension of the model.
-    Studies on random lattices with \cite{Lima2000} and without \cite{Janke1994}
+    Studies on random lattices with (Ref.\ \cite{Lima2000}) and without (Ref.\ \cite{Janke1994})
     varying coupling constants \(J\) confirm that the
-    critical exponents are not influenced by a random lattice.
+    critical exponents are not influenced by a random structure of the lattice.
     So they will be used for consistency cross checking and
     comparison with the known exact values \cite[p. 59]{Pelissetto2002}.
     If the critical exponents can be reproduced, the determined critical
     temperatures are probably correct, too.\\
-    % Ausfuehrlichere Herleitung der Skalentheorie, Skalenanalyse
-    To determine the critical exponents, the finite size scaling method
-    will be used. The here given explanation will give a rough idea, how
-    the method works. For a more detailed explanation look at \cite{Norrenbrock2011}, \cite{DMelchert2009} or \cite{NewmanBarkema1999}.
+    To determine the critical exponents, the FSS method
+    will be used. The explanation below will give a rough idea how
+    the method works. A more detailed explanation can be found in Refs.\ \cite{Norrenbrock2011}, \cite{DMelchert2009} or \cite{Binder2010}.
     The crucial element is that there exists a \emph{scaling function},
     which is valid for sufficiently large \(L\) near the critical
     temperature \(T_{c}\) and has only an explicit \(L\) dependence.
@@ -251,12 +253,12 @@
     and plots the measured observables for all \(L\).
     Then one varies \(\nu\) and \(T_{c}\) until the plotted observables
     collapse on one curve -- the scaling function.
-    Like the obersables from Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_s_0}
-    collapse in Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}.
-    %\footnote{Examples for a collapse to determine the other critical exponents are in appendix \ref{appendix:finiteSizeScaling}}.
+    A data collapse of the curves showed in Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_s_0}
+    is illustrated in Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}.
     The same principle can be used to determine the other two exponents.
     Note that \(L=16\) is not used for the collapse, because it is a
-    rather small value. Eq. \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
+    rather small value of \(L\) for which deviations from the assumed
+    scaling behavior might be expected. I.e.\ Eq.\ \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
     are approximations for big \(L\). For small \(L\) one needs some
     \emph{corrections to scaling} terms, which are not considered here.\\
     To accomplish the collapse in a semi-automatic and reproduceable
@@ -279,27 +281,28 @@
             \subref{sfig:gettingCrit:binder_s_0} The Binder cumulant \(g\)
                 of an square lattice Ising model (\(\sigma=0\)).\\
             \subref{sfig:gettingCrit:collapse_s_0} The curve from \subref{sfig:gettingCrit:binder_s_0}
-                collapsed by finite size scaling (errors are for clarity
+                collapsed by FSS (errors are for clarity
                 not given, see Tab.\ \ref{tab:critExp})
         }
         \label{fig:gettingCrit}
     \end{figure}\\
-    A finite size scaling analysis was
+    A FSS analysis was
     performed to determine the critical exponents \(\beta, \gamma, \nu\)
     using \texttt{autoscale.py} \cite{autoscale2009} and Eq.\ \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}.
-    The values for \(\nu\) are obtained by every collapse and are therefore
-    averaged over all determined values. Fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_sus}\subref{sfig:gettingCrit:collapse_s_1_sus}
-    show an example collapse for \(\sigma=1\) of the magnetic susceptibility
+    The values for \(\nu\) are obtained by data collapse for each observable.
+    As a final result, the arithmetic mean of these values is presented.
+    Fig. \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_sus}\subref{sfig:gettingCrit:collapse_s_1_sus}
+    show an examplary collapse for \(\sigma=1\) of the magnetic susceptibility
     \begin{equation}
         \chi = \frac{1}{TN}\avg{\avg{m^2} - \avg{m}^2}.
     \end{equation}
     This way the exponents \(\gamma\) and \(\nu\) are determined.
-    Analogically Fig.\ \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_meanM}\subref{sfig:gettingCrit:collapse_s_1_meanM}
+    Similarly Fig.\ \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_meanM}\subref{sfig:gettingCrit:collapse_s_1_meanM}
     show the collapse for the mean magnetization per site \(\avg{\abs{m}}\) for \(\sigma=1\)
     to determine the exponents \(\beta\) and \(\nu\).
     Also the collapse of the binder cumulant, as mentioned before and shown
     in Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0},
-    is used to get a further value of \(\nu\).
+    is used to get a further estimate of \(\nu\).
     \begin{figure}[htbp]
         \centering
         \subfigure[Susceptibility $\chi$][]
@@ -324,34 +327,56 @@
         }
         \caption[Examples of Determining Critical Temperature and Exponents]
         {
-            Examples for the method of finite size scaling, which was used
+            Examples for the method of FSS, which was used
             to determine the critical exponents \(\nu, \gamma, \beta\) and
             the critical temperature \(T_c\).\\
             \subref{sfig:gettingCrit:s_1_sus} The susceptibility \(\chi\)
-                of an Ising model on an RNG \(\sigma=1\)\\
-            \subref{sfig:gettingCrit:collapse_s_1_sus} collapsed by finite
-                size scaling, to determine \(\gamma\) (for error estimates see Tab.\ \ref{tab:critExp}).\\
+                of an Ising model on an RNG at \(\sigma=1\).\\
+            \subref{sfig:gettingCrit:collapse_s_1_sus} data collapse, to determine \(\gamma\) (for error estimates see Tab.\ \ref{tab:critExp}).\\
             \subref{sfig:gettingCrit:s_1_meanM} The mean magnetization \(\avg{\abs{m}}\)
-                of an Ising model on an GG \(\sigma=1\)\\
-            \subref{sfig:gettingCrit:collapse_s_1_meanM} collapsed by finite
-                size scaling, to determine \(\beta\) (for error estimates see Tab.\ \ref{tab:critExp}).
+                of an Ising model on an GG at \(\sigma=1\).\\
+            \subref{sfig:gettingCrit:collapse_s_1_meanM} data collapse, to determine \(\beta\) (for error estimates see Tab.\ \ref{tab:critExp}).
         }
         \label{fig:gettingCrit2}
     \end{figure}\\
-    The values for
-    \(\sigma = 0\) are analytically known \cite{Pelissetto2002}. The
+    The values for \(\sigma = 0\), i.e.\ the critical temperature and
+    critical exponents for the square lattice Ising model,
+    are analytically known \cite{Pelissetto2002}. Due to universality, the
     values for all other \(\sigma\) are expected be the same as for
     \(\sigma = 0\) like mentioned before in Sec.\ \ref{ssec:finitesize}.
     Therefore it is sufficient to take a few samples to test, if the
     expectations match. Hence 5 values of \(\sigma\) are analyzed.
-    The analytically known values for \(\sigma = 0\) and the in \cite{Janke1994}
-    examined limit of a random lattice \(\sigma \gtrsim 1\) are natural
-    choices.
+    The analytically known values for \(\sigma = 0\) and the
+    limit of a random lattice \(\sigma \gtrsim 1\), examined in
+    Ref.\ \cite{Janke1994}, are natural choices.
     The other \(\sigma\) are chosen to represent regions where the behavior of
-    \(T_c\) shows some characteristics. (Namely there is a plateau at small
-    \(\sigma\), a steep decline at medium \(\sigma\) and a shallow
+    \(T_c\) shows some characteristics. (As we will see later, there is a plateau at small
+    \(\sigma\), a steep decline at intermediate values of \(\sigma\) and a shallow
     decline at \(\sigma = 0.5\). This will be shown in the next
     chapter in Fig.\ \ref{fig:Tc}\subref{sfig:Tc:RNG}\subref{sfig:Tc:GG}.)
+    The range \(\Delta x\) which specifies the mesurements used for the
+    data collapse, was restricted to the in Tab.\ \ref{tab:FSS_range}
+    listed ranges.
+    \begin{table}[htbp]
+        \center
+        \begin{tabular}{l l l@{, }r}
+            \toprule
+                                & \multicolumn{1}{c}{\(\sigma\) }   & \multicolumn{2}{c}{\(\Delta x\)}\\
+            \midrule
+            \(\avg{\abs{m}}\)   & \(0.0, 0.1\)                      & \([-2.5\) & \( 7]\)\\
+                                & \(0.2, ,0.3, 0.5, 1.0\)           & \([-1.5\) & \(10]\)\\
+            \(\chi\)            & \(0.0, 0.1\)                      & \([-2.0\) & \( 7]\)\\
+                                & \(0.2, ,0.3, 0.5, 1.0\)           & \([-1.5\) & \( 7]\)\\
+            \(g\)               & \(0.0, 0.1\)                      & \([-3.5\) & \(12]\)\\
+                                & \(0.2, ,0.3, 0.5, 1.0\)           & \([-1.5\) & \(10]\)\\
+            \bottomrule
+        \end{tabular}
+        \caption[Ranges of the Data Collapse]{
+            The range \(\Delta x\) specifies the mesurements used for the
+            data collapse.
+        }
+        \label{tab:FSS_range}
+    \end{table}\\
     The determined values are displayed in Tab.\ \ref{tab:critExp}.
     The given errors for \(\beta, \gamma\) are estimates from \texttt{autoscale.py}
     and the errors of \(T_c\) and \(\nu\) are the standard deviations of
@@ -379,13 +404,13 @@
             \bottomrule
         \end{tabular}
         \caption[Critical Exponents for Different $\sigma$]{
-            Critical exponents for different $\sigma$. A finite size
+            Critical exponents for different values of \(\sigma\). A finite size
             scaling analysis was performed to determine the critical
             exponents \(\beta, \gamma, \nu\) and the critical temperature
-            \(T_c\). The errors for \(beta\) and \(\gamma\) are estimates
+            \(T_c\). The errors for \(\beta\) and \(\gamma\) are estimated
             by \texttt{autoscale.py} \cite{autoscale2009}. The errors of
             \(\nu\) and \(T_c\) are the standard deviation of three obtained
-            values through different collapses.
+            values through different collapses (see text).
         }
         \label{tab:critExp}
     \end{table}\\
@@ -393,9 +418,9 @@
     are matching the expectations. \(T_c\) for \(\sigma = 0\) is in good
     agreement with the known value. Especially \(\nu\) and \(\gamma\)
     are always in very good agreement with their exact values. Besides the
-    good agreement of the by data collapse obtained values of \(\nu\) and \(\gamma\),
+    good agreement of the values of \(\nu\) and \(\gamma\) obtained by data collapse,
     the ratio \(\frac{\gamma}{\nu}\) is also determined by fitting the maxima of
-    the susceptibility \(\chi_{\mathrm{max}}\) by the power law \(aL^\frac{\gamma}{\nu}\).
+    the susceptibility \(\chi_{\mathrm{max}}\) to the power law function \(aL^\frac{\gamma}{\nu}\).
     Because there were many measurements in the vicinity of \(T_c\)
     (c.f.\ Fig.\ \ref{sfig:gettingCrit:s_1_sus}), it should give a
     reasonable estimate to take their maximum, without the need to
@@ -416,7 +441,7 @@
         }
         \caption[Alternative Way Determining $\gamma / \nu$]
         {
-            Cross checking the ratio critical exponents $\gamma$ and $\nu$ for
+            Cross checking the ratio of the critical exponents $\gamma$ and $\nu$ for
                 \subref{sfig:susCrossCheck:RNG} the RNG at $\sigma \in \{0.0, 1.0\}$ and
                 \subref{sfig:susCrossCheck:GG} the GG at $\sigma \in \{0.0, 0.3\}$.
             The plotted values are the maxima of all measured \(\chi\).
@@ -481,7 +506,7 @@
     compared. In the following figures the RNG will always be on the
     left side and the GG on the right side.
     And in Tab.\ \ref{tab:critTemp} the values are displayed together with the
-    values obtained by the data collapse from the section before.
+    values obtained by the data collapse from the previous section.
     \begin{table}[htbp]
         \center
         \begin{tabular}{l l l l l}
@@ -544,7 +569,7 @@
             \subref{sfig:Tc:RNG} the RNG and
             \subref{sfig:Tc:GG} the GG.\\
             Interesting points are the jump and rise of the GG at small
-            \(\sigma\). And the plateau on the RNG for small \(\sigma\).
+            \(\sigma\) and the plateau on the RNG for small \(\sigma\).
         }
         \label{fig:Tc}
     \end{figure}\\
@@ -557,320 +582,336 @@
     maximum at \(\sigma \approx 0.15\) on the GG will be discussed later.
     For large values of \(\sigma\) the displaced nodes approach the limit of randomly
     distributed nodes, hence \(T_c\) is independent of \(\sigma\) for
-    \(\sigma \gg 1\). Regarding this both meet the expectations.\\
+    \(\sigma \gg 1\). Regarding this both graph types meet the expectations.\\
     Another strange property is the jump from \(\sigma = 0\) to \(\sigma > 0\)
     of \(T_c\) on the GG. To understand that one has to
     consider the influence of the graph properties on the critical
-    temperature.\\
-    One basic property of a graph is its degree \(K\) -- sometimes
-    called \emph{coordination number}. \(K\) is defined as the mean count
-    of neighbors per node.
-    \begin{equation}
-        K = \frac{1}{N} \sum_{\avg{i,j}} 1
-        \label{eq:degree}
-    \end{equation}
-    It is known that the degree has an impact on the critical temperature.
-    For example the Honeycomb lattice is of degree \(K=3\)
-    and there exists an analytic solution \cite{Wannier1945}.
-    Its critical temperature is determined by Eq.\ \eqref{eq:exactHCTc}:
-    \begin{equation}
-        \cosh\brac{\frac{J}{T_c}}=2 \overset{J=1}{\Longrightarrow} T_c \approx 1.52
-        \label{eq:exactHCTc}
-    \end{equation}
-    This is lower than for the square lattice with degree 4.\\
-    This is plausible, because more edges lead to more neighbors. The energy
-    which is necessary to flip a spin down while the spins of its neighbors are up,
-    gets higher with the number of neighbors. So the more edges are in
-    the graph the more stable the system becomes and \(T_c\) is higher.
-    This is also an explanation why the \(T_c\) of the RNG is always
-    lower than that of the GG: The degree of the \(T_c\) is lower.\\
-    If one plots the degree of the graphs at different \(\sigma\) like
-    in Fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG},
-    one recognizes that \(T_c\) and \(K\) are evidently correlated.
-    The values for \(K\) are obtained as an average over \(100\)
-    realizations of each graph type for \(L=16\) and \(L=32\) lattices.
-    Note that \(K\) is independent of \(L\) because of the periodic boundary.
-    In Fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
-    one can see that these curves are almost identical and the small
-    errorbars suggest that they are sufficiently precise for this purpose.
-    It seems reasonable to normalize \(T_c\) by the degree of the underlying
-    graph. This is done in Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
-    Indeed the normalization eliminates the jump and reduces the
-    slope of the rising on the GG. Hence it reduces differences
-    between the RNG and the GG. But the elimination of the jump is
-    unfortunately random and probably caused by a lucky choice of the
-    function, which determines the coupling constants \(J\). As proof for
-    this claim in appendix \ref{appendix:fixedCoupling} the same analysis
-    is performed for a model with fixed \(J\). There the jump gets narrower
-    but is still existent. Anyway, the degree seems to have an impact on
-    the critical temperature \(T_c\), but it is not a trivial one.
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[][]
-        {
-            \label{sfig:deg:RNG}
-            \includegraphics[width=0.45\textwidth]{plots/RNG_deg}
-        }
-        \subfigure[][]
-        {
-            \label{sfig:deg:GG}
-            \includegraphics[width=0.45\textwidth]{plots/GG_deg}
-        }
-
-        \subfigure[][]
-        {
-            \label{sfig:Tc_norm_deg:RNG}
-            \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_norm_deg}
-        }
-        \subfigure[][]
-        {
-            \label{sfig:Tc_norm_deg:GG}
-            \includegraphics[width=0.45\textwidth]{plots/GG_Tc_norm_deg}
-        }
-
-        \caption[Critical Temperature Normalized by Degree of the Graph]
-        {
-            Top: Degree \(K\) of graph over different
-            disorder parameters \(\sigma\) for
-            \subref{sfig:deg:RNG} the RNG and
-            \subref{sfig:deg:GG} the GG.\\
-            Bottom: Critical temperatures normalized by degree over different
-            disorder parameters for
-            \subref{sfig:Tc_norm_deg:RNG} the RNG and
-            \subref{sfig:Tc_norm_deg:GG} the GG.
-        }
-        \label{fig:Tc_deg}
-    \end{figure}\\
-    To understand the jump of \(T_c\) it seems to be necessary to
-    understand the jump of \(K\), which is easily explained
-    by the definition of the GG and its aftereffects for
-    the transition from \(\sigma = 0\). Visible in Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.00}\subref{sfig:GG_sigma:0.01}
-    a small change of \(\sigma\) causes many new edges to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
-    To fully understand this, take four nodes forming a square. The edge
-    across does not exist, because the other two nodes are on the border
-    of the lune. Moving one node slightly into the square, causes the lune
-    to get smaller, hence no other nodes are inside or on the border of
-    the lune anymore and the edge appears. This process is sketched in
-    Fig.\ \ref{fig:GGEdge}.
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[][]{
-            \label{sfig:GGEdge:before}
-            \input{images/GGEdgeBefore}
-        }
-        \subfigure[][]{
-            \label{sfig:GGEdge:after}
-            \input{images/GGEdgeAfter}
-        }
-        \caption[Sketch why Many New Edges Arise at the Transition from $\sigma = 0$ to $\sigma > 0$]
-        {
-            \subref{sfig:GGEdge:before} The edge across does not exist,
-            because the other two nodes are on the edge of the lune.
-            \subref{sfig:GGEdge:after} Moving one node slightly into the
-            square, causes the lune to get smaller, hence no other nodes
-            are inside or on the edge of the lune anymore and the edge
-            appears.
-        }
-        \label{fig:GGEdge}
-    \end{figure}\\
-    Further the increase of \(T_c\) on the GG can be made plausible.
-    %~ Though it is not removed by the normalization, it is reduced.
-    Also the maximum of the \(K\) is at the same \(\sigma\), as the maximum
-    of \(T_c\). So while displacing the nodes, there arise more edges
-    than edges are vanishing until \(\sigma \approx 0.15\) is reached.
-    Then more edges disappear, than appear at further displacement. This
-    is not an obvious effect, but can be seen in Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.09}\subref{sfig:GG_sigma:0.15}\subref{sfig:GG_sigma:0.21}.
-    \begin{figure}[htbp]
-        \subfigure[][$\sigma = 0.00$]
-        {
-            \label{sfig:GG_sigma:0.00}
-            \includegraphics[width=0.30\textwidth]{images/GG/sigma_e0}
-        }
-        \subfigure[][$\sigma = 0.01$]
-        {
-            \label{sfig:GG_sigma:0.01}
-            \includegraphics[width=0.30\textwidth]{images/GG/sigma_g0}
-        }
-
-        \subfigure[][$\sigma = 0.09$]
-        {
-            \label{sfig:GG_sigma:0.09}
-            \includegraphics[width=0.30\textwidth]{images/GG/out009}
-        }
-        \subfigure[][$\sigma = 0.15$]
-        {
-            \label{sfig:GG_sigma:0.15}
-            \includegraphics[width=0.30\textwidth]{images/GG/out015}
-        }
-        \subfigure[][$\sigma = 0.21$]
-        {
-            \label{sfig:GG_sigma:0.21}
-            \includegraphics[width=0.30\textwidth]{images/GG/out021}
-        }
-
-        \caption[Examples of GG for different $\sigma$]
-        {
-            GG with periodic boundary conditions for different \(\sigma = 0\).
-            The number of edges increases from \subref{sfig:GG_sigma:0.00}
-            to \subref{sfig:GG_sigma:0.01} significantly. Until \subref{sfig:GG_sigma:0.15}
-            it increases and after that the number of edges decreases.
-        }
-        \label{fig:GG_sigma}
-    \end{figure}\\
-    The evolution of the RNG with increasing \(\sigma\) can be made plausible
-    with the same arguments. Fig. \ref{fig:RNG_sigma}
-    shows that for \(\sigma \lesssim 0.1\) the square lattice character is
-    preserved -- no new edges arise neither many existing edges vanish, which
-    explains the plateau in the \(T_{c}\) diagram. With
-    increasing \(\sigma\), more and more edges vanish\footnote{See also \url{http://www.youtube.com/watch?v=rltzi15mTM4} for an animation.},
-    thus reducing the degree and \(T_{c}\).
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[][$\sigma = 0.09$]
-        {
-            \label{sfig:RNG_sigma:0.09}
-            \includegraphics[width=0.30\textwidth]{images/RNG/out009}
-        }
-        \subfigure[][$\sigma = 0.15$]
-        {
-            \label{sfig:RNG_sigma:0.15}
-            \includegraphics[width=0.30\textwidth]{images/RNG/out015}
-        }
-        \subfigure[][$\sigma = 0.21$]
-        {
-            \label{sfig:RNG_sigma:0.21}
-            \includegraphics[width=0.30\textwidth]{images/RNG/out021}
-        }
-
-        \caption[Examples of RNG for different $\sigma$]
-        {
-            RNG with periodic boundary conditions for different \(\sigma = 0\).
-            \subref{sfig:RNG_sigma:0.09} has still almost the square lattice
-            configuration of edges, which is why the plateau from Fig.\ \ref{fig:Tc}\subref{sfig:Tc:RNG}
-            exists. In the next two pictures one sees the fast disappearance
-            of edges.
-        }
-        \label{fig:RNG_sigma}
-    \end{figure}\\
-    But the degree does not alone influence the behavior of \(T_c\).
-    Further \(T_c\) depends on the coupling constant \(J\), which is
-    obvious in Eq.\ \eqref{eq:exactTc} and \eqref{eq:exactHCTc}. The
-    coupling constant in turn is depending on the length of the edges,
-    which changes with \(\sigma\).
-    Therefore  in Fig.\ \ref{fig:TcJ}\subref{sfig:sumJ:RNG}\subref{sfig:sumJ:GG}
-    the mean sum of the coupling constants to all neighbors \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
-    is plotted. This is a number which should combine the dependence on
-    the degree and the coupling constant. It is determined by summing
-    over the edge weights of all edges connected to a node and averaging
-    this value over all nodes. Alternatively it is the average edge weight
-    of all edges multiplied by the degree.
-    The plots Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}
-    show that \(\avg{\sum_{\avg{i,j}} J_{ij}}\) is also correlated with \(T_c\).
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[][]
-        {
-            \label{sfig:sumJ:RNG}
-            \includegraphics[width=0.45\textwidth]{plots/RNG_sumJ}
-        }
-        \subfigure[][]
-        {
-            \label{sfig:sumJ:GG}
-            \includegraphics[width=0.45\textwidth]{plots/GG_sumJ}
-        }
-
-        \subfigure[][]
-        {
-            \label{sfig:Tc_normJ:RNG}
-            \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_normJ}
-        }
-        \subfigure[][]
-        {
-            \label{sfig:Tc_normJ:GG}
-            \includegraphics[width=0.45\textwidth]{plots/GG_Tc_normJ}
-        }
-
-        \caption[Critical Temperature Normalized by Mean Sum of the Coupling Constants]
-        {
-            Top: Mean sum of the coupling constants to all
-            neighbors over different disorder parameters for
-            \subref{sfig:sumJ:RNG} the RNG and
-            \subref{sfig:sumJ:GG} the GG.\\
-            Bottom: Critical temperatures normalized by mean sum of the
-            coupling constants \(\avg{\sum_{\avg{i,j}} J_{ij}}\) over different
-            disorder parameters for
-            \subref{sfig:Tc_normJ:RNG} the RNG and
-            \subref{sfig:Tc_normJ:GG} the GG.
-        }
-        \label{fig:TcJ}
-    \end{figure}\\
-    Though Eq.\ \eqref{eq:exactHCTc} shows that there does not have
-    to be a linear connection between \(J\) and \(T_c\), the best guess
-    is a linear connection, because this model is derived from the
-    square lattice, where the connection is linear. Therefore, one
-    normalizes \(T_c\) with \(\avg{\sum_{\avg{i,j}} J_{ij}}\) as in
-    Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}, the
-    jump on the GG arises again, but \(T_c\) is now monotonically
-    decreasing with increasing disorder parameter \(\sigma\).
-    %~ This is a strong hint, that the change of the \(T_c\) with changing
-    %~ \(\sigma\) is in some way connected to \(J\) and \(K\) which is an
-    %~ expected conclusion.\\
-    Moreover the forms of both curves are quite similar, but the
-    one for the RNG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}
-    is generally lower and spans over a bigger temperature range than
-    the curve of the GG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:GG}.
-    Both graph types have a plateau at \(0 < \sigma < 0.1\). The conclusion
-    is that small disorder has little influence on this normalized critical
     temperature.
-    Also both graph types have a steep decline after the plateau before
-    they approach an asymptotic limit for \(\sigma \gg 1\).\\
+    \subsubsection{Influence of the Average Degree on the Critical Temperature}
+        One basic property of a graph is its average degree \(K\) -- sometimes
+        called average \emph{coordination number}. \(K\) is defined as the mean count
+        of neighbors per node.
+        \begin{equation}
+            K = \frac{1}{N} \sum_{\avg{i,j}} 1.
+            \label{eq:degree}
+        \end{equation}
+        It is well known that the degree has an impact on the critical temperature.
+        For example the Honeycomb lattice is of degree \(K=3\) and the
+        respective critical temperature can be obtained by analytic means \cite{Wannier1945},
+        yielding
+        \begin{equation}
+            \cosh\brac{\frac{J}{T_c}}=2 \overset{J=1}{\Longrightarrow} T_c \approx 1.52.
+            \label{eq:exactHCTc}
+        \end{equation}
+        Note that this is lower than the critical temperature \(T_c = 2.269...\)
+        characteristic for the square lattice with degree \(K=4\).\\
+        This is plausible, because more edges lead to more neighbors.
+        Consider, e.g., a fully polarized spin configuration. Now, the
+        energy needed to flip a spin so that it assumes an orientation opposite
+        to the orientation of its neighbors increases with the number of
+        its neighbors. So the more edges are in
+        the graph the more stable the system becomes with respect to spin flips
+        at low \(T\), leading to an increasing value of \(T_c\).
+        This is also an explanation why the \(T_c\) of the RNG is always
+        lower than that of the GG: The degree of the RNG is lower.\\
+        If one plots the degree of the graphs at different \(\sigma\) like
+        in Fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG},
+        one recognizes that \(T_c\) and \(K\) are evidently correlated.
+        The values for \(K\) are obtained as an average over \(100\)
+        realizations of each graph type for \(L=16\) and \(L=32\) lattices.
+        %~ Note that \(K\) is independent of \(L\) because of the periodic boundary.
+        In Fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
+        one can see that these curves are almost identical and the small
+        errorbars suggest that they are sufficiently precise for this purpose.
+        It seems reasonable to normalize \(T_c\) by the degree of the underlying
+        graph. This is done in Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
+        Indeed the normalization eliminates the jump and reduces the
+        slope of the \(T_c\) curve for the GG. Hence it reduces differences
+        between the RNG and the GG. However the elimination of the jump is
+        unfortunately a coincidence and probably caused by a lucky choice of the
+        function, which determines the coupling constants \(J\). As proof for
+        this claim in appendix \ref{appendix:fixedCoupling} the same analysis
+        is performed for a model with fixed \(J\). There the jump gets narrower
+        but is still existent. Anyway, the degree seems to have an impact on
+        the critical temperature \(T_c\), but it is not a trivial one.
+        Note that even after the normalization, the values of \(T_c / K\)
+        for the RNG are smaller than those for the GG.
+        \begin{figure}[htbp]
+            \centering
+            \subfigure[][]
+            {
+                \label{sfig:deg:RNG}
+                \includegraphics[width=0.45\textwidth]{plots/RNG_deg}
+            }
+            \subfigure[][]
+            {
+                \label{sfig:deg:GG}
+                \includegraphics[width=0.45\textwidth]{plots/GG_deg}
+            }
 
-\subsection{Critical Value of the Binder Cumulant}
-    The value of the Binder cumulant at the critical point \(g_c\)
-    depends strongly on boundary conditions but only weakly on the lattice
-    structure \cite{BinderValue}. For periodic boundary conditions on a
-    square lattice it is \(g_c \approx 0.916\) according to \cite{BinderValue}
-        \footnote{Note that \cite{BinderValue} uses another definition of
-            the Binder cumulant, and has to be normalized by \(\frac{2}{3}\)
-            to match its definition in this thesis.}.
-    Because the analysis of Sec.\ \ref{ssec:binderIntersections}
-    yields \(g_c\) anyway, it is easy to check the consistency and
-    behavior of \(g_c\) in the disordered Ising model.\\
-    \begin{figure}[htbp]
-        \centering
-        \subfigure[for a RNG][]
-        {
-            \label{sfig:TcG:RNG}
-            \includegraphics[width=0.45\textwidth]{plots/RNG_TcG}
-        }
-        \subfigure[for a GG][]
-        {
-            \label{sfig:TcG:GG}
-            \includegraphics[width=0.45\textwidth]{plots/GG_TcG}
-        }
-        \caption[Values of the Binder Cumulant at the Critical Point $g_c$]
-        {
-            Values of the Binder cumulant at the critical point \(g_c\)
-            for\\
-            \subref{sfig:TcG:RNG} a RNG and\\
-            \subref{sfig:TcG:GG} a GG for different \(\sigma\).
-            The dotted line is the reference value for square lattices
-            with periodic boundary conditions \cite{BinderValue}, which
-            corresponds to \(\sigma = 0\).
-        }
-        \label{fig:TcG}
-    \end{figure}\\
-    Considering both plots in Fig.\ \ref{fig:TcG}, \(g_c\) is for low
-    \(\sigma\) obviously always bigger than the known value. Though the
-    deviations are only very small. Perhaps this overestimation is caused
-    by the cubic spline interpolation used to acquire these \(g_c\) values.
-    For bigger \(\sigma\) the uncertainty gets greater, but the values
-    do only differ by a few percent, hence even the big disorder and
-    definition of nearest neighbors via a proximity graph does not change
-    \(g_c\) much. Though it is mentioned in \cite{BinderValue} that the
-    lattice structure has a minor effect on \(g_c\), the uncertainty of
-    \(g_c\) is too big, to show it. For a more exact analysis, new
-    Monte Carlo simulations at \(T_c\) would be needed. But this is
-    beyond the scope of this thesis. Anyway, the results are the expected
-    behavior, because no major deviations from the value of \(g_c\) at
-    \(\sigma = 0\) occur at larger \(\sigma\).
+            \subfigure[][]
+            {
+                \label{sfig:Tc_norm_deg:RNG}
+                \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_norm_deg}
+            }
+            \subfigure[][]
+            {
+                \label{sfig:Tc_norm_deg:GG}
+                \includegraphics[width=0.45\textwidth]{plots/GG_Tc_norm_deg}
+            }
+
+            \caption[Critical Temperature Normalized by Degree of the Graph]
+            {
+                Top: Degree \(K\) of graph over different
+                disorder parameters \(\sigma\) for
+                \subref{sfig:deg:RNG} the RNG and
+                \subref{sfig:deg:GG} the GG.\\
+                Bottom: Critical temperatures normalized by degree over different
+                disorder parameters for
+                \subref{sfig:Tc_norm_deg:RNG} the RNG and
+                \subref{sfig:Tc_norm_deg:GG} the GG.
+            }
+            \label{fig:Tc_deg}
+        \end{figure}\\
+        To understand the jump of \(T_c\) it seems to be necessary to
+        understand the jump of \(K\), which is easily explained
+        by the definition of the GG. As evident from Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.00}\subref{sfig:GG_sigma:0.01}
+        a small change of \(\sigma\) causes many new edges to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
+        To fully understand this, take four nodes forming a square. The edge
+        across the diagonal of the plaquette does not exist, because the
+        other two nodes are located exactly on the border
+        of the lune. Moving one node slightly into the square, causes the lune
+        to get smaller, hence no other nodes are inside or on the border of
+        the lune anymore and the new diagonal edge appears. This process is sketched in
+        Fig.\ \ref{fig:GGEdge}.
+        \begin{figure}[htbp]
+            \centering
+            \subfigure[][]{
+                \label{sfig:GGEdge:before}
+                \input{images/GGEdgeBefore}
+            }
+            \subfigure[][]{
+                \label{sfig:GGEdge:after}
+                \input{images/GGEdgeAfter}
+            }
+            \caption[Sketch why Many New Edges Arise at the Transition from $\sigma = 0$ to $\sigma > 0$]
+            {
+                \subref{sfig:GGEdge:before} The edge across does not exist,
+                because the other two nodes are on the edge of the lune.
+                \subref{sfig:GGEdge:after} Moving one node slightly into the
+                square, causes the lune to get smaller, hence no other nodes
+                are inside or on the edge of the lune anymore and the edge
+                appears.
+            }
+            \label{fig:GGEdge}
+        \end{figure}\\
+        Further, the increase of \(T_c\) on the GG can be made plausible.
+        Also, the maximum value of \(K\) and the minimum value of \(T_c\)
+        are observed at a similar value of \(\sigma\). Hence, while displacing the nodes, there arise more edges
+        than edges are vanishing until \(\sigma \approx 0.15\) is reached.
+        Then more edges disappear, than appear at further displacement. This
+        is not an obvious effect, but can be seen in Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.09}\subref{sfig:GG_sigma:0.15}\subref{sfig:GG_sigma:0.21}.
+        \begin{figure}[htbp]
+            \subfigure[][$\sigma = 0.00$]
+            {
+                \label{sfig:GG_sigma:0.00}
+                \includegraphics[width=0.30\textwidth]{images/GG/sigma_e0}
+            }
+            \subfigure[][$\sigma = 0.01$]
+            {
+                \label{sfig:GG_sigma:0.01}
+                \includegraphics[width=0.30\textwidth]{images/GG/sigma_g0}
+            }
+
+            \subfigure[][$\sigma = 0.09$]
+            {
+                \label{sfig:GG_sigma:0.09}
+                \includegraphics[width=0.30\textwidth]{images/GG/out009}
+            }
+            \subfigure[][$\sigma = 0.15$]
+            {
+                \label{sfig:GG_sigma:0.15}
+                \includegraphics[width=0.30\textwidth]{images/GG/out015}
+            }
+            \subfigure[][$\sigma = 0.21$]
+            {
+                \label{sfig:GG_sigma:0.21}
+                \includegraphics[width=0.30\textwidth]{images/GG/out021}
+            }
+
+            \caption[Examples of GG for different $\sigma$]
+            {
+                GG with periodic boundary conditions for different \(\sigma\).
+                The number of edges increases from \subref{sfig:GG_sigma:0.00}
+                to \subref{sfig:GG_sigma:0.01} significantly. Until \subref{sfig:GG_sigma:0.15}
+                it increases and after that the number of edges decreases.
+            }
+            \label{fig:GG_sigma}
+        \end{figure}\\
+        The evolution of the RNG with increasing \(\sigma\) can be made plausible
+        with the same arguments. Fig. \ref{fig:RNG_sigma}
+        shows that for \(\sigma \lesssim 0.1\) the square lattice character is
+        preserved -- no new edges arise and only a few existing edges vanish, which
+        explains the plateau in the \(T_{c}\) diagram. With
+        increasing \(\sigma\), more and more edges vanish\footnote{See also \url{http://www.youtube.com/watch?v=rltzi15mTM4} for an animation.},
+        thus reducing the degree and consequently the corresponding value of \(T_{c}\).
+        \begin{figure}[htbp]
+            \centering
+            \subfigure[][$\sigma = 0.09$]
+            {
+                \label{sfig:RNG_sigma:0.09}
+                \includegraphics[width=0.30\textwidth]{images/RNG/out009}
+            }
+            \subfigure[][$\sigma = 0.15$]
+            {
+                \label{sfig:RNG_sigma:0.15}
+                \includegraphics[width=0.30\textwidth]{images/RNG/out015}
+            }
+            \subfigure[][$\sigma = 0.21$]
+            {
+                \label{sfig:RNG_sigma:0.21}
+                \includegraphics[width=0.30\textwidth]{images/RNG/out021}
+            }
+
+            \caption[Examples of RNG for different $\sigma$]
+            {
+                RNG with periodic boundary conditions for different \(\sigma\).
+                \subref{sfig:RNG_sigma:0.09} has still almost the square lattice
+                configuration of edges, which is why the plateau from Fig.\ \ref{fig:Tc}\subref{sfig:Tc:RNG}
+                exists. In the next two pictures one sees the fast disappearance
+                of edges, chracteristic for the RNG for a set of randomly
+                distributed points (i.e.\ Poisson process).
+            }
+            \label{fig:RNG_sigma}
+        \end{figure}\\
+    \subsubsection{Influence of the Coupling Constant on the Critical Temperature}
+        However, note that the degree does not alone influence the behavior of \(T_c\).
+        Further \(T_c\) depends on the coupling constant \(J\), which is
+        obvious from Eqs.\ \eqref{eq:exactTc} and \eqref{eq:exactHCTc}. The
+        coupling constant in turn is depending on the length of the edges,
+        which changes with \(\sigma\).
+        Therefore  in Fig.\ \ref{fig:TcJ}\subref{sfig:sumJ:RNG}\subref{sfig:sumJ:GG}
+        the mean sum of the coupling constants to all neighbors
+        \begin{equation}
+            \avg{\sum_{\avg{i,j}} J_{ij}}
+        \end{equation}
+        is plotted. This is a number which should combine the dependence on
+        the degree and the coupling constant. It is determined by summing
+        over the edge weights of all edges connected to a node and averaging
+        this value over all nodes. Alternatively it is the average edge weight
+        of all edges of the graph multiplied by the degree \(\avg{J_{ij}} K\).
+        The plots Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}
+        show that \(\avg{\sum_{\avg{i,j}} J_{ij}}\) is also correlated with \(T_c\).
+        \begin{figure}[htbp]
+            \centering
+            \subfigure[][]
+            {
+                \label{sfig:sumJ:RNG}
+                \includegraphics[width=0.45\textwidth]{plots/RNG_sumJ}
+            }
+            \subfigure[][]
+            {
+                \label{sfig:sumJ:GG}
+                \includegraphics[width=0.45\textwidth]{plots/GG_sumJ}
+            }
+
+            \subfigure[][]
+            {
+                \label{sfig:Tc_normJ:RNG}
+                \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_normJ}
+            }
+            \subfigure[][]
+            {
+                \label{sfig:Tc_normJ:GG}
+                \includegraphics[width=0.45\textwidth]{plots/GG_Tc_normJ}
+            }
+
+            \caption[Critical Temperature Normalized by Mean Sum of the Coupling Constants]
+            {
+                Top: Mean sum of the coupling constants to all
+                neighbors over different disorder parameters for
+                \subref{sfig:sumJ:RNG} the RNG and
+                \subref{sfig:sumJ:GG} the GG.\\
+                Bottom: Critical temperatures normalized by mean sum of the
+                coupling constants \(\avg{\sum_{\avg{i,j}} J_{ij}}\) over different
+                disorder parameters for
+                \subref{sfig:Tc_normJ:RNG} the RNG and
+                \subref{sfig:Tc_normJ:GG} the GG.
+            }
+            \label{fig:TcJ}
+        \end{figure}\\
+        Though Eq.\ \eqref{eq:exactHCTc} shows that there does not have
+        to be a linear connection between \(J\) and \(T_c\), the best guess
+        is a linear connection, because this model is derived from the
+        square lattice, where the connection is linear. Therefore, one
+        normalizes \(T_c\) with \(\avg{\sum_{\avg{i,j}} J_{ij}}\) as in
+        Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}, the
+        jump on the GG arises again, but \(T_c\) is now monotonically
+        decreasing with increasing disorder parameter \(\sigma\).
+        %~ This is a strong hint, that the change of the \(T_c\) with changing
+        %~ \(\sigma\) is in some way connected to \(J\) and \(K\) which is an
+        %~ expected conclusion.\\
+        Moreover the forms of both curves are quite similar, but the
+        one for the RNG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}
+        is generally lower and spans over a bigger temperature range than
+        the curve of the GG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:GG}.
+        Both graph types have a plateau at \(0 < \sigma < 0.1\). The conclusion
+        is that small disorder has little influence on this normalized critical
+        temperature.
+        Also both graph types exhibit a steep decline after the plateau before
+        they approach an asymptotic limit for \(\sigma \gg 1\).\\
+
+    \subsection{Critical Value of the Binder Cumulant}
+        The value of the Binder cumulant at the critical point \(g_c\)
+        depends strongly on boundary conditions but only weakly on the precise lattice
+        structure \cite{BinderValue}. For periodic boundary conditions on a
+        square lattice it is \(g_c \approx 0.916\) according to \cite{BinderValue}
+            \footnote{Note that \cite{BinderValue} uses another definition of
+                the Binder cumulant, and has to be normalized by \(\frac{2}{3}\)
+                to match the definition in this thesis.}.
+        Because the analysis of Sec.\ \ref{ssec:binderIntersections}
+        yields \(g_c\) anyway, it is easy to check the consistency and
+        behavior of \(g_c\) in the geometrically disordered Ising model.
+        The error bars are the standard error of the six values obtained
+        through the intersections.\\
+        \begin{figure}[htbp]
+            \centering
+            \subfigure[for a RNG][]
+            {
+                \label{sfig:TcG:RNG}
+                \includegraphics[width=0.45\textwidth]{plots/RNG_TcG}
+            }
+            \subfigure[for a GG][]
+            {
+                \label{sfig:TcG:GG}
+                \includegraphics[width=0.45\textwidth]{plots/GG_TcG}
+            }
+            \caption[Values of the Binder Cumulant at the Critical Point $g_c$]
+            {
+                Values of the Binder cumulant at the critical point \(g_c\)
+                for\\
+                \subref{sfig:TcG:RNG} a RNG and\\
+                \subref{sfig:TcG:GG} a GG for different \(\sigma\).
+                The dotted line is the reference value for square lattices
+                with periodic boundary conditions \cite{BinderValue}, which
+                corresponds to \(\sigma = 0\).
+            }
+            \label{fig:TcG}
+        \end{figure}\\
+        Considering both plots in Fig.\ \ref{fig:TcG}, \(g_c\) is for low
+        \(\sigma\) obviously always bigger than the known value. Though the
+        deviations are only very small. Perhaps this overestimation is caused
+        by the cubic spline interpolation used to acquire these \(g_c\) values.
+        Or this are again finite size effects which would disappear for
+        larger system sizes.
+        For bigger \(\sigma\) the uncertainty gets greater, but the values
+        do only differ by a few percent, hence even the big disorder and
+        definition of nearest neighbors via a proximity graph does not change
+        the value of \(g_c\) much. Though it is mentioned in \cite{BinderValue} that the
+        lattice structure has a minor effect on \(g_c\), the uncertainty of
+        \(g_c\) is too large to observe this. For a more exact analysis, new
+        Monte Carlo simulations at \(T_c\) would be needed. But this is
+        beyond the scope of this thesis. Anyway, the results are the expected
+        behavior, because no major deviations from the value of \(g_c\) at
+        \(\sigma = 0\) occur at larger \(\sigma\). Within error bars the
+        values are all in reasonable agreement with \(g_c\).
