@@ -52,7 +52,7 @@
     generation of the random start configuration of the spins.\\
     The errors \(\Delta \overline{\avg{O}}\) are estimated by bootstrap resampling
     \cite{Bootstrap}.\\
-    The bootstrapping method estimates the error \(\Delta \overline{\avg{O}}\)
+    The bootstrap method estimates the error \(\Delta \overline{\avg{O}}\)
     by taking \(M\) random samples from the \(M\) measured values of \(O\),
     where the same value can be chosen more than once, calculating the
     estimator \(\avg{O_b}\) of this bootstrap sample and doing this \(k\)
@@ -264,7 +264,7 @@
     The same principle can be used to determine the other two exponents.
     Note that \(L=16\) is not used for the collapse, because it is a
     rather small value of \(L\) for which deviations from the assumed
-    scaling behavior might be expected. I.e.\ Eq.\ \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
+    scaling behavior might be expected, i.e.\ Eq.\ \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
     are approximations for big \(L\). For small \(L\) one needs some
     \emph{corrections to scaling} terms, which are not considered here.\\
     To accomplish the collapse in a semi-automatic and reproduceable
@@ -773,7 +773,7 @@
         explains the plateau in the \(T_{c}\) diagram. With
         increasing \(\sigma\), more and more edges vanish\footnote{See also \url{http://www.youtube.com/watch?v=rltzi15mTM4} for an animation.},
         thus reducing the degree and consequently the corresponding value of \(T_{c}\).
-        \begin{figure}[htbp]
+        \begin{figure}[htb]
             \centering
             \subfigure[][$\sigma = 0.09$]
             {
@@ -802,10 +802,9 @@
             }
             \label{fig:RNG_sigma}
         \end{figure}
-
         \clearpage
 
-    \subsubsection{Influence of the Coupling Constant on the Critical Temperature}
+    \subsubsection{Influence of the Coupling Constant on the Critical Temperature}%
     \label{sssec:J}
         However, note that the degree does not alone influence the behavior of \(T_c\).
         Further \(T_c\) depends on the coupling constant \(J\), which is
@@ -824,7 +823,7 @@
         of all edges of the graph multiplied by the degree \(\avg{J_{ij}} K\).
         The plots Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}
         show that \(\avg{\sum_{\avg{i,j}} J_{ij}}\) is also correlated with \(T_c\).
-        \begin{figure}[htbp]
+        \begin{figure}[hbtp]
             \centering
             \subfigure[][]
             {
@@ -883,7 +882,7 @@
         Also both graph types exhibit a steep decline after the plateau before
         they approach an asymptotic limit for \(\sigma \gg 1\).\\
         If one looks at the behavior of \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
-        for \(\sigma \ll 1\) and consequently \(d_{ij} \approx 1\) the
+        for \(\sigma \ll 1\) and consequently \(d_{ij} \approx 1\), the
         following approximation is valid.
         \begin{equation}
             \abs{1-d_{ij}} := \varepsilon \ll 1
@@ -915,10 +914,10 @@
         Also note that the degree \(K\) is
         the same used in \ref{fig:Tc}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
         because it is obviously independent of \(J\).
-        Further, note that for small values of \(\sigma < 0.3\), \(T_c / K\)
+        Further, note that for small values of \(\sigma\), \(T_c / K\)
         obtained using the fixed coupling strength \(J=1\) coincides with
         \(T_c / \avg{\sum_{\avg{i,j}}J_{ij}}\) obtained using the distance
-        dependent coupling strength, Eq.\ \ref{eq:coupling}.
+        dependent coupling strength (see Eq.\ \ref{eq:coupling}).
         This can be expected from the approximate analytic statement presented
         in Sec.\ \ref{sssec:J}.
         \begin{figure}[htb]
@@ -960,11 +959,11 @@
             }
             \label{fig:Tc_deg_A0}
         \end{figure}\\
-        Because Ref.\ \cite{Janke1994} gives for the DT with \(J=1\) a
-        critical temperature of \(T_{c,DT} = 3.80\)\footnote{more precise: a value of \(\frac{1}{T_c} \approx 0.263\) is given},
-        it can be compared to the obtained \(T_{c,GG} = 2.19\)
-        and \(T_{c,RNG} = 1.13\) for \(\sigma = 1.2\), which should be very
-        similar to a Poisson distributed set of nodes.
+        Ref.\ \cite{Janke1994} gives a critical temperature for the DT with \(J=1\)
+        \(T_{c,DT} = 3.80\)\footnote{more precise: a value of \(\frac{1}{T_c} \approx 0.263\) is given}.
+        It can be compared to the obtained \(T_{c,GG} = 2.19\)
+        and \(T_{c,RNG} = 1.13\) for \(\sigma = 1.2\), which should
+        ensure a set of nodes very similar to a Poisson process.
         Note that while for the graph ensembles the relation
         \begin{equation}
             DT \supseteq GG \supseteq RNG

@@ -125,8 +125,8 @@
         between two nodes \(i\) and \(j\) will be drawn, if there exists
         a circle passing through \(i\) and \(j\), which does not contain
         any other node in its interior, see Ref.\ \cite{Katajainen}.
-        To make this clear a the construction of a four node DT is sketched
-        in Fig.\ \ref{fig:def:DT} in the appendix Sec. \ref{appendix:DT_def}.
+        To make this clear the construction of a four node DT is sketched
+        in Fig.\ \ref{fig:def:DT} in the appendix Sec.\ \ref{appendix:DT_def}.
 
     \subsubsection{Gabriel Graph}
         The Gabriel graph (GG) \cite{Gabriel1969}
@@ -167,10 +167,10 @@
                 exist, of RNG (hatched region) and GG (cross hatched region).
                 It is evident from this sketch that the GG is a supergraph
                 of the RNG. If there is an edge in the RNG, the hatched
-                region contains no node, the of course also the double
+                region contains no node, then of course also the double
                 hatched region contains no node and thus this edge appears
                 also in the GG. So every egde of the RNG is also present
-                in a GG on the same node set.
+                in a GG on the same set of nodes.
             \subref{sfig:lunes:rng} Example of a RNG on periodic
                 boundary conditions. Periodic nodes are dashed.
             \subref{sfig:lunes:gg} Example of a GG on
@@ -199,7 +199,7 @@
         near the lune one can subdivide the area in \(M\) \emph{cells} of size
         \(L_c \times L_c\) and save for each cell a list with nodes lying
         inside like presented in Ref.\ \cite{RNGCell} and sketched in Fig.\ \ref{fig:cell}.
-        The implementation of this thesis uses \(M=N\).
+        The implementation of this thesis uses \(M = N\) (\(L_c = L\)).
         \begin{figure}[htbp]
             \centering
             \subfigure[not Connected Nodes][]{
@@ -229,7 +229,7 @@
         Given the discretized cell structure it is just necessary to test the nodes in the cells which
         resemble a rectangular bounding box of the lune. Most pairs will be
         far away from each other and there will be one or more cells in the
-        middle of the bounding box, which are completely inside the lune so.
+        middle of the bounding box, which are completely inside the lune.
         Then only one node has to be tested from such a cell to discard an
         edge between the nodes. On the other hand, nodes that will be connected
         are near to each other so that only very few cells intersect the bounding
