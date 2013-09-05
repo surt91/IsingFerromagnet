@@ -887,7 +887,8 @@
             J_{ij} = e^{\pm \alpha \varepsilon} \approx 1 \pm \varepsilon \mp \dots
         \end{equation}
         \begin{align}
-            \avg{\sum_{\avg{i,j}} J_{ij}} &= \frac{\pm \varepsilon}{N} \avg{\sum_{\avg{i,j}} 1} \\
+            \avg{\sum_{\avg{i,j}} J_{ij}} &= \avg{\sum_{\avg{i,j}} (1 \pm \varepsilon)} \\
+                                          &= \frac{1 \pm \varepsilon}{N} \sum_{\avg{i,j}} 1 \\
                                           &= K(1 \pm \varepsilon) \approx K
         \end{align}
         Therefore this normalization is independent of the choice of \(\alpha\)
