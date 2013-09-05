@@ -59,10 +59,13 @@
     times. Then the standard deviation of the \(k\) calculated \(\avg{O_b}\)
     is taken as an estimate for \(\Delta \overline{\avg{O}}\).
     In this thesis the number of bootstrap samples is \(k = 200\).\\
-    Note that while the error of \(\avg{O}\), \(\Delta \avg{O}\) is dependend on \(\tau\) \cite[p. 151]{Katzgraber2011}
-    \(\Delta \overline{\avg{O}}\) is not directly, because it is averaged
-    over different realizations of the random proximity graph, which are
-    surely uncorrelated.
+    Note that the error of \(\avg{O}\), which is the standard error\footnote{for the arthmetic mean: standard deviation divided by \(\sqrt M\), where \(M\) is the number of samples}
+    of different states on one instance of a proximity graph \(\Delta \avg{O}\),
+    is dependend on \(\tau\) \cite[p. 151]{Katzgraber2011}.
+    However \(\Delta \overline{\avg{O}}\), which is the the error of the
+    observable averaged over different instances of the proximity graphs,
+    is not dependend on \(\tau\), because different realizations of the
+    random proximity graph are surely uncorrelated.
     Because every error mentioned in this thesis is of this type, it is not
     necessary to determine \(\tau\) for each observable. Therefore a good
     error estimate can be achieved by simple bootstrapping. Nevertheless, one has
