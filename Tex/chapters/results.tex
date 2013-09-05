@@ -151,7 +151,9 @@
     of the disordered Ising model in dependence of the disorder parameter
     \(\sigma\). At \(T_c\) the mean magnetization \(\avg{|m|}\) of
     the system will show a steep decline to zero and the susceptibility
-    \(\chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}\)
+    \begin{equation}
+        \chi = \frac{N}{T}\brac{\avg{m^2}-\avg{m}^2}
+    \end{equation}
     will diverge. In Fig.\ \ref{fig:smeared_out}\subref{sfig:smeared_out:meanM_L}
     it is easy to see that the steep decline of \(\avg{|m|}\)
     occurs at lower temperatures \(T\) for higher
@@ -362,16 +364,16 @@
     listed ranges.
     \begin{table}[htbp]
         \center
-        \begin{tabular}{l l l@{, }r}
+        \begin{tabular}{c l l@{, }r}
             \toprule
-                                & \multicolumn{1}{c}{\(\sigma\) }   & \multicolumn{2}{c}{\(\Delta x\)}\\
+            collapsed observable & \multicolumn{1}{c}{\(\sigma\) }   & \multicolumn{2}{c}{\(\Delta x\)}\\
             \midrule
-            \(\avg{\abs{m}}\)   & \(0.0, 0.1\)                      & \([-2.5\) & \( 7]\)\\
-                                & \(0.2, ,0.3, 0.5, 1.0\)           & \([-1.5\) & \(10]\)\\
-            \(\chi\)            & \(0.0, 0.1\)                      & \([-2.0\) & \( 7]\)\\
-                                & \(0.2, ,0.3, 0.5, 1.0\)           & \([-1.5\) & \( 7]\)\\
-            \(g\)               & \(0.0, 0.1\)                      & \([-3.5\) & \(12]\)\\
-                                & \(0.2, ,0.3, 0.5, 1.0\)           & \([-1.5\) & \(10]\)\\
+            \(\avg{\abs{m}}\)    & \(0.0, 0.1\)                      & \([-2.5\) & \( 7]\)\\
+                                 & \(0.2, 0.3, 0.5, 1.0\)           & \([-1.5\) & \(10]\)\\
+            \(\chi\)             & \(0.0, 0.1\)                      & \([-2.0\) & \( 7]\)\\
+                                 & \(0.2, 0.3, 0.5, 1.0\)           & \([-1.5\) & \( 7]\)\\
+            \(g\)                & \(0.0, 0.1\)                      & \([-3.5\) & \(12]\)\\
+                                 & \(0.2, 0.3, 0.5, 1.0\)           & \([-1.5\) & \(10]\)\\
             \bottomrule
         \end{tabular}
         \caption[Ranges of the Data Collapse]{
@@ -800,6 +802,8 @@
             \label{fig:RNG_sigma}
         \end{figure}
 
+        \clearpage
+
     \subsubsection{Influence of the Coupling Constant on the Critical Temperature}
     \label{sssec:J}
         However, note that the degree does not alone influence the behavior of \(T_c\).
@@ -956,12 +960,21 @@
             \label{fig:Tc_deg_A0}
         \end{figure}\\
         Because Ref.\ \cite{Janke1994} gives for the DT with \(J=1\) a
-        critical temperature \(T_{c,DT} = 3.80\), the obtained \(T_{c,GG} = 2.19\)
+        critical temperature of \(T_{c,DT} = 3.80\)\footnote{more precise: a value of \(\frac{1}{T_c} \approx 0.263\) is given},
+        it can be compared to the obtained \(T_{c,GG} = 2.19\)
         and \(T_{c,RNG} = 1.13\) for \(\sigma = 1.2\), which should be very
-        similar to a Poisson distributed set of nodes, can be compared.
+        similar to a Poisson distributed set of nodes.
         Note that while for the graph ensembles as mentioned in Sec. \ref{ssec:graphtypes}
-        the relation \(DT \supseteq GG \supseteq RNG\) holds, also the
-        relation \(T_{c,DT} \ge T_{c,GG} \ge T_{c,RNG}\) holds.
+        the relation
+        \begin{equation}
+            DT \supseteq GG \supseteq RNG
+        \end{equation}
+        holds, also the
+        relation
+        \begin{equation}
+            T_{c,DT} \ge T_{c,GG} \ge T_{c,RNG}
+        \end{equation}
+        holds.
         Also keep in mind that the relation \(T_{c,GG} \ge T_{c,RNG}\)
         was true for \(\alpha = 0.5\) in the preceding sections.
         This phenomenon is also known from percolation where the relation
