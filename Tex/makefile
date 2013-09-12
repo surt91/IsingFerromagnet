@@ -1,4 +1,6 @@
 DOKUMENT = Ferromagnet
+VORTRAG  = Vortrag
+
 CHAPTERS = chapters/title.tex \
            chapters/introduction.tex \
            chapters/methods.tex\
@@ -55,7 +57,7 @@ PLOTS = plots/binder_fit_s_0.pdf \
         $(GG_LST) \
         $(RNG_LST)
 
-all: $(DOKUMENT).pdf
+all: $(DOKUMENT).pdf $(VORTRAG).pdf
 
 .PHONY : clean
 
@@ -65,6 +67,12 @@ $(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS) $(IMAGES) $(BIBFILE)
 	pdflatex -interaction=batchmode $(DOKUMENT)
 	pdflatex -interaction=batchmode $(DOKUMENT)
 
+$(VORTRAG).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
+	pdflatex -interaction=batchmode $(VORTRAG)
+	bibtex $(VORTRAG)
+	pdflatex -interaction=batchmode $(VORTRAG)
+	pdflatex -interaction=batchmode $(VORTRAG)
+
 %.eps: %.gp
 	cd $(<D) && gnuplot $(<F)
 
@@ -73,4 +81,4 @@ $(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS) $(IMAGES) $(BIBFILE)
 
 clean:
 	rm -f $(PLOTS) plots/fit.log
-	rm -f *.log *.aux *.bbl *.blg *.toc *.out *.lof *.lot $(DOKUMENT).pdf
+	rm -f {$(DOKUMENT),$(VORTRAG)}.{pdf,log,aux,bbl,blg,toc,out,lof,lot,snm,nav}
