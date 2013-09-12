@@ -56,10 +56,42 @@
 \section{Model}
     \subsection{Ising Ferromagnet}
         \begin{frame}{Ising Ferromagnet}
-            \begin{equation}
-                H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}.
-            \end{equation}
-            (Ref.\ \cite{Ising1925})
+            \begin{itemize}[<+->]
+                \item \(N\) sites
+                \item \(\avg{i,j}\) denotes "nearest neighbor" relationship
+                \item every site has a spin \(s \in \{-1,+1\}\){}
+                \item two spins \(i,j\) are coupled by \(J_{i,j}\){}
+                \item{
+                    \begin{equation}
+                        H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}.
+                    \end{equation}
+                    (Ref.\ \cite{Ising1925})
+                }
+            \end{itemize}
+        \end{frame}
+
+        \begin{frame}{Disordered Ising Ferromagnet}
+            \begin{columns}[t]
+                \begin{column}{5cm}
+                    \begin{itemize}
+                        \item start with square lattice
+                        \pause
+                        \item displace every node randomly according to\\
+                            \(f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}.\)
+                    \end{itemize}
+                \end{column}
+                \begin{column}{6cm}
+                    \vspace{-1cm}
+                    \begin{figure}[htbp]
+                        \centering
+                        \input{images/Displacement}
+                        \caption
+                        {
+                            Displacement of the nodes.
+                        }
+                    \end{figure}
+                \end{column}
+            \end{columns}
         \end{frame}
 
     \subsection{Proximity Graphs}
@@ -67,9 +99,9 @@
             \begin{itemize}[<+->]
                 \item{ 3 graph types used
                     \begin{itemize}
-                        \item Delaunay Triangulation (DT)
-                        \item Gabriel Graph (GG)
-                        \item Relative Neighborhood Graph (RNG)
+                        \item Delaunay Triangulation (DT) \cite{Katajainen}
+                        \item Gabriel Graph (GG) \cite{Gabriel1969}
+                        \item Relative Neighborhood Graph (RNG) \cite{Toussaint1980}
                     \end{itemize}
                 }
                 \item{
@@ -155,24 +187,80 @@
             \end{itemize}
             \begin{itemize}[<+->]
                 \item But there are states contributing more than others
-                \item{ e.g.\ in canonical systems at low \(T\) with
+                \item{ e.g.\ low \(H_{i}\) in canonical systems at low \(T\) with
                     \begin{equation}
-                        p_{i} = e^{-k_{B}T}
+                        p_{i} = e^{-\frac{H_{i}}{k_{B}T}}
                     \end{equation}
                 }
             \end{itemize}
         \end{frame}
+
         \begin{frame}{Importance Sampling}
             \begin{itemize}[<+->]
+                \item generate new states according to the known distribution \(p_{i}\)
+                \item generate new states from former states
                 \item{ Markov Chains
                     \begin{itemize}
-                        \item Ergodicity
-                        \item Detailed Balance
+                        \item Ergodicity\\
+                                every state is reachable in finite time
+                        \item Detailed Balance\\
+                                in equilibrium the probability to reach a state is the same as the probability to leave the same state
                     \end{itemize}
                 }
+                \item note that the correlation of subsequent states has an effect on the errorbars\\
+                    \(\to\) autocorrelation time \(\tau\)
             \end{itemize}
         \end{frame}
 
+        \begin{frame}{Single Spin Flip Metropolis Update \cite{Metropolis1953}}
+            \begin{equation}
+                A(\mu \to \nu) =
+                \begin{cases}
+                    1                            & \Delta H \le 0 \\
+                    \exp{\brac{-\beta \Delta H}} & \Delta H > 0
+                \end{cases}.
+            \end{equation}
+        \end{frame}
+
+        \begin{frame}{Wolff Cluster Update \cite{Wolff1989}}
+            \begin{equation}
+                P_{\mathrm{add}} = 1-\exp\brac{-2\beta J},
+            \end{equation}
+            \pause
+            \begin{itemize}[<+->]
+                \item very efficient at \(T_{c}\)
+                \item but inferior to Metropolis at large and small \(T\)
+            \end{itemize}
+        \end{frame}
+
+        \begin{frame}{Parallel Tempering \cite{ParallelTempering1986}}
+            \begin{equation}
+                P_{i,i+1}((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,e^{\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}}}
+            \end{equation}
+            \begin{columns}[b]
+                \begin{column}{5cm}
+                    \begin{figure}[htbp]
+                        \centering
+                        \input{images/parTempSchema}
+                        \caption
+                        {
+                            Swapping the spin configurations.
+                        }
+                    \end{figure}
+                \end{column}
+                \pause
+                \begin{column}{6cm}
+                    \begin{figure}[htbp]
+                        \centering
+                        \input{images/parTempE}
+                        \caption
+                        {
+                            Sketch of an energy landscape.
+                        }
+                    \end{figure}
+                \end{column}
+            \end{columns}
+        \end{frame}
 
 \section{References}
     \begin{frame}[allowframebreaks]
