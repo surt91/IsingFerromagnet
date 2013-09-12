@@ -21,7 +21,9 @@ IMAGES = images/GG_RNG_def.tex \
          images/GGEdgeBefore.tex \
          images/GGEdgeAfter.tex \
          images/parTempSchema.tex \
-         images/parTempE.tex
+         images/parTempE.tex \
+         images/GG_def.tex \
+         images/RNG_def.tex
 
 GG_LST = plots/GG_Tc_normJ.pdf \
          plots/GG_Tc_norm_deg.pdf \

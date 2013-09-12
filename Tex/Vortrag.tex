@@ -1,10 +1,13 @@
 \documentclass{beamer}
-\usetheme{Hannover}  %% Themenwahl
+%~ \usetheme{Hannover}  %% Themenwahl
+%~ \usetheme{Bergen}  %% Themenwahl
+\usetheme{Berkeley}  %% Themenwahl
+\usecolortheme{dove}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-\usepackage[english,ngerman]{babel}
+\usepackage[english]{babel}
 
 \usepackage{graphicx}
 \usepackage{upgreek}
@@ -52,20 +55,124 @@
 
 \section{Model}
     \subsection{Ising Ferromagnet}
-        \begin{frame}
-            \frametitle{Hamiltonian}
+        \begin{frame}{Ising Ferromagnet}
             \begin{equation}
                 H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}.
             \end{equation}
             (Ref.\ \cite{Ising1925})
         \end{frame}
+
     \subsection{Proximity Graphs}
-        \begin{frame}
-            \frametitle{Relative Neighborhood Graph}
+        \begin{frame}{Proximity Graphs}
+            \begin{itemize}[<+->]
+                \item{ 3 graph types used
+                    \begin{itemize}
+                        \item Delaunay Triangulation (DT)
+                        \item Gabriel Graph (GG)
+                        \item Relative Neighborhood Graph (RNG)
+                    \end{itemize}
+                }
+                \item{
+                    \begin{equation}
+                        DT \supseteq GG \supseteq RNG
+                    \end{equation}
+                }
+            \end{itemize}
         \end{frame}
-        \begin{frame}
-            \frametitle{Gabriel Graph}
+
+        \begin{frame}{Delaunay Triangulation}
+            \begin{figure}[htbp]
+                \centering
+                \input{images/DT_def}
+                \caption
+                {
+                    Example of a DT.
+                }
+            \end{figure}
         \end{frame}
+
+        \begin{frame}{Gabriel Graph}
+            \begin{columns}[b]
+                \begin{column}{5cm}
+                    \begin{figure}[htbp]
+                        \centering
+                        \input{images/GG_def}
+                        \caption
+                        {
+                            Lune of a GG.
+                        }
+                    \end{figure}
+                \end{column}
+                \begin{column}{5cm}
+                    \begin{figure}[htbp]
+                        \centering
+                        \includegraphics[width=1\textwidth]{images/GG/L12S03.pdf}
+                        \caption
+                        {
+                            GG Example
+                        }
+                    \end{figure}
+                \end{column}
+            \end{columns}
+        \end{frame}
+
+        \begin{frame}{Relative Neighborhood Graph}
+            \begin{columns}[b]
+                \begin{column}{5cm}
+                    \begin{figure}[htbp]
+                        \centering
+                        \input{images/RNG_def}
+                        \caption
+                        {
+                            Lune of a RNG.
+                        }
+                    \end{figure}
+                \end{column}
+                \begin{column}{5cm}
+                    \begin{figure}[htbp]
+                        \centering
+                        \includegraphics[width=1\textwidth]{images/RNG/L12S03.pdf}
+                        \caption
+                        {
+                            RNG Example
+                        }
+                    \end{figure}
+                \end{column}
+            \end{columns}
+        \end{frame}
+
+\section{Methods}
+    \subsection{Monte Carlo Simulations}
+        \begin{frame}{Monte Carlo Simulations}
+            \begin{itemize}[<+->]
+                \item generate random states
+                \item mesure observables of these states
+                \item{ estimate observable \(O\) by
+                    \begin{equation}
+                        \avg{O} = \frac{1}{Z} \sum_i p_i O_i
+                    \end{equation}
+                }
+            \end{itemize}
+            \begin{itemize}[<+->]
+                \item But there are states contributing more than others
+                \item{ e.g.\ in canonical systems at low \(T\) with
+                    \begin{equation}
+                        p_{i} = e^{-k_{B}T}
+                    \end{equation}
+                }
+            \end{itemize}
+        \end{frame}
+        \begin{frame}{Importance Sampling}
+            \begin{itemize}[<+->]
+                \item{ Markov Chains
+                    \begin{itemize}
+                        \item Ergodicity
+                        \item Detailed Balance
+                    \end{itemize}
+                }
+            \end{itemize}
+        \end{frame}
+
 
 \section{References}
     \begin{frame}[allowframebreaks]
