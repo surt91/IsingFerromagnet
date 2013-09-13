@@ -62,7 +62,7 @@ PLOTS = plots/binder_fit_s_0.pdf \
 
 all: $(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf
 
-.PHONY : clean
+.PHONY : clean proper
 
 $(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS) $(IMAGES) $(BIBFILE)
 	pdflatex -interaction=batchmode $(DOKUMENT)
@@ -91,3 +91,7 @@ $(HANDOUT).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
 clean:
 	rm -f $(PLOTS) plots/fit.log
 	rm -f {$(DOKUMENT),$(VORTRAG),$(HANDOUT)}.{pdf,log,aux,bbl,blg,toc,out,lof,lot,snm,nav}
+
+proper:
+	rm -f $(PLOTS) plots/fit.log
+	rm -f {$(DOKUMENT),$(VORTRAG),$(HANDOUT)}.{log,aux,bbl,blg,toc,out,lof,lot,snm,nav}
