@@ -1,5 +1,6 @@
 DOKUMENT = Ferromagnet
 VORTRAG  = Vortrag
+HANDOUT  = Handout
 
 CHAPTERS = chapters/title.tex \
            chapters/introduction.tex \
@@ -59,7 +60,7 @@ PLOTS = plots/binder_fit_s_0.pdf \
         $(GG_LST) \
         $(RNG_LST)
 
-all: $(DOKUMENT).pdf $(VORTRAG).pdf
+all: $(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf
 
 .PHONY : clean
 
@@ -75,6 +76,12 @@ $(VORTRAG).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
 	pdflatex -interaction=batchmode $(VORTRAG)
 	pdflatex -interaction=batchmode $(VORTRAG)
 
+$(HANDOUT).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
+	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
+	bibtex $(VORTRAG)
+	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
+	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
+
 %.eps: %.gp
 	cd $(<D) && gnuplot $(<F)
 
@@ -83,4 +90,4 @@ $(VORTRAG).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
 
 clean:
 	rm -f $(PLOTS) plots/fit.log
-	rm -f {$(DOKUMENT),$(VORTRAG)}.{pdf,log,aux,bbl,blg,toc,out,lof,lot,snm,nav}
+	rm -f {$(DOKUMENT),$(VORTRAG),$(HANDOUT)}.{pdf,log,aux,bbl,blg,toc,out,lof,lot,snm,nav}
