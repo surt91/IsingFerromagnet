@@ -5,6 +5,8 @@
 *.toc
 *.lof
 *.lot
+*.nav
+*.snm
 
 Ferromagnet.pdf
 Vortrag.pdf
