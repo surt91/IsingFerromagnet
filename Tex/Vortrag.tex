@@ -60,7 +60,7 @@
                 \item \(N\) sites
                 \item \(\avg{i,j}\) denotes "nearest neighbor" relationship
                 \item every site has a spin \(s \in \{-1,+1\}\){}
-                \item two spins \(i,j\) are coupled by \(J_{i,j}\){}
+                \item two spins \(i,j\) are coupled by \(J_{ij}\)
                 \item{
                     \begin{equation}
                         H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}.
@@ -78,19 +78,22 @@
                         \item<2-> displace every node randomly according to\\
                             \(f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}.\){}
                         \item<3-> assign new nearest neighbors
+                        \item<4-> depending on their distance \(d_{ij}\) assign new \(J_{ij} = e^{\alpha(1-d_{ij})}\)
+                        \item<4-> here \(\alpha = 0.5\)
                     \end{itemize}
                 \end{column}
-                \pause
                 \begin{column}{6cm}
-                    \vspace{-1cm}
-                    \begin{figure}[htbp]
-                        \centering
-                        \input{images/Displacement}
-                        \caption
-                        {
-                            Displacement of the nodes.
-                        }
-                    \end{figure}
+                    \visible<2->{
+                        \vspace{-1cm}
+                        \begin{figure}[htbp]
+                            \centering
+                            \input{images/Displacement}
+                            \caption
+                            {
+                                Displacement of the nodes.
+                            }
+                        \end{figure}
+                    }
                 \end{column}
             \end{columns}
         \end{frame}
