@@ -78,7 +78,7 @@ $(VORTRAG).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
 
 $(HANDOUT).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
-	bibtex $(VORTRAG)
+	bibtex $(HANDOUT)
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
 
