@@ -298,6 +298,51 @@
             \end{columns}
         \end{frame}
 
+\section{Results}
+    \begin{frame}{Details}
+        \begin{itemize}[<+->]
+            \item Aim: determining the dependence from \(T_{c}\) on \(\sigma\)
+            \item \(10^{4} (L\in\{16,32\})\) or  \(5\cdot 10^{3} (L\in\{64,128\})\) uncorreltated measurements of \(O\) to get \(\avg{O}\)
+            \item on each of 100 randomly generated proximity graphs to get \(\overline{\avg{O}}\){}
+            \item \(m = \frac{1}{N} \sum_{i} s_{i}\)
+            \item \(E = \frac{1}{N} H\)
+        \end{itemize}
+    \end{frame}
+
+    \subsection{Finite Size Scaling}
+        \begin{frame}{Finite Size Effects}
+            \begin{columns}[t]
+                \begin{column}{5cm}
+                    \begin{itemize}[<+->]
+                        \item \(T_{c}\) defined for \(L \to \infty\)
+                        \item here: to ways to determine \(T_{c}\) are used
+                        \item Finite Size Scaling to collapse the data
+                        \begin{itemize}[<+->]
+                            \item yields also critical exponents
+                        \end{itemize}
+                        \item Intersection of the Binder Cumulant
+                        \begin{itemize}[<+->]
+                            \item very simple and easy to automate
+                        \end{itemize}
+                    \end{itemize}
+                \end{column}
+                \begin{column}{6cm}
+                    \begin{figure}[htbp]
+                        \centering
+                        \includegraphics[width=1\textwidth]{plots/meanM}
+                        \caption
+                        {
+                            Finite Size Effects
+                        }
+                    \end{figure}
+                \end{column}
+            \end{columns}
+        \end{frame}
+
+    \subsection{Critical Exponents}
+
+    \subsection{Critical Temperature}
+
 \section{References}
     \begin{frame}[allowframebreaks]
         \bibliography{lit}
