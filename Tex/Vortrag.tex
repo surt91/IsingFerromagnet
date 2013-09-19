@@ -15,6 +15,8 @@
 \usepackage{units}
 \usepackage{url}
 
+\usepackage{subfigure}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
@@ -309,39 +311,241 @@
         \end{itemize}
     \end{frame}
 
+    \begin{frame}{Finite Size Effects}
+        \begin{columns}[t]
+            \begin{column}{5cm}
+                \begin{itemize}[<+->]
+                    \item \(T_{c}\) defined for \(L \to \infty\)
+                    \item here: to ways to determine \(T_{c}\) are used
+                    \item Finite Size Scaling to collapse the data
+                    \begin{itemize}[<+->]
+                        \item yields also critical exponents
+                    \end{itemize}
+                    \item Intersection of the Binder Cumulant
+                    \begin{itemize}[<+->]
+                        \item very simple and easy to automate
+                    \end{itemize}
+                \end{itemize}
+            \end{column}
+            \begin{column}{6cm}
+                \begin{figure}[htbp]
+                    \centering
+                    \includegraphics[width=1\textwidth]{plots/meanM}
+                    \caption
+                    {
+                        Finite Size Effects
+                    }
+                \end{figure}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
     \subsection{Finite Size Scaling}
-        \begin{frame}{Finite Size Effects}
+        \begin{frame}{Finite Size Scaling}
+            Scaling Functions
+            \begin{align}
+                \label{eq:fsscaling:m}
+                \avg{m_L} &= L^{-\frac{\beta}{\nu}} \tilde{M}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
+                \label{eq:fsscaling:chi}
+                \chi_L    = L^{2} \beta \avg{\brac{m_{L}-\avg{m_{L}}}^2} &= L^{\frac{\gamma}{\nu}} \tilde{C}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
+                \label{eq:fsscaling:g}
+                g         = \frac{3}{2}\brac{1-\frac{\avg{m_{L}^4}}{3\avg{m_{L}^2}^2}} &\propto \tilde{G}\brac{L^\frac{1}{\nu}\brac{T-T_c}}
+            \end{align}
+            using \texttt{autoscale.py} \cite{autoscale2009}
+        \end{frame}
+        \begin{frame}{Finite Size Scaling}
+            \begin{figure}[htbp]
+                \centering
+                \subfigure
+                {
+                    \label{sfig:gettingCrit:binder_s_0}
+                    \includegraphics[width=0.47\textwidth]{plots/binder_s_0}
+                }
+                \subfigure[Finite Size Scaling of the Binder Cumulant $g$][]
+                {
+                    \label{sfig:gettingCrit:collapse_s_0}
+                    \includegraphics[width=0.47\textwidth]{plots/collapse_s_0}
+                }
+                \caption
+                {
+                    Scaling of the Binder Cumulant at \(\sigma = 0\)
+                }
+                \label{fig:gettingCrit}
+            \end{figure}
+        \end{frame}
+        \begin{frame}{Finite Size Scaling}
+            \begin{figure}[htbp]
+                \centering
+                \subfigure
+                {
+                    \label{sfig:gettingCrit:s_1_sus}
+                    \includegraphics[width=0.47\textwidth]{plots/s_1_sus}
+                }
+                \subfigure
+                {
+                    \label{sfig:gettingCrit:collapse_s_1_sus}
+                    \includegraphics[width=0.47\textwidth]{plots/collapse_s_1_sus}
+                }
+                \caption
+                {
+                    Scaling of the susceptibility at \(\sigma = 1\) on RNG
+                }
+                \label{fig:gettingCrit}
+            \end{figure}
+        \end{frame}
+        \begin{frame}{Finite Size Scaling}
+            \begin{figure}[htbp]
+                \centering
+                \subfigure
+                {
+                    \label{sfig:gettingCrit:s_1_meanM}
+                    \includegraphics[width=0.47\textwidth]{plots/s_1_meanM}
+                }
+                \subfigure
+                {
+                    \label{sfig:gettingCrit:collapse_s_1_meanM}
+                    \includegraphics[width=0.47\textwidth]{plots/collapse_s_1_meanM}
+                }
+                \caption
+                {
+                    Scaling of the magnetization at \(\sigma = 1\) on GG
+                }
+                \label{fig:gettingCrit}
+            \end{figure}
+        \end{frame}
+
+    \subsection{Critical Exponents}
+        \begin{frame}{Critical Exponents}
+            \begin{table}[htbp]
+                \center
+                \resizebox{\textwidth}{!}{
+                    \begin{tabular}{l l l l l l}
+                        \toprule
+                         & \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(T_c\)} & \multicolumn{1}{c}{\(\nu\)} & \multicolumn{1}{c}{\(\gamma\)} & \multicolumn{1}{c}{\(\beta\)}\\
+                        \midrule
+                        exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & 2.2691... & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
+                        \midrule
+                        RNG          & 0.0 & 2.2689(7)& 0.992(11)& 1.740(2) & 0.130(1) \\
+                                     & 0.1 & 2.2058(8)& 0.987(12)& 1.746(5) & 0.133(4) \\
+                                     & 0.2 & 1.627(2) & 1.010(9) & 1.756(14)& 0.123(10)\\
+                                     & 0.5 & 1.2825(7)& 1.010(16)& 1.750(16)& 0.143(13)\\
+                                     & 1.0 & 1.2123(3)& 1.013(6) & 1.758(16)& 0.138(13)\\
+                        \midrule
+                        GG           & 0.0 & 2.2687(5)& 0.998(8) & 1.735(2) & 0.1262(4)\\
+                                     & 0.1 & 2.895(4) & 0.999(19)& 1.744(5) & 0.133(6) \\
+                                     & 0.3 & 2.527(1) & 1.029(30)& 1.724(16)& 0.129(12)\\
+                                     & 0.5 & 2.238(1) & 1.006(5) & 1.750(12)& 0.125(13)\\
+                                     & 1.0 & 2.128(2) & 1.038(32)& 1.743(17)& 0.123(16)\\
+
+                        \bottomrule
+                    \end{tabular}
+                }
+                \caption
+                {
+                    Critical exponents for different values of \(\sigma\)
+                }
+                \label{tab:critExp}
+            \end{table}
+        \end{frame}
+
+    \subsection{Critical Temperature}
+        \begin{frame}{Binder Cumulant Intersection}
             \begin{columns}[t]
                 \begin{column}{5cm}
                     \begin{itemize}[<+->]
-                        \item \(T_{c}\) defined for \(L \to \infty\)
-                        \item here: to ways to determine \(T_{c}\) are used
-                        \item Finite Size Scaling to collapse the data
+                        \item Interpolate \(g\) to estimate the intersection
+                        \item cubic spline is robust
                         \begin{itemize}[<+->]
-                            \item yields also critical exponents
+                            \item piecewise fitting polynoms of degree 3
+                            \item whole curve is \(2 \times\) continously differentiable
                         \end{itemize}
-                        \item Intersection of the Binder Cumulant
-                        \begin{itemize}[<+->]
-                            \item very simple and easy to automate
-                        \end{itemize}
+                        \item intersection is at \(T_{c}\)
+                        \item easy to implement using \texttt{scipy}
                     \end{itemize}
                 \end{column}
                 \begin{column}{6cm}
                     \begin{figure}[htbp]
                         \centering
-                        \includegraphics[width=1\textwidth]{plots/meanM}
+                        \includegraphics[width=\textwidth]{plots/binder_fit_s_0}
                         \caption
                         {
-                            Finite Size Effects
+                            Binder Cumulant \(g\) at \(\sigma = 0\).
+                            Interpolated by cubic splines.
                         }
+                        \label{fig:gettingCrit:binder_fit_s_0}
                     \end{figure}
                 \end{column}
             \end{columns}
         \end{frame}
 
-    \subsection{Critical Exponents}
+        \begin{frame}{Critical Temperature}
+            \begin{figure}[htbp]
+                \centering
+                \subfigure
+                {
+                    \label{sfig:Tc:RNG}
+                    \includegraphics[width=0.45\textwidth]{plots/RNG_Tc}
+                }
+                \subfigure
+                {
+                    \label{sfig:Tc:GG}
+                    \includegraphics[width=0.45\textwidth]{plots/GG_Tc}
+                }
+                \caption
+                {
+                    \(T_c\) over \(\sigma\) for RNG and GG.
+                }
+                \label{fig:Tc}
+            \end{figure}
+        \end{frame}
 
-    \subsection{Critical Temperature}
+        \begin{frame}{Why the jump on GG?}
+            \begin{figure}[htbp]
+                \centering
+                \subfigure{
+                    \label{sfig:GGEdge:before}
+                    \resizebox{0.43\textwidth}{!}{
+                        \input{images/GGEdgeBefore}
+                    }
+                }
+                \subfigure{
+                    \label{sfig:GGEdge:after}
+                    \resizebox{0.43\textwidth}{!}{
+                        \input{images/GGEdgeAfter}
+                    }
+                }
+                \caption
+                {
+                    Small GG at \(\sigma = 0\) and \(\sigma > 0\)
+                }
+                \label{fig:GGEdge}
+            \end{figure}
+        \end{frame}
+
+        \begin{frame}{Influence of the degree on \(T_{c}\)}
+            \begin{equation}
+                K = \frac{1}{N} \sum_{\avg{i,j}} 1
+                \label{eq:degree}
+            \end{equation}
+            \begin{figure}[htbp]
+                \centering
+                \subfigure
+                {
+                    \label{sfig:deg:RNG}
+                    \includegraphics[width=0.45\textwidth]{plots/RNG_deg}
+                }
+                \subfigure
+                {
+                    \label{sfig:deg:GG}
+                    \includegraphics[width=0.45\textwidth]{plots/GG_deg}
+                }
+                \caption
+                {
+                    Degree \(K\) over different \(\sigma\) for RNG and GG
+                }
+                \label{fig:Tc_deg}
+            \end{figure}
+        \end{frame}
 
 \section{References}
     \begin{frame}[allowframebreaks]
