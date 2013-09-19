@@ -174,6 +174,38 @@
             \end{columns}
         \end{frame}
 
+        \begin{frame}{Graph Generation}
+            \begin{columns}[t]
+                \begin{column}{5cm}
+                    \begin{itemize}
+                        \item<1-> Fastest: generate DT in \(O(n \log(n))\) and test every edge
+                        \item<2-> But DT generation is not trivial
+                        \item<3-> Simplest: test every possible edge in \(O(n^{3})\)
+                        \item<4-> But: really slow
+                        \item<5-> Idea: test only nodes near the lune for every pair in best case \(O(n^{2})\)
+                    \end{itemize}
+                \end{column}
+                \begin{column}{5cm}
+                    \begin{overprint}
+                        \onslide<6>{
+                            \only<6>{
+                                \begin{figure}[htbp]
+                                    \centering
+                                    \input{images/CellBig}
+                                \end{figure}
+                            }
+                        }
+                        \onslide<7>{
+                                \begin{figure}[htbp]
+                                    \centering
+                                    \input{images/CellSmall}
+                                \end{figure}
+                        }
+                    \end{overprint}
+                \end{column}
+            \end{columns}
+        \end{frame}
+
 \section{Methods}
     \subsection{Monte Carlo Simulations}
         \begin{frame}{Monte Carlo Simulations}
