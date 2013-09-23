@@ -3,7 +3,7 @@
     The examined model is a 2D Ising model.
     The most common definition of the Ising model, to which will be referred to
     as the \emph{square lattice Ising model}, is a square lattice with
-    edge length \(L\) and \(N=L^2\) sites with periodic boundary conditions.
+    lateral length \(L\) and \(N=L^2\) sites with periodic boundary conditions.
     Note that \(N\) always refers to the number of sites in this thesis.
     Each site has a magnetic moment, which is called the spin. Each
     spin can take a value \(s \in \{-1,+1\}\) and interacts with its
@@ -13,7 +13,8 @@
         \label{eq:hamiltonian}
     \end{equation}
     \(\avg{i,j}\) refers to nodes \(i\) and \(j\) which are nearest
-    neighbors, so that they are directly coupled to each other. The
+    neighbors, so that they are directly coupled to each other. This will
+    be called an edge. The
     coupling between \(i\) and \(j\) is characterized by \(J_{ij}\),
     the coupling constant. If \(J_{ij} > 0 \ \forall \avg{i,j}\) the model resembles a ferromagnet.
     For the square lattice Ising model \(J_{ij} = 1 \ \forall \avg{i,j}\) applies.\\
@@ -25,7 +26,7 @@
     sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
     from a Gaussian distribution
     \begin{equation}
-        f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}.
+        f(\Delta x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{\Delta x^2}{2\sigma^2}}.
         \label{eq:gauss}
     \end{equation}
     This is sketched in Fig.\ \ref{fig:displacement}.
@@ -53,7 +54,7 @@
     The edges are constructed according to
     one of the two in Sec.\ \ref{ssec:graphtypes} defined rules,
     so that for a given configuration of points the resulting graph is an
-    instance of a proximity graph. The coupling constant \(J\) gets
+    instance of a so called proximity graph. The coupling constant \(J\) gets
     identified with edge weights. \(J\) will be changed to depend on the
     geometric distance between the connected pair of sites. More precise,
     the weight of an edge is \(E_{ij} = J_{ij} = \exp (\alpha (1-d_{ij}))\)
@@ -78,6 +79,7 @@
             itself. Hence, the torus represents the geometry of the model
             not perfectly, but gives very quick the right idea.
             Also the shades are of course only a guide to the eye.
+            This model was created using \texttt{Blender}\footnote{Blender is an open source 3D modelling tool. \url{http://www.blender.org/}}.
         }
         \label{fig:torusRNG}
     \end{figure}\\
@@ -107,7 +109,7 @@
 
 \subsection{Proximity Graphs}
 \label{ssec:graphtypes}
-    A graph \(G(V,E)\) is a set of nodes \(V\) and edges \(E\). In the
+    A graph \(G(V,E)\) is a set of nodes \(V\) and edges \(E \subset V^(2)\). In the
     scope of this model, the nodes get identified with the sites of the
     lattice and the edges signal the neighbor status of two sites. If the
     corresponding nodes are connected, the sites will be neighbors.\\
@@ -126,7 +128,7 @@
         a circle passing through \(i\) and \(j\), which does not contain
         any other node in its interior, see Ref.\ \cite{Katajainen}.
         To make this clear the construction of a four node DT is sketched
-        in Fig.\ \ref{fig:def:DT} in the appendix Sec.\ \ref{appendix:DT_def}.
+        in Fig.\ \ref{fig:def:DT} (see appendix).
 
     \subsubsection{Gabriel Graph}
         The Gabriel graph (GG) \cite{Gabriel1969}
@@ -142,8 +144,9 @@
     \subsubsection{Relative Neighborhood Graph}
         The Relative Neighborhood
         graph (RNG) \cite{Toussaint1980} is a subgraph of the GG. Two nodes \(i\) and \(j\) with
-        distance \(d_{ij}\) will be connected, if no other node is in the
-        \emph{lune}. The lune is defined as the intersection of two
+        distance \(d_{ij}\) will be connected again, if no other node is in the
+        \emph{lune}, which is different from the lune of the GG. The lune
+        is defined as the intersection of two
         circles with radius \(r = d\) and centers on \(i\) and \(j\).
         See also the hatched region in Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}.
 
@@ -180,6 +183,7 @@
     \end{figure}
 
     \subsubsection{Construction}
+        In this thesis only GG and RNG are examined.
         The simplest way to construct these graphs is to test for each
         pair of nodes if any other node lies in
         the lune of the pair. That is of complexity \(O (N^3)\), because
@@ -199,7 +203,7 @@
         near the lune one can subdivide the area in \(M\) \emph{cells} of size
         \(L_c \times L_c\) and save for each cell a list with nodes lying
         inside like presented in Ref.\ \cite{RNGCell} and sketched in Fig.\ \ref{fig:cell}.
-        The implementation of this thesis uses \(M = N\) (\(L_c = L\)).
+        The implementation of this thesis uses \(M = N\) (\(L_c = 1\)).
         \begin{figure}[htbp]
             \centering
             \subfigure[not Connected Nodes][]{

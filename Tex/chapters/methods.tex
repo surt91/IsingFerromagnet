@@ -8,17 +8,19 @@
     the observables are only fluctuating but not changing in any
     particular direction. For example thermal equilibrium denotes the
     condition that the system under scrutiny has reached the temperature
-    of the heat bath. This is the case, once there is no directed energy
-    exchange between them, thus the energy of the simulated system reaches
-    a steady state, where only fluctuations occur.
-    In a canonical ensemble the probability \(p_i\) of a state
-    \(i\) is distributed according to a Boltzman distribution
+    of the heat bath. This is the case, once there is only energy fluctuating
+    between them but no net energy exchange, thus the energy of the
+    simulated system reaches a steady state, where only fluctuations occur.
+    In a canonical ensemble the probability \(p_\nu\) of a state
+    \(\nu\) is distributed according to a Boltzman distribution
     \begin{equation}
-        p_i \propto e^{-\beta H_i}
+        p_\nu = \frac{1}{Z} e^{-\beta H_\nu}
     \end{equation}
     \begin{equation}
         \beta = \frac{1}{k_B T}
     \end{equation}
+    Where \(Z\) is the partition function, which normalizes \(p_\nu\) to
+    a probability: \(\sum_\nu p_\nu = 1\).
     Further the free energy \(F\) of a canonical ensemble is minimized
     in equilibrium and all observables can be derived from \(F\)
     in a straight forward way, as stated in every textbook about
@@ -47,16 +49,16 @@
     \end{equation}
     one has to know the partition function
     \begin{equation}
-        Z = \sum_i p_i = \sum_i e^{-\beta H_i},
+        Z = \sum_\nu e^{-\beta H_\nu},
         \label{eq:partitionFunction}
     \end{equation}
     where the sum goes over all possible states \(i\) of the system.
     Then, averages can be computed according to
     \begin{equation}
-        \avg{O} = \frac{1}{Z} \sum_i O_i e^{-\beta H_i},
+        \avg{O} = \frac{1}{Z} \sum_\nu O_\nu e^{-\beta H_\nu},
     \end{equation}
     Because every site can have two states, there are \(2^N\) different
-    states of the system. For each the energy \(H_i\) has to be calculated
+    states of the system. For each the energy \(H_\nu\) has to be calculated
     to solve the sum from Eq.\ \eqref{eq:partitionFunction} to gain \(Z\).
     Hence for small \(N\) the partition function is computable, but the system
     may show very different properties than in the thermodynamic limit.
@@ -138,14 +140,14 @@
     states according to their occurence probability given by the Boltzmann
     distribution. In fact this reduces the estimator to
     \begin{equation}
-        O_M = \frac{1}{M} \sum_{i=1}^M O_i,
+        O_M = \frac{1}{M} \sum_{\nu=1}^M O_\nu,
     \end{equation}
     where \(M\) is the number of samples. The proof is shown in \cite{NewmanBarkema1999}.
     This is a very convenient form.\\
     But it is difficult to create a random state of a physical system,
     e.g.\ the Ising system, according to a given distribution. The simple
     approach of creating uniformly distributed random states and reject
-    them with probability \(p_i^{-1}\) depending on their energy is not
+    them with probability \(p_\nu^{-1}\) depending on their energy is not
     efficient, because many generated states will be discarded and the
     computing time to generate them and calculating their energy will
     be wasted.
@@ -155,12 +157,13 @@
     \emph{Detailed Balance} means that the probability to leave a state is
     the same as the probability to enter the state in equilibrium
     \(p_\mu A(\mu \to \nu) = p_\nu A(\nu \to \mu)\) with \(p_\mu\) the
-    probability to be in state \(\mu\). This ensures that the system can
-    equilibrate and that the states are distributed according to the
-    desired distribution in equilibrium \cite{NewmanBarkema1999}.
+    probability to be in state \(\mu\).
     \emph{Ergodicity} requires that every possible state is reachable
     from every other state in finite time, see Refs.\ \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
-    Otherwise the samples might not be representative for the whole system.\\
+    This ensures that the system can equilibrate and that the states are
+    distributed according to the desired distribution in equilibrium
+    \cite{NewmanBarkema1999}. Otherwise the samples might not be representative
+    for the whole system.\\
     In this thesis three algorithms, which fulfill all requirements,
     were used. They will be shortly described in the following subsections.
     But first equilibration- and autocorrelation time will be discussed.
@@ -173,7 +176,8 @@
         equilibrium is defined as a steady state, one can determine it by
         observing the change of the observables over the progressing
         simulation as pictured in Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}.
-        The count of sweeps until
+        The progression of a Monte Carlo simulation is measured in \emph{sweeps},
+        which denote some operation. The count of sweeps until
         equilibrium is reached, is called \emph{equilibration time} \(t_{eq}\).
         All measurements should start after this time.\\
         In Fig.\ \ref{fig:equiandauto}\subref{sfig:equiandauto:equiE}
@@ -195,7 +199,7 @@
             {
                 \subref{sfig:equiandauto:equiE} Example of an Ising system
                     \(L=64\) reaching thermal equilibrium at \(T=2.36\) after
-                    approximately \(n=100\) sweeps.\\
+                    approximately \(N_s=100\) sweeps.\\
                 \subref{sfig:equiandauto:autoM} The autocorrelation of an
                     Ising system \(L=64\) at \(T=2.40\) (only Metropolis
                     sweeps -- otherwise the decline is too steep to show)
@@ -251,11 +255,12 @@
         A \emph{Metropolis} Monte Carlo \cite{Metropolis1953} simulation of an
         Ising model will choose a random spin, calculate the energy change
         \begin{equation}
-            \Delta H = H(\nu) - H(\mu)\\
+            \Delta H = H_\nu - H_\mu
             \label{eq:dH}
         \end{equation}
-        that would result from a flip of that spin and execute the flip
-        with the probability, see Refs.\ \cite{NewmanBarkema1999} \cite{Katzgraber2011}
+        that would result from a flip of that spin. Where \(\mu\) is the
+        state before the flip and \(\nu\) after the flip. The flip is then executed
+        with the probability
         \begin{equation}
             A(\mu \to \nu) =
             \begin{cases}
@@ -264,8 +269,9 @@
             \end{cases}.
             \label{eq:metropolis}
         \end{equation}
+        see Refs.\ \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
         So if a transition lowers the energy it will be always done. This
-        results in a high ratio between chosen spins and flipped spins.
+        results in a high ratio between flipped spins and chosen spins.
         Therefore it minimizes the calculations needed for a change of
         the state. Also note that \(\Delta H\) is easy to calculate,
         because it is only affected by the spin of the neighbors of the
@@ -277,11 +283,11 @@
         single spin flip Metropolis update decreases significantly, i.e.\ the
         autocorrelation time \(\tau\) diverges.
         This is called \emph{critical slowing} down.\\
-        In order to circumvent this a cluster algorithm like the \emph{Wolff}
+        In order to circumvent this, a cluster algorithm like the \emph{Wolff}
         algorithm \cite{Wolff1989} can be used.
         For an Ising model the Wolff algorithm builds a cluster of sites
-        starting with a random site and adding neighboring sites of the
-        same spin with probability
+        starting with a random site and adding neighboring sites exhibiting the
+        same spin orientation with probability
         \begin{equation}
             P_{\mathrm{add}} = 1-\exp\brac{-2\beta J},
             \label{eq:wolffAdd}
@@ -296,11 +302,12 @@
         \cite[p. 91ff]{NewmanBarkema1999} \cite[p. 151f]{Katzgraber2011}.
         This leads fast to new uncorrelated states at the critical
         temperature because big clusters are flipped. But there are not
-        much advantages at high or low temperatures. At low temperatures
-        the cluster will consist of almost all sites such that all but
-        very few spins will be flipped. At high temperatures the cluster
-        will only contain very few sites.
-        Both situations have no advantage over the Metropolis algorithm.\\
+        much advantages at high or low temperatures. At high temperatures the cluster
+        will only contain very few sites, so only few spins will be flipped.
+        At low temperatures the cluster will consist of almost all sites
+        such that all but very few spins will be flipped. Altough the equilibrium
+        will be reached sooner at low temperatures than with the Metropolis
+        algorithm, situations have no advantage after equilibration.\\
         So one would activate this algorithm near the critical temperature
         but would use a simple Metropolis algorithm at high and low temperatures.
 
@@ -310,7 +317,7 @@
         the spin configurations between two neighboring temperatures are
         swapped periodically with probability \cite[p. 169ff]{NewmanBarkema1999} \cite[S. 155ff]{Katzgraber2011}
         \begin{equation}
-            P_{i,i+1}((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,\exp\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}},
+            P_{\nu,\nu+1}(S_\nu \leftrightarrow S_{\nu+1}) = \min\brac{1,\exp\brac{\brac{E_{\nu+1}-E_\nu}\brac{\frac{1}{T_{\nu+1}}-\frac{1}{T_\nu}}}},
             \label{eq:partemp}
         \end{equation}
         as schematically pictured in Fig.\ \ref{fig:parTemp}\subref{sfig:parTemp:schema}.
