@@ -1,7 +1,7 @@
 set terminal postscript eps enhanced color blacktext lw 2 26
 set output 'collapse_s_1_sus.eps'
 
-set key samplen 1. center bottom Left                 # customize key
+set key samplen 1. right center Left                 # customize key
 set xl "{/Italic (T-T_c) L^{1/{/Symbol n}}}"
 set yl "{/Italic {/Symbol c}} L^{-{/Symbol g}/{/Symbol n}}"  # set x,y labels
 xc=1.2123
