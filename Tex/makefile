@@ -2,6 +2,8 @@ DOKUMENT = Ferromagnet
 VORTRAG  = Vortrag
 HANDOUT  = Handout
 
+LATEX = $(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf
+
 CHAPTERS = chapters/title.tex \
            chapters/introduction.tex \
            chapters/methods.tex\
@@ -60,21 +62,17 @@ PLOTS = plots/binder_fit_s_0.pdf \
         $(GG_LST) \
         $(RNG_LST)
 
-all: $(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf
+all: $(LATEX)
 
 .PHONY : clean proper
 
-$(DOKUMENT).pdf: $(DOKUMENT).tex $(CHAPTERS) $(PLOTS) $(IMAGES) $(BIBFILE)
-	pdflatex -interaction=batchmode $(DOKUMENT)
-	bibtex $(DOKUMENT)
-	pdflatex -interaction=batchmode $(DOKUMENT)
-	pdflatex -interaction=batchmode $(DOKUMENT)
+$(DOKUMENT).pdf: $(CHAPTERS)
 
-$(VORTRAG).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
-	pdflatex -interaction=batchmode $(VORTRAG)
-	bibtex $(VORTRAG)
-	pdflatex -interaction=batchmode $(VORTRAG)
-	pdflatex -interaction=batchmode $(VORTRAG)
+$(DOKUMENT).pdf $(VORTRAG).pdf: %.pdf: %.tex $(PLOTS) $(IMAGES) $(BIBFILE)
+	pdflatex -interaction=batchmode $*
+	bibtex $*
+	pdflatex -interaction=batchmode $*
+	pdflatex -interaction=batchmode $*
 
 $(HANDOUT).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
