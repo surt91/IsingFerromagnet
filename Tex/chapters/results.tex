@@ -429,7 +429,23 @@
         \label{tab:critExp}
     \end{table}\\
     According to Tab.\ \ref{tab:critExp}, most values
-    are matching the expectations. \(T_c\) for \(\sigma = 0\) is in good
+    are matching the expectations.\\
+    Note that the large deviations in comparison to the given error for
+    \(\gamma\) and \(\beta\) at \(\sigma = 0\) might be caused by the
+    determination of the errorbars which neglects the thermal fluctuations
+    and mainly accounts for fluctuations induced by variing graph instances.
+    Those are according to my tests of greater importance except for
+    \(\sigma =0\) where they do not occur. Hence the errorbars at \(\sigma = 0\)
+    are underestimated. The quality parameter \(S\) of \texttt{autoscale.py}
+    showed for the \(\sigma = 0\) collapses a bad value, too. That is a strong
+    hint for underestimated errorbars.
+    As a conclusion, the method for the determination of the errorbars
+    has to be optimized to also account for the thermal fluctuations which
+    are important for \(\sigma=0\) and possibly \(\sigma\approx 0\).
+    In spite of this flaw, the second method for determining \(T_{c}\),
+    which is performed in the next section, does not utilize the errorbars
+    and is therefore unaffected for all \(\sigma\).\\
+    \(T_c\) for \(\sigma = 0\) is in good
     agreement with the known value. Especially \(\nu\) and \(\gamma\)
     are always in very good agreement with their exact values. Besides the
     good agreement of the values of \(\nu\) and \(\gamma\) obtained by data collapse,
