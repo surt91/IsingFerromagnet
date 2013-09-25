@@ -475,6 +475,29 @@ node_t * gs_depth_first_search(gs_graph_t *g, int node, int target, node_t *tree
     return tree_of_tested_nodes;
 }
 
+/*! \fn double get_mean_dist(gs_graph_t *g)
+    \brief Diese Funktion gibt den Mittelwert der Knotendistanzen im
+            Graphen g aus indem er eine Umkehrfunktion auf die einzelnen
+            Gewichte anwendet
+
+    \param [in] g Graph über den gemittelt wird
+    \return Mittelwert der Knotendistanzen
+*/
+double get_mean_dist(gs_graph_t *g)
+{
+    int n, i;
+    double sum = 0;
+    int count = 0;
+    for(n=0;n<g->num_nodes; n++)
+        for(i=0;i<g->node[n].num_neighbors;i++)
+        {
+            sum += -log(g->node[n].neighbors[i].weight)*2+1;
+            count++;
+        }
+    /* Es sollte egal sein, dass über jede Kante zweimal summiert wird */
+    return (sum / count);
+}
+
 /*! \fn double get_mean_weight(gs_graph_t *g)
     \brief Diese Funktion gibt den Mittelwert der Kantengewichte im
             Graphen g aus

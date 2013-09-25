@@ -28,6 +28,9 @@ class output_reader():
     ## @var sigma
     # Unordnungsparameter (double)
 
+    ## @var d
+    # mittlerer Knotenabstand (double)
+
     ## @var J
     # mittleres J (double)
 
@@ -73,6 +76,7 @@ class output_reader():
             self.J = " ".join(header).rpartition("<J>=")[2].partition (" #")[0]
             self.sumJ = " ".join(header).rpartition("sumJ=")[2].partition (" #")[0]
             self.deg = " ".join(header).rpartition("deg=")[2].partition (" #")[0]
+            self.d = " ".join(header).rpartition("d=")[2].partition (" #")[0]
 
             # Zwischenspeichern, da Einträge im Reader verbraucht werden
             alle = [i for i in reader]

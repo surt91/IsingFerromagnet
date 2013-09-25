@@ -8,6 +8,7 @@ def getJFromDat(dataPath, outPath, L):
     J = {}
     sumJ = {}
     deg = {}
+    d = {}
     if not os.path.exists(outPath):
         os.makedirs(outPath)
 
@@ -30,6 +31,10 @@ def getJFromDat(dataPath, outPath, L):
             deg[r.sigma].append(float(r.deg))
         except KeyError:
             deg.update({r.sigma:[float(r.deg)]})
+        try:
+            d[r.sigma].append(float(r.d))
+        except KeyError:
+            d.update({r.sigma:[float(r.d)]})
 
     #~ print d
     for key in J.keys():
@@ -38,6 +43,8 @@ def getJFromDat(dataPath, outPath, L):
         sumJ[key] = [mean(sumJ[key]), std(sumJ[key])/sqrt(len(sumJ[key]))]
     for key in deg.keys():
         deg[key] = [mean(deg[key]), std(deg[key])/sqrt(len(deg[key]))]
+    for key in d.keys():
+        d[key] = [mean(d[key]), std(d[key])/sqrt(len(d[key]))]
 
     print dataPath
     print "<J>"
@@ -57,6 +64,13 @@ def getJFromDat(dataPath, outPath, L):
     print "deg"
     with open(os.path.join(outPath, "deg_L{0}.dat".format(L)), "w") as f:
         for [key, val] in sorted(deg.items()):
+            print key, " : ", val[0], "+-", val[1]
+            f.write("{0} {1} {2}\n".format(key,val[0],val[1]))
+    print " "
+
+    print "d"
+    with open(os.path.join(outPath, "d_L{0}.dat".format(L)), "w") as f:
+        for [key, val] in sorted(d.items()):
             print key, " : ", val[0], "+-", val[1]
             f.write("{0} {1} {2}\n".format(key,val[0],val[1]))
     print " "

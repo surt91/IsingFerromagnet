@@ -33,6 +33,7 @@ inline void get_cell_border_gabriel(gs_node_t node1, gs_node_t node2, double dis
 void delete_random_edges_till_percolation(gs_graph_t *g, gsl_rng *rng);
 int test_connectivity_between_nodes(gs_graph_t *g, int node1, int node2);
 node_t * gs_depth_first_search(gs_graph_t *g, int node, int target, node_t *tree_of_tested_nodes, int *status);
+double get_mean_dist(gs_graph_t *g);
 double get_mean_weight(gs_graph_t *g);
 double get_mean_deg(gs_graph_t *g);
 double get_sum_weight(gs_graph_t *g);
