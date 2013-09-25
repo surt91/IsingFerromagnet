@@ -607,9 +607,10 @@
         called average \emph{coordination number}. \(K\) is defined as the mean count
         of neighbors per node.
         \begin{equation}
-            K = \frac{1}{N} \sum_{\avg{i,j}} 1.
+            K = \frac{2}{N} \sum_{E} 1.
             \label{eq:degree}
         \end{equation}
+        Where \(E\) is the set of edges.
         For a Poisson point process, i.e.\ for \(\sigma \gtrsim 1\),
         the average degree of the mentioned graph types are known.
         \(K_{DT} = 6\) \cite{DelaunayDegree}, \(K_{GG} = 4\) \cite{notPChristoph} and \(K_{RNG} = 2.5576(3)\) \cite{RNGCell}.
