@@ -59,6 +59,8 @@ PLOTS = plots/binder_fit_s_0.pdf \
         plots/Specific_Heat_0.pdf \
         plots/autocorrL.pdf \
         plots/autocorrT.pdf \
+        plots/Tc_K.pdf \
+        plots/Tc_J.pdf \
         $(GG_LST) \
         $(RNG_LST)
 

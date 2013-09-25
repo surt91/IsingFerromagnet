@@ -508,7 +508,7 @@
     Take Fig.\ \ref{fig:gettingCrit:binder_fit_s_0} as an example.
     Here such interpolations are plotted for \(\sigma=0\) and are
     intersecting at \(T \approx 2.27\).
-    To determine \(T_c\), the intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}}
+    To determine \(T_c\), the six unique intersections\footnote{found using the \texttt{scipy.optimize} tools \cite{scipy2001}} \(\in \{(16,32),(16,64),(16,128),(32,64),(32,128),(64,128)\}\)
     are averaged and the standard error is calculated. In this case, one
     gets \(T_c = 2.2689(2)\), which is in good agreement with the
     exact solution from Eq.\ \eqref{eq:exactTc}.
@@ -520,7 +520,7 @@
     left side and the GG on the right side.
     And in Tab.\ \ref{tab:critTemp} the values are displayed together with the
     values obtained by the data collapse from the previous section.
-    \begin{table}[htbp]
+    \begin{table}[htb]
         \center
         \begin{tabular}{l l l l l}
             \toprule
@@ -562,7 +562,7 @@
     The values obtained through the data collapse and the values obtained
     through the intersection of the binder cumulant are always in good
     agreement and of comparable precision.\\
-    These values of \(T_c\) are plotted over \(\sigma\) in Fig.\ \ref{fig:Tc}.
+    These values of \(T_c\) are plotted as a function of \(\sigma\) in Fig.\ \ref{fig:Tc}.
     \begin{figure}[htbp]
         \centering
         \subfigure[][]
@@ -640,23 +640,39 @@
         The values for \(K\) are obtained as an average over \(100\)
         realizations of each graph type for \(L=16\) and \(L=32\) lattices.
         %~ Note that \(K\) is independent of \(L\) because of the periodic boundary.
-        In Fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
-        one can see that these curves are almost identical and the small
-        errorbars suggest that they are sufficiently precise for this purpose.
+        %~ In Fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
+        %~ one can see that these curves are almost identical and the small
+        %~ errorbars suggest that they are sufficiently precise for this purpose.
+        The great influence of \(K\) on \(T_c\) is shown in Fig.\ \ref{fig:Tc_K}.
+        But the discontinuity at \(K \approx 4\) and slight curvature at
+        \(K \approx 5\) proof that it is not the only influence.
+        \begin{figure}[htb]
+            \centering
+            \includegraphics[width=0.45\textwidth]{plots/Tc_K}
+            \caption[Critical Temperature as a Function of the Degree of the Graph]
+            {
+                The critical temperature is plotted as a function of the
+                degree. There seems to be an in first approximation linear
+                dependency. But at \(K \approx 4\) the jump also seen in
+                Fig.\ \ref{fig:Tc} occurs. Also slight curvature can be
+                recognized and is further examined in Fig.\ \ref{fig:Tc_deg}.
+            }
+            \label{fig:Tc_K}
+        \end{figure}\\
         It seems reasonable to normalize \(T_c\) by the degree of the underlying
         graph. This is done in Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
         Indeed the normalization eliminates the jump and reduces the
         slope of the \(T_c\) curve for the GG. Hence it reduces differences
         between the RNG and the GG. However the elimination of the jump is
         unfortunately a coincidence and probably caused by a lucky choice of the
-        function, which determines the coupling constants \(J\). As proof for
+        function, which determines the local coupling constants \(J_{ij}\). As proof for
         this claim in Sec.\ \ref{appendix:fixedCoupling} the same analysis
         is performed for a model with fixed \(J\). There the jump gets narrower
         but is still existent. Anyway, the degree seems to have an impact on
         the critical temperature \(T_c\), but it is not a trivial one.
         Note that even after the normalization, the values of \(T_c / K\)
         for the RNG are smaller than those for the GG.
-        \begin{figure}[htbp]
+        \begin{figure}[htb]
             \centering
             \subfigure[][]
             {
@@ -704,7 +720,7 @@
         to get smaller, hence no other nodes are inside or on the border of
         the lune anymore and the new diagonal edge appears. This process is sketched in
         Fig.\ \ref{fig:GGEdge}.
-        \begin{figure}[htbp]
+        \begin{figure}[htb]
             \centering
             \subfigure[][]{
                 \label{sfig:GGEdge:before}
@@ -726,12 +742,12 @@
             \label{fig:GGEdge}
         \end{figure}\\
         Further, the increase of \(T_c\) on the GG can be made plausible.
-        Also, the maximum value of \(K\) and the minimum value of \(T_c\)
+        Also, the maximum value of \(K\) and the maximum value of \(T_c\)
         are observed at a similar value of \(\sigma\). Hence, while displacing the nodes, there arise more edges
         than edges are vanishing until \(\sigma \approx 0.15\) is reached.
-        Then more edges disappear, than appear at further displacement. This
+        Then more edges disappear than appear at further displacement. This
         is not an obvious effect, but can be seen in Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.09}\subref{sfig:GG_sigma:0.15}\subref{sfig:GG_sigma:0.21}.
-        \begin{figure}[htbp]
+        \begin{figure}[htb]
             \subfigure[][$\sigma = 0.00$]
             {
                 \label{sfig:GG_sigma:0.00}
@@ -809,7 +825,7 @@
     \subsubsection{Influence of the Coupling Constant on the Critical Temperature}%
     \label{sssec:J}
         However, note that the degree does not alone influence the behavior of \(T_c\).
-        Further \(T_c\) depends on the coupling constant \(J\), which is
+        Further \(T_c\) depends on the coupling constant \(J_{ij}\), which is
         obvious from Eqs.\ \eqref{eq:exactTc} and \eqref{eq:exactHCTc}. The
         coupling constant in turn is depending on the length of the edges,
         which changes with \(\sigma\).
@@ -823,9 +839,28 @@
         over the edge weights of all edges connected to a node and averaging
         this value over all nodes. Alternatively it is the average edge weight
         of all edges of the graph multiplied by the degree \(\avg{J_{ij}} K\).
-        The plots Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}
-        show that \(\avg{\sum_{\avg{i,j}} J_{ij}}\) is also correlated with \(T_c\).
-        \begin{figure}[hbtp]
+        The plot Fig.\ \ref{fig:Tc_J} shows that
+        there is a less obvious dependency between \(T_c\) and \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
+        than between \(T_c\) and \(K\) (c.f.\ Fig.\ \ref{fig:Tc_K}).
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.45\textwidth]{plots/Tc_J}
+            \caption[Critical Temperature as a Function of the Degree of the Graph]
+            {
+                The critical temperature is plotted as a function of the
+                average edge weight. T
+            }
+            \label{fig:Tc_J}
+        \end{figure}\\
+        Though Eq.\ \eqref{eq:exactHCTc} and Fig.\ \ref{fig:Tc_J} show
+        that there is no linear connection between \(J\) and \(T_c\), the best guess
+        is a linear connection, because this model is derived from the
+        square lattice, where the connection is linear. Therefore, one
+        normalizes \(T_c\) with \(\avg{\sum_{\avg{i,j}} J_{ij}}\) as in
+        Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}, the
+        jump on the GG arises again, but \(T_c\) is now monotonically
+        decreasing with increasing disorder parameter \(\sigma\).
+        \begin{figure}[hbt]
             \centering
             \subfigure[][]
             {
@@ -863,14 +898,6 @@
             }
             \label{fig:TcJ}
         \end{figure}\\
-        Though Eq.\ \eqref{eq:exactHCTc} shows that there does not have
-        to be a linear connection between \(J\) and \(T_c\), the best guess
-        is a linear connection, because this model is derived from the
-        square lattice, where the connection is linear. Therefore, one
-        normalizes \(T_c\) with \(\avg{\sum_{\avg{i,j}} J_{ij}}\) as in
-        Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}, the
-        jump on the GG arises again, but \(T_c\) is now monotonically
-        decreasing with increasing disorder parameter \(\sigma\).
         %~ This is a strong hint, that the change of the \(T_c\) with changing
         %~ \(\sigma\) is in some way connected to \(J\) and \(K\) which is an
         %~ expected conclusion.\\
@@ -893,7 +920,7 @@
             J_{ij} = e^{\pm \alpha \varepsilon} \approx 1 \pm \varepsilon \mp \dots
         \end{equation}
         \begin{align}
-            \avg{\sum_{\avg{i,j}} J_{ij}} &= \avg{\sum_{\avg{i,j}} (1 \pm \varepsilon)} \\
+            \avg{\sum_{\avg{i,j}} J_{ij}} &\approx \avg{\sum_{\avg{i,j}} (1 \pm \varepsilon)} \\
                                           &= \frac{1 \pm \varepsilon}{N} \sum_{\avg{i,j}} 1 \\
                                           &= K(1 \pm \varepsilon) \approx K
         \end{align}
@@ -1035,9 +1062,9 @@
     definition of nearest neighbors via a proximity graph does not change
     the value of \(g_c\) much. Though it is mentioned in \cite{BinderValue} that the
     lattice structure has a minor effect on \(g_c\), the uncertainty of
-    \(g_c\) is too large to observe this. For a more exact analysis, new
+    \(g_c\) is too large to confirm this. For a more exact analysis, new
     Monte Carlo simulations at \(T_c\) would be needed. But this is
-    beyond the scope of this thesis. Anyway, the results are the expected
+    beyond the scope of this thesis. Anyway, the results show the expected
     behavior, because no major deviations from the value of \(g_c\) at
     \(\sigma = 0\) occur at larger \(\sigma\). Within error bars the
     values are all in reasonable agreement with \(g_c\).
