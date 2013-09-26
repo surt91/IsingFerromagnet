@@ -905,6 +905,36 @@
         temperature.
         Also both graph types exhibit a steep decline after the plateau before
         they approach an asymptotic limit for \(\sigma \gg 1\).\\
+        Although one could assume, that the course of \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
+        should be strongly influenced by the mean length of the edges, because \(J_{ij}\)
+        is a function on the edge length \(d_{ij}\), this is not the case.
+        As shown in Fig.\ \ref{fig:TcD}, it shows especially at low \(\sigma\)
+        a more complicated course than both \(T_c\) and \(\avg{\sum_{\avg{i,j}} J_{ij}}\).
+        This is a hint that the influence of \(K\) on \(T_c\) is much more
+        important than the influence of \(d\) and therefore the influence
+        of \(J_{i,j}\) on \(T_c\). At least with the chosen function for \(J_{ij}\).
+        \begin{figure}[hbt]
+            \centering
+            \subfigure[][]
+            {
+                \label{sfig:TcD:RNG}
+                \includegraphics[width=0.45\textwidth]{plots/RNG_d}
+            }
+            \subfigure[][]
+            {
+                \label{sfig:TcD:GG}
+                \includegraphics[width=0.45\textwidth]{plots/GG_d}
+            }
+
+            \caption[Critical Temperature Normalized by Mean Sum of the Coupling Constants]
+            {
+                The mean length of all edges \(d\) for
+                \subref{sfig:TcD:RNG} RNG
+                and \subref{sfig:TcD:GG} GG for different system sizes \(L\)
+                averaged over 100 different realizations.
+            }
+            \label{fig:TcD}
+        \end{figure}\\
         If one looks at the behavior of \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
         for \(\sigma \ll 1\) and consequently \(d_{ij} \approx 1\), the
         following approximation is valid.
