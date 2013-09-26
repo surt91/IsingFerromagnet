@@ -639,6 +639,7 @@
         %~ one can see that these curves are almost identical and the small
         %~ errorbars suggest that they are sufficiently precise for this purpose.
         The great influence of \(K\) on \(T_c\) is shown in Fig.\ \ref{fig:Tc_K}.
+        In fact one can fit
         But the discontinuity at \(K \approx 4\) and slight curvature at
         \(K \approx 5\) proof that it is not the only influence.
         \begin{figure}[htb]
@@ -647,10 +648,14 @@
             \caption[Critical Temperature as a Function of the Degree of the Graph]
             {
                 The critical temperature is plotted as a function of the
-                degree. There seems to be an in first approximation linear
-                dependency. But at \(K \approx 4\) the jump also seen in
-                Fig.\ \ref{fig:Tc} occurs. Also slight curvature can be
-                recognized and is further examined in Fig.\ \ref{fig:Tc_deg}.
+                degree. At \(K \approx 4\) the jump also seen in Fig.\ \ref{fig:Tc} occurs.
+                There seems to be an in first approximation linear
+                dependency. The dotted lines are fits to a power law function \(T_c = aK^b\)
+                ignoring the point at \(K=4\) on the GG.
+                As a approximation it seems suited but besides the bad
+                \(\chi^2\) values are hints that there is some finer
+                structure which is not fitted by a power law function.
+                This is further examined in Fig.\ \ref{fig:Tc_deg}.
             }
             \label{fig:Tc_K}
         \end{figure}\\
@@ -663,7 +668,13 @@
         function, which determines the local coupling constants \(J_{ij}\). As proof for
         this claim in Sec.\ \ref{appendix:fixedCoupling} the same analysis
         is performed for a model with fixed \(J\). There the jump gets narrower
-        but is still existent. Anyway, the degree seems to have an impact on
+        but is still existent.\\
+        In Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg_fit:RNG}\subref{sfig:Tc_norm_deg_fit:GG}
+        the normalization is done using the found power law function.
+        The amplitude of the curve shrinks which is a hint, that this is a good
+        approximation. But it is not a constant, so there have to be other
+        influences.
+        Anyway, the degree seems to have a major impact on
         the critical temperature \(T_c\), but it is not a trivial one.
         Note that even after the normalization, the values of \(T_c / K\)
         for the RNG are smaller than those for the GG.
@@ -690,6 +701,16 @@
                 \label{sfig:Tc_norm_deg:GG}
                 \includegraphics[width=0.45\textwidth]{plots/GG_Tc_norm_deg}
             }
+            \subfigure[][]
+            {
+                \label{sfig:Tc_norm_deg_fit:RNG}
+                \includegraphics[width=0.45\textwidth]{plots/RNG_Tc_norm_deg_fit}
+            }
+            \subfigure[][]
+            {
+                \label{sfig:Tc_norm_deg_fit:GG}
+                \includegraphics[width=0.45\textwidth]{plots/GG_Tc_norm_deg_fit}
+            }
 
             \caption[Critical Temperature Normalized by Degree of the Graph]
             {
@@ -697,10 +718,19 @@
                 disorder parameters \(\sigma\) for
                 \subref{sfig:deg:RNG} the RNG and
                 \subref{sfig:deg:GG} the GG.
-                Bottom: Critical temperatures normalized by degree over different
+                Middle: Critical temperatures normalized by degree over different
                 disorder parameters for
                 \subref{sfig:Tc_norm_deg:RNG} the RNG and
                 \subref{sfig:Tc_norm_deg:GG} the GG.
+                Bottom: Critical temperatures normalized by the in Fig.\ \ref{fig:Tc_K}
+                determined power law function over different
+                disorder parameters for
+                \subref{sfig:Tc_norm_deg:RNG} the RNG and
+                \subref{sfig:Tc_norm_deg:GG} the GG.
+                Note that the \(\sigma = 0\) point of the GG is not displayed.
+                The found power law function seems to be a good approximation.
+                But at least for the RNG and at least for small values of
+                \(\sigma\) on the GG it can not explain everything.
             }
             \label{fig:Tc_deg}
         \end{figure}\\
