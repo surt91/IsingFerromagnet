@@ -159,7 +159,15 @@ class Database():
         return tau
 
     @staticmethod
-    def bootstrap_stderr(x, n_resample, f):
+    def bootstrap_stderr(xRaw, n_resample, f):
+        #~ for i in range(n_resample):
+            #~ mittelwerteForRealisations = [f([choice(xRealisierung) for _ in xRealisierung]) for xRealisierung in xRaw]
+            #~ meanmean[i] = mean([choice(mittelwerteForRealisations) for _ in mittelwerteForRealisations])
+        bootstrapSample = [mean([choice([f([choice(xRealisierung) for _ in xRealisierung]) for xRealisierung in xRaw]) for _ in xRaw]) for i in range(n_resample)]
+        return mean(bootstrapSample), std(bootstrapSample)
+
+    @staticmethod
+    def bootstrap_stderr_old(x, n_resample, f):
         h = [f([choice(x) for _ in x]) for _ in range(n_resample)]
         return std(h)
 
@@ -481,21 +489,21 @@ class Database():
         c.close()
         # Berechne die Erwartungswerte
         if signed:
-            M = [f(list(self.getVal(i[0])),T,L) for i in lst]
+            M = [list(self.getVal(i[0])),T,L for i in lst]
         else:
-            M = [f(list(map(abs,self.getVal(i[0]))),T,L) for i in lst]
+            M = [list(map(abs,self.getVal(i[0]))),T,L for i in lst]
 
         # berechne den Mittelwert der Erwartungswerte
-        return mean(M), self.bootstrap_stderr(M, 200, mean)
+        return self.bootstrap_stderr(M, 20, lambda x: f(x,L,T))
 
     def getAverageE(self, f, sigma, L, T):
         """! Liefert den über verschiedene Realisierungen gemittelten
         Erwartungswert von f(E) aus: mean(<f(E)>) """
         c = self.connRaw.cursor()
         c.execute('SELECT E FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
-        E = [f(self.getVal(i[0]),T,L) for i in c.fetchall()]
+        E = [self.getVal(i[0]),T,L for i in c.fetchall()]
         c.close()
-        return mean(E), self.bootstrap_stderr(E, 200, mean)
+        return self.bootstrap_stderr(E, 20, lambda x: f(x,L,T))
 
 if __name__ == '__main__':
     a=Database( dbPath = "dataRNG.db", dataPath = "../dataRNG", graphType=1)

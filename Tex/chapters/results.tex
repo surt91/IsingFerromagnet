@@ -52,25 +52,20 @@
     generation of the random start configuration of the spins.\\
     The errors \(\Delta \overline{\avg{O}}\) are estimated by bootstrap resampling
     \cite{Bootstrap}.\\
-    The bootstrap method estimates the error \(\Delta \overline{\avg{O}}\)
-    by taking \(M\) random samples from the \(M\) measurements of \(O\),
-    where the same measurement can be chosen more than once, calculating the
-    estimator \(\avg{O_b}\) of this bootstrap sample and doing this \(k\)
-    times. Then the standard deviation of the \(k\) calculated \(\avg{O_b}\)
-    is taken as an estimate for \(\Delta \overline{\avg{O}}\).
-    In this thesis the number of bootstrap samples is \(k = 200\).\\
-    Note that the error of \(\avg{O}\), which is the standard error\footnote{for the arthmetic mean: standard deviation divided by \(\sqrt M\), where \(M\) is the number of samples}
-    of different states on one instance of a proximity graph \(\Delta \avg{O}\),
-    is dependend on \(\tau\) \cite[p. 151]{Katzgraber2011}.
-    However \(\Delta \overline{\avg{O}}\), which is the the error of the
-    observable averaged over different instances of the proximity graphs,
-    is not dependend on \(\tau\), because different realizations of the
-    random proximity graph are surely uncorrelated.
-    Because every error mentioned in this thesis is of this type, it is not
-    necessary to determine \(\tau\) for each observable. Therefore a good
-    error estimate can be achieved by simple bootstrapping. Nevertheless, one has
-    to simulate enough uncorrelated states for each realization to keep
-    the \(\Delta \overline{\avg{O}}\) small. For every determined value an
+    There are two kinds of errors in this simulations. On the one hand
+    there are thermal fluctuations in the simulation of one graph realization and
+    on the other hand there are fluctuations in the structure of the realizations.
+    To account for both, first a resampling of the "timeline" of one
+    realization is performed. From these resamples the expected values of
+    the observables \(\avg\abs{m}, \chi\) and \(g\) are estimated for each
+    realization. Those are then resampled and from the resampled values
+    one bootstrap average \(\avg{O}b\) is calculated. This procedure is
+    repeated until 20 different bootstrap averages are present. Their
+    mean and standard deviation are the used as \(\overline{\avg{O}}\) and
+    its standard error \(\Delta \overline{\avg{O}}\). A shematic figure of
+    this is shown in Fig.\ \ref{fig:bootstrap}.
+    % TODO
+    For every determined value an
     error is calculated and given in the form \texttt{value(error of last digit)}.
     The errors of fit parameters are the asymptotic standard errors as calculated
     by gnuplot divded by root of the chi-squared per degree of freedom
@@ -429,22 +424,7 @@
         \label{tab:critExp}
     \end{table}\\
     According to Tab.\ \ref{tab:critExp}, most values
-    are matching the expectations.\\
-    Note that the large deviations in comparison to the given error for
-    \(\gamma\) and \(\beta\) at \(\sigma = 0\) might be caused by the
-    determination of the errorbars which neglects the thermal fluctuations
-    and mainly accounts for fluctuations induced by variing graph instances.
-    Those are according to my tests of greater importance except for
-    \(\sigma =0\) where they do not occur. Hence the errorbars at \(\sigma = 0\)
-    are underestimated. The quality parameter \(S\) of \texttt{autoscale.py}
-    showed for the \(\sigma = 0\) collapses a bad value, too. That is a strong
-    hint for underestimated errorbars.
-    As a conclusion, the method for the determination of the errorbars
-    has to be optimized to also account for the thermal fluctuations which
-    are important for \(\sigma=0\) and possibly \(\sigma\approx 0\).
-    In spite of this flaw, the second method for determining \(T_{c}\),
-    which is performed in the next section, does not utilize the errorbars
-    and is therefore unaffected for all \(\sigma\).\\
+    are matching the expectations.
     \(T_c\) for \(\sigma = 0\) is in good
     agreement with the known value. Especially \(\nu\) and \(\gamma\)
     are always in very good agreement with their exact values. Besides the
