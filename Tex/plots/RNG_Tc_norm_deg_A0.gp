@@ -10,7 +10,7 @@ set size square
 
 #set logscale xy
 
-plot "< paste data/RNG_Tc_A0.dat data/RNG_deg_L32_A0.dat" u 1:($2/$5):($3/$5) w ye lt 1 lc 1 ps 2 pt 4 title "{/Italic T_c / K}",\
-     "" u 1:($2/$5):($3/$5) w l lt 3 lc 1 notitle smooth csplines,\
-     "< paste data/RNG_Tc.dat data/RNG_sumJ_L32.dat" u 1:($2/$5):($3/$5) w ye lt 1 lc 3 ps 2 pt 6 title "{/Italic T_c / {/Symbol \341}{/Symbol S}_{{/Symbol \341}i,j{/Symbol \361}} J_{ij}{/Symbol \361}}",\
-     "" u 1:($2/$5):($3/$5) w l lt 3 lc 3 notitle smooth csplines
+plot "< paste data/RNG_Tc_A0.dat data/RNG_deg_L32_A0.dat" u 1:($2/$5):($3/$5+$2/$5**2*$6) w ye lt 1 lc 1 ps 2 pt 4 title "{/Italic T_c / K}",\
+     "" u 1:($2/$5) w l lt 3 lc 1 notitle smooth csplines,\
+     "< paste data/RNG_Tc.dat data/RNG_sumJ_L32.dat" u 1:($2/$5):($3/$5+$2/$5**2*$6) w ye lt 1 lc 3 ps 2 pt 6 title "{/Italic T_c / {/Symbol \341}{/Symbol S}_{{/Symbol \341}i,j{/Symbol \361}} J_{ij}{/Symbol \361}}",\
+     "" u 1:($2/$5) w l lt 3 lc 3 notitle smooth csplines
