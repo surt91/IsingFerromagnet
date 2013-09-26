@@ -9,9 +9,9 @@ import logging
 import array
 from numpy import mean, var
 from numpy import std
+from numpy.random import choice
 import numpy
 
-from random import choice
 
 from reader import *
 
@@ -163,7 +163,7 @@ class Database():
         #~ for i in range(n_resample):
             #~ mittelwerteForRealisations = [f([choice(xRealisierung) for _ in xRealisierung]) for xRealisierung in xRaw]
             #~ meanmean[i] = mean([choice(mittelwerteForRealisations) for _ in mittelwerteForRealisations])
-        bootstrapSample = [mean([choice([f([choice(xRealisierung) for _ in xRealisierung]) for xRealisierung in xRaw]) for _ in xRaw]) for i in range(n_resample)]
+        bootstrapSample = [mean(choice([f(choice(xRealisierung, len(xRealisierung))) for xRealisierung in xRaw], len(xRaw))) for i in range(n_resample)]
         return mean(bootstrapSample), std(bootstrapSample)
 
     @staticmethod
@@ -489,10 +489,11 @@ class Database():
         c.close()
         # Berechne die Erwartungswerte
         if signed:
-            M = [list(self.getVal(i[0])),T,L for i in lst]
+            M = [list(self.getVal(i[0])) for i in lst]
         else:
-            M = [list(map(abs,self.getVal(i[0]))),T,L for i in lst]
-
+            M = [list(map(abs,self.getVal(i[0]))) for i in lst]
+        if not M:
+            return None, None
         # berechne den Mittelwert der Erwartungswerte
         return self.bootstrap_stderr(M, 20, lambda x: f(x,L,T))
 
@@ -501,10 +502,12 @@ class Database():
         Erwartungswert von f(E) aus: mean(<f(E)>) """
         c = self.connRaw.cursor()
         c.execute('SELECT E FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
-        E = [self.getVal(i[0]),T,L for i in c.fetchall()]
+        E = [self.getVal(i[0]) for i in c.fetchall()]
         c.close()
+        if not E:
+            return None, None
         return self.bootstrap_stderr(E, 20, lambda x: f(x,L,T))
 
 if __name__ == '__main__':
-    a=Database( dbPath = "dataRNG.db", dataPath = "../dataRNG", graphType=1)
-    b=Database( dbPath = "dataGG.db", dataPath = "../dataGG", graphType=2)
+    a=Database( dbPath = "dataRNG.db", dbRawPath="dataRawRNG.db", dataPath = "../dataRNG", graphType=1)
+    b=Database( dbPath = "dataGG.db", dbRawPath="dataRawGG.db", dataPath = "../dataGG", graphType=2)
