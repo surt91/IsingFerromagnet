@@ -670,15 +670,16 @@
         is performed for a model with fixed \(J\). There the jump gets narrower
         but is still existent.\\
         In Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg_fit:RNG}\subref{sfig:Tc_norm_deg_fit:GG}
-        the normalization is done using the found power law function.
+        the normalization is done using power law function obtained through the fit from Fig.\ \ref{fig:Tc_K}.
         The amplitude of the curve shrinks which is a hint, that this is a good
         approximation. But it is not a constant, so there have to be other
         influences.
-        Anyway, the degree seems to have a major impact on
-        the critical temperature \(T_c\), but it is not a trivial one.
         Note that even after the normalization, the values of \(T_c / K\)
-        for the RNG are smaller than those for the GG.
-        \begin{figure}[htb]
+        for the RNG are smaller than those for the GG.\\
+        Anyway, this analysis shows that the degree has a major impact on
+        the critical temperature \(T_c\), but it also shows that there
+        have to be other graph properties having a minor influence on \(T_{c}\).
+        \begin{figure}[htbp]
             \centering
             \subfigure[][]
             {
@@ -725,8 +726,8 @@
                 Bottom: Critical temperatures normalized by the in Fig.\ \ref{fig:Tc_K}
                 determined power law function over different
                 disorder parameters for
-                \subref{sfig:Tc_norm_deg:RNG} the RNG and
-                \subref{sfig:Tc_norm_deg:GG} the GG.
+                \subref{sfig:Tc_norm_deg_fit:RNG} the RNG and
+                \subref{sfig:Tc_norm_deg_fit:GG} the GG.
                 Note that the \(\sigma = 0\) point of the GG is not displayed.
                 The found power law function seems to be a good approximation.
                 But at least for the RNG and at least for small values of
@@ -734,7 +735,7 @@
             }
             \label{fig:Tc_deg}
         \end{figure}\\
-        To understand the jump of \(T_c\) it seems to be necessary to
+        To understand the jump of \(T_c\) on a GG it seems to be necessary to
         understand the jump of \(K\), which is easily explained
         by the definition of the GG. As evident from Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.00}\subref{sfig:GG_sigma:0.01}
         a small change of \(\sigma\) causes many new edges to arise\footnote{See also \url{http://www.youtube.com/watch?v=PcVZ2pG11GI} for an animation.}.
@@ -873,7 +874,8 @@
             \caption[Critical Temperature as a Function of the Degree of the Graph]
             {
                 The critical temperature is plotted as a function of the
-                average edge weight. T
+                average edge weight. The curve shows a less straight line
+                than Fig.\ \ref{fig:Tc_K}.
             }
             \label{fig:Tc_J}
         \end{figure}\\
@@ -885,7 +887,7 @@
         Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}\subref{sfig:Tc_normJ:GG}, the
         jump on the GG arises again, but \(T_c\) is now monotonically
         decreasing with increasing disorder parameter \(\sigma\).
-        \begin{figure}[hbt]
+        \begin{figure}[hbtp]
             \centering
             \subfigure[][]
             {
@@ -909,42 +911,6 @@
                 \includegraphics[width=0.45\textwidth]{plots/GG_Tc_normJ}
             }
 
-            \caption[Critical Temperature Normalized by Mean Sum of the Coupling Constants]
-            {
-                Top: Mean sum of the coupling constants to all
-                neighbors over different disorder parameters for
-                \subref{sfig:sumJ:RNG} the RNG and
-                \subref{sfig:sumJ:GG} the GG.
-                Bottom: Critical temperatures normalized by mean sum of the
-                coupling constants \(\avg{\sum_{\avg{i,j}} J_{ij}}\) over different
-                disorder parameters for
-                \subref{sfig:Tc_normJ:RNG} the RNG and
-                \subref{sfig:Tc_normJ:GG} the GG.
-            }
-            \label{fig:TcJ}
-        \end{figure}\\
-        %~ This is a strong hint, that the change of the \(T_c\) with changing
-        %~ \(\sigma\) is in some way connected to \(J\) and \(K\) which is an
-        %~ expected conclusion.\\
-        Moreover the forms of both curves are quite similar, but the
-        one for the RNG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}
-        is generally lower and spans over a bigger temperature range than
-        the curve of the GG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:GG}.
-        Both graph types have a plateau at \(0 < \sigma < 0.1\). The conclusion
-        is that small disorder has little influence on this normalized critical
-        temperature.
-        Also both graph types exhibit a steep decline after the plateau before
-        they approach an asymptotic limit for \(\sigma \gg 1\).\\
-        Although one could assume, that the course of \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
-        should be strongly influenced by the mean length of the edges, because \(J_{ij}\)
-        is a function on the edge length \(d_{ij}\), this is not the case.
-        As shown in Fig.\ \ref{fig:TcD}, it shows especially at low \(\sigma\)
-        a more complicated course than both \(T_c\) and \(\avg{\sum_{\avg{i,j}} J_{ij}}\).
-        This is a hint that the influence of \(K\) on \(T_c\) is much more
-        important than the influence of \(d\) and therefore the influence
-        of \(J_{i,j}\) on \(T_c\). At least with the chosen function for \(J_{ij}\).
-        \begin{figure}[hbt]
-            \centering
             \subfigure[][]
             {
                 \label{sfig:TcD:RNG}
@@ -958,13 +924,39 @@
 
             \caption[Critical Temperature Normalized by Mean Sum of the Coupling Constants]
             {
-                The mean length of all edges \(d\) for
+                Top: Mean sum of the coupling constants to all
+                neighbors over different disorder parameters for
+                \subref{sfig:sumJ:RNG} the RNG and
+                \subref{sfig:sumJ:GG} the GG.
+                Middle: Critical temperatures normalized by mean sum of the
+                coupling constants \(\avg{\sum_{\avg{i,j}} J_{ij}}\) over different
+                disorder parameters for
+                \subref{sfig:Tc_normJ:RNG} the RNG and
+                \subref{sfig:Tc_normJ:GG} the GG.
+                Bottom: The mean length of all edges \(d\) for
                 \subref{sfig:TcD:RNG} RNG
                 and \subref{sfig:TcD:GG} GG for different system sizes \(L\)
                 averaged over 100 different realizations.
             }
-            \label{fig:TcD}
+            \label{fig:TcJ}
         \end{figure}\\
+        Moreover the forms of both curves are quite similar, but the
+        one for the RNG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:RNG}
+        is generally lower and spans over a bigger temperature range than
+        the curve of the GG in Fig.\ \ref{fig:TcJ}\subref{sfig:Tc_normJ:GG}.
+        Both graph types have a plateau at \(0 < \sigma < 0.1\). The conclusion
+        is that small disorder has little influence on this normalized critical
+        temperature.
+        Also both graph types exhibit a steep decline after the plateau before
+        they approach an asymptotic limit for \(\sigma \gg 1\).\\
+        Although one could assume, that the course of \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
+        should be strongly influenced by the mean length of the edges, because \(J_{ij}\)
+        is a function on the edge length \(d_{ij}\), this is not the case.
+        As shown in Fig.\ \ref{fig:TcJ}\subref{sfig:TcD:RNG}\subref{sfig:TcD:GG}, it shows especially at low \(\sigma\)
+        a more complicated course than both \(T_c\) and \(\avg{\sum_{\avg{i,j}} J_{ij}}\).
+        This is a hint that the influence of \(K\) on \(T_c\) is much more
+        important than the influence of \(d\) and therefore the influence
+        of \(J_{i,j}\) on \(T_c\). At least with the chosen function for \(J_{ij}\).
         If one looks at the behavior of \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
         for \(\sigma \ll 1\) and consequently \(d_{ij} \approx 1\), the
         following approximation is valid.
