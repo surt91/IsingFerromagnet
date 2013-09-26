@@ -7,5 +7,7 @@ set ylabel '{/Italic T / K^{1.38}}'
 set xr [-0.1:1.3]
 set size square
 
+set key spacing 10
+
 plot "< paste data/RNG_Tc.dat data/RNG_deg_L32.dat" u 1:($2/$5**1.38):($3/$5**1.3+1.3*$2/$5**2.3*$6) w ye lt 1 lc 1 ps 2 pt 4 title "{/Italic T_c / K^{1.38}}",\
      "" u 1:($2/$5**1.38):($3/$5) w l lt 3 lc 1 notitle smooth csplines
