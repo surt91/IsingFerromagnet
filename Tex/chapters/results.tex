@@ -51,20 +51,18 @@
     the random numbers used in the Monte Carlo simulation and during the
     generation of the random start configuration of the spins.\\
     The errors \(\Delta \overline{\avg{O}}\) are estimated by bootstrap resampling
-    \cite{Bootstrap}.\\
+    \cite{Bootstrap}.
     There are two kinds of errors in this simulations. On the one hand
     there are thermal fluctuations in the simulation of one graph realization and
     on the other hand there are fluctuations in the structure of the realizations.
     To account for both, first a resampling of the "timeline" of one
     realization is performed. From these resamples the expected values of
-    the observables \(\avg\abs{m}, \chi\) and \(g\) are estimated for each
+    the observables \(\avg{\abs{m}}, \chi\) and \(g\) are estimated for each
     realization. Those are then resampled and from the resampled values
-    one bootstrap average \(\avg{O}b\) is calculated. This procedure is
+    one bootstrap average \(\avg{O}_b\) is calculated. This procedure is
     repeated until 20 different bootstrap averages are present. Their
-    mean and standard deviation are the used as \(\overline{\avg{O}}\) and
-    its standard error \(\Delta \overline{\avg{O}}\). A shematic figure of
-    this is shown in Fig.\ \ref{fig:bootstrap}.
-    % TODO
+    mean and standard deviation are used as \(\overline{\avg{O}}\) and
+    its standard error \(\Delta \overline{\avg{O}}\).
     For every determined value an
     error is calculated and given in the form \texttt{value(error of last digit)}.
     The errors of fit parameters are the asymptotic standard errors as calculated
