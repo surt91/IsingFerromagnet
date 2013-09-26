@@ -7,7 +7,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-\usepackage[ngerman]{babel}
+\usepackage[english]{babel}
 
 \usepackage{graphicx}
 \usepackage{upgreek}
@@ -55,14 +55,14 @@
 \maketitle
 \frame{\tableofcontents[pausesections]}
 
-\section{Modell}
+\section{Model}
     \subsection{Ising Ferromagnet}
         \begin{frame}{Ising Ferromagnet}
             \begin{itemize}[<+->]
-                \item \(N\) Knoten (Gitterplätze)
-                \item \(\avg{i,j}\) bezeichnet "nächste Nachbar"\ Beziehung
-                \item jeder Knoten hat einen Spin \(s \in \{-1,+1\}\){}
-                \item Zwei Spins \(i,j\) sind verbunden über \(J_{ij}\)
+                \item \(N\) sites
+                \item \(\avg{i,j}\) denotes "nearest neighbor" relationship
+                \item every site has a spin \(s \in \{-1,+1\}\){}
+                \item two spins \(i,j\) are coupled by \(J_{ij}\)
                 \item{
                     \begin{equation}
                         H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}.
@@ -72,16 +72,16 @@
             \end{itemize}
         \end{frame}
 
-        \begin{frame}{Ungeordneter Ising Ferromagnet}
+        \begin{frame}{Disordered Ising Ferromagnet}
             \begin{columns}[t]
                 \begin{column}{5cm}
                     \begin{itemize}
-                        \item<1-> beginne mit einem Quadratgitter
-                        \item<2-> verschiebe jeden Knoten nach der Verteilung\\
+                        \item<1-> start with square lattice
+                        \item<2-> displace every node randomly according to\\
                             \(f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}.\){}
-                        \item<3-> bestimme neue "nächste Nachbarn"
-                        \item<4-> bestimme neue abstandsabhängiges \(J_{ij} = e^{\alpha(1-d_{ij})}\)
-                        \item<4-> hier \(\alpha = 0.5\)
+                        \item<3-> assign new nearest neighbors
+                        \item<4-> depending on their distance \(d_{ij}\) assign new \(J_{ij} = e^{\alpha(1-d_{ij})}\)
+                        \item<4-> here \(\alpha = 0.5\)
                     \end{itemize}
                 \end{column}
                 \begin{column}{6cm}
@@ -92,7 +92,7 @@
                             \input{images/Displacement}
                             \caption
                             {
-                                Verschiebung der Knoten.
+                                Displacement of the nodes.
                             }
                         \end{figure}
                     }
@@ -103,7 +103,7 @@
     \subsection{Proximity Graphs}
         \begin{frame}{Proximity Graphs}
             \begin{itemize}[<+->]
-                \item{ 3 Graph Arten benutzt
+                \item{ 3 graph types used
                     \begin{itemize}
                         \item Delaunay Triangulation (DT) \cite{Katajainen}
                         \item Gabriel Graph (GG) \cite{Gabriel1969}
@@ -124,7 +124,7 @@
                 \input{images/DT_def}
                 \caption
                 {
-                    Beispiel eines DT.
+                    Example of a DT.
                 }
             \end{figure}
         \end{frame}
@@ -137,7 +137,7 @@
                         \input{images/GG_def}
                         \caption
                         {
-                            Lune eines GG.
+                            Lune of a GG.
                         }
                     \end{figure}
                 \end{column}
@@ -147,7 +147,7 @@
                         \includegraphics[width=1\textwidth]{images/GG/L12S03.pdf}
                         \caption
                         {
-                            Beispiel eines GG.
+                            GG Example
                         }
                     \end{figure}
                 \end{column}
@@ -162,7 +162,7 @@
                         \input{images/RNG_def}
                         \caption
                         {
-                            Lune eines RNG.
+                            Lune of a RNG.
                         }
                     \end{figure}
                 \end{column}
@@ -172,22 +172,22 @@
                         \includegraphics[width=1\textwidth]{images/RNG/L12S03.pdf}
                         \caption
                         {
-                            Beispiel eines RNG.
+                            RNG Example
                         }
                     \end{figure}
                 \end{column}
             \end{columns}
         \end{frame}
 
-        \begin{frame}{Graph Erzeugung}
+        \begin{frame}{Graph Generation}
             \begin{columns}[t]
                 \begin{column}{5cm}
                     \begin{itemize}
-                        \item<1-> am schnellsten: baue einen DT in \(O(n \log(n))\) und teste jede Kante
-                        \item<2-> Aber DT Erstellung ist nich trivial
-                        \item<3-> am einfachsten: teste jede mögliche Kante in \(O(n^{3})\)
-                        \item<4-> Aber dies ist sehr langsam.
-                        \item<5-> Idee: teste für jedes Paar Knoten nur Knoten nahe deren Lunes (im besten Fall \(O(n^{2})\))
+                        \item<1-> Fastest: generate DT in \(O(n \log(n))\) and test every edge
+                        \item<2-> But DT generation is not trivial
+                        \item<3-> Simplest: test every possible edge in \(O(n^{3})\)
+                        \item<4-> But: really slow
+                        \item<5-> Idea: test only nodes near the lune for every pair in best case \(O(n^{2})\)
                     \end{itemize}
                 \end{column}
                 \begin{column}{5cm}
@@ -211,23 +211,23 @@
             \end{columns}
         \end{frame}
 
-\section{Methoden}
-    \subsection{Monte Carlo Simulationen}
-        \begin{frame}{Monte Carlo Simulationen}
+\section{Methods}
+    \subsection{Monte Carlo Simulations}
+        \begin{frame}{Monte Carlo Simulations}
             \begin{itemize}[<+->]
-                \item erzeuge zufällige Zustände
-                \item messe die Observablen dieser Zustände
-                \item{ schätze die Observable \(O\) als
+                \item generate random states
+                \item mesure observables of these states
+                \item{ estimate observable \(O\) by
                     \begin{equation}
-                        \avg{O} = \frac{1}{Z} \sum_\nu p_\nu O_\nu
+                        \avg{O} = \frac{1}{Z} \sum_i p_i O_i
                     \end{equation}
                 }
             \end{itemize}
             \begin{itemize}[<+->]
-                \item Aber es gibt Zustände, die mehr beitragen als andere
-                \item{ zB.\ Zustände geringer Energie in kanonischen Systemen
+                \item But there are states contributing more than others
+                \item{ e.g.\ low \(H_{i}\) in canonical systems at low \(T\) with
                     \begin{equation}
-                        p_{\nu} = e^{-\frac{H_{\nu}}{k_{B}T}}
+                        p_{i} = e^{-\frac{H_{i}}{k_{B}T}}
                     \end{equation}
                 }
             \end{itemize}
@@ -235,18 +235,18 @@
 
         \begin{frame}{Importance Sampling}
             \begin{itemize}[<+->]
-                \item erzeuge neue Zustände entsprechend der Verteilung \(p_{i}\)
-                \item effizient möglich durch Erzeugung neuer Zustände aus vorherigen
-                \item{ Stichwort: Markov Kette
+                \item generate new states according to the known distribution \(p_{i}\)
+                \item generate new states from former states
+                \item{ Markov Chains
                     \begin{itemize}
-                        \item Ergodizität\\
-                                Jeder Zustand ist ein endlicher Zeit erreichbar.
+                        \item Ergodicity\\
+                                every state is reachable in finite time
                         \item Detailed Balance\\
-                                Im Gleichgewicht ist die Wahrscheinlichkeit einen Zustand zu erreichen genauso groß, wie die Wahrscheinlichkeit ihn zu verlassen.
+                                in equilibrium the probability to reach a state is the same as the probability to leave the same state
                     \end{itemize}
                 }
-                \item Die Korrelation aufeinanderfolgender Zustände hat einen Einfluss auf die Fehlerbalken der Observablen\\
-                    \(\to\) Beachte die Autokorrelationszeit \(\tau\)
+                \item note that the correlation of subsequent states has an effect on the errorbars\\
+                    \(\to\) autocorrelation time \(\tau\)
             \end{itemize}
         \end{frame}
 
@@ -265,16 +265,15 @@
                 P_{\mathrm{add}} = 1-\exp\brac{-2\beta J},
             \end{equation}
             \pause
-            \vspace{-1cm}
             \begin{itemize}[<+->]
-                \item sehr effizient bei \(T_{c}\)
-                \item ist aber Metropolis bei hohen und geringen \(T\) unterlegen
+                \item very efficient at \(T_{c}\)
+                \item but inferior to Metropolis at large and small \(T\)
             \end{itemize}
         \end{frame}
 
         \begin{frame}{Parallel Tempering \cite{ParallelTempering1986}}
             \begin{equation}
-                P_{\nu,\nu+1}(S_\nu \leftrightarrow S_{\nu+1}) = \min\brac{1,\exp\brac{\brac{E_{\nu+1}-E_\nu}\brac{\frac{1}{T_{\nu+1}}-\frac{1}{T_\nu}}}},
+                P_{i,i+1}((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,e^{\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}}}
             \end{equation}
             \begin{columns}[b]
                 \begin{column}{5cm}
@@ -283,7 +282,7 @@
                         \input{images/parTempSchema}
                         \caption
                         {
-                            Austausch der Spin Konfigurationen.
+                            Swapping the spin configurations.
                         }
                     \end{figure}
                 \end{column}
@@ -294,24 +293,21 @@
                         \input{images/parTempE}
                         \caption
                         {
-                            Skizze einer Energielandschaft.
+                            Sketch of an energy landscape.
                         }
                     \end{figure}
                 \end{column}
             \end{columns}
         \end{frame}
 
-\section{Ergebnis}
+\section{Results}
     \begin{frame}{Details}
         \begin{itemize}[<+->]
-            \item Ziel: Bestimme die Abhängigkeit von \(T_{c}\) und \(\sigma\)
-            \item \(10^{4} (L\in\{16,32\})\) bzw.<\ \(5\cdot 10^{3} (L\in\{64,128\})\) unkorrelierte Messungen von \(O\) für \(\avg{O}\)
-            \item auf jedem von 100 zufälligen proximity Graphs für \(\overline{\avg{O}}\)
-            \item Messgrößen:
-            \begin{itemize}[<+->]
-                \item \(m = \frac{1}{N} \sum_{i} s_{i}\)
-                \item \(E = \frac{1}{N} H\)
-            \end{itemize}
+            \item Aim: determining the dependence from \(T_{c}\) on \(\sigma\)
+            \item \(10^{4} (L\in\{16,32\})\) or  \(5\cdot 10^{3} (L\in\{64,128\})\) uncorreltated measurements of \(O\) to get \(\avg{O}\)
+            \item on each of 100 randomly generated proximity graphs to get \(\overline{\avg{O}}\){}
+            \item \(m = \frac{1}{N} \sum_{i} s_{i}\)
+            \item \(E = \frac{1}{N} H\)
         \end{itemize}
     \end{frame}
 
@@ -319,16 +315,16 @@
         \begin{columns}[t]
             \begin{column}{5cm}
                 \begin{itemize}[<+->]
-                    \item \(T_{c}\) ist nur für \(L \to \infty\) definiert
-                    \item Verschiedene Wege, um \(T_{c}\) zu bestimmen
+                    \item \(T_{c}\) defined for \(L \to \infty\)
+                    \item here: two ways to determine \(T_{c}\) are used
                     \begin{enumerate}[<+->]
-                        \item Finite Size Scaling lässt die Daten auf eine Kurve kollabieren
+                        \item Finite Size Scaling to collapse the data
                         \begin{itemize}[<+->]
-                            \item liefert auch kritische Exponenten
+                            \item yields also critical exponents
                         \end{itemize}
-                        \item Schnittpunkte der Binder Kumulante \(g\)
+                        \item Intersection of the Binder Cumulant
                         \begin{itemize}[<+->]
-                            \item sehr einfach und leicht zu automatisieren
+                            \item very simple and easy to automate
                         \end{itemize}
                     \end{enumerate}
                 \end{itemize}
@@ -348,7 +344,7 @@
 
     \subsection{Finite Size Scaling}
         \begin{frame}{Finite Size Scaling}
-            Skalen Functionen
+            Scaling Functions
             \begin{align}
                 \label{eq:fsscaling:m}
                 \avg{m_L} &= L^{-\frac{\beta}{\nu}} \tilde{M}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
@@ -357,8 +353,7 @@
                 \label{eq:fsscaling:g}
                 g         = \frac{3}{2}\brac{1-\frac{\avg{m_{L}^4}}{3\avg{m_{L}^2}^2}} &\propto \tilde{G}\brac{L^\frac{1}{\nu}\brac{T-T_c}}
             \end{align}
-            \pause
-            Durchführung mittels \texttt{autoscale.py} \cite{autoscale2009}
+            using \texttt{autoscale.py} \cite{autoscale2009}
         \end{frame}
         \begin{frame}{Finite Size Scaling}
             \begin{figure}[htbp]
@@ -375,7 +370,7 @@
                 }
                 \caption
                 {
-                    Skalierung der Binder Kumulante bei \(\sigma = 0\)
+                    Scaling of the Binder Cumulant at \(\sigma = 0\)
                 }
                 \label{fig:gettingCrit}
             \end{figure}
@@ -395,7 +390,7 @@
                 }
                 \caption
                 {
-                    Skalierung der Suszeptibilität bei \(\sigma = 1\) auf RNG
+                    Scaling of the susceptibility at \(\sigma = 1\) on RNG
                 }
                 \label{fig:gettingCrit}
             \end{figure}
@@ -415,14 +410,14 @@
                 }
                 \caption
                 {
-                    Skalierung der magnetisierung bei \(\sigma = 1\) auf GG
+                    Scaling of the magnetization at \(\sigma = 1\) on GG
                 }
                 \label{fig:gettingCrit}
             \end{figure}
         \end{frame}
 
-    \subsection{Kritische Exponenten}
-        \begin{frame}{Kritische Exponenten}
+    \subsection{Critical Exponents}
+        \begin{frame}{Critical Exponents}
             \begin{table}[htbp]
                 \center
                 \resizebox{\textwidth}{!}{
@@ -430,7 +425,7 @@
                         \toprule
                          & \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(T_c\)} & \multicolumn{1}{c}{\(\nu\)} & \multicolumn{1}{c}{\(\gamma\)} & \multicolumn{1}{c}{\(\beta\)}\\
                         \midrule
-                        exakt (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & 2.2691... & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
+                        exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & 2.2691... & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
                         \midrule
                         RNG          & 0.0 & 2.2689(7)& 0.992(11)& 1.740(2) & 0.130(1) \\
                                      & 0.1 & 2.2058(8)& 0.987(12)& 1.746(5) & 0.133(4) \\
@@ -449,25 +444,25 @@
                 }
                 \caption
                 {
-                    Kritische Exponenten bei verschiedenen \(\sigma\)
+                    Critical exponents for different values of \(\sigma\)
                 }
                 \label{tab:critExp}
             \end{table}
         \end{frame}
 
-    \subsection{Kritische Temperatur}
-        \begin{frame}{Schnittpunkte der Binder Kumulante}
+    \subsection{Critical Temperature}
+        \begin{frame}{Binder Cumulant Intersection}
             \begin{columns}[t]
                 \begin{column}{5cm}
                     \begin{itemize}[<+->]
-                        \item Interpoliere \(g\), um die Schnittpunkte zu schätzen
-                        \item Cubic Spline ist robust
+                        \item Interpolate \(g\) to estimate the intersection
+                        \item cubic spline is robust
                         \begin{itemize}[<+->]
-                            \item stückweises Anpassen von Polynomen dritten Grades
-                            \item verbinden, sodass die Kurve zweimal stetig differentierbar ist
+                            \item piecewise fitting polynoms of degree 3
+                            \item whole curve is \(2 \times\) continously differentiable
                         \end{itemize}
-                        \item Schnittpunkte sind bei \(T_{c}\) \cite{Binder1981}
-                        \item einfach umzusetzten mit zB.\ \texttt{scipy}
+                        \item intersection is at \(T_{c}\)
+                        \item easy to implement using \texttt{scipy}
                     \end{itemize}
                 \end{column}
                 \begin{column}{6cm}
@@ -476,8 +471,8 @@
                         \includegraphics[width=\textwidth]{plots/binder_fit_s_0}
                         \caption
                         {
-                            Binder Kumulante \(g\) bei \(\sigma = 0\).
-                            Interpoliert mit Cubic Splines.
+                            Binder Cumulant \(g\) at \(\sigma = 0\).
+                            Interpolated by cubic splines.
                         }
                         \label{fig:gettingCrit:binder_fit_s_0}
                     \end{figure}
@@ -500,16 +495,16 @@
                 }
                 \caption
                 {
-                    \(T_c\) über \(\sigma\) auf RNG und GG.
+                    \(T_c\) over \(\sigma\) for RNG and GG.
                 }
                 \label{fig:Tc}
             \end{figure}
             \pause
-            \(T_{c,RNG} \le T_{c,GG}\) während \(RNG \subseteq GG\)\\
-            (vergleiche Containment Theorem für Percolation)
+            Note: \(T_{c,RNG} \le T_{c,GG}\) while \(RNG \subseteq GG\)\\
+            (compare containment theorem for percolation)
         \end{frame}
 
-        \begin{frame}{Warum springt \(T_c\) auf dem GG?}
+        \begin{frame}{Why the jump on GG?}
             \begin{figure}[htbp]
                 \centering
                 \subfigure{
@@ -526,13 +521,13 @@
                 }
                 \caption
                 {
-                    Kleiner GG bei \(\sigma = 0\) and \(\sigma > 0\).
+                    Small GG at \(\sigma = 0\) and \(\sigma > 0\)
                 }
                 \label{fig:GGEdge}
             \end{figure}
         \end{frame}
 
-        \begin{frame}{Einfluss des Grades \(K\) auf \(T_{c}\)}
+        \begin{frame}{Influence of the degree on \(T_{c}\)}
             \begin{equation}
                 K = \frac{1}{N} \sum_{\avg{i,j}} 1
                 \label{eq:degree}
@@ -551,21 +546,21 @@
                 }
                 \caption
                 {
-                    \(K\) über verschiedene \(\sigma\) auf RNG und GG.
+                    Degree \(K\) over different \(\sigma\) for RNG and GG
                 }
                 \label{fig:Tc_deg}
             \end{figure}
         \end{frame}
 
-\section{Überblick}
-    \begin{frame}{Zusammenfassung}
+\section{Conclusion}
+    \begin{frame}{Conclusion}
         \begin{itemize}[<+->]
-            \item Ungeordneter Ising Ferromagnet ist in der Universalitäts Klasse des Quadratgitter Ising Ferromagnets.
-            \item Verlauf von \(T_{c}\) über \(\sigma\) ist qualitativ ähnlich zu \(K\) über \(\sigma\).
+            \item Disordered Ising Ferromagnet is in the square lattice Ising Ferromagnet universality class
+            \item course of \(T_{c}\) over different \(\sigma\) is qualitative similar to course of \(K\)
         \end{itemize}
     \end{frame}
 
-\section{Literatur}
+\section{References}
     \begin{frame}[allowframebreaks]
         \bibliography{lit}
         \bibliographystyle{amsplain}
