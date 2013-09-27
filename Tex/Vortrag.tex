@@ -273,7 +273,7 @@
 
         \begin{frame}{Parallel Tempering \cite{ParallelTempering1986}}
             \begin{equation}
-                P_{i,i+1}((E_i,T_i) \to (E_{i+1},T_{i+1})) = \min\brac{1,e^{\brac{\brac{E_{i+1}-E_i}\brac{\frac{1}{T_{i+1}}-\frac{1}{T_i}}}}}
+                P_{\nu,\nu+1}(S_\nu \leftrightarrow S_{\nu+1}) = \min\brac{1,e^{\brac{E_{\nu+1}-E_\nu}\brac{\frac{1}{T_{\nu+1}}-\frac{1}{T_\nu}}}},
             \end{equation}
             \begin{columns}[b]
                 \begin{column}{5cm}
@@ -347,11 +347,11 @@
             Scaling Functions
             \begin{align}
                 \label{eq:fsscaling:m}
-                \avg{m_L} &= L^{-\frac{\beta}{\nu}} \tilde{M}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
+                \avg{m_L}                                                              &= L^{-{\beta/\nu}} \tilde{M}\brac{L^{1/\nu}\brac{T-T_c}}\\
                 \label{eq:fsscaling:chi}
-                \chi_L    = L^{2} \beta \avg{\brac{m_{L}-\avg{m_{L}}}^2} &= L^{\frac{\gamma}{\nu}} \tilde{C}\brac{L^\frac{1}{\nu}\brac{T-T_c}}\\
+                \chi_L    = L^{2} \beta \avg{\brac{m_{L}-\avg{m_{L}}}^2}               &= L^{{\gamma/\nu}} \tilde{C}\brac{L^{1/\nu}\brac{T-T_c}}\\
                 \label{eq:fsscaling:g}
-                g         = \frac{3}{2}\brac{1-\frac{\avg{m_{L}^4}}{3\avg{m_{L}^2}^2}} &\propto \tilde{G}\brac{L^\frac{1}{\nu}\brac{T-T_c}}
+                g         = \frac{3}{2}\brac{1-\frac{\avg{m_{L}^4}}{3\avg{m_{L}^2}^2}} &\propto \tilde{G}\brac{L^{1/\nu}\brac{T-T_c}}
             \end{align}
             using \texttt{autoscale.py} \cite{autoscale2009}
         \end{frame}
@@ -461,7 +461,7 @@
                             \item piecewise fitting polynoms of degree 3
                             \item whole curve is \(2 \times\) continously differentiable
                         \end{itemize}
-                        \item intersection is at \(T_{c}\)
+                        \item intersection is at \(T_{c}\) \cite{Binder1981}
                         \item easy to implement using \texttt{scipy}
                     \end{itemize}
                 \end{column}
