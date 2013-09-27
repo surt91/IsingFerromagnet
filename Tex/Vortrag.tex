@@ -551,16 +551,42 @@
         \end{frame}
 
         \begin{frame}{Influence of the degree on \(T_{c}\)}
-            \begin{figure}[htb]
-                \centering
-                \includegraphics[width=0.7\textwidth]{plots/Tc_K}
-                \caption
-                {
-                    \(T_c\) as a function of \(K\).
-                    The dotted lines are fits to \(T_c = aK^b\).
-                }
-                \label{fig:Tc_K}
-            \end{figure}
+            \begin{columns}[b]
+                \begin{column}{0.7\textwidth}
+                    \begin{figure}[htb]
+                        \centering
+                        \includegraphics[width=0.7\textwidth]{plots/Tc_K}
+                        \caption
+                        {
+                            \(T_c\) as a function of \(K\).
+                            The dotted lines are fits to \(T_c = aK^b\).
+                        }
+                        \label{fig:Tc_K}
+                    \end{figure}
+                \end{column}
+                \pause
+                \begin{column}{0.3\textwidth}
+                    \begin{figure}[htbp]
+                        \centering
+                        \subfigure
+                        {
+                            \label{sfig:Tc_norm_deg_fit:RNG}
+                            \includegraphics[width=1\textwidth]{plots/RNG_Tc_norm_deg_fit}
+                        }
+                        \\
+                        \subfigure
+                        {
+                            \label{sfig:Tc_norm_deg_fit:GG}
+                            \includegraphics[width=1\textwidth]{plots/GG_Tc_norm_deg_fit}
+                        }
+                        \caption
+                        {
+                            \(T_c / aK^b\)
+                        }
+                        \label{fig:Tc_deg_fit}
+                    \end{figure}
+                \end{column}
+            \end{columns}
         \end{frame}
 
 \section{Conclusion}
