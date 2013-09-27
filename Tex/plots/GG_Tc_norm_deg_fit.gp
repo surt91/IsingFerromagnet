@@ -5,7 +5,7 @@ set xlabel '{/Italic {/Symbol s}}'
 set ylabel '{/Italic T / K^{1.30}}'
 
 set xr [-0.1:1.3]
-set yr [0.345:0.355]
+set yr [0.345:0.352]
 set size square
 
 set key spacing 10
