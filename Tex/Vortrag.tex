@@ -61,11 +61,11 @@
             \begin{itemize}[<+->]
                 \item \(N\) sites
                 \item \(\avg{i,j}\) denotes "nearest neighbor" relationship
-                \item every site has a spin \(s \in \{-1,+1\}\){}
+                \item every site has a spin \(s \in \{-1,+1\}\)
                 \item two spins \(i,j\) are coupled by \(J_{ij}\)
                 \item{
                     \begin{equation}
-                        H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}.
+                        H = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}
                     \end{equation}
                     (Ref.\ \cite{Ising1925})
                 }
@@ -78,7 +78,7 @@
                     \begin{itemize}
                         \item<1-> start with square lattice
                         \item<2-> displace every node randomly according to\\
-                            \(f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}.\){}
+                            \(f(x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{x^2}{2\sigma^2}}\)
                         \item<3-> assign new nearest neighbors
                         \item<4-> depending on their distance \(d_{ij}\) assign new \(J_{ij} = e^{\alpha(1-d_{ij})}\)
                         \item<4-> here \(\alpha = 0.5\)
@@ -273,7 +273,7 @@
 
         \begin{frame}{Parallel Tempering \cite{ParallelTempering1986}}
             \begin{equation}
-                P_{\nu,\nu+1}(S_\nu \leftrightarrow S_{\nu+1}) = \min\brac{1,e^{\brac{E_{\nu+1}-E_\nu}\brac{\frac{1}{T_{\nu+1}}-\frac{1}{T_\nu}}}},
+                P_{\nu,\nu+1}(S_\nu \leftrightarrow S_{\nu+1}) = \min\brac{1,e^{\brac{E_{\nu+1}-E_\nu}\brac{\frac{1}{T_{\nu+1}}-\frac{1}{T_\nu}}}}
             \end{equation}
             \begin{columns}[b]
                 \begin{column}{5cm}
@@ -527,7 +527,7 @@
 
         \begin{frame}{Influence of the degree on \(T_{c}\)}
             \begin{equation}
-                K = \frac{1}{N} \sum_{\avg{i,j}} 1
+                K = \frac{2}{N} \# E
                 \label{eq:degree}
             \end{equation}
             \begin{figure}[htbp]
@@ -550,11 +550,24 @@
             \end{figure}
         \end{frame}
 
+        \begin{frame}{Influence of the degree on \(T_{c}\)}
+            \begin{figure}[htb]
+                \centering
+                \includegraphics[width=0.7\textwidth]{plots/Tc_K}
+                \caption
+                {
+                    \(T_c\) as a function of \(K\).
+                    The dotted lines are fits to \(T_c = aK^b\).
+                }
+                \label{fig:Tc_K}
+            \end{figure}
+        \end{frame}
+
 \section{Conclusion}
     \begin{frame}{Conclusion}
         \begin{itemize}[<+->]
             \item Disordered Ising Ferromagnet is in the square lattice Ising Ferromagnet universality class
-            \item course of \(T_{c}\) over different \(\sigma\) is qualitative similar to course of \(K\)
+            \item course of \(T_{c}\) over different \(\sigma\) can be approximated knowing \(K\)
         \end{itemize}
     \end{frame}
 
