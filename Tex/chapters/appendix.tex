@@ -27,20 +27,38 @@
 
 \subsection{Finite Size Effects at the Example of the Specific Heat}
 \label{appendix:finiteSizeEffects}
-    In Fig.\ \ref{fig:smeared_out_appendix} the specific heat
+    In Fig.\ \ref{fig:smeared_out_appendix}\subref{sfig:smeared_out_appendix:c} the specific heat
     \begin{equation}
         c = \frac{N}{T^2}\avg{\avg{E^2} - \avg{E}^2}
     \end{equation}
     is plotted for different system sizes. The finite size effects are obvious.
     The divergence is finite and gets steeper with larger \(L\). Besides
-    the maximum moves to the critical temperature with larger \(L\).
+    the maximum moves to the critical temperature with larger \(L\).\\
+    In Fig.\ \ref{fig:smeared_out_appendix}\subref{sfig:smeared_out_appendix:logL} the maxima of a
+    cubic spline interpolation of \(c\) is plotted. Note that no errorbars
+    are estimated. As mentioned before,
+    this maximum increases logarithmically. One sees that a logarithmic
+    fit is not worse than the power law fit. But to confirm the expected
+    logarithmic growth, one would need much larger systems. Also the one
+    would estimate the maximum by other means than an interpolation.
     \begin{figure}[htbp]
         \centering
-        \includegraphics[width=0.45\textwidth]{plots/Specific_Heat_0}
+        \subfigure[][]
+        {
+            \label{sfig:smeared_out_appendix:c}
+            \includegraphics[width=0.45\textwidth]{plots/Specific_Heat_0}
+        }
+        \subfigure[][]
+        {
+            \label{sfig:smeared_out_appendix:logL}
+            \includegraphics[width=0.45\textwidth]{plots/Specific_Heat_0_log}
+        }
         \caption[Finite Size Effects by Example of the Specific Heat]
         {
-            Effects of different system sizes on the specific heat \(c\)
+            \subref{sfig:smeared_out_appendix:c} Effects of different system sizes on the specific heat \(c\)
             at \(\sigma = 0\). Dotted lines are guides to the eye.
+            \subref{sfig:smeared_out_appendix:logL} maxima of \(c\) fitted
+            with a power law function and a logarithm.
         }
         \label{fig:smeared_out_appendix}
     \end{figure}
