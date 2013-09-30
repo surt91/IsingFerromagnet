@@ -5,10 +5,14 @@ set key samplen 1. left bottom Left
 
 set xlabel "{/Italic T}"
 set ylabel "{/Italic g}"
-set xtics 0.05
-set xr [2.2:2.35]
+
+set xtics 0.1
+set xtics add ("T_c" 2.2691)
+set xr [2.2:2.4]
+set yr [0:1]
 
 set size square
+set arrow from 2.2691,0 to 2.2691,1 nohead
 
 plot "data/binderFit16_s_0.000.dat" u 1:2 w l lt 2 lc 1 notitle,\
      "data/binderFit32_s_0.000.dat" u 1:2 w l lt 2 lc 2 notitle,\
