@@ -1,5 +1,7 @@
 OBJ 	= graph.o graph_modify.o stack.o list.o tree.o spin.o
 
+SOURCE = $(subst .o,.c,$(OBJ)) $(subst .o,.h,$(OBJ))
+
 TARGET	= ising
 LINK	= gcc
 CC	= gcc
@@ -17,5 +19,8 @@ all: $(TARGET)
 $(TARGET): $(OBJ)
 	$(CC) -o $(TARGET) $(LFLAGS) $(OBJ)
 
+docs: doc.cfg $(SOURCE)
+	doxygen $<
+
 clean:
-	rm -rf $(OBJ) $(TARGET)
+	rm -rf $(OBJ) $(TARGET) docs
