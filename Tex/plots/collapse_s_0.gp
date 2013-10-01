@@ -4,8 +4,8 @@ set output 'collapse_s_0.eps'
 set key samplen 1. left bottom Left                 # customize key
 set xl "{/Italic (T-T_c) L^{1/{/Symbol n}}}"
 set yl "{/Italic g}"                                # set x,y labels
-xc=2.267979
-a=1/1.006524
+xc=2.2688
+a=1/0.997
 b=0                                                 # set scaling parameters
 set label 1 sprintf("{/Italic T_c}= %.3f\n{/Italic {/Symbol n}} = %.3f", xc, 1/a) at graph 0.95,0.8 right # list scaling parameters
 sx(x,L)=(x-xc)*L**a; sy(y,L)=y*L**b                 # def scaling assumption

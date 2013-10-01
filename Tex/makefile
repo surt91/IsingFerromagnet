@@ -46,13 +46,9 @@ RNG_LST = $(subst GG,RNG,$(GG_LST))
 PLOTS = plots/binder_fit_s_0.pdf \
         plots/binder_s_0.pdf \
         plots/collapse_s_0.pdf \
-        plots/collapse_s_0_sus.pdf \
         plots/collapse_s_1_sus.pdf \
-        plots/collapse_s_0_meanM.pdf \
         plots/collapse_s_1_meanM.pdf \
-        plots/s_0_sus.pdf \
         plots/s_1_sus.pdf \
-        plots/s_0_meanM.pdf \
         plots/s_1_meanM.pdf \
         plots/equiE.pdf \
         plots/autoM.pdf \
@@ -63,6 +59,7 @@ PLOTS = plots/binder_fit_s_0.pdf \
         plots/autocorrT.pdf \
         plots/Tc_K.pdf \
         plots/Tc_J.pdf \
+        plots/Specific_Heat_0_log.pdf \
         $(GG_LST) \
         $(RNG_LST)
 

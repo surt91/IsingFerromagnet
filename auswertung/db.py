@@ -495,7 +495,7 @@ class Database():
         if not M:
             return None, None
         # berechne den Mittelwert der Erwartungswerte
-        return self.bootstrap_stderr(M, 20, lambda x: f(x,L,T))
+        return self.bootstrap_stderr(M, 20, lambda x: f(x,T,L))
 
     def getAverageE(self, f, sigma, L, T):
         """! Liefert den über verschiedene Realisierungen gemittelten
@@ -506,7 +506,7 @@ class Database():
         c.close()
         if not E:
             return None, None
-        return self.bootstrap_stderr(E, 20, lambda x: f(x,L,T))
+        return self.bootstrap_stderr(E, 20, lambda x: f(x,T,L))
 
 if __name__ == '__main__':
     a=Database( dbPath = "dataRNG.db", dbRawPath="dataRawRNG.db", dataPath = "../dataRNG", graphType=1)
