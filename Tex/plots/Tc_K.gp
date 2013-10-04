@@ -17,6 +17,8 @@ a2=1; b2=1;
 f1(x) = a1*x**b1
 f2(x) = a2*x**b2
 
+set label 3 "Fit to {/Italic aK^b}" at graph 0.65,0.27 left
+
 fit f1(x) "< paste data/RNG_deg_L32.dat data/RNG_Tc.dat" u 2:5:6 via a1,b1
 set label 1 sprintf("b_{RNG} = %.4f(%.0f), {/Symbol c}^2=%.0f", b1, b1_err*1e4/FIT_STDFIT, FIT_STDFIT**2) at graph 0.20,0.17 left
 

@@ -554,16 +554,11 @@
             values of \(T_c\) which were determined before via finte-size
             scaling analysis. The other values are determined by
             the intersections of the Binder cumulants \(g\) for different
-            the intersections of the Binder cumulants \(g\) for different
             system sizes. The values of both methods match within errorbars.
         }
         \label{tab:critTemp}
-    \end{table}\\
-    The values obtained through the data collapse and the values obtained
-    through the intersections of the Binder cumulants are always in good
-    agreement and of comparable precision.\\
-    These values of \(T_c\) are plotted as a function of \(\sigma\) in Fig.\ \ref{fig:Tc}.
-    \begin{figure}[htbp]
+    \end{table}
+    \begin{figure}[h!]
         \centering
         \subfigure[][]
         {
@@ -586,6 +581,10 @@
         }
         \label{fig:Tc}
     \end{figure}\\
+    The values obtained through the data collapse and the values obtained
+    through the intersections of the Binder cumulants are always in good
+    agreement and of comparable precision. These values of \(T_c\) are
+    plotted as a function of \(\sigma\) in Fig.\ \ref{fig:Tc}.
     One sees that the RNG on the left has generally a lower critical
     temperature than the GG.
     Also \(T_c\) of the RNG decreases
@@ -677,6 +676,42 @@
                 \label{sfig:Tc_norm_deg:GG}
                 \includegraphics[width=0.45\textwidth]{plots/GG_Tc_norm_deg}
             }
+
+            \caption[Critical Temperature Normalized by Degree of the Graph]
+            {
+                Top: Degree \(K\) of the graph over different
+                disorder parameters \(\sigma\) for
+                \subref{sfig:deg:RNG} the RNG and
+                \subref{sfig:deg:GG} the GG.
+                Bottom: Critical temperatures normalized by degree over different
+                disorder parameters for
+                \subref{sfig:Tc_norm_deg:RNG} the RNG and
+                \subref{sfig:Tc_norm_deg:GG} the GG.
+            }
+            \label{fig:Tc_deg}
+        \end{figure}\\
+        The great influence of \(K\) on \(T_c\) becomes even more obvious
+        by plotting \(T_{c}\) as a function of \(K\) as done in Fig.\ \ref{fig:Tc_deg_fit}\subref{sfig:Tc_K}.
+        In fact a fit of a power law function \(T_c = aK^b\) gives a reasonable
+        approximation of \(T_{c}\). But large values for the \(\chi^{2}\)
+        seem to indicate that this is only an approximation which does not
+        account for every detail of the curve. These details will be
+        investigated.\\
+        In Fig.\ \ref{fig:Tc_deg_fit}\subref{sfig:Tc_norm_deg_fit:RNG}\subref{sfig:Tc_norm_deg_fit:GG}
+        the normalization is done using the power law function obtained through the fit from Fig.\ \ref{fig:Tc_deg_fit}\subref{sfig:Tc_K}.
+        The amplitude of the curve shrinks which is a hint, that this is a good
+        approximation. But it is not a constant, so there have to be other
+        influences as supposed before.
+        Note that even after the normalization, the values of \(T_c / K\)
+        for the RNG are smaller than those for the GG.\\
+        \begin{figure}[htbp]
+            %~ \centering
+            \subfigure[][]
+            {
+                \label{sfig:Tc_K}
+                \includegraphics[width=0.45\textwidth]{plots/Tc_K}
+            }
+
             \subfigure[][]
             {
                 \label{sfig:Tc_norm_deg_fit:RNG}
@@ -690,15 +725,17 @@
 
             \caption[Critical Temperature Normalized by Degree of the Graph]
             {
-                Top: Degree \(K\) of graph over different
-                disorder parameters \(\sigma\) for
-                \subref{sfig:deg:RNG} the RNG and
-                \subref{sfig:deg:GG} the GG.
-                Middle: Critical temperatures normalized by degree over different
-                disorder parameters for
-                \subref{sfig:Tc_norm_deg:RNG} the RNG and
-                \subref{sfig:Tc_norm_deg:GG} the GG.
-                Bottom: Critical temperatures normalized by the in Fig.\ \ref{fig:Tc_K}
+                \subref{sfig:Tc_K} The critical temperature is plotted as a function of the
+                degree. At \(K \approx 4\) the jump also seen in Fig.\ \ref{fig:Tc} occurs.
+                There seems to be an in first approximation linear
+                dependency. The dotted lines are fits to a power law function \(T_c = aK^b\)
+                ignoring the point at \(K=4\) on the GG.
+                As an approximation it seems suited but the bad
+                \(\chi^2\) values are hints that there is some finer
+                structure which is not fitted by a power law function.
+                This is further examined in \subref{sfig:Tc_norm_deg_fit:RNG}
+                and \subref{sfig:Tc_norm_deg_fit:GG} where the
+                critical temperatures are normalized by the
                 determined power law function over different
                 disorder parameters for
                 \subref{sfig:Tc_norm_deg_fit:RNG} the RNG and
@@ -708,41 +745,16 @@
                 But at least for the RNG and at least for small values of
                 \(\sigma\) on the GG it can not explain everything.
             }
-            \label{fig:Tc_deg}
+            \label{fig:Tc_deg_fit}
         \end{figure}\\
-        The great influence of \(K\) on \(T_c\) is shown in Fig.\ \ref{fig:Tc_K}.
-        In fact a fit of a power law function \(T_c = aK^b\) gives a reasonable
-        approximation of \(T_{c}\). But large values for the \(\chi^{2}\)
-        seem to indicate that this is only an approximation which does not
-        account for every detail of the curve. These details will be
-        investigated.\\
-        In Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg_fit:RNG}\subref{sfig:Tc_norm_deg_fit:GG}
-        the normalization is done using the power law function obtained through the fit from Fig.\ \ref{fig:Tc_K}.
-        The amplitude of the curve shrinks which is a hint, that this is a good
-        approximation. But it is not a constant, so there have to be other
-        influences as supposed before.
-        Note that even after the normalization, the values of \(T_c / K\)
-        for the RNG are smaller than those for the GG.\\
         Anyway, this analysis shows that the degree has a major impact on
         the critical temperature \(T_c\), but it also shows that there
         have to be other graph properties having a minor influence on \(T_{c}\).
-        \begin{figure}[htb]
-            \centering
-            \includegraphics[width=0.45\textwidth]{plots/Tc_K}
-            \caption[Critical Temperature as a Function of the Degree of the Graph]
-            {
-                The critical temperature is plotted as a function of the
-                degree. At \(K \approx 4\) the jump also seen in Fig.\ \ref{fig:Tc} occurs.
-                There seems to be an in first approximation linear
-                dependency. The dotted lines are fits to a power law function \(T_c = aK^b\)
-                ignoring the point at \(K=4\) on the GG.
-                As an approximation it seems suited but the bad
-                \(\chi^2\) values are hints that there is some finer
-                structure which is not fitted by a power law function.
-                This is further examined in Fig.\ \ref{fig:Tc_deg}.
-            }
-            \label{fig:Tc_K}
-        \end{figure}\\
+        The most promising candidate is the coupling constant \(J_{i,j}\), i.e.\ the
+        distance of the nodes of the graph.
+        Also the fact that the fits for the RNG and the GG yield other exponents,
+        i.e.\ they are on different lines, proofs that the graph type has
+        also an major influence beyond the degree.\\
         To understand the jump of \(T_c\) on a GG it seems to be necessary to
         understand the jump of \(K\), which is easily explained
         by the definition of the GG. As evident from Fig.\ \ref{fig:GG_sigma}\subref{sfig:GG_sigma:0.00}\subref{sfig:GG_sigma:0.01}
@@ -819,7 +831,7 @@
             \label{fig:GG_sigma}
         \end{figure}\\
         The evolution of the RNG with increasing \(\sigma\) can be made plausible
-        with the same arguments. Fig. \ref{fig:RNG_sigma}
+        with the same arguments. Fig.\ \ref{fig:RNG_sigma}
         shows that for \(\sigma \lesssim 0.1\) the square lattice character is
         preserved -- no new edges arise and only a few existing edges vanish, which
         explains the plateau in the \(T_{c}\) diagram. With
@@ -875,7 +887,7 @@
         of all edges of the graph multiplied by the degree \(\avg{J_{ij}} K\).
         The plot Fig.\ \ref{fig:Tc_J} shows that
         there is a less obvious dependency between \(T_c\) and \(\avg{\sum_{\avg{i,j}} J_{ij}}\)
-        than between \(T_c\) and \(K\) (c.f.\ Fig.\ \ref{fig:Tc_K}).
+        than between \(T_c\) and \(K\) (c.f.\ Fig.\ \ref{fig:Tc_deg_fit}\subref{sfig:Tc_K}.).
         \begin{figure}[htbp]
             \centering
             \includegraphics[width=0.45\textwidth]{plots/Tc_J}
@@ -883,7 +895,7 @@
             {
                 The critical temperature is plotted as a function of the
                 average edge weight. The curve shows a less straight line
-                than Fig.\ \ref{fig:Tc_K}.
+                than Fig.\ \ref{fig:Tc_deg_fit}\subref{sfig:Tc_K}..
             }
             \label{fig:Tc_J}
         \end{figure}\\
@@ -990,7 +1002,7 @@
     \label{appendix:fixedCoupling}
         A quick analysis of this model with fixed coupling constants \(J = 1\)
         (i.e.\ \(\alpha=0\)) is performed. The results are displayed in Fig.\ \ref{fig:Tc_deg_A0}.
-        The jump from \(\sigma=0\) to \(\sigma>0\) does not disappear as in Fig.\ \ref{fig:Tc_deg}
+        The jump from \(\sigma=0\) to \(\sigma>0\) does not disappear as in Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:GG}
         for variable \(J\) with \(\alpha=0.5\). This suggests that the
         disappearance of the jump is a random special case for the function
         \(J_{ij}=e^{\alpha(1-d_{ij})}\) at \(\alpha=0.5\).\\
