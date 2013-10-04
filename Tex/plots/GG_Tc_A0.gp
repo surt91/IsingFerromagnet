@@ -12,5 +12,5 @@ set key title 'GG' samplen 1
 
 #set logscale xy
 
-plot "data/GG_Tc_A0.dat" u 1:2:3 w ye ps 2 pt 4 title "{/Italic T_c}",\
-     "" w l lt 3 lc 1 notitle smooth csplines
+plot "data/GG_Tc_A0.dat" u 1:2:3 w ye ps 2 pt 6 lc 3 title "{/Italic T_c}",\
+     "" w l lt 3 lc 3 notitle smooth csplines

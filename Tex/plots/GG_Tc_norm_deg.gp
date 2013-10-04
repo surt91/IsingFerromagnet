@@ -9,5 +9,5 @@ set size square
 
 set key title 'GG' samplen 1
 
-plot "< paste data/GG_Tc.dat data/GG_deg_L32.dat" u 1:($2/$5):($3/$5+$2/$5**2*$6) w ye ps 2 pt 4 title "{/Italic T_c / K}",\
-     "" u 1:($2/$5) w l lt 3 lc 1 notitle smooth csplines
+plot "< paste data/GG_Tc.dat data/GG_deg_L32.dat" u 1:($2/$5):($3/$5+$2/$5**2*$6) w ye ps 2 pt 6 lc 3 title "{/Italic T_c / K}",\
+     "" u 1:($2/$5) w l lt 3 lc 3 notitle smooth csplines

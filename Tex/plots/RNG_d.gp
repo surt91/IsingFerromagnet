@@ -9,7 +9,7 @@ set xr [-0.1:1.3]
 set size square
 set key title 'RNG' samplen 1
 
-plot "data/RNG_d_L16.dat" w ye lt 1 lc 1 pt 4 ps 2 title "L = 16",\
-     "data/RNG_d_L32.dat" w ye lt 1 lc 2 pt 6 ps 2 title "L = 32",\
-     "data/RNG_d_L16.dat" w l  lt 3 lc 1 notitle smooth csplines,\
-     "data/RNG_d_L32.dat" w l  lt 3 lc 2 notitle smooth csplines
+plot "data/RNG_d_L16.dat" w ye lt 1 lc 5 pt 4 ps 2 title "L = 16",\
+     "data/RNG_d_L32.dat" w ye lt 1 lc 1 pt 6 ps 2 title "L = 32",\
+     "data/RNG_d_L16.dat" w l  lt 3 lc 5 notitle smooth csplines,\
+     "data/RNG_d_L32.dat" w l  lt 3 lc 1 notitle smooth csplines

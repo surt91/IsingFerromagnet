@@ -9,5 +9,5 @@ set key title 'GG' samplen 1
 
 set size square
 
-plot 'data/GG_Tc.dat' w ye ps 2 pt 4 title "{/Italic T_c}",\
-     "" w l lt 3 lc 1 notitle smooth csplines
+plot 'data/GG_Tc.dat' w ye ps 2 pt 6 lc 3 title "{/Italic T_c}",\
+     "" w l lt 3 lc 3 notitle smooth csplines

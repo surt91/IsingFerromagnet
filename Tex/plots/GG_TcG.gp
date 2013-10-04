@@ -12,5 +12,5 @@ set key title 'GG' samplen 1
 
 f(x)=0.9160
 
-plot 'data/GG_TcG.dat' u 1:2:3 w ye pt 4 ps 1 lc 1 title "{/Italic g_c}",\
-     f(x) w l lt 3 lc 1 notitle
+plot 'data/GG_TcG.dat' u 1:2:3 w ye pt 6 ps 1 lc 3 title "{/Italic g_c}",\
+     f(x) w l lt 3 lc 3 notitle
