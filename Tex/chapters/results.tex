@@ -66,7 +66,7 @@
     For every determined value an
     error is calculated and given in the form \texttt{value(error of last digit)}.
     The errors of fit parameters are the asymptotic standard errors as calculated
-    by gnuplot divded by root of the chi-squared per degree of freedom
+    by gnuplot divded by the root of the chi-squared per degree of freedom
     as stated in \cite{young2012everything}. Gnuplot\footnote{\url{http://gnuplot.info/}.} is an open
     source plotting program used for all plots and fits in this thesis.
     Also note that dotted lines in the plots are -- if not noted otherwise --
@@ -100,7 +100,7 @@
             \subref{fig:autocorr:temperatures} the temperature $T$ for
                 $\sigma=0$ and
             \subref{fig:autocorr:powerLaw} the system size $L$. Plotted on
-                double logarithmic axis with a power law fit \(\tau \propto L^z\) (dotted line)
+                double logarithmic axis with a power law fit \(\tau \propto L^{z'}\) (dotted line)
                 to determine the dynamical exponent \(z'\).
                 (Errorbars are the standard error estimated by bootstrap resampling.)
         }
@@ -137,8 +137,8 @@
     Anyhow, Fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} alone
     proofs the effectiveness of the Wolff cluster algorithm at criticality.\\
     This is of course only a rough analysis of existing data which was
-    generated for another purpose. For a more detailed inspection, one
-    would perform the simulation at the critical point, which will be
+    generated for another purpose. For a more detailed inspection one
+    would perform the simulation at the critical point which will be
     determined subsequently.
 
 \subsection{Finite-Size Effects}
@@ -176,8 +176,7 @@
             \subref{sfig:smeared_out:meanM} Effects of different system
             sizes at \(\sigma = 0\), i.e.\ the square lattice Ising ferromagnet.
             The \(L=16\) curve is much less steep than the \(L=128\) curve.
-            Note that the \(L=\infty\) curve has not an infinite slope but
-            follows a power law function near \(T_c\).
+            Note that the \(L=\infty\) curve follows a power law function near \(T_c\).
         }
         \label{fig:smeared_out}
     \end{figure}\\
@@ -216,7 +215,7 @@
     point as in both examples above. But this is not imperative.
     E.g.\ the critical "exponent" \(\alpha\) corresponding to the divergence of
     the specific heat \(c\) for the two dimensional Ising model is nominally \(\alpha = 0\),
-    because \(c\) diverges logarithmically and not exponentially.
+    because \(c\) diverges logarithmically and not following a power law.
     For that reason, \(\alpha\) will not be considered in this section.\\
     The important property of the critical exponents is that they are
     universal for a model with respect to certain model characteristics.
@@ -257,7 +256,6 @@
     collapse on one curve -- the scaling function.
     A data collapse of the curves showed in Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:binder_s_0}
     is illustrated in Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0}.
-    The same principle can be used to determine the other two exponents.
     Note that \(L=16\) is not used for the collapse, because it is a
     rather small value of \(L\) for which deviations from the assumed
     scaling behavior might be expected, i.e.\ Eq.\ \eqref{eq:fsscaling:m}-\eqref{eq:fsscaling:g}
@@ -302,10 +300,10 @@
     Similarly Fig.\ \ref{fig:gettingCrit2}\subref{sfig:gettingCrit:s_1_meanM}\subref{sfig:gettingCrit:collapse_s_1_meanM}
     show the collapse for the mean magnetization per site \(\avg{\abs{m}}\) for \(\sigma=1\)
     to determine the exponents \(\beta\) and \(\nu\).
-    Also the collapse of the binder cumulant, as mentioned before and shown
+    Also the collapse of the Binder cumulant, as mentioned before and shown
     in Fig.\ \ref{fig:gettingCrit}\subref{sfig:gettingCrit:collapse_s_0},
     is used to get a further estimate of \(\nu\).
-    \begin{figure}[htbp]
+    \begin{figure}[htb]
         \centering
         \subfigure[Susceptibility $\chi$][]
         {
@@ -333,10 +331,10 @@
             to determine the critical exponents \(\nu, \gamma, \beta\) and
             the critical temperature \(T_c\).
             \subref{sfig:gettingCrit:s_1_sus} The susceptibility \(\chi\)
-                of an Ising model on an RNG at \(\sigma=1\).
+                of an Ising model on RNG at \(\sigma=1\).
             \subref{sfig:gettingCrit:collapse_s_1_sus} data collapse, to determine \(\gamma\) (for error estimates see Tab.\ \ref{tab:critExp}).
             \subref{sfig:gettingCrit:s_1_meanM} The mean magnetization \(\avg{\abs{m}}\)
-                of an Ising model on an GG at \(\sigma=1\).
+                of an Ising model on GG at \(\sigma=1\).
             \subref{sfig:gettingCrit:collapse_s_1_meanM} data collapse, to determine \(\beta\) (for error estimates see Tab.\ \ref{tab:critExp}).
         }
         \label{fig:gettingCrit2}
@@ -486,7 +484,12 @@
     plateaus at low and high \(T\) do not influence the interpolation in
     the vicinity of \(T_c\) -- in contrast to, e.g.\ an polynom fit of
     degree 4, which has to be restricted to the vincinity of \(T_c\) to
-    yield meaningful results.
+    yield meaningful results. An even better method would be the
+    \emph{multiple histogram} method \cite[p. 219ff]{NewmanBarkema1999}.
+    But the simple cubic spline interpolation seems to deliver results
+    that are good enough, because the temperatures of the measurements are
+    sufficiently near to each other. Also cubic spline interpolation is
+    far easier to obtain.
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=0.47\textwidth]{plots/binder_fit_s_0}
@@ -548,15 +551,16 @@
         \caption[Critical Temperatures for Different $\sigma$]{
             Critical temperatures for different $\sigma$. For both graph
             types, GG and RNG. \(T_c^{\mathrm{collapse}}\) denotes the
-            values of \(T_c\) which were determined before via finte
-            size scaling analysis. The other values are determined by
-            the intersection of the binder cumulants \(g\) for different
-            system sizes. The values of both methods match.
+            values of \(T_c\) which were determined before via finte-size
+            scaling analysis. The other values are determined by
+            the intersections of the Binder cumulants \(g\) for different
+            the intersections of the Binder cumulants \(g\) for different
+            system sizes. The values of both methods match within errorbars.
         }
         \label{tab:critTemp}
     \end{table}\\
     The values obtained through the data collapse and the values obtained
-    through the intersection of the binder cumulant are always in good
+    through the intersections of the Binder cumulants are always in good
     agreement and of comparable precision.\\
     These values of \(T_c\) are plotted as a function of \(\sigma\) in Fig.\ \ref{fig:Tc}.
     \begin{figure}[htbp]
@@ -640,29 +644,6 @@
         %~ In Fig.\ \ref{fig:Tc_deg}\subref{sfig:deg:RNG}\subref{sfig:deg:GG}
         %~ one can see that these curves are almost identical and the small
         %~ errorbars suggest that they are sufficiently precise for this purpose.
-        \begin{figure}[htb]
-            \centering
-            \includegraphics[width=0.45\textwidth]{plots/Tc_K}
-            \caption[Critical Temperature as a Function of the Degree of the Graph]
-            {
-                The critical temperature is plotted as a function of the
-                degree. At \(K \approx 4\) the jump also seen in Fig.\ \ref{fig:Tc} occurs.
-                There seems to be an in first approximation linear
-                dependency. The dotted lines are fits to a power law function \(T_c = aK^b\)
-                ignoring the point at \(K=4\) on the GG.
-                As a approximation it seems suited but the bad
-                \(\chi^2\) values are hints that there is some finer
-                structure which is not fitted by a power law function.
-                This is further examined in Fig.\ \ref{fig:Tc_deg}.
-            }
-            \label{fig:Tc_K}
-        \end{figure}\\
-        The great influence of \(K\) on \(T_c\) is shown in Fig.\ \ref{fig:Tc_K}.
-        In fact a fit of a power law function \(T_c = aK^b\) gives a reasonable
-        approximation of \(T_{c}\). But large values for the \(\chi^{2}\)
-        seem to indicate that this is only a approximation which does not
-        account for every detail of the curve. These details will be
-        investigated.\\
         It seems reasonable to normalize \(T_c\) by the degree of the underlying
         graph. This is done in Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg:RNG}\subref{sfig:Tc_norm_deg:GG}.
         Indeed the normalization eliminates the jump and reduces the
@@ -673,16 +654,6 @@
         this claim in Sec.\ \ref{appendix:fixedCoupling} the same analysis
         is performed for a model with fixed \(J\). There the jump gets narrower
         but is still existent.\\
-        In Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg_fit:RNG}\subref{sfig:Tc_norm_deg_fit:GG}
-        the normalization is done using power law function obtained through the fit from Fig.\ \ref{fig:Tc_K}.
-        The amplitude of the curve shrinks which is a hint, that this is a good
-        approximation. But it is not a constant, so there have to be other
-        influences as supposed before.
-        Note that even after the normalization, the values of \(T_c / K\)
-        for the RNG are smaller than those for the GG.\\
-        Anyway, this analysis shows that the degree has a major impact on
-        the critical temperature \(T_c\), but it also shows that there
-        have to be other graph properties having a minor influence on \(T_{c}\).
         \begin{figure}[htbp]
             \centering
             \subfigure[][]
@@ -738,6 +709,39 @@
                 \(\sigma\) on the GG it can not explain everything.
             }
             \label{fig:Tc_deg}
+        \end{figure}\\
+        The great influence of \(K\) on \(T_c\) is shown in Fig.\ \ref{fig:Tc_K}.
+        In fact a fit of a power law function \(T_c = aK^b\) gives a reasonable
+        approximation of \(T_{c}\). But large values for the \(\chi^{2}\)
+        seem to indicate that this is only an approximation which does not
+        account for every detail of the curve. These details will be
+        investigated.\\
+        In Fig.\ \ref{fig:Tc_deg}\subref{sfig:Tc_norm_deg_fit:RNG}\subref{sfig:Tc_norm_deg_fit:GG}
+        the normalization is done using the power law function obtained through the fit from Fig.\ \ref{fig:Tc_K}.
+        The amplitude of the curve shrinks which is a hint, that this is a good
+        approximation. But it is not a constant, so there have to be other
+        influences as supposed before.
+        Note that even after the normalization, the values of \(T_c / K\)
+        for the RNG are smaller than those for the GG.\\
+        Anyway, this analysis shows that the degree has a major impact on
+        the critical temperature \(T_c\), but it also shows that there
+        have to be other graph properties having a minor influence on \(T_{c}\).
+        \begin{figure}[htb]
+            \centering
+            \includegraphics[width=0.45\textwidth]{plots/Tc_K}
+            \caption[Critical Temperature as a Function of the Degree of the Graph]
+            {
+                The critical temperature is plotted as a function of the
+                degree. At \(K \approx 4\) the jump also seen in Fig.\ \ref{fig:Tc} occurs.
+                There seems to be an in first approximation linear
+                dependency. The dotted lines are fits to a power law function \(T_c = aK^b\)
+                ignoring the point at \(K=4\) on the GG.
+                As an approximation it seems suited but the bad
+                \(\chi^2\) values are hints that there is some finer
+                structure which is not fitted by a power law function.
+                This is further examined in Fig.\ \ref{fig:Tc_deg}.
+            }
+            \label{fig:Tc_K}
         \end{figure}\\
         To understand the jump of \(T_c\) on a GG it seems to be necessary to
         understand the jump of \(K\), which is easily explained
