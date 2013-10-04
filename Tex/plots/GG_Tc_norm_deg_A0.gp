@@ -8,6 +8,8 @@ set xr [-0.1:1.3]
 #set yr [0.54:0.60]
 set size square
 
+set key title 'GG' samplen 1
+
 #set logscale xy
 
 plot "< paste data/GG_Tc_A0.dat data/GG_deg_L32_A0.dat" u 1:($2/$5):($3/$5+$2/$5**2*$6) w ye ps 2 pt 4 title "{/Italic T_c / K}",\

@@ -15,7 +15,8 @@ set size square
 
 set fit errorvariables
 
-set key samplen 1. left Left spacing 1.5
+set key samplen 1. left Right spacing 1.5
+set key title 'GG' samplen 1
 
 f1(x)=a1*x**b1
 f2(x)=a2*x**b2

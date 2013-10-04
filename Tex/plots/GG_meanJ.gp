@@ -4,6 +4,8 @@ set output 'GG_meanJ.eps'
 set xlabel '{/Italic {/Symbol s}}'
 set ylabel '{/Italic {/Symbol \341}J{/Symbol \361}}'
 
+set key title 'GG' samplen 1
+
 set size square
 
 plot "data/GG_meanJ_L16.dat" w ye lt 1 lc 1 pt 4 ps 2 title "L = 16",\
