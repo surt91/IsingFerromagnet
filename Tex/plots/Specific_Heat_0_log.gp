@@ -38,6 +38,6 @@ f2(x) = b*x**d
 fit f(x) "data/tmp.dat" u 1:2 via a
 fit f2(x) "data/tmp.dat" u 1:2 via b,d
 
-plot "data/tmp.dat" u 1:2 w p title "max({/Italic c})",\
+plot "data/tmp.dat" u 1:2 w p ps 2 title "max({/Italic c})",\
      f(x) lc 3 lt 3 title "{/Italic a} log({/Italic L})",\
      f2(x) lc 2 lt 3 title "{/Italic b} {/Italic L^d"

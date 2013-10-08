@@ -105,13 +105,10 @@
                 (Errorbars are the standard error estimated by bootstrap resampling.)
         }
         \label{fig:autocorr}
-    \end{figure}
-    The plateau at low temperatures is easy to understand considering the
-    effects of the Wolff cluster algorithm. At low temperatures it flips nearly every
-    spin in every step, thus the autocorrelation time is one sweep.
-    (Note that this is not the only explanation for the small values of \(\tau\).
-    The parallel tempering algorithm swaps spin configurations
-    with possibly different signs, thus having the same effect.)
+    \end{figure}\\
+    %~ The plateau at low temperatures is easy to understand considering the
+    %~ effects of the Wolff cluster algorithm. At low temperatures it flips nearly every
+    %~ spin in every step.
     Also note that the maximum of \(\tau\) is not at \(T_c\) but at a higher
     temperature. The cause is probably the effectiveness of the Wolff cluster
     algorithm at \(T_c\), hence \(\tau \approx 1\) at \(T_{c}\).
@@ -135,7 +132,10 @@
     because the peak in Fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw}
     is near \(T_{c}\).\\
     Anyhow, Fig.\ \ref{fig:autocorr}\subref{fig:autocorr:powerLaw} alone
-    proofs the effectiveness of the Wolff cluster algorithm at criticality.\\
+    proofs the effectiveness of the Wolff cluster algorithm at criticality.
+    Also note that this is not the only explanation for the small values of \(\tau\).
+    The parallel tempering algorithm swaps often spin configurations
+    which are uncorrelated, this in turn decreases \(\tau\).\\
     This is of course only a rough analysis of existing data which was
     generated for another purpose. For a more detailed inspection one
     would perform the simulation at the critical point which will be
@@ -176,7 +176,7 @@
             \subref{sfig:smeared_out:meanM} Effects of different system
             sizes at \(\sigma = 0\), i.e.\ the square lattice Ising ferromagnet.
             The \(L=16\) curve is much less steep than the \(L=128\) curve.
-            Note that the \(L=\infty\) curve follows a power law function near \(T_c\).
+            Note that the \(L=\infty\) curve follows a power law function near \(T_c\) for \(T < T_{c}\).
         }
         \label{fig:smeared_out}
     \end{figure}\\
