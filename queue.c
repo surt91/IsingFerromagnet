@@ -19,7 +19,6 @@ void enqueue(queue_t *queue, int value)
 
     entry->value = value;
     entry->next = NULL;
-    entry->prev = queue->last;
 
     if(queue->last != NULL)
         queue->last->next = entry;

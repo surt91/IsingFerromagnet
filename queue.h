@@ -5,20 +5,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/*! \struct queue_t
-    \brief Eine Queue
+/*! \struct queue_node_t
+    \brief Eine linked list
 
-    Enthält eine double linked list
+    Enthält eine linked list
 */
 struct queue_node_struct
 {
-    struct queue_node_struct *prev;      //!< Pointer auf vorheriges Element
-    struct queue_node_struct *next;        //!< Pointer auf nächstes Element
-    int                  value;                              //!< Inhalt
+    struct queue_node_struct *next;    //!< Pointer auf nächstes Element
+    int                      value;                          //!< Inhalt
 };
 
 typedef struct queue_node_struct queue_node_t;
 
+/*! \struct queue_t
+    \brief Eine Queue
+
+    Enthält eine linked list und Pointer auf Anfang und Ende
+*/
 typedef struct
 {
     struct queue_node_struct *first;
