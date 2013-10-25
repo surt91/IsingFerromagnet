@@ -82,6 +82,103 @@ cluster_map_t *bfs_cluster(gs_graph_t *g)
     return cluster_map;
 }
 
+/*! \fn double calc_radius_of_gyration(gs_graph_t *g, int *cluster_map, int cluster_label)
+    \brief Berechnet das Quadrat vom radius of gyration des Clusters cluster_label
+
+    \f$ R_s^2 = \frac {1}{s} \sum_{i=1}^s (r_i-<r>)^2 \f$
+
+    \param [in]     g                Graph
+    \param [in]     cluster_map      Array mit Clusterindizes
+    \param [in]     cluster_label    label des zu untersuchenden clusters
+    \return Radius of gyration squared
+*/
+double calc_radius_of_gyration(gs_graph_t *g, cluster_map_t *cluster_map, int cluster_label)
+{
+    int n;
+    int rx_mean, ry_mean;
+    int R;
+
+    // mittelpunkt
+    rx_mean = 0; ry_mean = 0;
+    for(n=0; n<g->num_nodes; n++)
+        if(cluster_map->map[n] == cluster_label)
+        {
+            rx_mean += g->node[n].x;
+            ry_mean += g->node[n].y;
+        }
+    rx_mean /= cluster_map->sizes[cluster_label];
+    ry_mean /= cluster_map->sizes[cluster_label];
+
+    // radius of gyration
+    R = 0;
+    for(n=0; n<g->num_nodes; n++)
+        if(cluster_map->map[n] == cluster_label)
+        {
+            R += SQUARE(g->node[n].x - rx_mean) + SQUARE(g->node[n].y - ry_mean);
+        }
+    R /= cluster_map->sizes[cluster_label];
+
+    return R;
+}
+
+int get_label_of_biggest_cluster(cluster_map_t *cluster_map)
+{
+    int i;
+    int max = 0;
+    int max_index = 0;
+
+    for(i=0;i<cluster_map->number_of_clusters;i++)
+    {
+        if(cluster_map->sizes[i] > max)
+        {
+            max_index = i;
+            max = cluster_map->sizes[i];
+        }
+    }
+
+    return max_index;
+}
+
+/*! \fn double calc_connectedness_length(gs_graph_t *g, cluster_map_t *cluster_map)
+    \brief Berechnet die connectedness length
+
+    \f$ \xi^2 = \frac {\sum_s s^2 n_s <R_s^2>}{\sum_s s^2 n_s} \f$
+
+    \param [in]     g                Graph
+    \param [in]     cluster_map      Array mit Clusterindizes
+    \return connecedness length
+*/
+double calc_connectedness_length(gs_graph_t *g, cluster_map_t *cluster_map)
+{
+    int i, j;
+    int s, ns;
+    double Rs;
+    double zahler, nenner;
+    int *visited;
+    visited = (int *) calloc(cluster_map->number_of_clusters, sizeof(int));
+
+    zahler = 0; nenner = 0;
+    visited[get_label_of_biggest_cluster(cluster_map)] = 1;
+
+    for(i=0;i<cluster_map->number_of_clusters;i++)
+        if(!visited[i])
+        {
+            s = cluster_map->sizes[i];
+            ns = 0;
+            Rs = 0;
+            for(j=0;j<cluster_map->number_of_clusters;j++)
+                if(cluster_map->sizes[j] == s)
+                {
+                    visited[j] = 1;
+                    ns++;
+                    Rs += calc_radius_of_gyration(g, cluster_map, j);
+                }
+            zahler += s*s*Rs;
+            nenner += s*s*ns;
+        }
+    return sqrt(zahler/nenner);
+}
+
 /*! \fn void print_clustermap(gs_graph_t *g, int *cluster_map)
     \brief Druckt eine "Cluster Karte" nach stdout
 
