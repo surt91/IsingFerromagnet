@@ -9,29 +9,38 @@
     \param [in]     g                zu durchsuchender Graph
     \param [in,out] cluster_map      Array mit Clusterindizes
 */
-void bfs_cluster(gs_graph_t *g, int *cluster_map)
+cluster_map_t *bfs_cluster(gs_graph_t *g)
 {
     int n, u, cluster_count;
     short int seed_spin;
     enum colors *color;
     int seed;
+    int size;
     int neighbor_index;
     queue_t *q;
+    queue_t *tmp_cluster_size;
+    cluster_map_t *cluster_map;
 
     color = (enum colors *) malloc(g->num_nodes*sizeof(enum colors));
+    cluster_map = (cluster_map_t *) malloc(sizeof(cluster_map_t));
+    cluster_map->map = (int *) malloc(g->num_nodes*sizeof(int));
+    cluster_map->number_of_nodes = g->num_nodes;
+    cluster_map->L = g->L;
+
     for(n=0; n<g->num_nodes; n++)
     {
         color[n] = white;
-        cluster_map[n] = -1;
+        cluster_map->map[n] = -1;
     }
     cluster_count = 0;
+    tmp_cluster_size = create_queue();
 
     for(seed=0; seed<g->num_nodes; seed++)
     {
         if(color[seed] == white)
         {
-            cluster_count++;
             seed_spin = g->spins[seed];
+            size = 0;
             q = create_queue();
 
             color[seed] = gray;
@@ -51,12 +60,26 @@ void bfs_cluster(gs_graph_t *g, int *cluster_map)
                     }
                 }
                 color[u] = black;
-                cluster_map[u] = cluster_count;
+                size++;
+                cluster_map->map[u] = cluster_count;
             }
             clear_queue(q);
+            enqueue(tmp_cluster_size,size);
+            cluster_count++;
         }
     }
     free(color);
+
+    cluster_map->number_of_clusters = cluster_count-1;
+    cluster_map->sizes = (int *) malloc((cluster_count-1)*sizeof(int));
+    n = 0;
+    while(tmp_cluster_size->size)
+    {
+        cluster_map->sizes[n] = dequeue(tmp_cluster_size);
+        n++;
+    }
+
+    return cluster_map;
 }
 
 /*! \fn void print_clustermap(gs_graph_t *g, int *cluster_map)
@@ -65,13 +88,18 @@ void bfs_cluster(gs_graph_t *g, int *cluster_map)
     \param [in]     g                Graph
     \param [in]     cluster_map      Array mit Clusterindizes
 */
-void print_clustermap(gs_graph_t *g, int *cluster_map)
+void print_clustermap(cluster_map_t *cluster_map)
 {
-    int i,j;
-    for(i=0;i<g->L;i++)
+    int i,j,L;
+    L = cluster_map->L;
+    for(i=0;i<L;i++)
     {
-        for(j=0;j<g->L;j++)
-            printf("% 3d ",cluster_map[i*g->L+j]);
+        for(j=0;j<L;j++)
+            printf("% 3d ",cluster_map->map[i*L+j]);
         printf("\n");
+    }
+    for(i=0;i<cluster_map->number_of_clusters;i++)
+    {
+        printf("% 3d: %d nodes\n",i,cluster_map->sizes[i]);
     }
 }
