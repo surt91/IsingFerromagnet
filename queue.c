@@ -36,14 +36,19 @@ int dequeue(queue_t *queue)
     int value;
     queue_node_t *tmp;
 
-    if(queue->size >=0)
+    if(queue->size > 0)
     {
         value = queue->first->value;
-        tmp = queue->first;
-        queue->first = queue->first->next;
+        tmp = queue->first->next;
+        free(queue->first);
+        queue->first = tmp;
 
-        free(tmp);
         queue->size--;
+        if(queue->size == 0)
+        {
+            queue->last = NULL;
+            queue->first = NULL;
+        }
         return value;
     }
     else
@@ -70,6 +75,9 @@ void test_queue()
     printf("%d\n",dequeue(q));
     printf("%d\n",dequeue(q));
     enqueue(q,42);
+    printf("%d\n",dequeue(q));
+    printf("%d\n",dequeue(q));
+    enqueue(q,55);
     printf("%d\n",dequeue(q));
 
     clear_queue(q);
