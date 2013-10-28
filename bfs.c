@@ -121,6 +121,12 @@ double calc_radius_of_gyration(gs_graph_t *g, cluster_map_t *cluster_map, int cl
     return R;
 }
 
+/*! \fn int get_label_of_biggest_cluster(cluster_map_t *cluster_map)
+    \brief Findet den größten cluster
+
+    \param [in]     cluster_map     clustermap, die durchsucht werden soll
+    \return Index des größten clusters
+*/
 int get_label_of_biggest_cluster(cluster_map_t *cluster_map)
 {
     int i;
@@ -137,6 +143,31 @@ int get_label_of_biggest_cluster(cluster_map_t *cluster_map)
     }
 
     return max_index;
+}
+
+/*! \fn int calc_mean_second_greatest_cluster_size(cluster_map_t *cluster_map)
+    \brief Findet den zweitgrößten Cluster
+
+    \param [in]     cluster_map     clustermap, die durchsucht werden soll
+    \return Anzahl der sites im 2. größten Cluster
+*/
+int calc_mean_second_greatest_cluster_size(cluster_map_t *cluster_map)
+{
+    int i;
+    int max = 0;
+    int second = 0;
+
+    max = get_label_of_biggest_cluster(cluster_map);
+
+    for(i=0;i<cluster_map->number_of_clusters;i++)
+    {
+        if(i == max)
+            continue;
+        if(cluster_map->sizes[i] >= second)
+            second = cluster_map->sizes[i];
+    }
+
+    return second;
 }
 
 /*! \fn double calc_connectedness_length(gs_graph_t *g, cluster_map_t *cluster_map)
@@ -181,6 +212,18 @@ double calc_connectedness_length(gs_graph_t *g, cluster_map_t *cluster_map)
             nenner += s*s*ns;
         }
     return sqrt(zahler/nenner);
+}
+
+/*! \fn void clear_cluster_map(cluster_map_t *cluster_map)
+    \brief Bereinigt die Cluster Datenstruktur
+
+    \param [in]     cluster_map     clustermap, die zerstört werden soll
+*/
+void clear_cluster_map(cluster_map_t *cluster_map)
+{
+    free(cluster_map->sizes);
+    free(cluster_map->map);
+    free(cluster_map);
 }
 
 /*! \fn void print_clustermap(gs_graph_t *g, int *cluster_map)

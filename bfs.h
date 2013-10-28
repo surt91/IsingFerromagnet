@@ -22,7 +22,10 @@ typedef struct
 } cluster_map_t;
 
 void print_clustermap(cluster_map_t *cluster_map);
+void clear_cluster_map(cluster_map_t *cluster_map);
 cluster_map_t *bfs_cluster(gs_graph_t *g);
 double calc_connectedness_length(gs_graph_t *g, cluster_map_t *cluster_map);
+
+int calc_mean_second_greatest_cluster_size(cluster_map_t *cluster_map);
 
 #endif /* _BFS_H */
