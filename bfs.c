@@ -70,8 +70,8 @@ cluster_map_t *bfs_cluster(gs_graph_t *g)
     }
     free(color);
 
-    cluster_map->number_of_clusters = cluster_count-1;
-    cluster_map->sizes = (int *) malloc((cluster_count-1)*sizeof(int));
+    cluster_map->number_of_clusters = cluster_count;
+    cluster_map->sizes = (int *) malloc((cluster_count)*sizeof(int));
     n = 0;
     while(tmp_cluster_size->size)
     {
@@ -155,6 +155,10 @@ double calc_connectedness_length(gs_graph_t *g, cluster_map_t *cluster_map)
     double Rs;
     double zahler, nenner;
     int *visited;
+
+    if(cluster_map->number_of_clusters == 1)
+        return 0.;
+
     visited = (int *) calloc(cluster_map->number_of_clusters, sizeof(int));
 
     zahler = 0; nenner = 0;
