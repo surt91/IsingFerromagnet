@@ -1,7 +1,7 @@
 TARGET	= ising
 MANUAL = manual.pdf
 
-OBJ 	= graph.o graph_modify.o stack.o list.o tree.o spin.o
+OBJ 	= graph.o graph_modify.o stack.o list.o tree.o spin.o queue.o bfs.o
 SOURCE = $(subst .o,.c,$(OBJ)) $(subst .o,.h,$(OBJ))
 
 LINK	= gcc
