@@ -84,8 +84,10 @@ class output_reader():
             del alle[-1]
 
             self.N = [int(i[0]) for i in alle]
-            self.E = [[float(j[2*i+1]) for j in alle] for i in range(len(self.T))]
-            self.M = [[float(j[2*i+2]) for j in alle] for i in range(len(self.T))]
+            self.E = [[float(j[4*i+1]) for j in alle] for i in range(len(self.T))]
+            self.M = [[float(j[4*i+2]) for j in alle] for i in range(len(self.T))]
+            self.R_s = [[float(j[4*i+3]) for j in alle] for i in range(len(self.T))]
+            self.xi_k = [[float(j[4*i+4]) for j in alle] for i in range(len(self.T))]
 
             self.A = [float(j) for j in footer[2:]]
 
