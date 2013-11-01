@@ -66,7 +66,7 @@ typedef struct
 
 #include "graph_modify.h"
 #include "stack.h"
-#include "bfs.h"
+#include "correlation_by_k_susceptibility.h"
 
 options_t get_cl_args(int argc, char *argv[]);
 

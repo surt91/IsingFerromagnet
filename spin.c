@@ -354,7 +354,7 @@ void do_mc_simulation(gs_graph_t **list_of_graphs, const options_t o)
         exit(-1);
     }
     /* Schreibe Header */
-    fprintf(data_out_file, "# N E M R_s xi_k # sigma=%.3f # x=%d # L=%d # type=%d # r=%d # <J>=%.6f # d=%.6f # deg=%.6f # sumJ=%.6f # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type, o.percolation, get_mean_weight(list_of_graphs[0]), get_mean_dist(list_of_graphs[0]), get_mean_deg(list_of_graphs[0]), get_sum_weight(list_of_graphs[0]));
+    fprintf(data_out_file, "# N E M R_s chi_0 chi_k # sigma=%.3f # x=%d # L=%d # type=%d # r=%d # <J>=%.6f # d=%.6f # deg=%.6f # sumJ=%.6f # T= ", o.sigma, o.seed, list_of_graphs[0]->L, o.graph_type, o.percolation, get_mean_weight(list_of_graphs[0]), get_mean_dist(list_of_graphs[0]), get_mean_deg(list_of_graphs[0]), get_sum_weight(list_of_graphs[0]));
     for(nT=0;nT<o.num_temps;nT++)
         fprintf(data_out_file, "%.3f, ", list_of_graphs[nT]->T);
     fprintf(data_out_file, "\n");
@@ -758,7 +758,6 @@ void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
 {
     int j;
     int nT;
-    cluster_map_t *cluster_map;
 
     /* Schreibe in Datei */
     if(N > o.t_eq && !(N % o.tau))
@@ -769,16 +768,11 @@ void write_data_to_file(FILE *data_out_file, gs_graph_t **list_of_graphs,
             /* An welcher Stelle liegt die nT-te Temperatur? */
             j = map_of_temps[nT];
 
-            // Radius of Gyration
-            cluster_map = bfs_cluster(list_of_graphs[j]);
-
             fprintf(data_out_file, "%f %f %f %f ",
                     list_of_graphs[j]->E/list_of_graphs[j]->num_nodes,
                     list_of_graphs[j]->M/list_of_graphs[j]->num_nodes,
-                    calc_connectedness_length(list_of_graphs[j], cluster_map),
-                    (double) calc_mean_second_greatest_cluster_size(cluster_map));
-
-            clear_cluster_map(cluster_map);
+                    calculate_wave_vector_dependend_susceptibility_1D(list_of_graphs[j],0),
+                    calculate_wave_vector_dependend_susceptibility_1D(list_of_graphs[j],2*M_PI/list_of_graphs[j]->L));
         }
         fprintf(data_out_file, "\n");
     }
