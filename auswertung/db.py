@@ -269,6 +269,20 @@ class Database():
 
             self.writeFileForGnuplot2(name+"_L_{0}".format(l)+".dat", x, dx)
 
+    def writeForGnuplotGOverXi(self, name):
+        """! Sammelt die Werte die geplottet werden sollen und gibt sie
+        an die Funktion weiter, die die Dateien schreibt """
+        c = self.conn.cursor()
+        for l in self.getDifferent("L"):
+            c.execute('SELECT {0},{1},{2},{3} FROM calculated_data WHERE L = ? ORDER BY T ASC, sigma ASC'.format("xi", "xiErr", "binder", "binderErr"), (l,))
+            x = c.fetchall()
+            xi = [i[0] for i in x]
+            dxi = [i[1] for i in x]
+            g = [i[2] for i in x]
+            dg = [i[3] for i in x]
+
+            self.writeFileForGnuplotGoverXi(name+"_L_{0}".format(l)+".dat", xi, dxi, g, dg)
+
     def writeBinderForGnuplot(self):
         self.writeForGnuplot("Binder", "binder", "binderErr")
         self.writeForGnuplot2("Binder", "binder", "binderErr")
@@ -302,8 +316,9 @@ class Database():
         self.writeForGnuplot2("Akzeptanz", "A", None)
 
     def writeXiForGnuplot(self):
-        self.writeForGnuplot("Correlation Length", "xi", "xiErr")
-        self.writeForGnuplot2("Correlation Length", "xi", "xiErr")
+        self.writeForGnuplot("Correlation_Length", "xi", "xiErr")
+        self.writeForGnuplot2("Correlation_Length", "xi", "xiErr")
+        self.writeForGnuplotGoverXi("Binder_over_Correlation_Length")
 
     def writeFileForScalana(self, name, x, dx):
         """! Schreibt die Datendatei, für Scalada"""
@@ -398,6 +413,46 @@ class Database():
             tmpStr = ""
             for [i,s] in enumerate(Ss):
                 tmpStr+=("'{0}' using 1:{1}:{2} w yerrorbar title {3}, ".format(name, 2*i+2, 2*i+3, "'s = {0}'".format(s)))
+            f.write(tmpStr[:-2])
+
+    def writeFileForGnuplotGoverXi(self, name, xi, dxi, g, dg):
+        """! Schreibt die Daten- und Skriptdateien, die die Gnuplot plots
+        erstellen """
+        directory = os.path.join(self.dataPath,"out")
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        Ss = sorted(self.getDifferent("sigma"))
+        Ts = sorted(self.getDifferent("T"))
+        numS = len(Ss)
+        numT = len(Ts)
+
+        with open(os.path.join(directory,name), "w") as f:
+            f.write("# Je vier Spalten beschreiben ein Sigma: g, xi, gFehler, xiFehler\n")
+            f.write("# Sigma: ")
+            for s in Ss:
+                f.write(" {0}".format(s))
+            f.write("\n")
+
+            # Zeilen
+            for i in range(numT):
+                for j in range(numS):
+                    f.write("{0}".format(xi[j+i*numS]))
+                    f.write(" {0}".format(g[j+i*numS]))
+                    f.write(" {0}".format(dxi[j+i*numS]))
+                    f.write(" {0}  ".format(dg[j+i*numS]))
+                f.write("\n")
+        with open(os.path.join(directory,name.replace(".dat",".gp")), "w") as f:
+            f.write("set terminal png\n")
+            f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
+            f.write("set xlabel 'Temperatur'\n")
+            f.write("set ylabel '{0}'\n".format(name.partition("_")[0]))
+            f.write("set key right\n")
+
+            f.write("plot ")
+            tmpStr = ""
+            for [i,s] in enumerate(Ss):
+                tmpStr+=("'{0}' using {1}:{2}:{3}:{4} w xyerrorbar title {5}, ".format(name, 4*i+1, 4*i+2, 4*i+3, 4*i+4, "'s = {0}'".format(s)))
             f.write(tmpStr[:-2])
 
     def createNewDatabase(self, dataPath):
