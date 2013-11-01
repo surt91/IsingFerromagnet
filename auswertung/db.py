@@ -139,6 +139,16 @@ class Database():
 
         return g
 
+    import math
+    @staticmethod
+    def getXi(lstChi,T,L):
+        """! Berechnet correlationsfunktion aus der k-Susyeptibilität
+        """
+        chi0, chiK = lstChi
+        kMin = 2*math.pi/L
+        xi = sqrt(chi0/chiK - 1) / (2*sin(kMin/2))
+        return xi
+
     @staticmethod
     def getAutocorrTime(m,T,L):
         """! getAutocorrTime()
@@ -291,6 +301,10 @@ class Database():
         self.writeForGnuplot("Akzeptanz", "A", None)
         self.writeForGnuplot2("Akzeptanz", "A", None)
 
+    def writeXiForGnuplot(self):
+        self.writeForGnuplot("Correlation Length", "xi", "xiErr")
+        self.writeForGnuplot2("Correlation Length", "xi", "xiErr")
+
     def writeFileForScalana(self, name, x, dx):
         """! Schreibt die Datendatei, für Scalada"""
         directory = os.path.join(self.dataPath,"scalana")
@@ -392,7 +406,7 @@ class Database():
         logging.info("create new Database: '{0}'".format(self.dbPath))
 
         self.connRaw.execute("""CREATE TABLE rawdata
-            (n blob, sigma real, L integer, x integer, T real, M blob, E blob, A real)""")
+            (n blob, sigma real, L integer, x integer, T real, M blob, E blob, A real, chi0 real, chiK real)""")
 
         self.addToDatabase(dataPath)
 
@@ -416,8 +430,8 @@ class Database():
             r = output_reader(os.path.join(dataPath,f))
             if int(r.graphType) != int(self.graphType):
                 continue
-            t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i]) for i in range(len(r.T))]
-            self.connRaw.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?)', t)
+            t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i], r.chi_0[i], r.chi_k_min[i]) for i in range(len(r.T))]
+            self.connRaw.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?,?,?)', t)
         self.connRaw.commit()
 
     def calculateNewDatabase(self):
@@ -425,7 +439,7 @@ class Database():
         die Mittelwerte der Erwartungswerte """
         logging.info("calculating")
         self.conn.execute("""CREATE TABLE calculated_data
-            (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real, auto real, A real)""")
+            (sigma real, L integer, T real, binder real, binderErr real, meanM real, meanMErr real, meanE real, meanEErr real, varM real, varMErr real, varE real, varEErr real, auto real, A real, xi real, xiErr real)""")
 
         logging.info("suche Verschiedene Sigmas")
         sigmas = self.getDifferent("sigma")
@@ -447,13 +461,14 @@ class Database():
                     mE, mEErr = self.getAverageE(self.getMean, s, L, T)
                     vM, vMErr = self.getAverageM(self.getSusceptibility, s, L, T)
                     vE, vEErr = self.getAverageE(self.getSpecificHeat, s, L, T)
+                    xi, xiErr = self.getAverageXi(self.getXi, s, L, T)
                     if self.autocorrFlag:
                         auto = self.getAverageM(self.getAutocorrTime, s, L, T, signed=True)[0]
                     else:
                         auto = 0
                     A = self.getAverageA(s, L, T)
-                    rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr, auto, A))
-        self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
+                    rows.append((s, L, T, binder, binderErr, mM, mMErr, mE, mEErr, vM, vMErr, vE, vEErr, auto, A, xi, xiErr))
+        self.conn.executemany('INSERT INTO calculated_data VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', rows)
         self.conn.commit()
         self.conn.execute("""CREATE INDEX idx_ex1 ON calculated_data(sigma,T,L)""")
         self.conn.execute("""CREATE INDEX idx_ex2 ON calculated_data(L,T,sigma)""")
@@ -507,6 +522,19 @@ class Database():
         if not E:
             return None, None
         return self.bootstrap_stderr(E, 20, lambda x: f(x,T,L))
+
+    def getAverageXi(self, f, sigma, L, T):
+        """! Liefert den über verschiedene Realisierungen gemittelten
+        Erwartungswert von chi(k) aus """
+        c = self.connRaw.cursor()
+        c.execute('SELECT chiK FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
+        chiK = [self.getVal(i[0]) for i in c.fetchall()]
+        c.execute('SELECT chi0 FROM rawdata WHERE sigma = ? AND L = ? AND T = ?', (sigma, L, T))
+        chi0 = [self.getVal(i[0]) for i in c.fetchall()]
+        c.close()
+        if not chiK or not chi0:
+            return None, None
+        return self.bootstrap_stderr((chi0, chiK), 20, lambda x: f(x,T,L))
 
 if __name__ == '__main__':
     a=Database( dbPath = "dataRNG.db", dbRawPath="dataRawRNG.db", dataPath = "../dataRNG", graphType=1)
