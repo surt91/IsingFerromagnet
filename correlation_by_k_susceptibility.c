@@ -15,6 +15,6 @@ double calculate_wave_vector_dependend_susceptibility_1D(gs_graph_t *g, double k
     tmp_sum = gsl_complex_div_real(tmp_sum, g->num_nodes);
     tmp_sum = gsl_complex_pow_real(tmp_sum, 2);
 
-    return GSL_REAL(tmp_sum);
-    //~ return gsl_complex_abs(tmp_sum);
+    //~ return GSL_REAL(tmp_sum);
+    return gsl_complex_abs(tmp_sum);
 }

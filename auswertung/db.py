@@ -11,7 +11,7 @@ from numpy import mean, var
 from numpy import std
 from numpy.random import choice
 import numpy
-
+import math
 
 from reader import *
 
@@ -70,6 +70,8 @@ class Database():
             self.writeAutoForGnuplot()
         logging.info("  Parallel Tempering Akzeptanzraten")
         self.writeParTempForGnuplot()
+        logging.info("  Korrelationslänge")
+        self.writeXiForGnuplot()
         logging.info("  finished")
 
         logging.info("start writing files for Scalana")
@@ -139,14 +141,14 @@ class Database():
 
         return g
 
-    import math
     @staticmethod
     def getXi(lstChi,T,L):
         """! Berechnet correlationsfunktion aus der k-Susyeptibilität
         """
-        chi0, chiK = lstChi
+
+        chi0, chiK = [mean(x) for x in lstChi]
         kMin = 2*math.pi/L
-        xi = sqrt(chi0/chiK - 1) / (2*sin(kMin/2))
+        xi = sqrt(chi0/chiK - 1) / (2*math.sin(kMin/2))
         return xi
 
     @staticmethod
@@ -174,6 +176,12 @@ class Database():
             #~ mittelwerteForRealisations = [f([choice(xRealisierung) for _ in xRealisierung]) for xRealisierung in xRaw]
             #~ meanmean[i] = mean([choice(mittelwerteForRealisations) for _ in mittelwerteForRealisations])
         bootstrapSample = [mean(choice([f(choice(xRealisierung, len(xRealisierung))) for xRealisierung in xRaw], len(xRaw))) for i in range(n_resample)]
+        return mean(bootstrapSample), std(bootstrapSample)
+
+    @staticmethod
+    def bootstrap_stderr_xi(xRaw, yRaw, n_resample, f):
+        # xRaw -> Chi0, yRaw -> ChiK
+        bootstrapSample = [mean((choice([f(choice(xRealisierung, len(xRealisierung)), choice(yRealisierung, len(yRealisierung))) for xRealisierung,yRealisierung in zip(xRaw, yRaw)], len(xRaw)))) for i in range(n_resample)]
         return mean(bootstrapSample), std(bootstrapSample)
 
     @staticmethod
@@ -276,10 +284,10 @@ class Database():
         for l in self.getDifferent("L"):
             c.execute('SELECT {0},{1},{2},{3} FROM calculated_data WHERE L = ? ORDER BY T ASC, sigma ASC'.format("xi", "xiErr", "binder", "binderErr"), (l,))
             x = c.fetchall()
-            xi = [i[0] for i in x]
-            dxi = [i[1] for i in x]
-            g = [i[2] for i in x]
-            dg = [i[3] for i in x]
+            xi  = [i[0]/l if i[1] != None else None for i in x ]
+            dxi = [i[1]/l if i[1] != None else None for i in x]
+            g   = [i[2] for i in x]
+            dg  = [i[3] for i in x]
 
             self.writeFileForGnuplotGoverXi(name+"_L_{0}".format(l)+".dat", xi, dxi, g, dg)
 
@@ -318,7 +326,7 @@ class Database():
     def writeXiForGnuplot(self):
         self.writeForGnuplot("Correlation_Length", "xi", "xiErr")
         self.writeForGnuplot2("Correlation_Length", "xi", "xiErr")
-        self.writeForGnuplotGoverXi("Binder_over_Correlation_Length")
+        self.writeForGnuplotGOverXi("Binder_over_Correlation_Length")
 
     def writeFileForScalana(self, name, x, dx):
         """! Schreibt die Datendatei, für Scalada"""
@@ -445,7 +453,7 @@ class Database():
         with open(os.path.join(directory,name.replace(".dat",".gp")), "w") as f:
             f.write("set terminal png\n")
             f.write("set output '{0}'\n".format(name.replace(".dat",".png")))
-            f.write("set xlabel 'Temperatur'\n")
+            f.write("set xlabel 'Correlation length / L'\n")
             f.write("set ylabel '{0}'\n".format(name.partition("_")[0]))
             f.write("set key right\n")
 
@@ -461,7 +469,7 @@ class Database():
         logging.info("create new Database: '{0}'".format(self.dbPath))
 
         self.connRaw.execute("""CREATE TABLE rawdata
-            (n blob, sigma real, L integer, x integer, T real, M blob, E blob, A real, chi0 real, chiK real)""")
+            (n blob, sigma real, L integer, x integer, T real, M blob, E blob, A real, chi0 blob, chiK blob)""")
 
         self.addToDatabase(dataPath)
 
@@ -485,7 +493,7 @@ class Database():
             r = output_reader(os.path.join(dataPath,f))
             if int(r.graphType) != int(self.graphType):
                 continue
-            t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i], r.chi_0[i], r.chi_k_min[i]) for i in range(len(r.T))]
+            t = [(self.setVal(r.N), r.sigma, r.L, r.x, r.T[i], self.setVal(r.M[i]), self.setVal(r.E[i]), r.A[i], self.setVal(r.chi_0[i]), self.setVal(r.chi_k_min[i])) for i in range(len(r.T))]
             self.connRaw.executemany('INSERT INTO rawdata VALUES (?,?,?,?,?,?,?,?,?,?)', t)
         self.connRaw.commit()
 
@@ -589,7 +597,7 @@ class Database():
         c.close()
         if not chiK or not chi0:
             return None, None
-        return self.bootstrap_stderr((chi0, chiK), 20, lambda x: f(x,T,L))
+        return self.bootstrap_stderr_xi(chi0, chiK, 20, lambda x, y: f((x,y),T,L))
 
 if __name__ == '__main__':
     a=Database( dbPath = "dataRNG.db", dbRawPath="dataRawRNG.db", dataPath = "../dataRNG", graphType=1)
