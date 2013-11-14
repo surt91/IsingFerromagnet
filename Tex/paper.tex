@@ -1,0 +1,102 @@
+\documentclass[a4paper,headsepline,bibtotocnumbered,12pt,titlepage,twoside]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[english]{babel}
+
+\usepackage{graphicx}
+\usepackage{upgreek}
+\usepackage{float}
+\usepackage{units}
+\usepackage{url}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+\usepackage{longtable}
+
+\usepackage[FIGTOPCAP,tight,raggedright,nooneline]{subfigure}
+\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
+
+\usepackage[automark]{scrpage2}
+\pagestyle{scrheadings}
+\clearscrheadfoot
+\ohead{\pagemark}
+\ihead{\headmark}
+\usepackage{setspace}
+\linespread{1.25}
+\usepackage{geometry}
+%~ \geometry{a4paper, top=21mm, left=30mm, right=30mm, bottom=21mm,
+          %~ headsep=10mm, footskip=12mm}
+\geometry{a4paper, top=21mm, bottom=21mm, headsep=10mm, footskip=12mm}
+
+\addtokomafont{sectioning}{\rmfamily}
+\usepackage[bf]{caption}
+\captionsetup{format=plain}
+\setlength{\parindent}{0pt}
+\fussy
+
+\newcommand{\change}[1]{{#1}}
+
+\usepackage{ae}
+\usepackage{booktabs}
+
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+%\abs{Ausdruck} %Betragsstriche, die skalieren - abgekürzt
+\newcommand{\abs}[1]{\ensuremath{\left\vert#1\right\vert}}
+% und das gleiche füur große Klammern
+\newcommand{\brac}[1]{\ensuremath{\left(#1\right)}}
+% Erwartungswert skalierend
+\newcommand{\avg}[1]{\left< #1 \right>}
+% ein nicht kursives d für Ableitungen/Integrale, mit etwas Platz davor, um sich etwas abzusetzten
+\newcommand{\de}{\ensuremath{\,\mathrm{d}}}
+% Für Einheiten: schreibt sie nicht kursiv und lässt etwas Platz zur Zahl vorher
+\newcommand{\eh}[1]{\ensuremath{\,\mathrm{#1}}}
+% einfaches Gradzeichen
+\newcommand{\gr}{\ensuremath{^{\circ}}}
+% Fehlerfortpfanzung
+% dy/dz * delta z
+\newcommand{\fehler}[2]%
+{\ensuremath{\abs{\frac{\partial #1}{\partial #2}}\cdot \Delta #2}}
+
+\hyphenation{}
+\setcounter{lofdepth}{2}
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+\begin{document}
+    \tableofcontents
+    \newpage
+    \listoffigures
+    \listoftables
+
+    \section{Introduction}
+        \input{paper/introduction}
+
+    \section{Model}
+        \input{paper/model}
+
+    \section{Methods}
+        \input{paper/methods}
+
+    \section{Results}
+        \input{paper/results}
+
+    \section{Conclusion}
+        \input{paper/conclusion}
+
+    \clearpage
+    \pagestyle{empty}
+    \input{chapters/acknowledgements}
+
+    \clearpage
+    \bibliography{lit}
+    \bibliographystyle{alpha}
+    %~ \bibliographystyle{amsplain}
+\end{document}

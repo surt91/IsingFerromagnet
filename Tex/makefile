@@ -2,7 +2,9 @@ DOKUMENT = Ferromagnet
 VORTRAG  = Vortrag
 HANDOUT  = Handout
 
-LATEX = $(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf
+PAPER = paper
+
+LATEX = $(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf $(PAPER).pdf
 
 CHAPTERS = chapters/title.tex \
            chapters/introduction.tex \
@@ -13,6 +15,13 @@ CHAPTERS = chapters/title.tex \
            chapters/appendix.tex \
            chapters/acknowledgements.tex \
            chapters/erklarung.tex
+
+P_CHAPTERS = paper/introduction.tex \
+             paper/methods.tex\
+             paper/model.tex \
+             paper/results.tex\
+             paper/conclusion.tex\
+             paper/acknowledgements.tex
 
 BIBFILE = lit.bib
 
@@ -63,19 +72,33 @@ PLOTS = plots/binder_fit_s_0.pdf \
         $(GG_LST) \
         $(RNG_LST)
 
+P_IMAGES = images/GG_RNG_def.tex
+
+P_GG_LST = plots/GG_Tc.pdf
+
+P_RNG_LST = $(subst GG,RNG,$(P_GG_LST))
+
+P_PLOTS = plots/Binder_over_Correlation_All.pdf \
+          $(P_GG_LST) \
+          $(P_RNG_LST)
+
 all: $(LATEX)
 
 .PHONY : clean proper
 
 $(DOKUMENT).pdf: $(CHAPTERS)
 
-$(DOKUMENT).pdf $(VORTRAG).pdf: %.pdf: %.tex $(PLOTS) $(IMAGES) $(BIBFILE)
+$(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf: $(PLOTS) $(IMAGES) $(BIBFILE)
+
+$(PAPER).pdf: $(P_PLOTS) $(P_IMAGES) $(BIBFILE)
+
+$(DOKUMENT).pdf $(VORTRAG).pdf $(PAPER).pdf: %.pdf: %.tex
 	pdflatex -interaction=batchmode $*
 	bibtex $*
 	pdflatex -interaction=batchmode $*
 	pdflatex -interaction=batchmode $*
 
-$(HANDOUT).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
+$(HANDOUT).pdf: $(VORTRAG).tex
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
 	bibtex $(HANDOUT)
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
@@ -85,7 +108,7 @@ $(HANDOUT).pdf: $(VORTRAG).tex $(PLOTS) $(IMAGES) $(BIBFILE)
 	cd $(<D) && gnuplot $(<F)
 
 %.pdf: %.eps
-	cd $(<D) && epspdf -b $(<F)
+	cd $(<D) && epstopdf $(<F)
 
 clean:
 	rm -f $(PLOTS) plots/fit.log
