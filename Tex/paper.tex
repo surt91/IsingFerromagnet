@@ -1,83 +1,26 @@
-\documentclass[a4paper,headsepline,bibtotocnumbered,12pt,titlepage,twoside]{scrartcl}
-
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-
-\usepackage[english]{babel}
+\documentclass[prl,twocolumn,groupedaddress,showpacs,showkeys,amsmath,amssymb,floatfix]{revtex4-1}
 
 \usepackage{graphicx}
-\usepackage{upgreek}
-\usepackage{float}
-\usepackage{units}
-\usepackage{url}
+\usepackage{dcolumn}
+\usepackage{bm}
 
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
-
-\usepackage{longtable}
-
-\usepackage[FIGTOPCAP,tight,raggedright,nooneline]{subfigure}
-\usepackage[colorlinks=false, pdfborder={0 0 0}]{hyperref}
-
-\usepackage[automark]{scrpage2}
-\pagestyle{scrheadings}
-\clearscrheadfoot
-\ohead{\pagemark}
-\ihead{\headmark}
-\usepackage{setspace}
-\linespread{1.25}
-\usepackage{geometry}
-%~ \geometry{a4paper, top=21mm, left=30mm, right=30mm, bottom=21mm,
-          %~ headsep=10mm, footskip=12mm}
-\geometry{a4paper, top=21mm, bottom=21mm, headsep=10mm, footskip=12mm}
-
-\addtokomafont{sectioning}{\rmfamily}
-\usepackage[bf]{caption}
-\captionsetup{format=plain}
-\setlength{\parindent}{0pt}
-\fussy
-
-\newcommand{\change}[1]{{#1}}
-
-\usepackage{ae}
-\usepackage{booktabs}
-
-\usepackage{tikz}
-\usetikzlibrary{patterns}
-
-%\abs{Ausdruck} %Betragsstriche, die skalieren - abgekürzt
-\newcommand{\abs}[1]{\ensuremath{\left\vert#1\right\vert}}
-% und das gleiche füur große Klammern
-\newcommand{\brac}[1]{\ensuremath{\left(#1\right)}}
-% Erwartungswert skalierend
-\newcommand{\avg}[1]{\left< #1 \right>}
-% ein nicht kursives d für Ableitungen/Integrale, mit etwas Platz davor, um sich etwas abzusetzten
-\newcommand{\de}{\ensuremath{\,\mathrm{d}}}
-% Für Einheiten: schreibt sie nicht kursiv und lässt etwas Platz zur Zahl vorher
-\newcommand{\eh}[1]{\ensuremath{\,\mathrm{#1}}}
-% einfaches Gradzeichen
-\newcommand{\gr}{\ensuremath{^{\circ}}}
-% Fehlerfortpfanzung
-% dy/dz * delta z
-\newcommand{\fehler}[2]%
-{\ensuremath{\abs{\frac{\partial #1}{\partial #2}}\cdot \Delta #2}}
-
-\hyphenation{}
-\setcounter{lofdepth}{2}
-
-\numberwithin{equation}{section}
-\numberwithin{figure}{section}
-\numberwithin{table}{section}
+% \newcommand{\change}[1]{{\bf #1}}
+% \newcommand{\changeAH}[1]{{\bf #1}}
 
 \begin{document}
-    \tableofcontents
-    \newpage
-    \listoffigures
-    \listoftables
 
-    \section{Abstract}
-        \input{paper/abstract}
+    \title{Critical Temperature of the Ising Ferromagnet on from Square Lattices by Site Displacement derived Proximity Graphs}
+    \author{H. Schawe}
+    \email{hendrik.schawe@uni-oldenburg.de}
+    \affiliation{Institut f\"ur Physik, Universit\"at Oldenburg, 26111 Oldenbug, Germany}
+    \date{\today}
+
+    \begin{abstract}
+    \input{paper/abstract}
+    \end{abstract}
+
+    \pacs{64.60.ah}
+    \maketitle
 
     \section{Introduction}
         \input{paper/introduction}
@@ -94,12 +37,7 @@
     \section{Conclusion}
         \input{paper/conclusion}
 
-    \clearpage
-    \pagestyle{empty}
     \input{paper/acknowledgements}
 
-    \clearpage
     \bibliography{lit}
-    \bibliographystyle{alpha}
-    %~ \bibliographystyle{amsplain}
 \end{document}
