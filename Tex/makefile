@@ -90,7 +90,7 @@ $(DOKUMENT).pdf: $(CHAPTERS)
 
 $(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf: $(PLOTS) $(IMAGES) $(BIBFILE)
 
-$(PAPER).pdf: $(P_PLOTS) $(P_IMAGES) $(BIBFILE)
+$(PAPER).pdf: $(P_CHAPTERS) $(P_PLOTS) $(P_IMAGES) $(BIBFILE)
 
 $(DOKUMENT).pdf $(VORTRAG).pdf $(PAPER).pdf: %.pdf: %.tex
 	pdflatex -interaction=batchmode $*
@@ -115,5 +115,5 @@ clean:
 	rm -f {$(DOKUMENT),$(VORTRAG),$(HANDOUT)}.{pdf,log,aux,bbl,blg,toc,out,lof,lot,snm,nav}
 
 proper:
-	rm -f $(PLOTS) plots/fit.log
+	rm -f $(PLOTS) $(P_PLOTS) plots/fit.log
 	rm -f {$(DOKUMENT),$(VORTRAG),$(HANDOUT)}.{log,aux,bbl,blg,toc,out,lof,lot,snm,nav}
