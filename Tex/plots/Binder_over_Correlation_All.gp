@@ -1,4 +1,4 @@
-set terminal postscript eps enhanced color blacktext lw 3 32
+set terminal postscript eps enhanced color blacktext lw 1 32
 set output 'Binder_over_Correlation_All.eps'
 
 set size 2,2

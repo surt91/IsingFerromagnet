@@ -4,6 +4,9 @@ set output 'RNG_Tc.eps'
 set xlabel '{/Italic {/Symbol s}}'
 set ylabel '{/Italic T}'
 set xr [-0.1:1.3]
+set yr [1.1:2.4]
+
+set format xy "%.1f"
 
 set size square
 
