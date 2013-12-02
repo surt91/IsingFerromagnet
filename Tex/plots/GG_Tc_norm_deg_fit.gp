@@ -8,6 +8,9 @@ set xr [-0.1:1.3]
 set yr [0.345:0.352]
 set size square
 
+set format x "%.1f"
+set format y "%.3f"
+
 set key title 'GG' samplen 1
 set key spacing 5
 

@@ -11,6 +11,8 @@ set label 1 sprintf("{/Italic T_c}= %.3f\n{/Italic {/Symbol n}} = %.3f\n{/Italic
 sx(x,L)=(x-xc)*L**a; sy(y,L)=y*L**-b                 # def scaling assumption
 set xr [-5:15]
 
+set format y "%.2f"
+
 set size square
 
 p "data/ScalanaSusceptibility_S_1.00_L_32.dat"  u (sx($1,32)):(sy($2,32)):(sy($3,32))    w ye lt 1 lc 2 ps 2 pt  6 t "{/Italic L} = 32" \

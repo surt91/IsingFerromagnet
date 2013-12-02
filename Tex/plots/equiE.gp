@@ -5,6 +5,7 @@ set xlabel 'Number of sweeps {/Italic N_s}'
 set ylabel 'Energy per site {/Italic E}'
 
 set xtics 50
+set format y "%.1f"
 
 set size square
 

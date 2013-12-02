@@ -8,6 +8,9 @@ set xr [-0.1:1.3]
 set yr [0.905:0.935]
 set size square
 
+set format x "%.1f"
+set format y "%.3f"
+
 set key title 'GG' samplen 1
 
 f(x)=0.9160

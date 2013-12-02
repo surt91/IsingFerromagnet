@@ -11,6 +11,8 @@ set logscale x 2
 set xr [11.3:170.0]
 set yr [3:1000]
 
+set format x "%.1f"
+
 set size square
 
 set fit errorvariables

@@ -7,6 +7,8 @@ set yl "{/Italic {/Symbol \341}|m|{/Symbol \361}}"  # set x,y labels
 
 set xr [1.5:2.8]
 
+set format xy "%.1f"
+
 set size square
 
 p "data/ScalanaMean_M_S_1.00_L_32.dat"  u 1:2:3  w ye lt 1 lc 2 ps 2 pt  6 t "{/Italic L} = 32" \

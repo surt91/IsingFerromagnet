@@ -7,7 +7,11 @@ set xrange [1.5:3.2]
 
 set size square
 
+set format xy "%.1f"
+
 set key samplen 1. left bottom Left
+
+f(x)=abs(x-2.2691)**0.125
 
 plot 'data/Mean_M_0_00.dat' using 1:2:3 w ye ps 2 lt 1 lc 1 pt 4 title '{/Italic L} = 16',\
      'data/Mean_M_0_00.dat' using 1:2 w l lt 3 lc 1 notitle smooth csplines,\

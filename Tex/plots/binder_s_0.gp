@@ -9,6 +9,8 @@ set ylabel "{/Italic g}"
 set xr [1.6:3.2]
 set yr [0:1]
 
+set format xy "%.1f"
+
 set size square
 
 plot "data/binder_0.00.dat" u 1:2:3 w ye lt 1 ps 2 pt  4 lc 1 title "{/Italic L} = 16",\

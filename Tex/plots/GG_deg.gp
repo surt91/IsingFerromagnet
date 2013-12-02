@@ -7,6 +7,8 @@ set ylabel '{/Italic K}'
 set xr [-0.1:1.3]
 set yr [3.9:5.2]
 
+set format xy "%.1f"
+
 set key title 'GG' samplen 1
 
 set size square

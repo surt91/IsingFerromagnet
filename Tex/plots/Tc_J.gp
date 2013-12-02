@@ -6,6 +6,8 @@ set ylabel '{/Italic T}'
 
 set yrange [1.2:3.3]
 
+set format xy "%.1f"
+
 set key samplen 1
 
 set size square

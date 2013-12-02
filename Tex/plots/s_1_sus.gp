@@ -7,6 +7,8 @@ set yl "{/Italic {/Symbol c}}"  # set x,y labels
 
 set xr [1:1.7]
 
+set format x "%.1f"
+
 set size square
 
 p "data/ScalanaSusceptibility_S_1.00_L_128.dat" u 1:2:3  w ye lt 1 lc 4 ps 2 pt 10 t "{/Italic L} = 128" \

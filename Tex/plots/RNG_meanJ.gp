@@ -4,6 +4,8 @@ set output 'RNG_meanJ.eps'
 set xlabel '{/Italic {/Symbol s}}'
 set ylabel '{/Italic {/Symbol \341}J{/Symbol \361}}'
 
+set format xy "%.1f"
+
 set size square
 
 set key title 'RNG' samplen 1

@@ -6,6 +6,9 @@ set ylabel '{/Italic c}'
 set xrange [2.1:2.4]
 set size square
 
+set format x "%.2f"
+set format y "%.1f"
+
 set key samplen 1. left Left
 
 plot 'data/Specific_Heat_0.dat' using 1:2:3 w ye lc 1 pt 4 title '{/Italic L} = 16',\

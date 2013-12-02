@@ -6,6 +6,8 @@ set ylabel '{/Italic {/Symbol t}}'
 
 set xr [0.1:3.3]
 
+set format x "%.1f"
+
 set size square
 set key samplen 1. left Left
 

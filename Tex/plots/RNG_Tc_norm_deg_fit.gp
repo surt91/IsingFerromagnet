@@ -7,6 +7,9 @@ set ylabel '{/Italic T / K^{1.38}}'
 set xr [-0.1:1.3]
 set size square
 
+set format x "%.1f"
+set format y "%.3f"
+
 set key title 'RNG' samplen 1
 set key spacing 5
 

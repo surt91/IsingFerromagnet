@@ -8,6 +8,8 @@ set xr [-0.1:1.3]
 #set yr [0.42:0.58]
 set size square
 
+set format xy "%.1f"
+
 set key title 'RNG' samplen 1
 
 #set logscale xy

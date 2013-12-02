@@ -8,6 +8,8 @@ set yr [3.9:5.0]
 
 set key title 'GG' samplen 1
 
+set format xy "%.1f"
+
 set size square
 
 plot "data/GG_sumJ_L16.dat" w ye lt 1 lc 4 pt 4 ps 2 title "L = 16",\

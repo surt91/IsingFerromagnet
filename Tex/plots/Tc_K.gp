@@ -8,6 +8,8 @@ set key samplen 1. left top Left
 
 set yrange [1.1:3.0]
 
+set format xy "%.1f"
+
 set size square
 
 set fit errorvariables

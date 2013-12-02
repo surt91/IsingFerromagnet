@@ -28,6 +28,8 @@ set xtics (16,32,64,128)
 
 set xr [12:136]
 
+set format y "%.1f"
+
 set size square
 
 set key samplen 1. left Left

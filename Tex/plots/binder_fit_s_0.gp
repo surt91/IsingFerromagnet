@@ -11,6 +11,8 @@ set xtics add ("T_c" 2.2691)
 set xr [2.2:2.4]
 set yr [0:1]
 
+set format xy "%.1f"
+
 set size square
 set arrow from 2.2691,0 to 2.2691,1 nohead
 

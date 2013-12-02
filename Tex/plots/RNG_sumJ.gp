@@ -6,6 +6,8 @@ set ylabel '{/Italic {/Symbol \341} {/Symbol S}_{{/Symbol \341}i,j{/Symbol \361}
 set xr [-0.1:1.3]
 set yr [2.8:4.1]
 
+set format xy "%.1f"
+
 set size square
 
 set key title 'RNG' samplen 1

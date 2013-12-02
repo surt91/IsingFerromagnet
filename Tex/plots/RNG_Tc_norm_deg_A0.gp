@@ -8,6 +8,9 @@ set xr [-0.1:1.3]
 #set yr [0.42:0.58]
 set size square
 
+set format x "%.1f"
+set format y "%.2f"
+
 set key title 'RNG' samplen 1 invert
 
 #set logscale xy

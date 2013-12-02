@@ -7,6 +7,8 @@ set xrange [0.5:3.0]
 
 set size square
 
+set format xy "%.1f"
+
 unset key
 
 set arrow from 2.75,0.6 to 0.75,0.4
