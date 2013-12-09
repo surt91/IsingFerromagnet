@@ -25,17 +25,17 @@ P_CHAPTERS = paper/introduction.tex \
 
 BIBFILE = lit.bib
 
-IMAGES = images/GG_RNG_def.tex \
-         images/DT_def.tex \
-         images/Displacement.tex \
-         images/CellSmall.tex \
-         images/CellBig.tex \
-         images/GGEdgeBefore.tex \
-         images/GGEdgeAfter.tex \
-         images/parTempSchema.tex \
-         images/parTempE.tex \
-         images/GG_def.tex \
-         images/RNG_def.tex
+TIKZ = images/GG_RNG_def.pdf \
+       images/DT_def.pdf \
+       images/Displacement.pdf \
+       images/CellSmall.pdf \
+       images/CellBig.pdf \
+       images/GGEdgeBefore.pdf \
+       images/GGEdgeAfter.pdf \
+       images/parTempSchema.pdf \
+       images/parTempE.pdf \
+       images/GG_def.pdf \
+       images/RNG_def.pdf
 
 GG_LST = plots/GG_Tc_normJ.pdf \
          plots/GG_Tc_norm_deg.pdf \
@@ -72,7 +72,7 @@ PLOTS = plots/binder_fit_s_0.pdf \
         $(GG_LST) \
         $(RNG_LST)
 
-P_IMAGES = images/GG_RNG_def.tex
+P_TIKZ = images/GG_RNG_def.pdf
 
 P_GG_LST = plots/GG_Tc.pdf
 
@@ -88,9 +88,9 @@ all: $(LATEX)
 
 $(DOKUMENT).pdf: $(CHAPTERS)
 
-$(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf: $(PLOTS) $(IMAGES) $(BIBFILE)
+$(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf: $(PLOTS) $(TIKZ) $(BIBFILE)
 
-$(PAPER).pdf: $(P_CHAPTERS) $(P_PLOTS) $(P_IMAGES) $(BIBFILE)
+$(PAPER).pdf: $(P_CHAPTERS) $(P_PLOTS) $(P_TIKZ) $(BIBFILE)
 
 $(DOKUMENT).pdf $(VORTRAG).pdf $(PAPER).pdf: %.pdf: %.tex
 	pdflatex -interaction=batchmode $*
@@ -108,12 +108,17 @@ $(HANDOUT).pdf: $(VORTRAG).tex
 	cd $(<D) && gnuplot $(<F)
 
 %.pdf: %.eps
-	cd $(<D) && epstopdf $(<F)
+	cd $(<D) && epspdf -b $(<F)
 
-clean:
+$(TIKZ): %.pdf: %.tex
+	cd $(<D) && pdflatex -interaction=batchmode $(<F)
+	rm -f $*.{log,aux}
+
+clean: proper
 	rm -f $(PLOTS) plots/fit.log
-	rm -f {$(DOKUMENT),$(VORTRAG),$(HANDOUT)}.{pdf,log,aux,bbl,blg,toc,out,lof,lot,snm,nav}
+	rm -f {$(DOKUMENT),$(VORTRAG),$(HANDOUT)}.pdf
 
 proper:
 	rm -f $(PLOTS) $(P_PLOTS) plots/fit.log
+	rm -f $(TIKZ) $(P_TIKZ)
 	rm -f {$(DOKUMENT),$(VORTRAG),$(HANDOUT)}.{log,aux,bbl,blg,toc,out,lof,lot,snm,nav}

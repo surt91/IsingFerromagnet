@@ -1,12 +1,17 @@
-\begin{tikzpicture}
-    \useasboundingbox (-0.9,-0.9) rectangle (4.8,4.8);
-    \draw[thick] (0,0) -- (0,4);
-    \draw[thick] (0,0) -- (4,0);
-    \draw[thick] (4,4) -- (4,0);
-    \draw[thick] (4,4) -- (0,4);
-    \fill (0,0) circle(0.2);
-    \fill (4,0) circle(0.2);
-    \fill (0,4) circle(0.2);
-    \fill (4,4) circle(0.2);
-    \draw (2,2) circle(2.82842712475);
-\end{tikzpicture}
+\documentclass{standalone}
+\usepackage{tikz}
+
+\begin{document}
+    \begin{tikzpicture}
+        \useasboundingbox (-0.9,-0.9) rectangle (4.8,4.8);
+        \draw[thick] (0,0) -- (0,4);
+        \draw[thick] (0,0) -- (4,0);
+        \draw[thick] (4,4) -- (4,0);
+        \draw[thick] (4,4) -- (0,4);
+        \fill (0,0) circle(0.2);
+        \fill (4,0) circle(0.2);
+        \fill (0,4) circle(0.2);
+        \fill (4,4) circle(0.2);
+        \draw (2,2) circle(2.82842712475);
+    \end{tikzpicture}
+\end{document}
