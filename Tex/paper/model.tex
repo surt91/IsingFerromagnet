@@ -148,24 +148,24 @@ square lattice Ising model.
         the lune of the pair. That is of complexity \(O (N^3)\), because
         there are \(N(N-1)\) pairs and for each \((N-2)\) nodes to test. So
         the running time of a straight forward implementation would be of
-        order \(O(N^3)\).\\
-        To reduce the complexity one can first create a DT in complexity \(O (N \log N)\)
-        \cite{RNGCell} and test the connectedness for each edge contained
-        therein in \(O (N)\), because the DT is a supergraph of both.
-        This results in a complexity of \(O (N^2 \log N)\)
-        For the construction of the DT for a given set of points one might
-        use existing software libraries, e.g.\ the \texttt{qHull}\cite{qhull} library.\\
-        So a trade off is to use basically the simple method but only test
+        order \(O(N^3)\).
+        To reduce the running time one can basically use this simple method but only test
         the connectedness for nodes which are near to the lune and abort if
         one node inside the lune is found. To determine which nodes are
         near the lune one can subdivide the area in \(M\) \emph{cells} of size
         \(L_c \times L_c\) and save for each cell a list with nodes lying
-        inside like presented in Ref.\ \cite{RNGCell} and sketched in Fig.\ \ref{fig:cell}.
-        The implementation of this thesis uses \(M = N\) (\(L_c = 1\)).
+        inside like presented in Ref.\ \cite{RNGCell} for the RNG and sketched in Fig.\ \ref{fig:cell}.
+        For this research \(M = N\) is used.\\
         \begin{figure}[htbp]
             \centering
-            %~ \input{images/CellBig}
-            %~ \input{images/CellSmall}
+            \subfigure[not Connected Nodes][]{
+                \label{sfig:cell:big}
+                \includegraphics[width=0.2\textwidth]{images/CellBig}
+            }
+            \subfigure[Connected Nodes][]{
+                \label{sfig:cell:small}
+                \includegraphics[width=0.2\textwidth]{images/CellSmall}
+            }
             \caption[Sketch how the Cell Method works]
             {
                 Sketch how the cell algorithm for the construction of the
@@ -190,13 +190,14 @@ square lattice Ising model.
         edge between the nodes. On the other hand, nodes that will be connected
         are near to each other so that only very few cells intersect the bounding
         box of their lune and consequently only very few nodes have to be tested.\\
-        %~ Here the number of cells equals the number of nodes.
         The complexity of this method should be between \(O(N^2)\) in the
         best case, because for every pair at least one check has to be performed,
         and \(O(N^3)\) in the worst case, e.g.\ all nodes are inside one
         cell.\\
-        Combining both algorithms yields a blazing fast algorithm in complexity
-        \(O(N \log N)\) for nodes which are evenly spread across the cells.\\
+        Note that even faster algorithms exsist for two dimensional RNG and GG, which require to first
+        generate a DT and use the fact, that the RNG and GG are subgraphs.
+        (For the construction of the DT for a given set of points one might
+        use existing software libraries, e.g.\ the \texttt{qHull}\cite{qhull} library.)\\
         However, generation of the graphs is not time critical, because
-        the MC simulations take much longer. So only the cell algorithm
+        the MC simulations take much longer. So only the simple cell algorithm
         was used to gegnerate the graphs.\\
