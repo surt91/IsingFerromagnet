@@ -1,38 +1,12 @@
 The results are obtained through Monte Carlo simulations.
-For each sweep \(N\) single spin flip Metropolis updates, one
-Wolff cluster update and one parallel tempering swap are
-performed. These algorithms will be outlined short in the following.\\
+For each sweep \(N\) single spin flip Metropolis updates \cite{Metropolis1953}, one
+Wolff cluster update \cite{Wolff1989} and one parallel tempering swap \cite{ParallelTempering1986} are
+performed. The latter two algorithms will be outlined short in the following.\\
 Because it is not known before, where the critical temperatures
 \(T_c\) are located, the Wolff cluster algorithm is used for
 every temperature. Albeit the efficiency of the algorithmic procedure
 was not dissected for every temperature, the speed up
 near criticality should be worth the moderate slow down at other temperatures.
-
-\subsection{Single Spin Flip Metropolis Update}
-    A \emph{Metropolis} Monte Carlo \cite{Metropolis1953} simulation of an
-    Ising model will choose a random spin, calculate the energy change
-    \begin{equation}
-        \Delta H = H_\nu - H_\mu
-        \label{eq:dH}
-    \end{equation}
-    that would result from a flip of that spin. Where \(\mu\) is the
-    state before the flip and \(\nu\) after the flip. The flip is then executed
-    with the probability
-    \begin{equation}
-        A(\mu \to \nu) =
-        \begin{cases}
-            1                            & \Delta H \le 0 \\
-            \exp{\brac{-\beta \Delta H}} & \Delta H > 0
-        \end{cases}.
-        \label{eq:metropolis}
-    \end{equation}
-    see Refs.\ \cite{NewmanBarkema1999} \cite{Katzgraber2011}.
-    So if a transition lowers the energy it will be always done. This
-    results in a high ratio between flipped spins and chosen spins.
-    Therefore it minimizes the calculations needed for a change of
-    the state. Also note that \(\Delta H\) is easy to calculate,
-    because it is only affected by the spin of the neighbors of the
-    chosen site.
 
 \subsection{Wolff Cluster Update}
 \label{sssec:wolff}
