@@ -1,16 +1,59 @@
-\begin{figure}[hbtp]
+The results are obtained through Monte Carlo simulations.
+For each sweep \(N\) single spin flip Metropolis updates \cite{Metropolis1953}, one
+Wolff cluster update \cite{Wolff1989} and one parallel tempering swap \cite{ParallelTempering1986} are
+performed. The latter two algorithms will be outlined short in the following.\\
+Because it is not known before, where the critical temperatures
+\(T_c\) are located, the Wolff cluster algorithm is used for
+every temperature. Albeit the efficiency of the algorithmic procedure
+was not dissected for every temperature, the speed up
+near criticality should be worth the moderate slow down at other temperatures.
+
+\begin{figure}[htb]
     \centering
-    \includegraphics[width=0.22\textwidth]{plots/RNG_Tc}
-    \includegraphics[width=0.22\textwidth]{plots/GG_Tc}
-    \caption[Critical Temperature over Different Disorder Parameters]
+    \includegraphics[width=0.47\textwidth]{plots/collapse_s_1_sus}
+    \caption[Examples of Determining Critical Temperature and Exponents]
     {
-        Critical temperatures \(T_c\) over different
-        disorder parameters \(\sigma\) for
-        Interesting points are the jump and rise of the GG at small
-        \(\sigma\) and the plateau on the RNG for small \(\sigma\).
+        Examples for the method of FSS, which was used
+        to determine the critical exponents \(\nu, \gamma, \beta\) and
+        the critical temperature \(T_c\).
+        data collapse, to determine \(\gamma\).
     }
-    \label{fig:Tc}
+    \label{fig:gettingCrit2}
 \end{figure}
+
+\begin{table}[htbp]
+    \center
+    \begin{tabular}{l l l l l l}
+        \toprule
+         & \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(T_c\)} & \multicolumn{1}{c}{\(\nu\)} & \multicolumn{1}{c}{\(\gamma\)} & \multicolumn{1}{c}{\(\beta\)}\\
+        \midrule
+        exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & 2.2691... & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
+        \midrule
+        RNG          & 0.0 & 2.2688(7) & 0.997(11)& 1.737(3) & 0.131(1) \\
+                     & 0.1 & 2.2053(6) & 0.994(10)& 1.745(5) & 0.128(3) \\
+                     & 0.2 & 1.6265(19)& 1.017(16)& 1.758(14)& 0.157(12)\\
+                     & 0.5 & 1.2825(9) & 1.011(18)& 1.746(16)& 0.146(13)\\
+                     & 1.0 & 1.2125(5) & 1.010(2) & 1.764(14)& 0.133(12)\\
+        \midrule
+        GG           & 0.0 & 2.2688(6) & 0.999(13)& 1.739(3) & 0.128(1)\\
+                     & 0.1 & 2.8944(43)& 1.001(12)& 1.745(6) & 0.135(6) \\
+                     & 0.3 & 2.5281(27)& 1.034(29)& 1.718(15)& 0.118(11)\\
+                     & 0.5 & 2.2388(9) & 1.006(5) & 1.747(12)& 0.125(11)\\
+                     & 1.0 & 2.1275(20)& 1.036(31)& 1.750(16)& 0.125(15)\\
+
+        \bottomrule
+    \end{tabular}
+    \caption[Critical Exponents for Different $\sigma$]{
+        Critical exponents for different values of \(\sigma\). A finite size
+        scaling analysis was performed to determine the critical
+        exponents \(\beta, \gamma, \nu\) and the critical temperature
+        \(T_c\). The errors for \(\beta\) and \(\gamma\) are estimated
+        by \texttt{autoscale.py} \cite{autoscale2009}. The errors of
+        \(\nu\) and \(T_c\) are the standard deviation of three obtained
+        values through different collapses (see text).
+    }
+    \label{tab:critExp}
+\end{table}
 
 \begin{figure}[hbtp]
     \centering
@@ -26,3 +69,22 @@
     }
     \label{fig:binderOverCorr}
 \end{figure}
+
+\begin{figure*}[hbtp]
+    \centering
+    \includegraphics[scale=0.6]{plots/RNG_Tc} \quad
+    \includegraphics[scale=0.6]{plots/GG_Tc} \quad
+    \includegraphics[scale=0.6]{plots/Tc_K_goodChi}
+    \caption[Critical Temperature over Different Disorder Parameters]
+    {
+        Critical temperatures \(T_c\) over different
+        disorder parameters \(\sigma\) for
+        Interesting points are the jump and rise of the GG at small
+        \(\sigma\) and the plateau on the RNG for small \(\sigma\).
+        Further \(T_c\)  is plotted as a function of the degree.
+        The dotted lines are fits to a power law function \(T_c = aK^b\)
+        ignoring the "bulk" of points in the lower left and upper right, where
+        deviations from the power law become obvious.
+    }
+    \label{fig:Tc}
+\end{figure*}

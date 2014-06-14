@@ -17,7 +17,6 @@ CHAPTERS = chapters/title.tex \
            chapters/erklarung.tex
 
 P_CHAPTERS = paper/introduction.tex \
-             paper/methods.tex\
              paper/model.tex \
              paper/results.tex\
              paper/conclusion.tex\
@@ -78,7 +77,9 @@ P_GG_LST = plots/GG_Tc.pdf
 
 P_RNG_LST = $(subst GG,RNG,$(P_GG_LST))
 
-P_PLOTS = plots/Binder_over_Correlation_All.pdf \
+P_PLOTS = plots/collapse_s_1_sus.pdf \
+          plots/Tc_K_goodChi.pdf \
+          plots/Binder_over_Correlation_All.pdf \
           $(P_GG_LST) \
           $(P_RNG_LST)
 
