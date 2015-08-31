@@ -73,15 +73,16 @@ PLOTS = plots/binder_fit_s_0.pdf \
 
 P_TIKZ = images/GG_RNG_def.pdf
 
-P_GG_LST = plots/GG_Tc.pdf
+P_TEX_PLOTS = plots/col_s1_sus.pdf \
+              plots/col_s1_m.pdf \
+              plots/Binder_over_Correlation_All.pdf \
+              plots/binder.pdf \
+              plots/Tc_RNG.pdf \
+              plots/Tc_GG.pdf \
+              plots/Tc_both.pdf \
+              plots/TcK.pdf \
 
-P_RNG_LST = $(subst GG,RNG,$(P_GG_LST))
-
-P_PLOTS = plots/collapse_s_1_sus.pdf \
-          plots/Tc_K_goodChi.pdf \
-          plots/Binder_over_Correlation_All.pdf \
-          $(P_GG_LST) \
-          $(P_RNG_LST)
+P_PLOTS = $(P_TEX_PLOTS)
 
 all: $(LATEX)
 
@@ -105,15 +106,18 @@ $(HANDOUT).pdf: $(VORTRAG).tex
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
 
+%.tex: %.gp
+	cd $(<D) && gnuplot $(<F) > /dev/null 2>&1
+
 %.eps: %.gp
 	cd $(<D) && gnuplot $(<F)
 
 %.pdf: %.eps
 	cd $(<D) && epspdf -b $(<F)
 
-$(TIKZ): %.pdf: %.tex
-	cd $(<D) && pdflatex -interaction=batchmode $(<F)
-	rm -f $*.{log,aux}
+$(TIKZ) $(P_TEX_PLOTS): %.pdf: %.tex
+	cd $(<D) && pdflatex -interaction=batchmode $(<F) > /dev/null
+	rm -f $*.{log,aux} $*-inc.eps $*-inc-eps-converted-to.pdf
 
 clean: proper
 	rm -f $(PLOTS) plots/fit.log

@@ -1,129 +1,134 @@
 \subsection{The Disordered Ising Model}
-The model under scrutiny in this article is the \emph{disordered Ising Ferromagnet}
-which is derived from the well understood \emph{square lattice Ising Ferromagnet} \cite{Onsager1944}.
-That is a square lattice with lateral length \(L\) and \(N=L^2\)
-sites with periodic boundary conditions.
-Each site has an Ising spin \(s \in \{-1,+1\}\) and interacts with its
-nearest neighbors described by the Hamiltonian
-\begin{equation}
-    \mathcal{H} = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}.
-    \label{eq:hamiltonian}
-\end{equation}
-\(\avg{i,j}\) refers to nodes \(i\) and \(j\) which are nearest
-neighbors, so that they are directly coupled to each other.
-This will be called an edge.
-The coupling between \(i\) and \(j\) is characterized by \(J_{ij} = J\),
-the coupling constant.
+\label{ssec:model}
+    We call the model under scrutiny in this article the \emph{disordered IFM}
+    which is derived from the well understood \emph{square lattice IFM} \cite{Onsager1944}.
+    That is a square lattice with lateral length \(L\) and \(N=L^2\)
+    sites with periodic boundary conditions.
+    Each site $i$ has an Ising spin \(s_i \in \{-1,+1\}\) and interacts with its
+    nearest neighbors described by the Hamiltonian
+    \begin{equation}
+        \mathcal{H} = - \sum_{\avg{i,j}}J_{ij}s_{i}s_{j}.
+        \label{eq:hamiltonian}
+    \end{equation}
+    \(\avg{i,j}\) refers to nodes \(i\) and \(j\) which are nearest
+    neighbors, so that they are directly coupled to each other.
+    This will be called an edge.
+    The coupling between \(i\) and \(j\) is characterized by \(J_{ij} = J\),
+    the coupling constant.
 
-The most important difference of the square lattice Ising model to the
-disordered Ising Ferromagnet is that the sites of the square lattice are
-displaced introducing geometric disorder resulting in a non regular graph
-structure.
-The displacement is randomly Gaussian distributed with standard
-deviation \(\sigma\), i.e.\ the \(x\) and \(y\) coordinates of the
-sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
-from a Gaussian distribution
-\begin{equation}
-    f(\Delta x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{\Delta x^2}{2\sigma^2}}.
-    \label{eq:gauss}
-\end{equation}
-This is sketched in Fig.\ \ref{fig:displacement}.
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.45\textwidth]{images/Displacement}
-    \caption[Sketch how the Displacement works]
-    {
-        Sketch how the displacement of the nodes works. The nodes
-        get displaced by \(\Delta x\) and \(\Delta y\) drawn from the
-        distributions displayed next to the points. The original
-        square lattice is indicated by dashed lines.
-    }
-    \label{fig:displacement}
-\end{figure}
-In the following \(\sigma\) will also be called \emph{disorder parameter}.
-If we take "nearest neighbor" in the Euclidean meaning, most sites
-will only have one nearest neighbor after the
-displacement. If only the edges between these neighbors remained,
-the lattice would collapse to many very small clusters. But if one
-left the edges as they were before the displacement, the edges would
-cross -- at least for big displacements. The crossing of edges then
-would destroy the planar character of the model.
-To avoid this, a new edge set will be etablished after the displacement.
-The edges are constructed
-so that for a given configuration of points the resulting graph is an
-instance of a so called proximity graph. The coupling constant \(J_{ij}\) gets
-identified with edge weights. \(J_{ij}\) will be changed to depend on the
-geometric distance between the connected pair of sites. More precise,
-the weight of an edge is
-\begin{equation}
-    E_{ij} = J_{ij} = \mathrm{e}^{(\alpha (1-d_{ij}))}
-    \label{eq:coupling}
-\end{equation}
-where \(d_{ij}\) is the Euclidean
-distance between the nodes \(i\) and \(j\). Following Ref.\ \cite{Lima2000}
-the free parameter \(\alpha\) is set to \(\alpha = 0.5\).
-The boundary is periodic, i.e.\ nodes near the right edge can be
-connected to nodes near the left edge and vice versa. Analogously the
-top and bottom edges are connected as if the graph lives on a torus.
-In subsequent graphics the graphs will be unwrapped to rectangular
-shapes. Connections which cross a periodic boundary are indicated
-by edges which connect a solid node to a dashed node.
-Note that for \(\sigma = 0\) all \(d_{ij} = 1\) and therefore all
-\(J_{ij} = 1\), so that the disordered Ising model is reduced to the
-square lattice Ising model.
+    The most important difference of the square lattice IFM to the
+    disordered IFM is that the sites of the square lattice are
+    displaced introducing geometric disorder resulting in a non regular graph
+    structure.
+    The displacement is randomly Gaussian distributed with standard
+    deviation \(\sigma\), i.e.~the \(x\) and \(y\) coordinates of the
+    sites are displaced by random \(\Delta x\) and \(\Delta y\) drawn
+    from a Gaussian distribution.
+    %~ \begin{equation}
+        %~ f(\Delta x)=\frac{1}{\sqrt{2\pi}\sigma}\mathrm{e}^{-\frac{\Delta x^2}{2\sigma^2}}.
+        %~ \label{eq:gauss}
+    %~ \end{equation}
+    %~ This is sketched in Fig.\ \ref{fig:displacement}.
+    %~ \begin{figure}[htbp]
+        %~ \centering
+        %~ \includegraphics[width=0.45\textwidth]{images/Displacement}
+        %~ \caption[Sketch how the Displacement works]
+        %~ {
+            %~ Sketch how the displacement of the nodes works. The nodes
+            %~ get displaced by \(\Delta x\) and \(\Delta y\) drawn from the
+            %~ distributions displayed next to the points. The original
+            %~ square lattice is indicated by dashed lines.
+        %~ }
+        %~ \label{fig:displacement}
+    %~ \end{figure}
+    In the following \(\sigma\) will also be called \emph{disorder parameter}.
+    If we take ``nearest neighbor" in the Euclidean meaning, most sites
+    will only have one nearest neighbor after the
+    displacement. If only the edges between these neighbors remained,
+    the lattice would collapse to many very small clusters. But if one
+    left the edges as they were before the displacement, the edges would
+    cross -- at least for big displacements. The crossing of edges then
+    would destroy the planar character of the model.
+    To avoid this, a new edge set will be established after the displacement
+    as shown in Fig.~\ref{fig:RNG_sigma} for example.
+    \begin{figure}[htb]
+        \centering
+        \subfigure[$\sigma = 0.09$]
+        {
+            \label{sfig:RNG_sigma:0.09}
+            \includegraphics[width=0.14\textwidth]{images/RNG/out009}
+        }
+        \subfigure[$\sigma = 0.15$]
+        {
+            \label{sfig:RNG_sigma:0.15}
+            \includegraphics[width=0.14\textwidth]{images/RNG/out015}
+        }
+        \subfigure[$\sigma = 0.21$]
+        {
+            \label{sfig:RNG_sigma:0.21}
+            \includegraphics[width=0.14\textwidth]{images/RNG/out021}
+        }
+        \caption[Examples of RNG for different $\sigma$]
+        {
+            Examples of proximity graphs (more precise, Relative Neighborhood
+            graph see Sec. \ref{ssec:graphtypes}) for different $\sigma$.
+            Connections which cross a periodic boundary are indicated
+            by edges which connect a solid node to a dashed node.
+        }
+        \label{fig:RNG_sigma}
+    \end{figure}
+    The edges are constructed
+    so that for a given configuration of points the resulting graph is an
+    instance of a so called proximity graph, which will be explained in Sec.~\ref{ssec:graphtypes}.
+    The coupling constant \(J_{ij}\) gets
+    identified with edge weights. \(J_{ij}\) depends on the
+    geometric distance between the connected pair of sites. More precise,
+    the weight of an edge is
+    \begin{equation}
+        E_{ij} = J_{ij} = \mathrm{e}^{\alpha (1-d_{ij})}
+        \label{eq:coupling}
+    \end{equation}
+    where \(d_{ij}\) is the Euclidean
+    distance between the nodes \(i\) and \(j\). Following Ref.~\cite{Lima2000}
+    the free parameter \(\alpha\) is set to \(\alpha = 0.5\).
+    Note that for \(\sigma = 0\) all \(d_{ij} = 1\) and therefore all
+    \(J_{ij} = 1\), so that the disordered IFM is reduced to the
+    square lattice IFM.
 
 \subsection{Proximity Graphs}
 \label{ssec:graphtypes}
     A graph \(G(V,E)\) is a set of nodes \(V\) and edges \(E \subset V^{2}\).
     In the scope of this model, the nodes get identified with the sites of the
     lattice. If two nodes are connected by an edge, the sites are neighbors.\\
-    All here mentioned graph types are \emph{proximity graphs}.
-    The edges of these graphs connect nodes which are by some metric near
-    to each other.
-    Hence they are suited to generalize problems defined on regular
+    The edges of \emph{proximity graphs} connect nodes which are by some metric near
+    to each other. Hence they are suited to generalize problems defined on regular
     lattices with nearest neighbor relationships.
     To determine the distance we use the Euclidean
     metric on two-dimensional graphs, though in principle every metric in any
     dimension can be used.
 
-    %~ \subsubsection{Gabriel Graph}
-        The Gabriel graph (GG) \cite{Gabriel1969}
-        is a subgraph of the Delaunay triangulation (DT) (for a definition
-        see e.g.\ Ref.\ \cite{Katajainen}), i.e.\ for the same set of nodes
-        \(V\) the edge set of the DT is a superset of the edge set of the
-        GG \(E_{DT} \supseteq E_{GG}\). Two nodes \(i\) and \(j\) with distance
-        \(d_{ij}\) will be connected with an edge, if a circle with its
-        center on half way between \(i\) and \(j\) and radius
-        \(r = \frac d 2\) contains no other nodes. This area will be
-        called \emph{lune} in the following. See also the cross hatched region
-        from Fig.\ \ref{fig:lunes}\subref{sfig:lunes:def}. An Example is
-        given in Fig.\ ref{fig:lunes}\subref{sfig:lunes:gg}.
-
-    %~ \subsubsection{Relative Neighborhood Graph}
-        The Relative Neighborhood
-        graph (RNG) \cite{Toussaint1980} is a subgraph of the GG. Two nodes \(i\) and \(j\) with
-        distance \(d_{ij}\) will be connected again, if no other node is in the
-        \emph{lune}, which is different from the lune of the GG. The lune
-        is defined as the intersection of two
-        circles with radius \(r = d\) and centers on \(i\) and \(j\).
-        See also the hatched region in Fig.\ \ref{fig:lunes}. An Example is
-        given in Fig.\ ref{fig:lunes}\subref{sfig:lunes:rng}.
+    The \emph{Relative Neighborhood graph} (RNG) \cite{Toussaint1980} is
+    a proximity graph. Two nodes \(i\) and \(j\) with distance $d_{ij}$
+    will be connected, if no other node is in the \emph {lune}. The lune
+    is defined as the intersection of two circles with radius \(r =
+    d_{ij}\) and centers on \(i\) and \(j\). See also the hatched region
+    in Fig.~\ref{fig:lunes}. An Example is given in Fig.~\ref{sfig:lunes:rng}.
 
     \begin{figure}[htbp]
         \centering
-        \subfigure[Definition of the Lunes][]{
+        \subfigure[]{
             \label{sfig:lunes:def}
             \includegraphics[width=0.14\textwidth]{images/GG_RNG_def}
         }
-        \subfigure[RNG example][]{
+        \subfigure[]{
             \label{sfig:lunes:rng}
             \includegraphics[width=0.14\textwidth]{images/RNG/L12S03.pdf}
         }
-        \subfigure[GG example][]{
+        \subfigure[]{
             \label{sfig:lunes:gg}
             \includegraphics[width=0.14\textwidth]{images/GG/L12S03.pdf}
         }
-        \caption[Gabriel - and Relative Neighborhood Graph]
+        \caption[Gabriel and Relative Neighborhood Graph]
         {
             \subref{sfig:lunes:def} Lunes, which define whether an edge
                 exist, of RNG (hatched region) and GG (cross hatched region).
@@ -141,63 +146,79 @@ square lattice Ising model.
         \label{fig:lunes}
     \end{figure}
 
+    The \emph{Gabriel graph} (GG) \cite{Gabriel1969} is a subgraph
+    of the Delaunay triangulation \cite{Delaunay1934,Katajainen}
+    (DT), i.e.~for the same set of nodes \(V\) the edge set of the
+    DT is a superset of the edge set of the GG. Two nodes \(i\) and
+    \(j\) with distance \(d_{ij}\) will be connected with an edge,
+    if a circle with its center on half way between \(i\) and \(j\)
+    and radius \(r = \frac{d_{ij}}{2}\) contains no other nodes. See
+    also the cross hatched region from Fig.~\ref{sfig:lunes:def}. An
+    Example is given in Fig.~\ref {sfig:lunes:gg}. Note that the
+    lune of the GG is completely enclosed in the lune of the RNG,
+    therefore the RNG is a subgraph of the GG.
+
+    To construct these graphs there is an algorithm\cite{RNGCell} with
+    a time complexity of \(\mathcal{O}(N \log N)\) for nodes on a two
+    dimensional plane.
+
     % TODO: alles hierdrunter
     %~ \subsubsection{Construction}
-        The simplest way to construct these graphs is to test for each
-        pair of nodes if any other node lies in
-        the lune of the pair. That is of complexity \(O (N^3)\), because
-        there are \(N(N-1)\) pairs and for each \((N-2)\) nodes to test. So
-        the running time of a straight forward implementation would be of
-        order \(O(N^3)\).
-        To reduce the running time one can basically use this simple method but only test
-        the connectedness for nodes which are near to the lune and abort if
-        one node inside the lune is found. To determine which nodes are
-        near the lune one can subdivide the area in \(M\) \emph{cells} of size
-        \(L_c \times L_c\) and save for each cell a list with nodes lying
-        inside like presented in Ref.\ \cite{RNGCell} for the RNG and sketched in Fig.\ \ref{fig:cell}.
-        For this research \(M = N\) is used.\\
-        \begin{figure}[htbp]
-            \centering
-            \subfigure[not Connected Nodes][]{
-                \label{sfig:cell:big}
-                \includegraphics[width=0.2\textwidth]{images/CellBig}
-            }
-            \subfigure[Connected Nodes][]{
-                \label{sfig:cell:small}
-                \includegraphics[width=0.2\textwidth]{images/CellSmall}
-            }
-            \caption[Sketch how the Cell Method works]
-            {
-                Sketch how the cell algorithm for the construction of the
-                RNG and GG works. Here with the lune definition of the GG.
-                The bounding box of the lune, which determines which cells have
-                to be tested, is marked with thick colored lines.
-                Left: shows that it is sufficient to find a
-                single node in an inner cell of the bounding box to discard
-                the edge between two distant nodes. The nodes inside the
-                other 8 marked cells do not have to be tested anymore.
-                Right: shows that only the nodes inside the
-                marked cell have to be tested, because there are no other nodes,
-                the edge can be drawn.
-            }
-            \label{fig:cell}
-        \end{figure}\\
-        Given the discretized cell structure it is just necessary to test the nodes in the cells which
-        resemble a rectangular bounding box of the lune. Most pairs will be
-        far away from each other and there will be one or more cells in the
-        middle of the bounding box, which are completely inside the lune.
-        Then only one node has to be tested from such a cell to discard an
-        edge between the nodes. On the other hand, nodes that will be connected
-        are near to each other so that only very few cells intersect the bounding
-        box of their lune and consequently only very few nodes have to be tested.\\
-        The complexity of this method should be between \(O(N^2)\) in the
-        best case, because for every pair at least one check has to be performed,
-        and \(O(N^3)\) in the worst case, e.g.\ all nodes are inside one
-        cell.\\
-        Note that even faster algorithms exsist for two dimensional RNG and GG, which require to first
-        generate a DT and use the fact, that the RNG and GG are subgraphs.
-        (For the construction of the DT for a given set of points one might
-        use existing software libraries, e.g.\ the \texttt{qHull}\cite{qhull} library.)\\
-        However, generation of the graphs is not time critical, because
-        the MC simulations take much longer. So only the simple cell algorithm
-        was used to gegnerate the graphs.\\
+        %~ The simplest way to construct these graphs is to test for each
+        %~ pair of nodes if any other node lies in
+        %~ the lune of the pair. That is of complexity \(O (N^3)\), because
+        %~ there are \(N(N-1)\) pairs and for each \((N-2)\) nodes to test. So
+        %~ the running time of a straight forward implementation would be of
+        %~ order \(O(N^3)\).
+        %~ To reduce the running time one can basically use this simple method but only test
+        %~ the connectedness for nodes which are near to the lune and abort if
+        %~ one node inside the lune is found. To determine which nodes are
+        %~ near the lune one can subdivide the area in \(M\) \emph{cells} of size
+        %~ \(L_c \times L_c\) and save for each cell a list with nodes lying
+        %~ inside like presented in Ref.\ \cite{RNGCell} for the RNG and sketched in Fig.\ \ref{fig:cell}.
+        %~ For this research \(M = N\) is used.\\
+        %~ \begin{figure}[htbp]
+            %~ \centering
+            %~ \subfigure[not Connected Nodes][]{
+                %~ \label{sfig:cell:big}
+                %~ \includegraphics[width=0.2\textwidth]{images/CellBig}
+            %~ }
+            %~ \subfigure[Connected Nodes][]{
+                %~ \label{sfig:cell:small}
+                %~ \includegraphics[width=0.2\textwidth]{images/CellSmall}
+            %~ }
+            %~ \caption[Sketch how the Cell Method works]
+            %~ {
+                %~ Sketch how the cell algorithm for the construction of the
+                %~ RNG and GG works. Here with the lune definition of the GG.
+                %~ The bounding box of the lune, which determines which cells have
+                %~ to be tested, is marked with thick colored lines.
+                %~ Left: shows that it is sufficient to find a
+                %~ single node in an inner cell of the bounding box to discard
+                %~ the edge between two distant nodes. The nodes inside the
+                %~ other 8 marked cells do not have to be tested anymore.
+                %~ Right: shows that only the nodes inside the
+                %~ marked cell have to be tested, because there are no other nodes,
+                %~ the edge can be drawn.
+            %~ }
+            %~ \label{fig:cell}
+        %~ \end{figure}\\
+        %~ Given the discretized cell structure it is just necessary to test the nodes in the cells which
+        %~ resemble a rectangular bounding box of the lune. Most pairs will be
+        %~ far away from each other and there will be one or more cells in the
+        %~ middle of the bounding box, which are completely inside the lune.
+        %~ Then only one node has to be tested from such a cell to discard an
+        %~ edge between the nodes. On the other hand, nodes that will be connected
+        %~ are near to each other so that only very few cells intersect the bounding
+        %~ box of their lune and consequently only very few nodes have to be tested.\\
+        %~ The complexity of this method should be between \(O(N^2)\) in the
+        %~ best case, because for every pair at least one check has to be performed,
+        %~ and \(O(N^3)\) in the worst case, e.g.\ all nodes are inside one
+        %~ cell.\\
+        %~ Note that even faster algorithms exsist for two dimensional RNG and GG, which require to first
+        %~ generate a DT and use the fact, that the RNG and GG are subgraphs.
+        %~ (For the construction of the DT for a given set of points one might
+        %~ use existing software libraries, e.g.\ the \texttt{qHull}\cite{qhull} library.)\\
+        %~ However, generation of the graphs is not time critical, because
+        %~ the MC simulations take much longer. So only the simple cell algorithm
+        %~ was used to gegnerate the graphs.\\

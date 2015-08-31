@@ -1,48 +1,75 @@
-The results are obtained through Monte Carlo simulations.
-For each sweep \(N\) single spin flip Metropolis updates \cite{Metropolis1953}, one
-Wolff cluster update \cite{Wolff1989} and one parallel tempering swap \cite{ParallelTempering1986} are
-performed. The latter two algorithms will be outlined short in the following.\\
-Because it is not known before, where the critical temperatures
-\(T_c\) are located, the Wolff cluster algorithm is used for
-every temperature. Albeit the efficiency of the algorithmic procedure
-was not dissected for every temperature, the speed up
-near criticality should be worth the moderate slow down at other temperatures.
+\label{sec:results}
+The results are obtained through Monte Carlo simulations. For each
+sweep \(N\) single spin flip Metropolis updates \cite{Metropolis1953},
+one Wolff cluster update \cite{Wolff1989} and one
+parallel tempering swap \cite{ParallelTempering1986} are performed.
+For every systemsize $L \in \{16,32,64,128\}$ and 19 different
+$\sigma \in [0,1.2]$ on $100$ different realizations at least $5000$
+independent measurements are taken in equilibrium.\\
+Because it is not known before, where the critical temperatures \(T_c\)
+are located, the Wolff cluster algorithm is used at every
+temperature. Albeit the efficiency of the algorithmic procedure was
+not dissected for every temperature, the speed up near criticality
+should be worth the moderate slow down at other temperatures.\\
 
+The differences of this model and the 2D IFM are only details,
+it is therefore expected that both are in the same universality class.
+To proof this, the critical exponents are determined by a finite-size
+scaling (FSS) analysis
+using the well kown scaling bahaviors of the magnetization, the susceptiblity and the Binder parameter
+in an automated and reproducable way using the
+\texttt{autoscale.py} \cite{autoscale2009} tool.
+In Fig.~\ref{fig:collapse}
 \begin{figure}[htb]
-    \centering
-    \includegraphics[width=0.47\textwidth]{plots/collapse_s_1_sus}
+    \includegraphics[scale=1]{plots/col_s1_sus}
     \caption[Examples of Determining Critical Temperature and Exponents]
     {
-        Examples for the method of FSS, which was used
-        to determine the critical exponents \(\nu, \gamma, \beta\) and
-        the critical temperature \(T_c\).
-        data collapse, to determine \(\gamma\).
+        Example for a collapse of the susceptiblity \(\chi\) on a RNG at
+        \(\sigma = 1\) to get the corresponding critical exponent $\gamma$.
+        The same procedure is used on the Binder parameter $g$ and the
+        magnetization $|m|$ to to determine the critical exponents
+        \(\nu\) and \(\beta\) and the critical temperature \(T_c\).
+        The inset shows the same data with unscaled axes.
     }
-    \label{fig:gettingCrit2}
+    \label{fig:collapse}
 \end{figure}
-
-\begin{table}[htbp]
-    \center
-    \begin{tabular}{l l l l l l}
-        \toprule
-         & \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(T_c\)} & \multicolumn{1}{c}{\(\nu\)} & \multicolumn{1}{c}{\(\gamma\)} & \multicolumn{1}{c}{\(\beta\)}\\
-        \midrule
-        exact (\cite[p. 59]{Pelissetto2002}) & \multicolumn{1}{c}{\(0\)} & 2.2691... & \multicolumn{1}{c}{\(1\)} & \multicolumn{1}{c}{\(\frac{7}{4}\)} & \multicolumn{1}{c}{\(\frac{1}{8}\)}\\
-        \midrule
-        RNG          & 0.0 & 2.2688(7) & 0.997(11)& 1.737(3) & 0.131(1) \\
-                     & 0.1 & 2.2053(6) & 0.994(10)& 1.745(5) & 0.128(3) \\
-                     & 0.2 & 1.6265(19)& 1.017(16)& 1.758(14)& 0.157(12)\\
-                     & 0.5 & 1.2825(9) & 1.011(18)& 1.746(16)& 0.146(13)\\
-                     & 1.0 & 1.2125(5) & 1.010(2) & 1.764(14)& 0.133(12)\\
-        \midrule
-        GG           & 0.0 & 2.2688(6) & 0.999(13)& 1.739(3) & 0.128(1)\\
-                     & 0.1 & 2.8944(43)& 1.001(12)& 1.745(6) & 0.135(6) \\
-                     & 0.3 & 2.5281(27)& 1.034(29)& 1.718(15)& 0.118(11)\\
-                     & 0.5 & 2.2388(9) & 1.006(5) & 1.747(12)& 0.125(11)\\
-                     & 1.0 & 2.1275(20)& 1.036(31)& 1.750(16)& 0.125(15)\\
-
-        \bottomrule
-    \end{tabular}
+%~ two examples collapses at $\sigma = 1$ for the
+%~ magnetization
+%~ \[\abs{m} = \avgR{\avg{\abs{\frac{1}{N}\sum_{i=1}^N s_i}}}\]
+ %~ -- with $\avg{\cdot}$ being the thermal average and $\avgR{\cdot}$ being the
+%~ average over the random realizations -- and the susceptiblity
+%~ \[\chi = \frac{N}{T}\brac{\avgR{\avg{m^2}}-\avgR{\avg{m}}^2}\]
+%~ are plotted.
+an example collapse at $\sigma = 1$ for the susceptiblity
+\[\chi = \frac{N}{T}\brac{\avgR{\avg{m^2}}-\avgR{\avg{m}}^2}\]
+with $\avg{\cdot}$ being the thermal average and $\avgR{\cdot}$ being the
+average over the random realizations, is plotted.
+%~ The collapse happens because $\chi$ should scale according to
+%~ \[\chi_L = L^{\gamma / \nu} \tilde{C}\brac{L^{1/\nu}\brac{T-T_c}}\]
+All obtained values for different $\sigma$ are visualized in Tab.~\ref{tab:critExp}
+\begin{table}[htb]
+    \begin{ruledtabular}
+        \begin{tabular}{l l l l l l}
+             & \multicolumn{1}{c}{\(\sigma\)} & \multicolumn{1}{c}{\(T_c\)} & \multicolumn{1}{c}{\(\nu\)} & \multicolumn{1}{c}{\(\gamma\)} & \multicolumn{1}{c}{\(\beta\)}\\
+            %~ \colrule
+            \hline
+            exact        & 0   & 2.2691... & \(1\)    & \(1.75\) & \(0.125\)\\
+            %~ \colrule
+            \hline
+            RNG          & 0.0 & 2.2688(7) & 1.00(1) & 1.741(2) & 0.125(1) \\
+                         & 0.1 & 2.2053(6) & 0.99(1) & 1.745(5) & 0.128(3) \\
+                         & 0.2 & 1.6265(19)& 1.02(2) & 1.758(14)& 0.122(7)\\
+                         & 0.5 & 1.2825(9) & 1.01(2) & 1.746(16)& 0.128(8)\\
+                         & 1.0 & 1.2125(5) & 1.01(1) & 1.764(14)& 0.125(6)\\
+            %~ \colrule
+            \hline
+            GG           & 0.0 & 2.2688(6) & 1.00(1) & 1.738(22)& 0.127(4)\\
+                         & 0.1 & 2.8944(43)& 1.00(1) & 1.745(6) & 0.135(6) \\
+                         & 0.3 & 2.5281(27)& 1.03(3) & 1.718(15)& 0.118(11)\\
+                         & 0.5 & 2.2388(9) & 1.01(1) & 1.747(12)& 0.125(11)\\
+                         & 1.0 & 2.1275(20)& 1.04(3) & 1.750(16)& 0.125(15)\\
+        \end{tabular}
+    \end{ruledtabular}
     \caption[Critical Exponents for Different $\sigma$]{
         Critical exponents for different values of \(\sigma\). A finite size
         scaling analysis was performed to determine the critical
@@ -50,41 +77,154 @@ near criticality should be worth the moderate slow down at other temperatures.
         \(T_c\). The errors for \(\beta\) and \(\gamma\) are estimated
         by \texttt{autoscale.py} \cite{autoscale2009}. The errors of
         \(\nu\) and \(T_c\) are the standard deviation of three obtained
-        values through different collapses (see text).
+        values through different collapses. The critical exponents
+        are in reasonable agreement with the exact kown values for the 2D Ising
+        universality class. The critical temperatures $T_c$ are shifting
+        as expected.
     }
     \label{tab:critExp}
 \end{table}
+and are within errorbars consistent with the exactly kown values for the
+two dimensional IFM.
+A newer method\cite{chiCollapse,Hartmann2013} to test if two models are in
+the same universality class is the analysis of the two-point finite-size
+correlation function
+\[\xi = \frac{1}{2\sin(\abs{\vec{k}_{\mathrm{min}}}/2)} \sqrt{\frac{\chi(\vec{0})}{\chi(\vec{k}_{\mathrm{min}})} - 1}\]
+where $\vec{k}_{min}=(2\pi / L, 0)$ and $\chi(\vec{k})$ is the wave vector
+dependent susceptiblity
+\[\chi(\vec{k}) = \avgR{\avg{\abs{\brac{\frac{1}{N}\sum_j s_j \exp(ikx_j)}^2}}}\]
+which is in this case only evaluated over the x-dimension thus $x_j$ is the
+position of the node in the x-dimension.
 
-\begin{figure}[hbtp]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=.45\textwidth]{plots/Binder_over_Correlation_All}
+    \includegraphics[scale=1]{plots/Binder_over_Correlation_All}
     \caption[Binder Cumulant over two-point finite-size correlation function divided by system size]
     {
         Binder Cumulant over two-point finite-size correlation function
         divided by system size. The datapoints for different system sizes
         are drawn with different symbols, while the datapoints for different
-        graph ensembles are drawn with different colors.
-        The inset zooms into the plot to show that
-        all datapoints fall within errorbars onto one curve.
+        graph ensembles are drawn with different colors. Anyway, all points
+        fall on one curve within errorbars.
+        %~ The inset zooms into the plot to show that
+        %~ all datapoints fall within errorbars onto one curve.
     }
     \label{fig:binderOverCorr}
 \end{figure}
+If the Binder parameter
+\[g = \frac{3}{2}\brac{1-\frac{\avgR{\avg{m^4}}}{3\avgR{\avg{m^2}^2}}}\]
+is plotted over $\xi$ for different $\sigma$, $L$ and $T$ as shown in
+Fig.~\ref{fig:binderOverCorr} all data points fall on the
+same curve, which confirms that this model is in the same universality
+class as the square lattice Ising ferromagnet, i.e.~$\sigma=0$.
 
+This study examines the critical temperatures $T_c$ for different $\sigma$.
+Therefore the knowledge that the Binder parameters $g$ for different
+system sizes $L$ intersect at $T_c$ \cite{Binder1981} as shown in Fig.~\ref{sfig:Tc:binder}
+%~ \begin{figure*}[hbtp]
+    %~ \centering
+    %~ \subfigure{
+        %~ \label{sfig:Tc:binder}
+        %~ \includegraphics[scale=1]{plots/binder}
+    %~ }
+    %~ \subfigure{
+        %~ \label{sfig:Tc:RNG}
+        %~ \includegraphics[scale=1]{plots/Tc_RNG}
+    %~ }
+    %~ \subfigure{
+        %~ \label{sfig:Tc:GG}
+        %~ \includegraphics[scale=1]{plots/Tc_GG}
+    %~ }
+    %~ \caption[Critical Temperature over Different Disorder Parameters]
+    %~ {
+        %~ Critical temperatures \(T_c\) are obtained by finding the intersections
+        %~ of the Binder parameters $g$ for different system sizes $L$.
+        %~ They are plotted over different disorder parameters \(\sigma\).
+        %~ Interesting points are the jump and rise of the GG at small
+        %~ \(\sigma\) and the plateau on the RNG for small \(\sigma\).
+    %~ }
+    %~ \label{fig:Tc}
+%~ \end{figure*}
 \begin{figure*}[hbtp]
-    \centering
-    \includegraphics[scale=0.6]{plots/RNG_Tc} \quad
-    \includegraphics[scale=0.6]{plots/GG_Tc} \quad
-    \includegraphics[scale=0.6]{plots/Tc_K_goodChi}
+    \subfigure[]{
+        \label{sfig:Tc:binder}
+        \includegraphics[scale=1]{plots/binder}
+    }
+    \subfigure[]{
+        \label{sfig:Tc:RNG}
+        \label{sfig:Tc:GG}
+        \includegraphics[scale=1]{plots/Tc_both}
+    }
+    \subfigure[]{
+        \label{fig:TcK}
+        \includegraphics[scale=1]{plots/TcK}
+    }
     \caption[Critical Temperature over Different Disorder Parameters]
     {
-        Critical temperatures \(T_c\) over different
-        disorder parameters \(\sigma\) for
+        \subref{sfig:Tc:binder} Critical temperatures \(T_c\) are obtained by finding the intersections
+        of the Binder parameters $g$ for different system sizes $L$.
+        \subref{sfig:Tc:RNG} They are plotted over different disorder parameters \(\sigma\).
         Interesting points are the jump and rise of the GG at small
         \(\sigma\) and the plateau on the RNG for small \(\sigma\).
-        Further \(T_c\)  is plotted as a function of the degree.
-        The dotted lines are fits to a power law function \(T_c = aK^b\)
-        ignoring the "bulk" of points in the lower left and upper right, where
+        \subref{fig:TcK} \(T_c\) is plotted in a log-log plot as a function of the degree $K$.
+        The lines are fits to a power law function \(T_c = aK^b\)
+        ignoring the ``bulk" of points in the lower left and upper right, where
         deviations from the power law become obvious.
+        For the RNG the fit yields $b = 1.349(2)$ with $\chi_\mathrm{red}^2 = 1.9$
+        and for the GG  $b = 1.300(5)$ with $\chi_\mathrm{red}^2 = 0.8$
     }
     \label{fig:Tc}
 \end{figure*}
+is used.
+Because \(g\) is only measured for discrete values of \(T\),
+the points have to be interpolated to find the intersection. Therefore
+a \emph{cubic spline} interpolation %footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
+is calculated for the measured points.
+%~ Cubic spline interpolation is a piece-wise fitting of polynoms of
+%~ degree three which are joined under the condition to be at least two
+%~ times continuously differentiable.
+%~ This interpolation type has the
+%~ advantage that it is only influenced by local points so that the
+%~ plateaus at low and high \(T\) do not influence the interpolation in
+%~ the vicinity of \(T_c\) -- in contrast to, e.g.\ an polynom fit of
+%~ degree 4, which has to be restricted to the vincinity of \(T_c\) to
+%~ yield meaningful results.
+An even better method would be the
+\emph{multiple histogram} method \cite[p. 219ff]{NewmanBarkema1999}.
+But the simple cubic spline interpolation seems to deliver results that
+are good enough, because the temperatures of the measurements are
+sufficiently near to each other. Also a cubic spline interpolation is
+far easier to obtain.
+
+The first oddity in Fig.~\ref{sfig:Tc:GG} which needs to be addressed is
+the jump of $T_c$ from $\sigma = 0$ to $\sigma > 0$. This is easily explainable
+because the square lattice at $\sigma = 0$ is a very special case for the
+GG and at smallest deviations from the square lattice new edges arise in
+the GG, which lead a stronger coupling of spins such that the system stays
+ferromagnetic at higher temperatures.
+
+For big $\sigma$ the configurations approach the limit of a Poisson point
+process, hence $T_c$ approaches its limit value.
+
+The critical temperature $T_c$ decreases with increasing $\sigma$, which
+is expected, because the edges get fewer as can be seen in
+Fig.~\ref{fig:RNG_sigma} and with loosely coupled spins, the temperature
+needed to disturb the ferromagnetic phase is lower than with strong coupled
+spins. To quantify the influence of this, $T_c$ is plotted over the
+degree $K$, i.e.~the mean number of neighbors each spin has, in Fig.~\ref{fig:TcK}.
+%~ \begin{figure}[hbtp]
+    %~ \includegraphics[scale=1]{plots/TcK}
+    %~ \caption
+    %~ {
+        %~ \(T_c\) is plotted in a log-log plot as a function of the degree.
+        %~ The lines are fits to a power law function \(T_c = aK^b\)
+        %~ ignoring the ``bulk" of points in the lower left and upper right, where
+        %~ deviations from the power law become obvious.
+        %~ For the RNG the fit yields $b = 1.349(2)$ with $\chi_\mathrm{red}^2 = 1.9$
+        %~ and for the GG  $b = 1.300(5)$ with $\chi_\mathrm{red}^2 = 0.8$
+    %~ }
+    %~ \label{fig:TcK}
+%~ \end{figure}
+In first approximation $T_c$ can be derived by a power law from $K$ and the
+graph type. But there are deviations from this behavior, which reflect
+at least the influence of the coupling constant $J$.

@@ -1,14 +1,13 @@
-\documentclass[prl,twocolumn,groupedaddress,showpacs,showkeys,amsmath,amssymb,floatfix]{revtex4-1}
+\documentclass[prb,twocolumn,groupedaddress,showpacs,showkeys,amsmath,amssymb,floatfix]{revtex4-1}
 
 \usepackage{graphicx}
 \usepackage{dcolumn}
 \usepackage{bm}
 
-\usepackage{booktabs}
-
-\usepackage[FIGTOPCAP,tight,raggedright,nooneline]{subfigure}
+\usepackage{subfigure}
 
 \newcommand{\avg}[1]{\ensuremath{\left< #1 \right>}}
+\newcommand{\avgR}[1]{\ensuremath{\left[ #1 \right] _{\mathrm{avg}}}}
 \newcommand{\abs}[1]{\ensuremath{\left\vert#1\right\vert}}
 \newcommand{\brac}[1]{\ensuremath{\left(#1\right)}}
 
@@ -20,6 +19,8 @@
     \title{Critical Temperature of the Ising Ferromagnet on Proximity Graphs derived from Square Lattices by Site Displacement}
     \author{Hendrik Schawe}
     \email{hendrik.schawe@uni-oldenburg.de}
+    \author{Christoph Norrenbrock}
+    \email{christoph.norrenbrock@uni-oldenburg.de}
     \affiliation{Institut f\"ur Physik, Universit\"at Oldenburg, 26111 Oldenbug, Germany}
     \date{\today}
 
@@ -28,7 +29,7 @@
     \end{abstract}
 
     % TODO: recherchieren und ändern
-    \pacs{64.60.ah}
+    %~ \pacs{64.60.ah}
     \maketitle
 
     \section{Introduction}
@@ -43,7 +44,8 @@
     \section{Conclusion}
         \input{paper/conclusion}
 
-    \input{paper/acknowledgements}
+    \section{Acknowledgements}
+        \input{paper/acknowledgements}
 
     \bibliography{lit}
 \end{document}
