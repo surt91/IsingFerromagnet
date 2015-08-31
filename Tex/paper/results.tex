@@ -3,22 +3,22 @@ The results are obtained through Monte Carlo simulations. For each
 sweep \(N\) single spin flip Metropolis updates \cite{Metropolis1953},
 one Wolff cluster update \cite{Wolff1989} and one
 parallel tempering swap \cite{ParallelTempering1986} are performed.
-For every systemsize $L \in \{16,32,64,128\}$ and 19 different
+For every system size $L \in \{16,32,64,128\}$ and 19 different
 $\sigma \in [0,1.2]$ on $100$ different realizations at least $5000$
 independent measurements are taken in equilibrium.\\
-Because it is not known before, where the critical temperatures \(T_c\)
+Since it is not known beforehand, where the critical temperatures \(T_c\)
 are located, the Wolff cluster algorithm is used at every
 temperature. Albeit the efficiency of the algorithmic procedure was
-not dissected for every temperature, the speed up near criticality
+not examined for every temperature, the speed up near criticality
 should be worth the moderate slow down at other temperatures.\\
 
-The differences of this model and the 2D IFM are only details,
-it is therefore expected that both are in the same universality class.
+It is not expected that the universality class depends on the graph
+structure unless the dimension is changed.
 To proof this, the critical exponents are determined by a finite-size
-scaling (FSS) analysis
-using the well kown scaling bahaviors of the magnetization, the susceptiblity and the Binder parameter
+scaling (FSS) analysis using the well kown scaling bahaviors of the
+magnetization, the susceptiblity and the Binder parameter
 in an automated and reproducable way using the
-\texttt{autoscale.py} \cite{autoscale2009} tool.
+method from Ref.~\cite{autoscale2009}.
 In Fig.~\ref{fig:collapse}
 \begin{figure}[htb]
     \includegraphics[scale=1]{plots/col_s1_sus}
@@ -33,19 +33,10 @@ In Fig.~\ref{fig:collapse}
     }
     \label{fig:collapse}
 \end{figure}
-%~ two examples collapses at $\sigma = 1$ for the
-%~ magnetization
-%~ \[\abs{m} = \avgR{\avg{\abs{\frac{1}{N}\sum_{i=1}^N s_i}}}\]
- %~ -- with $\avg{\cdot}$ being the thermal average and $\avgR{\cdot}$ being the
-%~ average over the random realizations -- and the susceptiblity
-%~ \[\chi = \frac{N}{T}\brac{\avgR{\avg{m^2}}-\avgR{\avg{m}}^2}\]
-%~ are plotted.
-an example collapse at $\sigma = 1$ for the susceptiblity
+a data collapse at $\sigma = 1$ for the susceptiblity
 \[\chi = \frac{N}{T}\brac{\avgR{\avg{m^2}}-\avgR{\avg{m}}^2}\]
 with $\avg{\cdot}$ being the thermal average and $\avgR{\cdot}$ being the
 average over the random realizations, is plotted.
-%~ The collapse happens because $\chi$ should scale according to
-%~ \[\chi_L = L^{\gamma / \nu} \tilde{C}\brac{L^{1/\nu}\brac{T-T_c}}\]
 All obtained values for different $\sigma$ are visualized in Tab.~\ref{tab:critExp}
 \begin{table}[htb]
     \begin{ruledtabular}
@@ -75,26 +66,26 @@ All obtained values for different $\sigma$ are visualized in Tab.~\ref{tab:critE
         scaling analysis was performed to determine the critical
         exponents \(\beta, \gamma, \nu\) and the critical temperature
         \(T_c\). The errors for \(\beta\) and \(\gamma\) are estimated
-        by \texttt{autoscale.py} \cite{autoscale2009}. The errors of
+        with the method from Ref.~\cite{autoscale2009}. The errors of
         \(\nu\) and \(T_c\) are the standard deviation of three obtained
         values through different collapses. The critical exponents
-        are in reasonable agreement with the exact kown values for the 2D Ising
+        are in reasonable agreement with the exact known values for the 2D Ising
         universality class. The critical temperatures $T_c$ are shifting
         as expected.
     }
     \label{tab:critExp}
 \end{table}
-and are within errorbars consistent with the exactly kown values for the
-two dimensional IFM.
-A newer method\cite{chiCollapse,Hartmann2013} to test if two models are in
+and are within errorbars consistent with the exactly known values for the
+square lattice IFM.
+A newer method \cite{chiCollapse,Hartmann2013} to test whether two models are in
 the same universality class is the analysis of the two-point finite-size
 correlation function
 \[\xi = \frac{1}{2\sin(\abs{\vec{k}_{\mathrm{min}}}/2)} \sqrt{\frac{\chi(\vec{0})}{\chi(\vec{k}_{\mathrm{min}})} - 1}\]
 where $\vec{k}_{min}=(2\pi / L, 0)$ and $\chi(\vec{k})$ is the wave vector
 dependent susceptiblity
 \[\chi(\vec{k}) = \avgR{\avg{\abs{\brac{\frac{1}{N}\sum_j s_j \exp(ikx_j)}^2}}}\]
-which is in this case only evaluated over the x-dimension thus $x_j$ is the
-position of the node in the x-dimension.
+which is in this case only evaluated over one direction thus $x_j$ is the
+position of the node in the x-direction.
 
 \begin{figure}[htbp]
     \centering
@@ -115,8 +106,8 @@ If the Binder parameter
 \[g = \frac{3}{2}\brac{1-\frac{\avgR{\avg{m^4}}}{3\avgR{\avg{m^2}^2}}}\]
 is plotted over $\xi$ for different $\sigma$, $L$ and $T$ as shown in
 Fig.~\ref{fig:binderOverCorr} all data points fall on the
-same curve, which confirms that this model is in the same universality
-class as the square lattice Ising ferromagnet, i.e.~$\sigma=0$.
+same curve, which confirms that this IFM on proximity graphs is in the
+same universality class as on the square lattice, i.e.~$\sigma=0$.
 
 This study examines the critical temperatures $T_c$ for different $\sigma$.
 Therefore the knowledge that the Binder parameters $g$ for different
@@ -176,9 +167,9 @@ system sizes $L$ intersect at $T_c$ \cite{Binder1981} as shown in Fig.~\ref{sfig
     \label{fig:Tc}
 \end{figure*}
 is used.
-Because \(g\) is only measured for discrete values of \(T\),
+Since \(g\) is only measured for discrete values of \(T\),
 the points have to be interpolated to find the intersection. Therefore
-a \emph{cubic spline} interpolation %footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
+a \emph{cubic spline} \cite{press2007numerical} interpolation %footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
 is calculated for the measured points.
 %~ Cubic spline interpolation is a piece-wise fitting of polynoms of
 %~ degree three which are joined under the condition to be at least two
@@ -197,34 +188,22 @@ sufficiently near to each other. Also a cubic spline interpolation is
 far easier to obtain.
 
 The first oddity in Fig.~\ref{sfig:Tc:GG} which needs to be addressed is
-the jump of $T_c$ from $\sigma = 0$ to $\sigma > 0$. This is easily explainable
+the jump of $T_c$ close to $\sigma = 0$, where it jumps from $T_c(0) = 2.269(1)$
+to $T_c(0.03) = 2.851(1)$ at the next measured temperature. This is easily explainable,
 because the square lattice at $\sigma = 0$ is a very special case for the
 GG and at smallest deviations from the square lattice new edges arise in
-the GG, which lead a stronger coupling of spins such that the system stays
+the GG, which lead to a stronger coupling of spins such that the system stays
 ferromagnetic at higher temperatures.
 
-For big $\sigma$ the configurations approach the limit of a Poisson point
-process, hence $T_c$ approaches its limit value.
+For large values of $\sigma$ the configurations approach the limit of a
+Poisson point process, hence $T_c$ approaches its limit value.
 
 The critical temperature $T_c$ decreases with increasing $\sigma$, which
-is expected, because the edges get fewer as can be seen in
+is expected, since the number of edges decreases, which can be seen in
 Fig.~\ref{fig:RNG_sigma} and with loosely coupled spins, the temperature
 needed to disturb the ferromagnetic phase is lower than with strong coupled
 spins. To quantify the influence of this, $T_c$ is plotted over the
 degree $K$, i.e.~the mean number of neighbors each spin has, in Fig.~\ref{fig:TcK}.
-%~ \begin{figure}[hbtp]
-    %~ \includegraphics[scale=1]{plots/TcK}
-    %~ \caption
-    %~ {
-        %~ \(T_c\) is plotted in a log-log plot as a function of the degree.
-        %~ The lines are fits to a power law function \(T_c = aK^b\)
-        %~ ignoring the ``bulk" of points in the lower left and upper right, where
-        %~ deviations from the power law become obvious.
-        %~ For the RNG the fit yields $b = 1.349(2)$ with $\chi_\mathrm{red}^2 = 1.9$
-        %~ and for the GG  $b = 1.300(5)$ with $\chi_\mathrm{red}^2 = 0.8$
-    %~ }
-    %~ \label{fig:TcK}
-%~ \end{figure}
-In first approximation $T_c$ can be derived by a power law from $K$ and the
-graph type. But there are deviations from this behavior, which reflect
+For a given graph type, $T_c$ can be derived approximately by a power law
+from $K$. But there are deviations from this behavior, which reflect
 at least the influence of the coupling constant $J$.

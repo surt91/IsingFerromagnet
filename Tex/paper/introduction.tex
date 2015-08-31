@@ -1,36 +1,49 @@
-%~ Hallo Welt \cite{Ising1925}
-%~ \blindtext
-%~ ising wichtig, drosophila und so
-%~ Janke und Lima haben das auch gemacht
-%~ TODO: mehr finden
-
-[todo: geo und bio cites] \cite{Karp2000} \cite{Santi2005} \cite{Bose2001} \cite{Kuhn2003} \cite{Selander1975} \cite{Sokal1978} \cite{Sokal1980}
-
-The Ising model for a ferromagnet \cite{Ising1925} is
-perhaps the most extensive studied model in statistical mechanics.
-It consists of spins wich can point up or down and interact with
-neighboring spins. It shows a second order phase transition between
-a ferromagnetic, i.e.~all spins having the same value, and
-paramagnetic phase. While there exist analytic solutions\cite{Onsager1944,Wannier1945}
-describing the phase transition for Ising models on
-regular lattices in two dimensions, higher dimensional lattices or
-non-regular lattices are the domain of Monte Carlo simulations.
+The Ising model for a ferromagnet \cite{Ising1925} is perhaps the
+most extensive studied model in statistical mechanics. It consists
+of spins which can point up or down and interact with neighboring
+spins. It shows a second order phase transition separating a
+ferromagnetic and a paramagnetic phase. While there exist analytic
+solutions\cite{Onsager1944,Wannier1945} describing the phase
+transition for Ising models on regular lattices in two dimensions,
+higher dimensional lattices and non-regular lattices are primarily studied
+by Monte Carlo simulations.
 
 Some work \cite{Janke1994,Lima2000,Lima2008} was done to determine
-the critcal temperatures and confirm the universality of 2D IFM
+the critcal temperatures and confirm the universality of two-dimensional IFM
 where the spins are arranged randomly in the unit square by a
 Poisson point process and neighbor relationships are determined by a
-Delaunay triangulation to maintain the planarity of the system.
+Delaunay triangulation that maintains the planarity of the system.
 This article extends the former research to other
-irregular lattice types closely related to the Delaunay triangulation and
-provides an interpolation between the square lattice IFM
-and spins distributed randomly in the plane.
-For a range of this interpolation the critcal temperatures are determined
-and it is confirmed that configurations from this range belong to the
-IFM universality class.
+irregular lattices, namely the Relative Neighborhood graph (RNG) and
+Gabriel graph (GG), which belong, as the Delaunay triangulation, to the
+family of \emph{proximity graphs}. To get some intuition for proximity
+graphs, their purpose is to connect nodes which are close to each other.
+Hence they are suited to generalize problems defined on regular lattices
+with nearest neighbor relationships.
+[todo: geo und bio cites] \cite{Karp2000} \cite{Santi2005} \cite{Bose2001} \cite{Kuhn2003} \cite{Selander1975} \cite{Sokal1978} \cite{Sokal1980}
+This family of graphs have been applied in geographic variation studies in
+biology and as potential candidate for ``virtual backbones'' in ad-hoc
+networks. % also machine learning
 
-In section \ref{ssec:model} the method to distribute the sites of the
-irregular lattice and in \ref{ssec:graphtypes} the rules to establish the
-bonds between them is explained, section \ref{sec:results} will show the
-details and results of our simulations, before section \ref{sec:conclusion}
-closes this article with the conclusions and an outlook.
+Beginning with a square lattice the nodes can be shifted randomly governed
+by a tunable parameter $\sigma$ until the distribution of the nodes is
+indistinguishable from a Poisson point process.
+For every realization of nodes, the construction rules for the proximity
+graph at hand define an edge-set.
+%~ The edge-set for any realization of node-placements is well defined by
+%~ the construction rules of the
+We measure the critical temperatures by varying $\sigma$ and confirm that
+the universality class does not change in the process.
+
+%~
+ %~ closely related to the Delaunay triangulation and
+%~ provides an interpolation between the square lattice IFM
+%~ and spins distributed randomly in the plane.
+%~ For a range of this interpolation the critcal temperatures are determined
+%~ and it is confirmed that configurations from this range belong to the
+%~ IFM universality class.
+
+In Sec. \ref{ssec:model} the model and the underlying proximity graphs
+are explained. Sec. \ref{sec:results} will show the
+details and results of our simulations. Sec. \ref{sec:conclusion}
+closes this article with the conclusion and an outlook.

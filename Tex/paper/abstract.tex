@@ -1,19 +1,13 @@
 We perform Monte Carlo simulations to determine the critical temperatures
-of an Ising Ferromagnet (IFM) located on the sites of different types of
-2D proximity graphs.
-%~ In particular we consider Relative Neighborhood graphs and Gabriel graphs
-%~ which are subgraphs of the Delaunay Triangulation for a given set of points.
-The graphs are derived from square lattices where nodes are displaced by
-a Gaussian distributed random variable.
-%~ The limit of maximal disorder thus corresponds to a Poisson point process.
-The deviation of the proximity graph from a square lattice is
-governed by the width \(\sigma\) of the Gaussian distribution.
-In our model, the coupling strength depends on the Euclidean distance
-between the coupled spins.
+of Ising Ferromagnets (IFM) on proximity graphs with different underlying
+node-sets, which can be governed by a parameter $\sigma$.
+The coupling strengths arise from the Euclidean distance
+between coupled spins.
 The simulations are carried out on graphs with \(N=16^{2}\) to \(N=128^{2}\)
 nodes utilizing the Wolff cluster algorithm and parallel tempering in a
 wide temperature range around the critical point to measure the Binder Cumulant.
 The critical temperatures are shown to depend mainly on the average degree
 and the type of the underlying proximity graph.
-We further verify that the model lies within the universality class of
-the 2D IFM using finite-size scaling methods.
+We further verify using finite-size scaling methods that the IFM on proximity
+graphs is in the same universality class as the IFM on a two-dimensional
+square lattice.
