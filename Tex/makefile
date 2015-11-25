@@ -73,16 +73,17 @@ PLOTS = plots/binder_fit_s_0.pdf \
 
 P_TIKZ = images/GG_RNG_def.pdf
 
-P_TEX_PLOTS = plots/col_s1_sus.pdf \
-              plots/col_s1_m.pdf \
-              plots/Binder_over_Correlation_All.pdf \
-              plots/binder.pdf \
-              plots/Tc_RNG.pdf \
-              plots/Tc_GG.pdf \
-              plots/Tc_both.pdf \
-              plots/TcK.pdf \
+P_TEX_PLOTS = plots/col_s1_sus.eps \
+              plots/col_s1_m.eps \
+              plots/Binder_over_Correlation_All.eps \
+              plots/binder.eps \
+              plots/Tc_RNG.eps \
+              plots/Tc_GG.eps \
+              plots/Tc_both.eps \
+              plots/TcK.eps \
 
 P_PLOTS = $(P_TEX_PLOTS)
+P_TIKZ = $(TIKZ:.pdf=.eps)
 
 all: $(LATEX)
 
@@ -94,11 +95,19 @@ $(DOKUMENT).pdf $(VORTRAG).pdf $(HANDOUT).pdf: $(PLOTS) $(TIKZ) $(BIBFILE)
 
 $(PAPER).pdf: $(P_CHAPTERS) $(P_PLOTS) $(P_TIKZ) $(BIBFILE)
 
-$(DOKUMENT).pdf $(VORTRAG).pdf $(PAPER).pdf: %.pdf: %.tex
+$(DOKUMENT).pdf $(VORTRAG).pdf: %.pdf: %.tex
 	pdflatex -interaction=batchmode $*
 	bibtex $*
 	pdflatex -interaction=batchmode $*
 	pdflatex -interaction=batchmode $*
+
+$(PAPER).pdf: %.pdf: %.tex
+	latex -interaction=batchmode $*
+	bibtex $*
+	latex -interaction=batchmode $*
+	latex -interaction=batchmode $*
+	dvips $*.dvi > /dev/null  2>&1
+	ps2pdf $*.ps > /dev/null
 
 $(HANDOUT).pdf: $(VORTRAG).tex
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
@@ -106,18 +115,19 @@ $(HANDOUT).pdf: $(VORTRAG).tex
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
 	pdflatex -interaction=batchmode -jobname $(HANDOUT) "\PassOptionsToClass{handout}{beamer}\input{$(VORTRAG)}"
 
-%.tex: %.gp
+%.eps: %.gp
 	cd $(<D) && gnuplot $(<F) > /dev/null 2>&1
 
-%.eps: %.gp
-	cd $(<D) && gnuplot $(<F)
+%.tex: %.gp
+	cd $(<D) && gnuplot $(<F) > /dev/null 2>&1
 
 %.pdf: %.eps
 	cd $(<D) && epspdf -b $(<F)
 
-$(TIKZ) $(P_TEX_PLOTS): %.pdf: %.tex
+$(P_TIKZ) $(P_TEX_PLOTS): %.eps: %.tex
 	cd $(<D) && pdflatex -interaction=batchmode $(<F) > /dev/null
-	rm -f $*.{log,aux} $*-inc.eps $*-inc-eps-converted-to.pdf
+	pdftops -eps $*.pdf > /dev/null 2>&1
+	rm -f $*.{log,aux}
 
 clean: proper
 	rm -f $(PLOTS) plots/fit.log
@@ -126,4 +136,5 @@ clean: proper
 proper:
 	rm -f $(PLOTS) $(P_PLOTS) plots/fit.log
 	rm -f $(TIKZ) $(P_TIKZ)
+	rm -f plots/*{-inc.eps,-inc-eps-converted-to.pdf,.tex,.dvi,.pdf,.eps}
 	rm -f {$(DOKUMENT),$(VORTRAG),$(HANDOUT)}.{log,aux,bbl,blg,toc,out,lof,lot,snm,nav}
