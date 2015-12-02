@@ -3,7 +3,7 @@ The results are obtained through Monte Carlo simulations. For each
 sweep \(N\) single spin flip Metropolis updates \cite{Metropolis1953},
 one Wolff cluster update \cite{Wolff1989} and one
 parallel tempering swap \cite{ParallelTempering1986} are performed.
-For every system size $L \in \{16,32,64,128\}$ and 19 different
+For every system size $L \in \{16,32,64,128\}$ and 19 different values of
 $\sigma \in [0,1.2]$ on $100$ different realizations at least $5000$
 independent measurements are taken in equilibrium.\\
 Since it is not known beforehand, where the critical temperatures \(T_c\)
@@ -16,7 +16,7 @@ It is not expected that the universality class depends on the graph
 structure unless the dimension is changed.
 To proof this, the critical exponents are determined by a finite-size
 scaling (FSS) analysis using the well kown scaling bahaviors of the
-magnetization, the susceptiblity and the Binder parameter
+magnetization, the susceptiblity and the Binder cumulant
 in an automated and reproducable way using the
 method from Ref.~\cite{autoscale2009}.
 In Fig.~\ref{fig:collapse}
@@ -26,8 +26,8 @@ In Fig.~\ref{fig:collapse}
     {
         Example for a collapse of the susceptiblity \(\chi\) on a RNG at
         \(\sigma = 1\) to get the corresponding critical exponent $\gamma$.
-        The same procedure is used on the Binder parameter $g$ and the
-        magnetization $|m|$ to to determine the critical exponents
+        The same procedure is used on the Binder cumulant $g$ and the
+        magnetization $|m|$ to determine the critical exponents
         \(\nu\) and \(\beta\) and the critical temperature \(T_c\).
         The inset shows the same data with unscaled axes.
     }
@@ -90,10 +90,10 @@ position of the node in the x-direction.
 \begin{figure}[htbp]
     \centering
     \includegraphics[scale=1]{plots/Binder_over_Correlation_All}
-    \caption[Binder Cumulant over two-point finite-size correlation function divided by system size]
+    \caption[Binder cumulant over two-point finite-size correlation function divided by system size]
     {
-        Binder Cumulant over two-point finite-size correlation function
-        divided by system size. The datapoints for different system sizes
+        Binder cumulant $g$ over two-point finite-size correlation function
+        divided by system size $L$. The datapoints for different system sizes
         are drawn with different symbols, while the datapoints for different
         graph ensembles are drawn with different colors. Anyway, all points
         fall on one curve within errorbars.
@@ -102,15 +102,15 @@ position of the node in the x-direction.
     }
     \label{fig:binderOverCorr}
 \end{figure}
-If the Binder parameter
+If the Binder cumulant
 \[g = \frac{3}{2}\brac{1-\frac{\avgR{\avg{m^4}}}{3\avgR{\avg{m^2}^2}}}\]
 is plotted over $\xi$ for different $\sigma$, $L$ and $T$ as shown in
-Fig.~\ref{fig:binderOverCorr} all data points fall on the
+Fig.~\ref{fig:binderOverCorr}, all data points fall on the
 same curve, which confirms that this IFM on proximity graphs is in the
 same universality class as on the square lattice, i.e.~$\sigma=0$.
 
-This study examines the critical temperatures $T_c$ for different $\sigma$.
-Therefore the knowledge that the Binder parameters $g$ for different
+This study examines the critical temperatures $T_c$ for different values of $\sigma$.
+Therefore the knowledge that the Binder cumulants $g$ for different
 system sizes $L$ intersect at $T_c$ \cite{Binder1981} as shown in Fig.~\ref{sfig:Tc:binder}
 %~ \begin{figure*}[hbtp]
     %~ \centering
@@ -187,7 +187,7 @@ are good enough, because the temperatures of the measurements are
 sufficiently near to each other. Also a cubic spline interpolation is
 far easier to obtain.
 
-The first oddity in Fig.~\ref{sfig:Tc:GG} which needs to be addressed is
+The first oddity of the GG in Fig.~\ref{sfig:Tc:GG} which needs to be addressed is
 the jump of $T_c$ close to $\sigma = 0$, where it jumps from $T_c(0) = 2.269(1)$
 to $T_c(0.03) = 2.851(1)$ at the next measured temperature. This is easily explainable,
 because the square lattice at $\sigma = 0$ is a very special case for the
@@ -200,8 +200,8 @@ Poisson point process, hence $T_c$ approaches its limit value.
 
 The critical temperature $T_c$ decreases with increasing $\sigma$, which
 is expected, since the number of edges decreases, which can be seen in
-Fig.~\ref{fig:RNG_sigma} and with loosely coupled spins, the temperature
-needed to disturb the ferromagnetic phase is lower than with strong coupled
+Fig.~\ref{fig:RNG_sigma}. With loosely coupled spins, the temperature
+needed to disturb the ferromagnetic phase is lower than with strongly coupled
 spins. To quantify the influence of this, $T_c$ is plotted over the
 degree $K$, i.e.~the mean number of neighbors each spin has, in Fig.~\ref{fig:TcK}.
 For a given graph type, $T_c$ can be derived approximately by a power law
