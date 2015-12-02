@@ -1,8 +1,14 @@
 set terminal epslatex standalone size 8.2cm,6cm font 10
 set output 'Binder_over_Correlation_All.tex'
 
+set size nosquare
+set lmargin at screen 0.15
+set rmargin at screen 0.98
+set bmargin at screen 0.18
+set tmargin at screen 0.96
+
 set xlabel "$\\xi / L$"
-set ylabel "$g$"
+set ylabel "$g$" offset 1.5,0
 
 set xr [0:6]
 set yr [0.94:1.005]
