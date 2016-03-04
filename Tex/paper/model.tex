@@ -15,7 +15,7 @@
     d_{ij}\) and centers on \(i\) and \(j\). That means that the edge
     $\{i,j\}$ is part of the graph, if the condition
     \begin{align*}
-        d_{ij} &\le \max\left\{ d_{ik} + d_{kj} \right\} &\forall k \in V\setminus\{i,j\}
+        d_{ij} &\le \max\left\{ d_{ik}, d_{kj} \right\} &\forall k \in V\setminus\{i,j\}
     \end{align*}
     is fulfilled. See also the hatched region
     in Fig.~\ref{fig:lunes}. An example is given in Fig.~\ref{sfig:lunes:rng}.
@@ -61,7 +61,7 @@
     and radius \(r = \frac{d_{ij}}{2}\) contains no other nodes, i.e.~the
     condition
     \begin{align*}
-        d_{ij} &< d_{ik} + d_{kj} &\forall k \in V\setminus\{i,j\}
+        d^{2}_{ij} &< d^{2}_{ik} + d^{2}_{kj} &\forall k \in V\setminus\{i,j\}
     \end{align*}
     is fulfilled. See
     also the cross hatched region from Fig.~\ref{sfig:lunes:def}. An
@@ -69,9 +69,9 @@
     lune of the GG is completely enclosed in the lune of the RNG,
     therefore the RNG is a subgraph of the GG.
 
-    To construct these graphs there is an algorithm\cite{RNGCell} with
+    To construct these graphs there is an algorithm with
     a time complexity of \(\mathcal{O}(N \log N)\) for nodes on a two
-    dimensional plane.
+    dimensional plane \cite{RNGCell}.
 
 \subsection{The Ising Model}
 \label{ssec:model}

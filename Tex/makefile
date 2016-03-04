@@ -71,7 +71,8 @@ PLOTS = plots/binder_fit_s_0.pdf \
         $(GG_LST) \
         $(RNG_LST)
 
-P_TIKZ = images/GG_RNG_def.pdf
+P_TIKZ = images/GG_RNG_def.pdf \
+         images/GGEdgeAfter.pdf \
 
 P_TEX_PLOTS = plots/col_s1_sus.eps \
               plots/col_s1_m.eps \
@@ -81,6 +82,7 @@ P_TEX_PLOTS = plots/col_s1_sus.eps \
               plots/Tc_GG.eps \
               plots/Tc_both.eps \
               plots/TcK.eps \
+              plots/K_sigma_inset_both.eps
 
 P_PLOTS = $(P_TEX_PLOTS)
 P_TIKZ = $(TIKZ:.pdf=.eps)
