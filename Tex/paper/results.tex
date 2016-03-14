@@ -80,8 +80,8 @@ square lattice IFM.
 A newer method \cite{chiCollapse,Hartmann2013} to test whether two models are in
 the same universality class is the analysis of the two-point finite-size
 correlation function
-\[\xi = \frac{1}{2\sin(\abs{\vec{k}_{\mathrm{min}}}/2)} \sqrt{\frac{\chi(\vec{0})}{\chi(\vec{k}_{\mathrm{min}})} - 1}\]
-where $\vec{k}_{min}=(2\pi / L, 0)$ and $\chi(\vec{k})$ is the wave vector
+\[\xi = \frac{1}{2\sin\brac{\abs{\vec{k}_{\mathrm{min}}}/2}} \sqrt{\frac{\chi(\vec{0})}{\chi(\vec{k}_{\mathrm{min}})} - 1}\]
+where $\vec{k}_{\mathrm{min}}=(2\pi / L, 0)$ and $\chi(\vec{k})$ is the wave vector
 dependent susceptiblity
 \[\chi(\vec{k}) = \avgR{\avg{\abs{\brac{\frac{1}{N}\sum_j s_j \exp(ikx_j)}^2}}}\]
 which is in this case only evaluated over one direction thus $x_j$ is the
@@ -107,35 +107,12 @@ If the Binder cumulant
 is plotted over $\xi$ for different $\sigma$, $L$ and $T$ as shown in
 Fig.~\ref{fig:binderOverCorr}, all data points fall on the
 same curve, which confirms that this IFM on proximity graphs is in the
-same universality class as on the square lattice, i.e.~$\sigma=0$.
+same universality class as on the square lattice, i.e., $\sigma=0$.
 
 This study examines the critical temperatures $T_c$ for different values of $\sigma$.
 Therefore the knowledge that the Binder cumulants $g$ for different
 system sizes $L$ intersect at $T_c$ \cite{Binder1981} as shown in Fig.~\ref{sfig:Tc:binder}
-%~ \begin{figure*}[hbtp]
-    %~ \centering
-    %~ \subfigure{
-        %~ \label{sfig:Tc:binder}
-        %~ \includegraphics[scale=1]{plots/binder}
-    %~ }
-    %~ \subfigure{
-        %~ \label{sfig:Tc:RNG}
-        %~ \includegraphics[scale=1]{plots/Tc_RNG}
-    %~ }
-    %~ \subfigure{
-        %~ \label{sfig:Tc:GG}
-        %~ \includegraphics[scale=1]{plots/Tc_GG}
-    %~ }
-    %~ \caption[Critical Temperature over Different Disorder Parameters]
-    %~ {
-        %~ Critical temperatures \(T_c\) are obtained by finding the intersections
-        %~ of the Binder parameters $g$ for different system sizes $L$.
-        %~ They are plotted over different disorder parameters \(\sigma\).
-        %~ Interesting points are the jump and rise of the GG at small
-        %~ \(\sigma\) and the plateau on the RNG for small \(\sigma\).
-    %~ }
-    %~ \label{fig:Tc}
-%~ \end{figure*}
+is used.
 \begin{figure*}[hbtp]
     \subfigure[]{
         \label{sfig:Tc:binder}
@@ -157,16 +134,19 @@ system sizes $L$ intersect at $T_c$ \cite{Binder1981} as shown in Fig.~\ref{sfig
         \subref{sfig:Tc:RNG} They are plotted over different disorder parameters \(\sigma\).
         Interesting points are the jump and rise of the GG at small
         \(\sigma\) and the plateau on the RNG for small \(\sigma\).
-        \subref{fig:TcK} \(T_c\) is plotted in a log-log plot as a function of the degree $K$.
-        The lines are fits to a power law function \(T_c = aK^b\)
-        ignoring the ``bulk" of points in the lower left and upper right, where
-        deviations from the power law become obvious.
-        For the RNG the fit yields $b = 1.349(2)$ with $\chi_\mathrm{red}^2 = 1.9$
-        and for the GG  $b = 1.300(5)$ with $\chi_\mathrm{red}^2 = 0.8$
+        \subref{fig:TcK} The average degree \(K\) is plotted over $\sigma$ and
+        the similarity to \subref{sfig:Tc:RNG} shows that the degree is the single
+        most important influence on $T_c$. The inset shows that for the GG there
+        is actually in good approximation a power-law relationship \(T_c = aK^b\)
+        The upper curve is for an ensemble where the edges have unit weight and
+        yields an exponent $b_1=1.321(1)$ with $\chi_{\mathrm{red}}^2 = 2.5$.
+        The ensemble with length dependent weigth is the lower curve with
+        $b = 1.305(2)$, $\chi_{\mathrm{red}}^2 = 4.9$.
+        The bad $\chi_\mathrm{red}^2$ are caused by the region in the upper right,
+        where $T_c$ is rising with $\sigma$ and hint at other influences.
     }
     \label{fig:Tc}
 \end{figure*}
-is used.
 Since \(g\) is only measured for discrete values of \(T\),
 the points have to be interpolated to find the intersection. Therefore
 a \emph{cubic spline} \cite{press2007numerical} interpolation %footnote{created using the \texttt{scipy.interpolate} tools \cite{scipy2001}}
@@ -188,26 +168,46 @@ sufficiently near to each other. Also a cubic spline interpolation is
 far easier to obtain.
 
 \begin{figure}[hbtp]
-\label{fig:TcK}
-        \includegraphics[scale=1]{plots/K_sigma_inset_both}
+    \includegraphics[width=0.15\textwidth]{images/GGEdgeAfter}
+    \caption
+    {
+        Smallest movement of nodes in a square lead to a new edge across the
+        facet. This effect leads to the discontinuity in Fig.~\ref{sfig:Tc:RNG} and
+        Fig.~\ref{fig:TcK}.
+    }
+    \label{fig:GGEdgeAfter}
 \end{figure}
 The first oddity of the GG in Fig.~\ref{sfig:Tc:GG} which needs to be addressed is
 the jump of $T_c$ close to $\sigma = 0$, where it jumps from $T_c(0) = 2.269(1)$
 to $T_c(0.03) = 2.851(1)$ at the next measured temperature. This is easily explainable,
 because the square lattice at $\sigma = 0$ is a very special case for the
 GG and at smallest deviations from the square lattice new edges arise in
-the GG, which lead to a stronger coupling of spins such that the system stays
-ferromagnetic at higher temperatures.
+the GG, this is visualized in Fig.~\ref{fig:GGEdgeAfter}. These new edges lead
+to a stronger coupling of spins such that the system stays ferromagnetic at
+higher temperatures.
 
 For large values of $\sigma$ the configurations approach the limit of a
-Poisson point process, hence $T_c$ approaches its limit value.
+Poisson point process, hence $T_c$ approaches its limit value. Note that
 
 The critical temperature $T_c$ decreases with increasing $\sigma$, which
 is expected, since the number of edges decreases, which can be seen in
 Fig.~\ref{fig:RNG_sigma}. With loosely coupled spins, the temperature
 needed to disturb the ferromagnetic phase is lower than with strongly coupled
-spins. To quantify the influence of this, $T_c$ is plotted over the
-degree $K$, i.e.~the mean number of neighbors each spin has, in Fig.~\ref{fig:TcK}.
-For a given graph type, $T_c$ can be derived approximately by a power law
-from $K$. But there are deviations from this behavior, which reflect
-at least the influence of the coupling constant $J$.
+spins.
+For the GG there is a power-law relationship between the degree $K$ and
+the critical temperature $T_c$ for both the distance dependent coupling constant
+and a constant $J=1$ as shown in the inset of Fig.~\ref{fig:TcK}. The exponents
+and goodness of fit are shown in the caption.
+Also here the square lattice $\sigma = 0$ is a special case, as it is incompatible with the
+power law. Also note that the points for small $\sigma$ in the top right of the
+inset are the ones wich worsen the goodness of fit. For the RNG this power law
+is not observable.
+A further interesting feature which highlights the immportance of the structure
+of the graph for the critical temperature is the fact that the square lattice
+has a different critical temperature than the GG in the Poisson point process
+limit although they share the same average degree of $K=4$. ($T_c/K$ als Wert einer Kante)
+%To quantify the influence of this, $T_c$ is plotted over the
+%degree $K$, i.e., the mean number of neighbors each spin has, in Fig.~\ref{fig:TcK}.
+%For a given graph type, $T_c$ can be derived approximately by a power law
+%from $K$. But there are deviations from this behavior, which reflect
+%at least the influence of the coupling constant $J$.
