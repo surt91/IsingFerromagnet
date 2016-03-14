@@ -3,7 +3,7 @@ set output "binder.tex"
 
 set size nosquare
 set lmargin at screen 0.18
-set rmargin at screen 0.98
+set rmargin at screen 0.96
 set bmargin at screen 0.18
 set tmargin at screen 0.96
 

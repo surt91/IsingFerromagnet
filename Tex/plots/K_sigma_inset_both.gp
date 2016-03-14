@@ -19,7 +19,8 @@ set yr [2.5:7.1]
 set xtics 0.4
 set ytics 1
 
-set format xy "%.1f"
+set format x "%.1f"
+set format y "%.0f"
 
 set key samplen 1 top left
 
@@ -35,19 +36,19 @@ set tmargin at screen 0.96
 
 set object 1 rectangle from graph 0,0 to graph 1,1 behind fc rgb "#ffffff"
 
-set xlabel '$K$' offset 0,1.1
-set ylabel '$T_c$' offset 2.7,0
+set xlabel '$\ln K$' offset -0.2,1.1
+set ylabel '$\ln T_c$' offset 3.7,-0.6
 
 set key title samplen 1. left top Left reverse
 
-set xrange [3.9:5.2]
+set xrange [3.9:5.25]
 set yrange [2:3.4]
 
-set format y "$%.1f$"
+set format y "$%.0f$"
 set format x "$%.0f$"
 
-set xtics (1,2,3,4,5,6)
-set ytics (1.2,1.6,2.0,2.4,2.8,3.2)
+set xtics ('$\ln 4$' 4, '$\ln 5$' 5)
+set ytics ('$\ln 2$' 2, '$\ln 3$' 3)
 
 set log xy
 
