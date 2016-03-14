@@ -1,7 +1,7 @@
 TARGET	= ising
 MANUAL = manual.pdf
 
-OBJ 	= graph.o graph_modify.o stack.o list.o tree.o spin.o queue.o correlation_by_k_susceptibility.o
+OBJ 	= graph.o graph_modify.o stack.o list.o tree.o spin.o queue.o correlation_by_k_susceptibility.o union_find.o
 SOURCE = $(subst .o,.c,$(OBJ)) $(subst .o,.h,$(OBJ))
 
 LINK	= gcc
@@ -12,11 +12,11 @@ DOXYCHECK := $(shell which $(DOXYGEN))
 
 #~ CFLAGS	= -g -pg #-DTHREADED
 #~ LFLAGS	= -lm -lgsl -lgslcblas #-lpthread -pg
-CFLAGS	= -O2 -march=native -pipe # -DTHREADED
+CFLAGS	= -O3 -mtune=native -pipe # -DTHREADED
 LFLAGS	= -lm -lgsl -lgslcblas # -lpthread
 WARNLEVEL= -Wall # -pedantic
 
-all: $(TARGET) $(MANUAL)
+all: $(TARGET)
 
 %.o: %.c %.h
 	$(CC) -c $(WARNLEVEL) $(CFLAGS) $< -o $@

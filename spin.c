@@ -195,7 +195,7 @@ options_t get_cl_args(int argc, char *argv[])
                 fprintf(stdout,"    -ix    autokorrelationszeit                 (int)\n");
                 fprintf(stdout,"    -sx    sigma x                           (double)\n");
                 fprintf(stdout,"    -ax    alpha x                           (double)\n");
-                fprintf(stdout,"    -tx    Graphtyp: (1: RNG, 2: Gabriel)       (int)\n");
+                fprintf(stdout,"    -tx    Graphtyp: (1: RNG, 2: Gabriel, 3: MST)(int)\n");
                 fprintf(stdout,"    -ox    filename (max. 79 Zeichen)        (string)\n");
                 fprintf(stdout,"    -gx    SVG Filename (max. 79 Zeichen)    (string)\n");
                 fprintf(stdout,"    -ux    Ordnung x (0: zufällig, 1: alle up)  (int)\n");

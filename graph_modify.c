@@ -23,7 +23,10 @@ gs_graph_t **init_graphs(const options_t o)
     move_graph_nodes(g, o.moving_fkt, o.rng, o.sigma);
 
     /* Verknüpfe die Knoten */
-    create_edges(g, o);
+    if(o.graph_type == 3) // MST
+        create_edges_mst(g, o);
+    else // GG or RNG
+        create_edges(g, o);
 
     if(o.percolation)
         delete_random_edges_till_percolation(g, o.rng);
@@ -267,6 +270,91 @@ void create_edges_regular(gs_graph_t *g)
             gs_insert_edge(g, i, i+L, weight);  /*oben*/
         else
             gs_insert_edge(g, i, i%L, weight);
+    }
+}
+
+typedef struct
+{
+    int i, j;
+    double l;
+}
+len_t;
+
+int compare(const void * a, const void * b)
+{
+    if((*(len_t*)a).l < (*(len_t*)b).l) return -1;
+    if((*(len_t*)a).l > (*(len_t*)b).l) return 1;
+    return 0;
+}
+
+double dist(double x1, double y1, double x2, double y2)
+{
+    return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
+}
+
+/*! \fn void create_edges_mst(gs_graph_t *g)
+    \brief Fügt Kanten zu einem Graphen hinzu, wodurch ein minimum
+            spanning tree erzeugt werden soll.
+
+    \param [in,out]    g    Graph, der modifiziert werden soll
+*/
+void create_edges_mst(gs_graph_t *g, const options_t o)
+{
+    int i, j, k, t;
+    int num_nodes, L, num_lengths;
+    double weight;
+    len_t *lengths;
+    gs_node_t n1, n2;
+    double min_dist;
+    union_find_t *uf;
+
+    num_nodes = g->num_nodes;
+    L         = g->L;
+    num_lengths = (num_nodes*num_nodes - num_nodes)/2;
+    lengths   = (len_t*) malloc(sizeof(len_t) * (num_lengths));
+
+    k = 0;
+    for(i=0; i<num_nodes; ++i)
+        for(j=0; j<i; ++j)
+        {
+            n1 = g->node[i];
+            n2 = g->node[j];
+
+            lengths[k].i = i;
+            lengths[k].j = j;
+
+            static const int m = 9;
+            static const int X[] = {0, -1,  0,  1, -1,  1, -1,  0,  1};
+            static const int Y[] = {0,  1,  1,  1,  0,  0, -1, -1, -1};
+            min_dist = L;
+
+            for(t=0; t<m; t++)
+            {
+                double tmp_dist = dist(n1.x, n1.y, n2.x+L*X[t], n2.y+L*Y[t]);
+                if(tmp_dist < min_dist)
+                    min_dist = tmp_dist;
+            }
+
+            lengths[k].l = min_dist;
+
+            k++;
+        }
+
+    // Kruskals algorithm
+    // get all edges sorted by length (with periodic boundaries)
+    // add them in that order to the graph, if no loop is created (check with union find)
+    qsort(lengths, num_lengths, sizeof(len_t), compare);
+    uf = uf_create(num_lengths);
+
+    for(k=0; k<num_lengths; ++k)
+    {
+        len_t len = lengths[k];
+        if(uf_find(uf, len.i) != uf_find(uf, len.j))
+        {
+            uf_union(uf, len.i, len.j);
+            weight = o.weighting_fkt(o.alpha, len.l);
+            gs_insert_edge(g, len.i, len.j, weight);
+        }
     }
 }
 
