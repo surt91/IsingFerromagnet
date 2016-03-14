@@ -16,11 +16,7 @@ CHAPTERS = chapters/title.tex \
            chapters/acknowledgements.tex \
            chapters/erklarung.tex
 
-P_CHAPTERS = paper/introduction.tex \
-             paper/model.tex \
-             paper/results.tex\
-             paper/conclusion.tex\
-             paper/acknowledgements.tex
+P_CHAPTERS =
 
 BIBFILE = lit.bib
 
