@@ -45,5 +45,5 @@ Usage: ./ising -[hTLxNesou]
 ## Technical details
 
 The code for the simulation, including the main function,
-is included in `spin.c`. Other functions data data structures are
+is included in `spin.c`. Other functions and data structures are
 in their own source files.
