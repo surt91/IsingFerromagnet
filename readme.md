@@ -4,6 +4,11 @@ This simulation code in standard C simulates an Ising Ferromagnet on
 different types of topologies. Currently square lattices, relative neighborhood
 graphs (RNG), Gabriel graphs (GG) and minimum spanning trees (MST) are implemented.
 
+This code was used to generate the results of
+[Scientific Reports 7, 8040 (2017)](https://dx.doi.org/10.1038/s41598-017-08531-8)
+and the thesis [Ising-Ferromagnet auf Ad-Hoc Netzwerken](https://hendrik.schawe.me/pdf/bachelorThesis.pdf)
+(German title, but English text).
+
 ## Setup
 
 For compilation the GNU scientific library (GSL) is needed. If it is installed systemwide,
